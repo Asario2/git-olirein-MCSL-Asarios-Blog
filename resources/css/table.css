@@ -1,0 +1,111 @@
+@layer utilities {
+
+    .np-dl-outer-container {
+        @apply border rounded-lg border-layout-sun-100 dark:border-layout-night-100 bg-layout-sun-0 text-layout-sun-800 dark:bg-layout-night-0 dark:text-layout-night-800;
+    }
+
+    .np-dl-data-container {
+        @apply p-2 overflow-x-auto overflow-y-hidden;
+    }
+
+    .np-dl-title {
+        @apply px-2 mt-2 mb-4 text-lg font-bold;
+    }
+
+    @screen md {
+        .np-dl-title {
+            @apply text-xl;
+        }
+    }
+
+    .np-dl-subtitle {
+        @apply px-2 mt-2 mb-4 text-base font-bold;
+    }
+
+    .np-dl-description {
+        @apply px-2 mt-2 mb-4 text-base;
+    }
+
+    .np-dl-table {
+        @apply w-full text-xs overflow-y-auto;
+    }
+
+    .np-dl-table--small {
+        @apply text-xs;
+    }
+
+    @screen md {
+        .np-dl-table {
+            @apply text-sm;
+        }
+
+        .np-dl-table--small {
+            @apply text-xs;
+        }
+    }
+
+    .np-dl-thead {
+        @apply text-left font-bold bg-layout-sun-0 text-layout-sun-800 dark:bg-layout-night-0 dark:text-layout-night-800;
+    }
+
+    .np-dl-th-normal {
+        @apply px-2 pt-2 pb-2 text-left align-top;
+    }
+
+    .np-dl-th-right {
+        @apply px-2 pt-2 pb-2 text-right align-top;
+    }
+
+    .np-dl-th-center {
+        @apply px-2 pt-2 pb-2 text-center align-top;
+    }
+
+    .np-dl-th--small {
+        @apply text-xs;
+    }
+
+    .np-dl-tr:hover {
+        @apply bg-layout-sun-200 text-layout-sun-900 dark:bg-layout-night-200 dark:text-layout-night-900;
+    }
+
+    .np-dl-tr:hover:focus-within {
+        @apply text-layout-sun-900 dark:text-layout-night-900;
+    }
+
+    .np-dl-td-normal {
+        @apply align-middle border-t border-layout-sun-200 dark:border-layout-night-200 text-left px-2 py-1;
+    }
+
+    .np-dl-td-normal-child {
+        @apply align-top border-t border-layout-sun-200 dark:border-layout-night-200 text-left px-0.5 py-4 mx-12;
+    }
+
+    .np-dl-td-right {
+        @apply align-middle border-t border-layout-sun-200 dark:border-layout-night-200 text-right px-2 py-1;
+    }
+
+    .np-dl-td-center {
+        @apply align-middle border-t border-layout-sun-200 dark:border-layout-night-200 text-center px-2 py-1;
+    }
+
+    .np-dl-td-edit {
+        @apply align-middle text-center border-t border-layout-sun-200 dark:border-layout-night-200 w-px px-4 py-2 cursor-pointer whitespace-nowrap;
+    }
+
+    .np-dl-td--small {
+        @apply text-xs;
+    }
+
+    .np-dl-container-filtername {
+        @apply mb-6 h-12 bg-layout-sun-0 dark:bg-layout-night-0 rounded shadow overflow-y-auto overflow-x-hidden flex items-center;
+    }
+
+    .np-dl-filtername {
+        @apply px-2 flex-1 text-sm tracking-wide;
+    }
+
+    .np-dl-td-no-entries {
+        @apply border-t px-2 py-2;
+    }
+
+}

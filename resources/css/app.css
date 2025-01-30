@@ -1,0 +1,93 @@
+@import 'button.css';
+@import 'footer.css';
+@import 'form.css';
+@import 'markdown.css';
+@import 'navigation.css';
+@import 'table.css';
+@import 'v_tippy.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+[x-cloak] {
+    display: none;
+}
+ul {
+    display: block;
+    list-style-type: disc;
+    
+}
+ul {
+    list-style-position: outside; /* Bullet Points außerhalb */
+    padding-left: 0px; /* Abstand von der linken Seite */
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+li {
+    line-height: 1.5; /* Passt den Abstand zwischen Textzeilen an */
+}
+li {
+    /* display: flex; /* Flexbox verwenden */ 
+    /* align-items: center; /* Zentriert den Text vertikal mit dem Bullet */ 
+}
+ul {
+    padding: 0;
+    margin: 0 0 20px 0; /* Setzt den oberen und unteren Abstand */
+}
+
+li {
+     /* Standard-Bullet-Point */
+    margin-left: 1.5rem; /* Einrückung */
+    line-height: 1.8; /* Passt die Textausrichtung an */
+	
+}
+ul, li {
+    margin: 0;
+    padding: 0;
+}	
+ul {
+    list-style-type: disc; /* Aktiviert Bullet Points */
+    list-style-position: outside; /* Bullet Points außerhalb des Textblocks */
+    margin-left: 20px; /* Abstand links für die Bullet Points */
+    padding-left: 20px; /* Zusätzliche Einrückung */
+}
+	ul {
+    /* display: flex; */
+    /* flex-direction: column; /* Vertikale Anor*/
+    list-style-type: disc; /* Bullet Points aktivieren */
+}
+
+ul {
+    list-style-type: disc; /* Überschreibt globale Regeln */
+}
+.fa-solid {
+    font-family: 'Font Awesome'; /* Specify the font family */
+	font-style: normal !important;
+}
+.fa-trash-can:before{
+	content: "\f2ed";
+	color:#a00;
+	font-size:20px;
+	cursor:pointer;
+}
+.fa-pencil:before{
+	content: "\f303";
+	color:inherit;
+	font-size:20px;
+	cursor:pointer;
+}
+@font-face {
+  font-family: 'Font Awesome';
+  font-style: normal;
+  font-weight: 900;
+    
+
+  font-display: block;
+  src: url("./fonts/fa-solid-900.eot");
+  src: url("./fonts/fa-solid-900.eot?#iefix") format("embedded-opentype"), url("./fonts/fa-solid-900.woff2") format("woff2"), url("./fonts/fa-solid-900.woff") format("woff"), url("./fonts/fa-solid-900.ttf") format("truetype"), url("./fonts/fa-solid-900.svg#fontawesome") format("svg");
+}
+.transpar{
+	background-color:rgba(0,0,0,0) !important;
+}

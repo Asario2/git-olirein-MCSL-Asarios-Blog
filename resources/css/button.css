@@ -1,0 +1,64 @@
+@layer utilities {
+
+    .button_normal {
+        @apply inline-flex items-center flex-nowrap cursor-pointer rounded-md px-2 py-1.5 border border-transparent text-sm leading-4 font-medium transition bg-transparent text-layout-sun-800 hover:bg-layout-sun-200 hover:text-layout-sun-950 outline-none focus:bg-transparent dark:bg-transparent dark:text-layout-night-800 dark:hover:bg-layout-night-200 dark:hover:text-layout-night-950 dark:outline-none dark:focus:bg-transparent
+    }
+
+    .button_menu {
+        @apply inline-flex items-center justify-center p-2 rounded-md focus:outline-none text-layout-sun-400 hover:text-layout-sun-500 hover:bg-layout-sun-100 focus:bg-layout-sun-100 focus:text-layout-sun-500 dark:text-layout-night-400 dark:hover:text-layout-night-500 dark:hover:bg-layout-night-100 dark:focus:bg-layout-night-100 dark:focus:text-layout-night-500 transition duration-150 ease-in-out;
+    }
+
+    .footer_link {
+        @apply inline-flex gap-x-2 py-0.5 px-2 rounded-lg text-layout-sun-600 hover:text-layout-sun-800 hover:bg-layout-sun-200 focus:outline-none focus:ring-1 focus:ring-layout-sun-600 dark:text-layout-night-600 dark:hover:text-layout-night-800 dark:hover:bg-layout-night-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-layout-night-600
+    }
+
+    .button_icon {
+        @apply h-5 w-5 mr-1;
+    }
+
+    .button_icon_solo {
+        @apply h-5 w-5;
+    }
+
+    .button_border {
+        @apply border border-primary-sun-300 dark:border-primary-night-300
+    }
+
+    .button_bg {
+        @apply bg-primary-sun-500 hover:bg-primary-sun-600 focus:bg-primary-sun-600 dark:bg-primary-night-500 dark:hover:bg-primary-night-600 dark:focus:bg-primary-night-600;
+    }
+
+    .button_text_case_border {
+        @apply text-primary-sun-500 dark:text-primary-night-500 hover:text-primary-sun-0 hover:bg-primary-sun-600 focus:text-primary-sun-0 focus:bg-primary-sun-600 dark:hover:text-primary-night-0 dark:hover:bg-primary-night-600 dark:focus:text-primary-night-0 dark:focus:bg-primary-night-600;
+    }
+
+    .button_text_case_bg {
+        @apply text-primary-sun-0 hover:text-primary-sun-0 dark:text-primary-night-0 dark:hover:text-primary-night-0
+    }
+
+    .button_danger_bg {
+        @apply bg-red-500 hover:bg-red-600 focus:bg-red-600 dark:bg-red-500 dark:hover:bg-red-400 dark:focus:bg-red-400;
+    }
+
+    .button_danger_border {
+        @apply border border-red-300 dark:border-red-700
+    }
+
+    .button_danger_text_case_bg {
+        @apply text-primary-sun-0 hover:text-primary-sun-0 dark:text-primary-night-0 dark:hover:text-primary-night-0
+    }
+
+    .button_danger_text_case_border {
+        @apply text-red-500 dark:text-red-500 hover:text-red-100 hover:bg-red-600 focus:text-red-100 focus:bg-red-600 dark:hover:text-red-900 dark:hover:bg-red-400 dark:focus:text-red-900 dark:focus:bg-red-400;
+    }
+
+    .button_white_bg {
+        @apply bg-layout-sun-0 hover:bg-layout-sun-300 focus:bg-layout-sun-400 dark:bg-layout-night-0 dark:hover:bg-layout-night-300 dark:focus:bg-layout-night-400;
+    }
+
+    .button_white_text_case_bg {
+        @apply text-primary-sun-800 hover:text-primary-sun-800 dark:text-primary-night-800 dark:hover:text-primary-night-800
+    }
+
+
+}

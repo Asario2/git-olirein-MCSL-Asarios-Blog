@@ -1,23 +1,23 @@
 # Starter Eleven
 
-Willkommen im Laravel-Template **Starter Eleven**. Ein möglicher Ausgangspunkt für die Entwicklung skalierbarer SaaS-Anwendungen mit Laravel. Dieses Template kombiniert die Eleganz von Laravel mit den modernen Möglichkeiten von Vue.js und TailwindCSS, um dir einen robusten Startpunkt für dein Projekt zu bieten.
+Welcome to the Laravel template **Starter Eleven**. A possible starting point for developing scalable SaaS applications with Laravel. This template combines the elegance of Laravel with the modern capabilities of Vue.js and TailwindCSS to give you a robust starting point for your project.
 
 ## Features
 
-- **Laravel 11**: Nutze die neuesten Laravel-Funktionen für robuste Backend-Logik.
-- **Vue.js Integration**: Für ein reaktives und modernes Frontend.
-- **TailwindCSS**: Schreibe stilvolles CSS schneller mit Utility-first CSS.
-- **Authentifizierungssystem**: Vorgefertigte Laravel Authentifizierung für deine SaaS-Anwendung.
-- **Blog**: Erstellung von Blogartikeln, Anzeige einer Liste von Blogartikeln, Anzeige eines Blogartikels
-- **Anwendungsfamilie**:
+- Laravel 11**: Utilize the latest Laravel features for robust backend logic.
+- **Vue.js integration**: For a responsive and modern frontend.
+- **TailwindCSS**: Write stylish CSS faster with utility-first CSS.
+- **Authentication System**: Pre-built Laravel authentication for your SaaS application.
+- **Blog**: Create blog articles, display a list of blog articles, display a blog article
+- Application family**:
   - Homepage
-  - Authentifizierung
-  - Anwendung für Administratoren (Intranet)
-  - Anwendung für Mitarbeiter (Intranet)
-  - Anwendung für Kunden (Extranet)
+  - Authentication
+  - Application for administrators (intranet)
+  - Application for employees (intranet)
+  - Application for customers (extranet)
 
-## Autor
-Informationen zum Autor Oliver Reinking findest du unter [ReinkingConsulting](https://reinkingconsulting.de)
+## Author
+Information about the author Oliver Reinking can be found at [ReinkingConsulting](https://reinkingconsulting.de)
 
-## Lizenz
-Das Laravel-Template **Starter Eleven** ist eine Open-Source-Software, lizenziert unter der [MIT-Lizenz](https://opensource.org/licenses/MIT).
+## License
+The Laravel template **Starter Eleven** is an open source software, licensed under the [MIT license](https://opensource.org/licenses/MIT).

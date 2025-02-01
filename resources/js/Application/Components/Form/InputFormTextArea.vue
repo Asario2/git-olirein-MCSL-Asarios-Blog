@@ -29,6 +29,11 @@
         type: String,
         default: 'Enter your text here...',
       },
+      id:{
+        type: [String, Number],
+        default: 0,
+
+      },
       value: {
         type: String,
         default: '',

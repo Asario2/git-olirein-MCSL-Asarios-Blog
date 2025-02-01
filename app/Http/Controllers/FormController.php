@@ -34,7 +34,10 @@ class FormController extends Controller
     {
         if(!in_array($name,Settings::excl_cols))
         {
-
+            if($create)
+            {
+                $value = NULL;
+            }
 
         $label = isset(Settings::exl[$name]) ? Settings::exl[$name] : $name;
         $class = FormController::getClass($name,1);
@@ -43,15 +46,26 @@ class FormController extends Controller
             $namefield = $name."Field";
         // $fields = new \stdClass();
 
-        $fields[$namefield] = [
-            'name'  => "$name",
-            'type'  => "$type",
-            'label' => "$label",
-            'value' => "$value",
-            'id'    => "$id",
-            'class' => "$class",
-            'rows' => "$rows",
-        ];
+
+            $fields[$name . 'Field'] = [
+                'name'  => "$name",
+                'type'  => "$type",
+                'label' => "$label",
+                'value' => "$value",
+                'id'    => "$id",
+                'class' => "$class",
+                'rows'  => "$rows",
+            ];
+
+        // $fields[$namefield] = [
+        //     'name'  => "$name",
+        //     'type'  => "$type",
+        //     'label' => "$label",
+        //     'value' => "$value",
+        //     'id'    => "$id",
+        //     'class' => "$class",
+        //     'rows' => "$rows",
+        // ];
         return $fields;
         }
     }
@@ -60,7 +74,7 @@ class FormController extends Controller
         {
             return "4";
         }
-        return "8";
+        return "10";
     }
     public static function getClass($name,$cl='')
     {

@@ -10,6 +10,7 @@
       <input
         type="datetime-local"
         :id="id"
+        step="1"
         :name="name"
         :value="value"
         :placeholder="placeholder"

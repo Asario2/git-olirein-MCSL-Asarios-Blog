@@ -27,33 +27,36 @@
                     <!-- ENDS Loading -->
                 </template>
 
-                <template #form>
+                <template #form style="display: inline-block">
                     <!-- Liste der Fehler -->
                     <error-list :errors="errors" />
 
                     <input-subtitle>Daten</input-subtitle>
                     <template style="display: inline-block">
                         <div>
-
+                            <pre>{{ formData }}</pre>
+                        <pre>{{ this.formFields }}</pre>
 
                             <form @submit.prevent="submitForm">
 
-                                <div v-for="field in formFields" :key="field.id">
-                                    <input-group>
+                                <div v-for="(field, key) in formFields" :key="key">
+
                                     <!-- Dynamische Felder basierend auf Feldtyp -->
                                 <div v-if="field && field.type === 'text'">
+
                                 <InputFormText
                                     :id="field.id || field.name"
                                     :name="field.name"
                                     :value="field.value"
+
                                     v-model="field.name"
                                     :ref="field.name"
                                     :placeholder="field.placeholder || ''"
                                 >
-                                    <template #label>{{ field.label }}</template>
+                                <template #label>{{ field.label }}</template>
                                 </InputFormText>
                                 </div>
-                                </input-group>
+
                                 <div v-if="field && field.type === 'datetime'">
                                     <InputFormDateTime
                                     :id="field.id"
@@ -74,6 +77,7 @@
                                     :name="field.name"
                                     v-model="field.name"
                                     :value="field.value"
+
                                     :ref="field.name"
                                     :placeholder="field.placeholder || ''"
                                     :class="field.class"
@@ -85,51 +89,10 @@
                             <button type="submit" class="bg-blue-500 text-white p-2 rounded">Absenden</button>
                             </form>
                         </div>
-                        </template>
-                                <!-- <div v-for="field in formFields" :key="field.name">
-                                <label :for="field.name">{{ field.label }}</label>
-                                <div v-if="field && field.type === 'text'">
-                                    <input
-                                        type="text"
-                                        :id="field.name"
-                                        :name="field.name"
-                                        :value="field.value"
 
-                                        :placeholder="field.placeholder || ''"
-                                        class="w-full
-                                                p-2.5
-                                                text-sm
-                                                rounded-lg
-                                                block
-                                                border
-                                                focus:ring-3
-                                                focus:ring-opacity-75
 
-                                                bg-layout-sun-0
-                                                text-layout-sun-900
-                                                border-primary-sun-500
-                                                focus:border-primary-sun-500
-                                                focus:ring-primary-sun-500
-                                                placeholder:text-layout-sun-400
+                    </template>
 
-                                                selection:bg-layout-sun-200
-                                                selection:text-layout-sun-1000
-
-                                                dark:bg-layout-night-0
-                                                dark:text-layout-night-900
-                                                dark:border-primary-night-500
-                                                dark:focus:border-primary-night-500
-                                                dark:focus:ring-primary-night-500
-                                                placeholder:dark:text-layout-night-400
-
-                                                dark:selection:bg-layout-night-200
-                                                dark:selection:text-layout-night-1000"
-                                        />
-                                </div>
-                            </div>-->
-                            <pre>{{ formData }}</pre>
-                        <pre>{{ formFields }}</pre>
-                        <pre>{{ datax }}</pre>
 
 
                     </template>
@@ -194,32 +157,7 @@
     </template>
 
 <script>
-import { onMounted } from 'vue'
 
-const data = ref(null)
-const loading = ref(true)
-const error = ref(null)
-
-const fetchData = async () => {
-loading.value = true
-error.value = null
-try {
-const response = await fetch("tables/form_data/"+table+"/" + id)
-if (!response.ok) {
-throw new Error('Network response was not ok')
-}
-datax.value = await response.json()
-console.log("asd:" + datax);
-} catch (err) {
-error.value = err.message
-} finally {
-loading.value = false
-}
-}
-
-onMounted(() => {
-fetchData()
-})
 
 
 
@@ -232,7 +170,11 @@ fetchData()
     let table_alt = table_z;
     import { defineComponent } from "vue";
     import { ref } from 'vue';
+    import { onMounted } from "vue";
 
+const data = ref(null)
+const loading = ref(true)
+const error = ref(null)
 
 
     import Layout from "@/Application/Admin/Shared/Layout.vue";
@@ -289,7 +231,6 @@ fetchData()
             InputLoading,
             ErrorList,
             InputSubtitle,
-            InputGroup,
             InputContainer,
             InputLabel,
             InputElement,
@@ -308,10 +249,10 @@ fetchData()
                 type: Object,
                 default: () => ({}),
             },
-            formFields:{
-                type: Object,
-                default: () => ({}),
-            },
+            // formFields:{
+            //     type: Object,
+            //     default: () => ({}),
+            // },
             editstate: {
                 type: String,
                 default:''
@@ -333,26 +274,26 @@ fetchData()
                 type: Object,
                 default: () => ({}),
             },
-            table_alt: {
-                type: String,
-                default:table_z,
-            },
-            tablez: {
-                type: String,
-                default:table_z,
-            },
-            rows:{
-                type:Array,
-                default: [],
-            },
+            // table_alt: {
+            //     type: String,
+            //     default:table_z,
+            // },
+            // tablez: {
+            //     type: String,
+            //     default:table_z,
+            // },
+            // rows:{
+            //     type:Array,
+            //     default: [],
+            // },
             breadcrumbs: {
-        type: Array,
+        type: Object,
         required: true,
         },
-        formData:{
-            type: Array,
-            default: [],
-        },
+        // formData:{
+        //     type: Array,
+        //     default: [],
+        // },
         },
 
         data() {
@@ -364,53 +305,12 @@ fetchData()
             //         type: "text",
             //         value: "valuei"
             // }],
+            // formFields:  {},
             ///formFields:[],
-            formFields:  {
-                "idField": {
-                "name": "id",
-                "type": "text",
-                "label": "ID",
-                "value": "2",
-                "id": "2",
-                "class": "disabled",
-                "rows": "8"
-            },
-                "nameField": {
-                "name": "name",
-                "type": "text",
-                "label": "Name",
-                "value": "Devlog",
-                "id": "2",
-                "class": "text",
-                "rows": "8"
-            },
-                "summaryField": {
-                "name": "summary",
-                "type": "textarea_short",
-                "label": "Kurzfassung",
-                "value": "short description of this one",
-                "id": "2",
-                "class": "textarea_short",
-                "rows": "4"
-            },
-                "created_atField": {
-                "name": "created_at",
-                "type": "datetime",
-                "label": "Erstellt am:",
-                "value": "2025-01-22 09:02:27",
-                "id": "2",
-                "class": "datetime",
-                "rows": "8"
-            }
 
-    },
         //   formData: {},
             // formData: [{ name: '', label: '', type:'' } ],
 
-            formData: {
-
-
-        },
 
 
     formData : {},
@@ -468,12 +368,16 @@ fetchData()
             tables() {
                 return this.$page.props.tables;
             },
-            formData() {
-                return this.$page.props.formData;
-            },
-            formFields() {
-                return this.$page.props.formFields
-            },
+            // formData() {
+            //     return this.$page.props.formData;
+            // },
+            dynamicFormData() {
+        return this.formFields.reduce((acc, field) => {
+            acc[field.name] = this.formData[field.name] || field.value;
+            return acc;
+        }, {});
+    }
+
         },
     watch: {
 
@@ -542,14 +446,59 @@ fetchData()
     setup() {
 
 
-
+        const formFields = reactive({
+      idField: {
+        name: "id",
+        type: "text",
+        label: "ID",
+        value: "2",
+        id: "2",
+        class: "disabled",
+        rows: "8"
+      },
+      nameField: {
+        name: "name",
+        type: "text",
+        label: "Name",
+        value: "Devlog",
+        id: "2",
+        class: "text",
+        rows: "8"
+      },
+      summaryField: {
+        name: "summary",
+        type: "textarea_short",
+        label: "Kurzfassung",
+        value: "short description of this one",
+        id: "2",
+        class: "textarea_short",
+        rows: "4"
+      },
+      created_atField: {
+        name: "created_at",
+        type: "datetime",
+        label: "Erstellt am:",
+        value: "2025-01-22 09:02:27",
+        id: "2",
+        class: "datetime",
+        rows: "8"
+      }
+    });
+    const formData = reactive({});
 
         // Instead of using $set, just update directly
-        // formData.field1 = 'new value';
+        // formData.field1 = 'newvalue';
 
-        return {
-        ///  formData
-        };
+        onMounted(() => {
+      Object.keys(formFields).forEach((key) => {
+        formData[formFields[key].name] = formFields[key].value;
+      });
+    });
+
+    return {
+      formFields,
+      formData
+    };
     },
         methods: {
 
@@ -566,48 +515,125 @@ fetchData()
                     (typeof value === "string" && value.trim().length > 0) || typeof value === "number"
                 );
             },
-            async fetchFormData() {
-            try {
+//             async fetchFormData() {
+//             try {
 
-            const response = await axios.get(route("GetTableForm", [table, id]));
-            response=>response.json();
-            console.log("tables/form-data/"+ table +"/" + id);
-            // console.log(response.data);
+//             const response = await axios.get(route("GetTableForm", [table, id]));
+//             // response=>response.json();
+//             console.log("tables/form-data/"+ table +"/" + id);
+//             // console.log(response.data);
+//             this.formFields = response.data;
+//             var formFields_old = response.data;
+//             var obj = JSON.stringify(this.formFields,null,2);
+//             obj = obj.replace(/"formFields": \[.*\]/, '');
+//             obj =  obj.replace(/^\{|\}$/g, '');
+
+//             obj = obj.replace(/}\s*,\s*\n\s*}/g, "},").replace(/[\[\]]/g, '').replace(/\[|\]$/, '');
+//             // obj = obj.replace(/},/g, "");
+//             obj = obj.replace(/,\s*\n\s*{/g, ',');
+
+//             //     console.log("new:"+JSON.stringify(obj, null, 2));
+//             obj = obj.replace(/\s*\}(?!,)\s*/g, '}');;
+//             obj = obj.replace(/}},/g, '\n   },');
+//             obj = obj.replace(/}}/g, '\n   }\n  }');
+
+//             this.formFields = obj;
+//             var fields = obj;
+//             console.log(this.formFields);
+
+//             formFields_old.forEach((field) => {
+//             //this.$set(this.formData, field.name, field.value || '');
+//             this.setFormField(field);
+
+//             console.log(field);
+//             });
+// //            Initialisiere das Formular-Daten-Objekt
+//             this.formFields.forEach(field => {
+//                 this.formData[field.name] = field.value;
+//              });
+//         } catch (error) {
+//             console.error("Fehler beim Abrufen der Formulardaten:", error);
+//         }
+
+//         }
+async fetchDataX() {
+    loading.value = true
+
+error.value = null
+try {
+const response = await fetch(route("GetTableForm", [table, id]))
+if (!response.ok) {
+throw new Error('Network response was not ok')
+}
+data.value = await response.json();
+this.formFields = data;
+
+} catch (err) {
+error.value = err.message
+} finally {
+loading.value = false
+console.log("asd:" + JSON.stringify(data,null,2));
+}
+},
+
+
+fetchFormData() {
+    axios.get(route("GetTableForm", [table, id]))
+        .then(response => {
+            console.log("tables/form-data/" + table + "/" + id);
+
             this.formFields = response.data;
-            var formFields_old = response.data;
-            var obj = JSON.stringify(this.formFields,null,2);
+            let formFields_old = response.data;
+
+            let obj = JSON.stringify(this.formFields, null, 2);
             obj = obj.replace(/"formFields": \[.*\]/, '');
-            obj =  obj.replace(/^\{|\}$/g, '');
-
+            obj = obj.replace(/^\{|\}$/g, '');
             obj = obj.replace(/}\s*,\s*\n\s*}/g, "},").replace(/[\[\]]/g, '').replace(/\[|\]$/, '');
-            // obj = obj.replace(/},/g, "");
             obj = obj.replace(/,\s*\n\s*{/g, ',');
-
-            //     console.log("new:"+JSON.stringify(obj, null, 2));
-            obj = obj.replace(/\s*\}(?!,)\s*/g, '}');;
+            obj = obj.replace(/\s*\}(?!,)\s*/g, '}');
             obj = obj.replace(/}},/g, '\n   },');
             obj = obj.replace(/}}/g, '\n   }\n  }');
 
             this.formFields = obj;
-            var fields = obj;
             console.log(this.formFields);
 
-            formFields_old.forEach((field) => {
-            //this.$set(this.formData, field.name, field.value || '');
-            this.setFormField(field);
-
-            console.log(field);
+            formFields_old.forEach(field => {
+                this.setFormField(field);
+                console.log(field);
             });
-            // Initialisiere das Formular-Daten-Objekt
-            // this.formFields.forEach(field => {
-            //     this.formData[field.name] = "";
-            // });
-        } catch (error) {
+
+            this.formFields.forEach(field => {
+                this.formData[field.name] = field.value;
+            });
+        })
+        .catch(error => {
             console.error("Fehler beim Abrufen der Formulardaten:", error);
-        }
-        },
+        });
+},
         submitForm() {
             console.log(JSON.stringify(this.formData,null,2)); // Formular-Daten absenden
+        },
+        reldiv(div)
+        {
+
+document.addEventListener("DOMContentLoaded", function () {
+    function reloadDiv() {
+        fetch(location.href)
+            .then(response => response.text())
+            .then(html => {
+                let parser = new DOMParser();
+                let doc = parser.parseFromString(html, "text/html");
+                let newContent = doc.querySelector(div);
+
+                if (newContent) {
+                    document.querySelector("#reldiv").innerHTML = newContent.innerHTML;
+                }
+            })
+            .catch(error => console.error("Error loading content:", error));
+    }
+
+    reloadDiv(); // Falls du es direkt beim Laden ausführen möchtest
+})
         },
             deleteTable() {
                 this.confirmingTableDeletion = false;
@@ -664,7 +690,22 @@ fetchData()
                     }
                 );
             },
+            updateData()
+            {
+                if(!this.formData){
+            formData = {};
+        }
+        if (typeof this.formFields === 'object' && !Array.isArray(this.formFields)) {
+        const fieldsArray = Object.values(this.formFields);
+        fieldsArray.forEach(field => {
+        if (field.name) {
 
+                this.formData[field.name] = field.value || '';
+
+        }
+        });
+        }
+    },
             selectTableImage(id) {
                 console.log("selectTableImage id:", id);
                 this.form.table_image_id = id;
@@ -674,28 +715,20 @@ fetchData()
             // API-Anfrage zum Abrufen der Daten
             axios.get(route("GetTableForm", [table, id]))  // Ersetze dies durch die tatsächliche API-URL
         .then(response => {
-        //    this.formFields = response.data.formFields;  // Setze die abgerufenen Daten in den lokalen Zustand
+           //this.formFields = response.data;  // Setze die abgerufenen Daten in den lokalen Zustand
         })
         .catch(error => {
             console.error('Fehler beim Abrufen der Daten:', error);
         });
 
-    this.fetchFormData();
+        //this.fetchDataX();
+        // this.fetchFormData();
+        this.updateData();
 
 
     },
     created() {
-        var formData = [];
-        if (typeof this.formFields === 'object' && !Array.isArray(this.formFields)) {
-        const fieldsArray = Object.values(this.formFields);
-        fieldsArray.forEach(field => {
-        if (field.name) {
 
-                formData[field.name] = field.value || '';
-
-        }
-        });
-        }
     }
         });
 

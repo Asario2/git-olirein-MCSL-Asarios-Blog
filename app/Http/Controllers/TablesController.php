@@ -251,9 +251,10 @@ class TablesController extends Controller
     ->update([$name => $val]);
 
     }
-    function EditTables(Request $request,$table,$id){
+    function EditTables(Request $request,$table,$id = ''){
         $tablez = [];
 
+        $edstate = !$id ? "Erstellen" : "Bearbeiten";
         $breadcrumbs = collect($tablez)->mapWithKeys(function ($item) {
             return [$item->title => route('admin.tables.show', $item->id)];
         });
@@ -264,10 +265,10 @@ class TablesController extends Controller
 
         $tables = DB::table($table)->get();
         return Inertia::render('Admin/TableForm', [
-            'filters' => Request()->all('search'),
+           // 'filters' => Request()->all('search'),
             'datarows' => $tables,
             "rows" => $tables,
-            "editstate"=> "Bearbeiten",
+            "editstate"=> $edstate,
             "table" => $tables,
             "ItemName" => "Beiträge",
             "itemName_des" => "Beitrags",
@@ -305,7 +306,15 @@ class TablesController extends Controller
         $id = (int)$id;
         $id = $id == 0 ? "1" : $id;
         $columns = Schema::getColumnListing($table);
-        $tables = DB::table($table)->where('id',$id)->orderBy($ord[0],$ord[1])->first();
+        if($id)
+        {
+            $tables = DB::table($table)->where('id',$id)->orderBy($ord[0],$ord[1])->first();
+        }
+        else{
+            $tables  = DB::table($table)->orderBy($ord[0],$ord[1])->first();
+            $create = true;
+        }
+
 
             foreach($columns as $column)
             {

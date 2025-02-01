@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 30. Jan 2025 um 18:13
--- Server-Version: 10.4.32-MariaDB
--- PHP-Version: 8.2.12
+-- Generation Time: Jan 31, 2025 at 02:26 PM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,15 +18,16 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Datenbank: `oliver_rein`
+-- Database: `oliver_rein`
 --
 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `admin_table`
+-- Table structure for table `admin_table`
 --
 
+DROP TABLE IF EXISTS `admin_table`;
 CREATE TABLE `admin_table` (
   `id` bigint(20) NOT NULL,
   `pub` tinyint(1) DEFAULT 1,
@@ -40,7 +41,7 @@ CREATE TABLE `admin_table` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Daten für Tabelle `admin_table`
+-- Dumping data for table `admin_table`
 --
 
 INSERT INTO `admin_table` (`id`, `pub`, `position`, `table_name`, `description`, `modul`, `created_at`, `published_at`, `updated_at`) VALUES
@@ -61,9 +62,10 @@ INSERT INTO `admin_table` (`id`, `pub`, `position`, `table_name`, `description`,
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `blogs`
+-- Table structure for table `blogs`
 --
 
+DROP TABLE IF EXISTS `blogs`;
 CREATE TABLE `blogs` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `blog_category_id` bigint(20) UNSIGNED NOT NULL DEFAULT 1,
@@ -84,7 +86,7 @@ CREATE TABLE `blogs` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Daten für Tabelle `blogs`
+-- Dumping data for table `blogs`
 --
 
 INSERT INTO `blogs` (`id`, `blog_category_id`, `title`, `content`, `summary`, `blog_author_id`, `blog_date`, `slug`, `reading_time`, `audio_on`, `audio_url`, `audio_duration`, `markdown_on`, `blog_image_id`, `created_at`, `updated_at`) VALUES
@@ -275,9 +277,10 @@ INSERT INTO `blogs` (`id`, `blog_category_id`, `title`, `content`, `summary`, `b
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `blog_authors`
+-- Table structure for table `blog_authors`
 --
 
+DROP TABLE IF EXISTS `blog_authors`;
 CREATE TABLE `blog_authors` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `name` varchar(100) DEFAULT NULL,
@@ -287,7 +290,7 @@ CREATE TABLE `blog_authors` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Daten für Tabelle `blog_authors`
+-- Dumping data for table `blog_authors`
 --
 
 INSERT INTO `blog_authors` (`id`, `name`, `info`, `created_at`, `updated_at`) VALUES
@@ -296,9 +299,10 @@ INSERT INTO `blog_authors` (`id`, `name`, `info`, `created_at`, `updated_at`) VA
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `blog_categories`
+-- Table structure for table `blog_categories`
 --
 
+DROP TABLE IF EXISTS `blog_categories`;
 CREATE TABLE `blog_categories` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `name` varchar(100) DEFAULT NULL,
@@ -308,7 +312,7 @@ CREATE TABLE `blog_categories` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Daten für Tabelle `blog_categories`
+-- Dumping data for table `blog_categories`
 --
 
 INSERT INTO `blog_categories` (`id`, `name`, `summary`, `created_at`, `updated_at`) VALUES
@@ -319,9 +323,10 @@ INSERT INTO `blog_categories` (`id`, `name`, `summary`, `created_at`, `updated_a
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `blog_images`
+-- Table structure for table `blog_images`
 --
 
+DROP TABLE IF EXISTS `blog_images`;
 CREATE TABLE `blog_images` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `name` varchar(100) DEFAULT NULL,
@@ -331,7 +336,7 @@ CREATE TABLE `blog_images` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Daten für Tabelle `blog_images`
+-- Dumping data for table `blog_images`
 --
 
 INSERT INTO `blog_images` (`id`, `name`, `url`, `created_at`, `updated_at`) VALUES
@@ -520,9 +525,10 @@ INSERT INTO `blog_images` (`id`, `name`, `url`, `created_at`, `updated_at`) VALU
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `cache`
+-- Table structure for table `cache`
 --
 
+DROP TABLE IF EXISTS `cache`;
 CREATE TABLE `cache` (
   `key` varchar(255) NOT NULL,
   `value` mediumtext NOT NULL,
@@ -530,12 +536,12 @@ CREATE TABLE `cache` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Daten für Tabelle `cache`
+-- Dumping data for table `cache`
 --
 
 INSERT INTO `cache` (`key`, `value`, `expiration`) VALUES
-('3733defb58efe959a0d4ca2660b1809e', 'i:1;', 1738247955),
-('3733defb58efe959a0d4ca2660b1809e:timer', 'i:1738247955;', 1738247955),
+('3733defb58efe959a0d4ca2660b1809e', 'i:1;', 1738329416),
+('3733defb58efe959a0d4ca2660b1809e:timer', 'i:1738329416;', 1738329416),
 ('58a529729abdfedf1f6a0f17c1ebdaf4', 'i:1;', 1737466785),
 ('58a529729abdfedf1f6a0f17c1ebdaf4:timer', 'i:1737466785;', 1737466785),
 ('9d2b9c28c3ecbbb2606c75afe5c5114d', 'i:1;', 1738254768),
@@ -546,9 +552,10 @@ INSERT INTO `cache` (`key`, `value`, `expiration`) VALUES
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `cache_locks`
+-- Table structure for table `cache_locks`
 --
 
+DROP TABLE IF EXISTS `cache_locks`;
 CREATE TABLE `cache_locks` (
   `key` varchar(255) NOT NULL,
   `owner` varchar(255) NOT NULL,
@@ -558,9 +565,10 @@ CREATE TABLE `cache_locks` (
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `comments`
+-- Table structure for table `comments`
 --
 
+DROP TABLE IF EXISTS `comments`;
 CREATE TABLE `comments` (
   `id` bigint(11) NOT NULL,
   `pub` tinyint(2) NOT NULL DEFAULT 1,
@@ -575,7 +583,7 @@ CREATE TABLE `comments` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
--- Daten für Tabelle `comments`
+-- Dumping data for table `comments`
 --
 
 INSERT INTO `comments` (`id`, `pub`, `users_id`, `post_id`, `tablename`, `content`, `email`, `created_at`, `updated_at`, `xis_checked`) VALUES
@@ -694,9 +702,10 @@ INSERT INTO `comments` (`id`, `pub`, `users_id`, `post_id`, `tablename`, `conten
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `devlog`
+-- Table structure for table `devlog`
 --
 
+DROP TABLE IF EXISTS `devlog`;
 CREATE TABLE `devlog` (
   `id` bigint(11) NOT NULL,
   `pub` tinyint(1) NOT NULL DEFAULT 0,
@@ -719,7 +728,7 @@ CREATE TABLE `devlog` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
 --
--- Daten für Tabelle `devlog`
+-- Dumping data for table `devlog`
 --
 
 INSERT INTO `devlog` (`id`, `pub`, `typ`, `title`, `created_at`, `chg_date`, `content`, `image_path`, `xis_ai`, `xis_ai_text`, `LinkName`, `LinkName_en`, `clinks_idx`, `url`, `url_en`, `author_id`, `xis_transl`, `xkis_IsFeed`) VALUES
@@ -756,9 +765,10 @@ INSERT INTO `devlog` (`id`, `pub`, `typ`, `title`, `created_at`, `chg_date`, `co
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `didyouknow`
+-- Table structure for table `didyouknow`
 --
 
+DROP TABLE IF EXISTS `didyouknow`;
 CREATE TABLE `didyouknow` (
   `id` bigint(11) NOT NULL,
   `pub` tinyint(2) NOT NULL,
@@ -771,7 +781,7 @@ CREATE TABLE `didyouknow` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Daten für Tabelle `didyouknow`
+-- Dumping data for table `didyouknow`
 --
 
 INSERT INTO `didyouknow` (`id`, `pub`, `position`, `author_id`, `headline`, `answer`, `created_at`, `chg_date`) VALUES
@@ -888,9 +898,10 @@ INSERT INTO `didyouknow` (`id`, `pub`, `position`, `author_id`, `headline`, `ans
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `failed_jobs`
+-- Table structure for table `failed_jobs`
 --
 
+DROP TABLE IF EXISTS `failed_jobs`;
 CREATE TABLE `failed_jobs` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `uuid` varchar(255) NOT NULL,
@@ -904,9 +915,10 @@ CREATE TABLE `failed_jobs` (
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `images`
+-- Table structure for table `images`
 --
 
+DROP TABLE IF EXISTS `images`;
 CREATE TABLE `images` (
   `id` bigint(11) NOT NULL,
   `pub` tinyint(1) NOT NULL DEFAULT 0,
@@ -931,7 +943,7 @@ CREATE TABLE `images` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Daten für Tabelle `images`
+-- Dumping data for table `images`
 --
 
 INSERT INTO `images` (`id`, `pub`, `position`, `images_categories_id`, `headline`, `headline_en`, `status`, `created_at`, `chg_date`, `message`, `message_en`, `camera_id`, `image_path`, `link`, `Format`, `Format_en`, `preis`, `users_id`, `xis_IsSaleable`, `xkis_Ticker`) VALUES
@@ -1257,9 +1269,10 @@ INSERT INTO `images` (`id`, `pub`, `position`, `images_categories_id`, `headline
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `images_categories`
+-- Table structure for table `images_categories`
 --
 
+DROP TABLE IF EXISTS `images_categories`;
 CREATE TABLE `images_categories` (
   `id` bigint(11) NOT NULL,
   `pub` tinyint(2) NOT NULL,
@@ -1281,7 +1294,7 @@ CREATE TABLE `images_categories` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Daten für Tabelle `images_categories`
+-- Dumping data for table `images_categories`
 --
 
 INSERT INTO `images_categories` (`id`, `pub`, `position`, `name`, `name_en`, `shortname`, `heading_alt`, `heading_alt_en`, `img_icon`, `AscName`, `AscName_en`, `description`, `description_en`, `itemscope`, `date`, `chg_date`, `xis_shopable`) VALUES
@@ -1313,9 +1326,10 @@ INSERT INTO `images_categories` (`id`, `pub`, `position`, `name`, `name_en`, `sh
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `jobs`
+-- Table structure for table `jobs`
 --
 
+DROP TABLE IF EXISTS `jobs`;
 CREATE TABLE `jobs` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `queue` varchar(255) NOT NULL,
@@ -1329,9 +1343,10 @@ CREATE TABLE `jobs` (
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `job_batches`
+-- Table structure for table `job_batches`
 --
 
+DROP TABLE IF EXISTS `job_batches`;
 CREATE TABLE `job_batches` (
   `id` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL,
@@ -1348,9 +1363,10 @@ CREATE TABLE `job_batches` (
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `migrations`
+-- Table structure for table `migrations`
 --
 
+DROP TABLE IF EXISTS `migrations`;
 CREATE TABLE `migrations` (
   `id` int(10) UNSIGNED NOT NULL,
   `migration` varchar(255) NOT NULL,
@@ -1358,7 +1374,7 @@ CREATE TABLE `migrations` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Daten für Tabelle `migrations`
+-- Dumping data for table `migrations`
 --
 
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
@@ -1376,9 +1392,10 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `password_reset_tokens`
+-- Table structure for table `password_reset_tokens`
 --
 
+DROP TABLE IF EXISTS `password_reset_tokens`;
 CREATE TABLE `password_reset_tokens` (
   `email` varchar(255) NOT NULL,
   `token` varchar(255) NOT NULL,
@@ -1388,9 +1405,10 @@ CREATE TABLE `password_reset_tokens` (
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `personal_access_tokens`
+-- Table structure for table `personal_access_tokens`
 --
 
+DROP TABLE IF EXISTS `personal_access_tokens`;
 CREATE TABLE `personal_access_tokens` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `tokenable_type` varchar(255) NOT NULL,
@@ -1407,9 +1425,10 @@ CREATE TABLE `personal_access_tokens` (
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `sessions`
+-- Table structure for table `sessions`
 --
 
+DROP TABLE IF EXISTS `sessions`;
 CREATE TABLE `sessions` (
   `id` varchar(255) NOT NULL,
   `user_id` bigint(20) UNSIGNED DEFAULT NULL,
@@ -1420,19 +1439,20 @@ CREATE TABLE `sessions` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Daten für Tabelle `sessions`
+-- Dumping data for table `sessions`
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('PM5OzIOZ5gMDLwh8jvV9b2FK0ve4SaHh26PkPYZz', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoieHlJaTJRS2xwNlhpWG5raTlzUkdxYkt5cXpMa0lZQ3huVldieG1lRCI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6Mjc6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MS9sb2dpbiI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1738247848),
-('qVsPBOjMGUVHwwZlTSrwPBy7RJqQXqhZNUTZBT8R', 2, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoibHN2cldNRFFUSDRRSWpMMXZ6QlZpalZOaVJlM2RhRVdHS0FSUXBzRiI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo1OiJ0b2FzdCI7YTowOnt9czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NDk6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MS9hZG1pbi90YWJsZXMvZWRpdC9ibG9ncy8xNzkiO31zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aToyO30=', 1738254976);
+('dbvQFl4nWieFJhP97GCvUNhfUD14XwXT4LjR4JN5', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoidVZSZG9PMHdyNXdUcjNoeGQ1VkFIT0tWbE9xanVuaHdPU2hHaGlMciI7czozOiJ1cmwiO2E6MDp7fXM6OToiX3ByZXZpb3VzIjthOjE6e3M6MzoidXJsIjtzOjQ5OiJodHRwOi8vbG9jYWxob3N0OjgwODEvYWRtaW4vdGFibGVzL2VkaXQvYmxvZ3MvMTc5Ijt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo1MDoibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiO2k6MTt9', 1738329374),
+('qVsPBOjMGUVHwwZlTSrwPBy7RJqQXqhZNUTZBT8R', 2, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36', 'YTo2OntzOjY6Il90b2tlbiI7czo0MDoibHN2cldNRFFUSDRRSWpMMXZ6QlZpalZOaVJlM2RhRVdHS0FSUXBzRiI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo1OiJ0b2FzdCI7YTowOnt9czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NDk6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MS9hZG1pbi90YWJsZXMvZWRpdC9ibG9ncy8xNzkiO31zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aToyO3M6OToiZGFya19tb2RlIjtzOjQ6ImRhcmsiO30=', 1738265989);
 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `tables`
+-- Table structure for table `tables`
 --
 
+DROP TABLE IF EXISTS `tables`;
 CREATE TABLE `tables` (
   `id` bigint(20) NOT NULL,
   `pub` tinyint(1) DEFAULT 1,
@@ -1446,7 +1466,7 @@ CREATE TABLE `tables` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Daten für Tabelle `tables`
+-- Dumping data for table `tables`
 --
 
 INSERT INTO `tables` (`id`, `pub`, `position`, `table_name`, `description`, `modul`, `created_at`, `published_at`, `updated_at`) VALUES
@@ -1467,9 +1487,10 @@ INSERT INTO `tables` (`id`, `pub`, `position`, `table_name`, `description`, `mod
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `users`
+-- Table structure for table `users`
 --
 
+DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `first_name` varchar(255) DEFAULT NULL,
@@ -1498,9 +1519,10 @@ CREATE TABLE `users` (
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `users_rights`
+-- Table structure for table `users_rights`
 --
 
+DROP TABLE IF EXISTS `users_rights`;
 CREATE TABLE `users_rights` (
   `id` bigint(11) NOT NULL,
   `pub` tinyint(1) NOT NULL DEFAULT 1,
@@ -1522,7 +1544,7 @@ CREATE TABLE `users_rights` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
--- Daten für Tabelle `users_rights`
+-- Dumping data for table `users_rights`
 --
 
 INSERT INTO `users_rights` (`id`, `pub`, `position`, `moderator_id`, `name`, `shortname`, `view_table`, `add_table`, `edit_table`, `publish_table`, `date_table`, `delete_table`, `xkis_AdminPanel`, `xkis_UserRights`, `xkis_SendMail`, `xkis_SandMail`, `xkis_CommentsCenter`) VALUES
@@ -1532,116 +1554,116 @@ INSERT INTO `users_rights` (`id`, `pub`, `position`, `moderator_id`, `name`, `sh
 (5, 1, 3, 1, 'Trial', 'trial', '000000000000000', '000000000000000', '000000000000000', '000000000000000', '000000000000000', '000000000000000', 0, 0, 0, 0, 0);
 
 --
--- Indizes der exportierten Tabellen
+-- Indexes for dumped tables
 --
 
 --
--- Indizes für die Tabelle `admin_table`
+-- Indexes for table `admin_table`
 --
 ALTER TABLE `admin_table`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indizes für die Tabelle `blogs`
+-- Indexes for table `blogs`
 --
 ALTER TABLE `blogs`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indizes für die Tabelle `blog_authors`
+-- Indexes for table `blog_authors`
 --
 ALTER TABLE `blog_authors`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indizes für die Tabelle `blog_categories`
+-- Indexes for table `blog_categories`
 --
 ALTER TABLE `blog_categories`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indizes für die Tabelle `blog_images`
+-- Indexes for table `blog_images`
 --
 ALTER TABLE `blog_images`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indizes für die Tabelle `cache`
+-- Indexes for table `cache`
 --
 ALTER TABLE `cache`
   ADD PRIMARY KEY (`key`);
 
 --
--- Indizes für die Tabelle `cache_locks`
+-- Indexes for table `cache_locks`
 --
 ALTER TABLE `cache_locks`
   ADD PRIMARY KEY (`key`);
 
 --
--- Indizes für die Tabelle `comments`
+-- Indexes for table `comments`
 --
 ALTER TABLE `comments`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indizes für die Tabelle `devlog`
+-- Indexes for table `devlog`
 --
 ALTER TABLE `devlog`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indizes für die Tabelle `didyouknow`
+-- Indexes for table `didyouknow`
 --
 ALTER TABLE `didyouknow`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indizes für die Tabelle `failed_jobs`
+-- Indexes for table `failed_jobs`
 --
 ALTER TABLE `failed_jobs`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `failed_jobs_uuid_unique` (`uuid`);
 
 --
--- Indizes für die Tabelle `images`
+-- Indexes for table `images`
 --
 ALTER TABLE `images`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indizes für die Tabelle `images_categories`
+-- Indexes for table `images_categories`
 --
 ALTER TABLE `images_categories`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id` (`id`);
 
 --
--- Indizes für die Tabelle `jobs`
+-- Indexes for table `jobs`
 --
 ALTER TABLE `jobs`
   ADD PRIMARY KEY (`id`),
   ADD KEY `jobs_queue_index` (`queue`);
 
 --
--- Indizes für die Tabelle `job_batches`
+-- Indexes for table `job_batches`
 --
 ALTER TABLE `job_batches`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indizes für die Tabelle `migrations`
+-- Indexes for table `migrations`
 --
 ALTER TABLE `migrations`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indizes für die Tabelle `password_reset_tokens`
+-- Indexes for table `password_reset_tokens`
 --
 ALTER TABLE `password_reset_tokens`
   ADD PRIMARY KEY (`email`);
 
 --
--- Indizes für die Tabelle `personal_access_tokens`
+-- Indexes for table `personal_access_tokens`
 --
 ALTER TABLE `personal_access_tokens`
   ADD PRIMARY KEY (`id`),
@@ -1649,7 +1671,7 @@ ALTER TABLE `personal_access_tokens`
   ADD KEY `personal_access_tokens_tokenable_type_tokenable_id_index` (`tokenable_type`,`tokenable_id`);
 
 --
--- Indizes für die Tabelle `sessions`
+-- Indexes for table `sessions`
 --
 ALTER TABLE `sessions`
   ADD PRIMARY KEY (`id`),
@@ -1657,129 +1679,141 @@ ALTER TABLE `sessions`
   ADD KEY `sessions_last_activity_index` (`last_activity`);
 
 --
--- Indizes für die Tabelle `tables`
+-- Indexes for table `tables`
 --
 ALTER TABLE `tables`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indizes für die Tabelle `users`
+-- Indexes for table `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `users_email_unique` (`email`);
 
 --
--- Indizes für die Tabelle `users_rights`
+-- Indexes for table `users_rights`
 --
 ALTER TABLE `users_rights`
   ADD PRIMARY KEY (`id`);
 
 --
--- AUTO_INCREMENT für exportierte Tabellen
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT für Tabelle `admin_table`
+-- AUTO_INCREMENT for table `admin_table`
 --
 ALTER TABLE `admin_table`
   MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=103;
 
 --
--- AUTO_INCREMENT für Tabelle `blogs`
+-- AUTO_INCREMENT for table `blogs`
 --
 ALTER TABLE `blogs`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=181;
 
 --
--- AUTO_INCREMENT für Tabelle `blog_authors`
+-- AUTO_INCREMENT for table `blog_authors`
 --
 ALTER TABLE `blog_authors`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT für Tabelle `blog_categories`
+-- AUTO_INCREMENT for table `blog_categories`
 --
 ALTER TABLE `blog_categories`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
--- AUTO_INCREMENT für Tabelle `blog_images`
+-- AUTO_INCREMENT for table `blog_images`
 --
 ALTER TABLE `blog_images`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=182;
 
 --
--- AUTO_INCREMENT für Tabelle `comments`
+-- AUTO_INCREMENT for table `comments`
 --
 ALTER TABLE `comments`
   MODIFY `id` bigint(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=125;
 
 --
--- AUTO_INCREMENT für Tabelle `devlog`
+-- AUTO_INCREMENT for table `devlog`
 --
 ALTER TABLE `devlog`
   MODIFY `id` bigint(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
--- AUTO_INCREMENT für Tabelle `didyouknow`
+-- AUTO_INCREMENT for table `didyouknow`
 --
 ALTER TABLE `didyouknow`
   MODIFY `id` bigint(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=119;
 
 --
--- AUTO_INCREMENT für Tabelle `failed_jobs`
+-- AUTO_INCREMENT for table `failed_jobs`
 --
 ALTER TABLE `failed_jobs`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT für Tabelle `images`
+-- AUTO_INCREMENT for table `images`
 --
 ALTER TABLE `images`
   MODIFY `id` bigint(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=429;
 
 --
--- AUTO_INCREMENT für Tabelle `images_categories`
+-- AUTO_INCREMENT for table `images_categories`
 --
 ALTER TABLE `images_categories`
   MODIFY `id` bigint(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
--- AUTO_INCREMENT für Tabelle `jobs`
+-- AUTO_INCREMENT for table `jobs`
 --
 ALTER TABLE `jobs`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT für Tabelle `migrations`
+-- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
--- AUTO_INCREMENT für Tabelle `personal_access_tokens`
+-- AUTO_INCREMENT for table `personal_access_tokens`
 --
 ALTER TABLE `personal_access_tokens`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT für Tabelle `tables`
+-- AUTO_INCREMENT for table `tables`
 --
 ALTER TABLE `tables`
   MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=103;
 
 --
--- AUTO_INCREMENT für Tabelle `users`
+-- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT für Tabelle `users_rights`
+-- AUTO_INCREMENT for table `users_rights`
 --
 ALTER TABLE `users_rights`
   MODIFY `id` bigint(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id`, `first_name`, `last_name`, `email`, `name`, `email_verified_at`, `password`, `users_rights_id`, `profile_photo_path`, `is_admin`, `is_employee`, `is_customer`, `admin_id`, `company_id`, `customer_id`, `last_login_at`, `two_factor_secret`, `two_factor_recovery_codes`, `two_factor_confirmed_at`, `remember_token`, `created_at`, `updated_at`) VALUES
+(2, 'Kiss', 'U', 'KissYou@example.com', 'KissU', '2025-01-10 14:58:58', '$2y$12$xmseqPoBKtL.VWc4w0yZAePcMwNY4ocIjIFgLYFYbYUrufAxuhXvG', 1, 'images/profile/008.jpg', 1, 0, 0, 2, NULL, NULL, '2025-01-30 16:31:49', NULL, NULL, '2025-01-20 17:38:47', NULL, '2025-01-10 14:58:58', '2025-01-30 16:31:49');
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

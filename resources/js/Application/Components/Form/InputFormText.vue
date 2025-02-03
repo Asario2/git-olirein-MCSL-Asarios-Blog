@@ -8,11 +8,12 @@
       </label>
       <input
         type="text"
+        size="12"
+        width="200"
         :id="id"
         :name="name"
-        :value="value"
         :placeholder="placeholder"
-        class="w-full
+        class="     
                p-2.5
                text-sm
                rounded-lg
@@ -40,7 +41,8 @@
 
                dark:selection:bg-layout-night-200
                dark:selection:text-layout-night-1000"
-      />
+               :value="modelValue"
+    @input="$emit('update:modelValue', $event.target.value)"
     </div>
   </template>
 
@@ -48,22 +50,11 @@
   export default {
     name: 'InputFormText',
     props: {
-      id: {
-        type: String,
-        required: true
-      },
-      name: {
-        type: String,
-        required: true
-      },
-      value: {
-        type: String,
-        default: ''
-      },
-      placeholder: {
-        type: String,
-        default: ''
-      }
+    id: { type: String, required: true },
+    name: { type: String, required: true },
+    modelValue: { type: String, default: '' },  // Use modelValue instead of value
+    placeholder: { type: String, default: '' }
+
     }
   };
   </script>

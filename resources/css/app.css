@@ -91,3 +91,6 @@ ul {
 .transpar{
 	background-color:rgba(0,0,0,0) !important;
 }
+textarea {
+  resize: none;
+}

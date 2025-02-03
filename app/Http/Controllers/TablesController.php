@@ -264,18 +264,18 @@ class TablesController extends Controller
         $breadcrumbs = $breadcrumbs->toArray();
 
         $tables = DB::table($table)->get();
+        \Log::info("ff:".$this->ExportFields($table,$id));
         return Inertia::render('Admin/TableForm', [
-           // 'filters' => Request()->all('search'),
             'datarows' => $tables,
             "rows" => $tables,
             "editstate"=> $edstate,
             "table" => $tables,
             "ItemName" => "Beiträge",
             "itemName_des" => "Beitrags",
-            "formFields"  => $this->ExportFields($table,$id),
-            "tablez " => $table,
-            'breadcrumbs'=>$breadcrumbs,
-        ]);
+            // "formFields"  => $this->ExportFields($table, $id),
+            "tablez" => $table,
+            'breadcrumbs' => $breadcrumbs,
+        ])->withViewData(['debug' => true]);
     }
     public function ExportFields($table,$id)
     {
@@ -321,7 +321,34 @@ class TablesController extends Controller
               $fields[] = FormController::Fields($column,$tables->$column,$table,$create,@$id);
             }
             $formFields = array_filter($fields);
+            // $formFields = json_decode(json_encode($formFields));
             $ar = ['formFields' => ($formFields)];
+            $ar = 'formFields: {
+
+                "idField": {
+                  "name": "id",
+                  "type": "text",
+                  "label": "ID",
+                  "value": "2",
+                  "id": "2",
+                  "class": "disabled"
+               },
+                "nameField": {
+                  "name": "name",
+                  "type": "text",
+                  "label": "Name",
+                  "value": "Devlog_alt",
+                  "id": "2",
+                  "class": "text"
+               },
+                "created_atField": {
+                  "name": "created_at",
+                  "type": "datetime",
+                  "label": "Erstellt am:",
+                  "value": "",
+                  "id": "2",
+                  "class": "datetime"
+               }';
             return response()->json($formFields);
     }
     public function ShowTable(Request $request,$table_alt=NULL)

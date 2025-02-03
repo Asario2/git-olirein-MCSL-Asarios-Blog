@@ -4,9 +4,8 @@
     :value="modelValue"
     :rows="rows"
     class="
-      block
+
       p-2.5
-      w-full
       text-sm
       rounded-lg
       border

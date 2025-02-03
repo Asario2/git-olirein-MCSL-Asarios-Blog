@@ -27,7 +27,7 @@
                     <!-- ENDS Loading -->
                 </template>
 
-                <template #form style="display: inline-block">
+                <template #form>
                     <!-- Liste der Fehler -->
                     <error-list :errors="errors" />
 
@@ -44,26 +44,23 @@
                                     <!-- Dynamische Felder basierend auf Feldtyp -->
                                 <div v-if="field && field.type === 'text'">
 
-                                <InputFormText
-                                    :id="field.id || field.name"
-                                    :name="field.name"
-                                    :value="field.value"
+                                    <InputFormText
+                                        :id="field.id || field.name"
+                                        :name="field.name"
+                                        v-model="field.value"
+                                        :placeholder="field.placeholder || ''"
+                                    >
+                                        <template #label>{{ field.label }}</template>
+                                    </InputFormText>
 
-                                    v-model="field.name"
-                                    :ref="field.name"
-                                    :placeholder="field.placeholder || ''"
-                                >
-                                <template #label>{{ field.label }}</template>
-                                </InputFormText>
                                 </div>
 
                                 <div v-if="field && field.type === 'datetime'">
                                     <InputFormDateTime
                                     :id="field.id"
                                     :name="field.name"
-                                    :value="field.value"
                                     :ref="field.name"
-                                    v-model="field.name"
+                                    v-model="field.value"
                                     :placeholder="field.placeholder || ''"
                                     :class="field.class"
                                 >
@@ -75,9 +72,23 @@
                                     <InputFormTextArea
                                     :id="field.id"
                                     :name="field.name"
+                                    v-model="field.value"
+                                    :value="field.value"
+                                    :rows="field.rows"
+                                    :ref="field.name"
+                                    :placeholder="field.placeholder || ''"
+                                    :class="field.class"
+                                >{{ field.value }}
+                                    <template #label>{{ field.label }}</template>
+                                </InputFormTextArea>
+                            </div>
+                            <div v-if="field && field.type === 'textarea'">
+                                    <InputFormTextArea
+                                    :id="field.id"
+                                    :name="field.name"
                                     v-model="field.name"
                                     :value="field.value"
-
+                                    :rows="field.rows"
                                     :ref="field.name"
                                     :placeholder="field.placeholder || ''"
                                     :class="field.class"
@@ -163,29 +174,30 @@
 
     const path = window.location.pathname; // Gibt "/admin/tables/show/Example" zurück
     const segments = path.split('/'); // Teilt den Pfad in Segmente auf
-    const lastSegment = segments[segments.length - 2];
     const id = segments[segments.length - 1];
     const table = segments[segments.length - 2];
-    let table_z = lastSegment;
-    let table_alt = table_z;
+    const routes = {
+
+    getform: (table,id) => `/tables/form-data/${table}/${id}`
+};
+
     import { defineComponent } from "vue";
-    import { ref } from 'vue';
+    import axios from 'axios';
+    import pickBy from 'lodash/pickBy';
+
+    // import { Ziggy } from 'ziggy-js';
+    // import route from 'ziggy';
+
     import { onMounted } from "vue";
-
-const data = ref(null)
-const loading = ref(true)
-const error = ref(null)
-
-
     import Layout from "@/Application/Admin/Shared/Layout.vue";
     import Breadcrumb from "@/Application/Components/Content/Breadcrumb.vue";
 
     import SmoothScroll from "@/Application/Components/SmoothScroll.vue";
 
-    import PageTitle from "@/Application/Components/Content/PageTitle.vue";
+    // import PageTitle from "@/Application/Components/Content/PageTitle.vue";
 
     import SectionForm from "@/Application/Components/Content/SectionForm.vue";
-    import SectionBorder from "@/Application/Components/Content/SectionBorder.vue";
+    // import SectionBorder from "@/Application/Components/Content/SectionBorder.vue";
 
     import ButtonGroup from "@/Application/Components/Form/ButtonGroup.vue";
     import InputButton from "@/Application/Components/Form/InputButton.vue";
@@ -199,19 +211,19 @@ const error = ref(null)
 
     import ErrorList from "@/Application/Components/Form/ErrorList.vue";
     import InputSubtitle from "@/Application/Components/Form/InputSubtitle.vue";
-    import InputGroup from "@/Application/Components/Form/InputGroup.vue";
-    import InputContainer from "@/Application/Components/Form/InputContainer.vue";
-    import InputLabel from "@/Application/Components/Form/InputLabel.vue";
-    import InputElement from "@/Application/Components/Form/InputElement.vue";
-    import InputCheckbox from "@/Application/Components/Form/InputCheckbox.vue";
-    import InputSelect from "@/Application/Components/Form/InputSelect.vue";
-    import InputTextarea from "@/Application/Components/Form/InputTextarea.vue";
-    import InputHtml from "@/Application/Components/Form/InputHtml.vue";
-    import InputError from "@/Application/Components/Form/InputError.vue";
+//    import InputGroup from "@/Application/Components/Form/InputGroup.vue";
+    // import InputContainer from "@/Application/Components/Form/InputContainer.vue";
+    // import InputLabel from "@/Application/Components/Form/InputLabel.vue";
+    // import InputElement from "@/Application/Components/Form/InputElement.vue";
+    // import InputCheckbox from "@/Application/Components/Form/InputCheckbox.vue";
+    // import InputSelect from "@/Application/Components/Form/InputSelect.vue";
+    // import InputTextarea from "@/Application/Components/Form/InputTextarea.vue";
+    // import InputHtml from "@/Application/Components/Form/InputHtml.vue";
+    // import InputError from "@/Application/Components/Form/InputError.vue";
     import { throttle } from 'lodash';
     import DialogModal from "@/Application/Components/DialogModal.vue";
     import { reactive } from 'vue';
-    import Alert from "@/Application/Components/Content/Alert.vue";
+    // import Alert from "@/Application/Components/Content/Alert.vue";
 
     export default defineComponent({
         name: "Admin_TableForm",
@@ -220,28 +232,28 @@ const error = ref(null)
             Layout,
             Breadcrumb,
             SmoothScroll,
-            PageTitle,
+            // PageTitle,
             InputFormDateTime,
             InputFormText,
             SectionForm,
-            SectionBorder,
+            // SectionBorder,
             ButtonGroup,
             InputButton,
             InputDangerButton,
             InputLoading,
             ErrorList,
             InputSubtitle,
-            InputContainer,
-            InputLabel,
-            InputElement,
-            InputCheckbox,
-            InputSelect,
-            InputTextarea,
-            InputHtml,
-            InputFormTextArea,
-            InputError,
+            // InputContainer,
+            // InputLabel,
+            // InputElement,
+            // InputCheckbox,
+            // InputSelect,
+            // InputTextarea,
+            // InputHtml,
+             InputFormTextArea,
+            // InputError,
             DialogModal,
-            Alert,
+            // Alert,
         },
 
         props: {
@@ -375,12 +387,27 @@ const error = ref(null)
         return this.formFields.reduce((acc, field) => {
             acc[field.name] = this.formData[field.name] || field.value;
             return acc;
-        }, {});
-    }
+        }, {});}
+
 
         },
     watch: {
+        updateData()
+            {
+                if(this.formData.length < 1){
+            this.formData = {};
+        }
+        if (typeof this.formFields === 'object' && !Array.isArray(this.formFields)) {
+        const fieldsArray = Object.values(this.formFields);
+        fieldsArray.forEach(field => {
+        if (field.name) {
 
+                this.formData[field.name] = field.value || '';
+
+        }
+        });
+        }
+    },
     formFields(newVal) {
         console.log("formFields geändert:", newVal);
     },
@@ -392,7 +419,7 @@ const error = ref(null)
         const segments = path.split('/'); // Teilt den Pfad in Segmente auf
         const lastSegment = segments[segments.length - 1];
         let paramValue = lastSegment;
-        let table_alt = lastSegment;
+
         //   let paramValue = document.getElementById("tb_alt").value;
 
         // Dynamische Parameter für die Route
@@ -484,20 +511,20 @@ const error = ref(null)
         rows: "8"
       }
     });
-    const formData = reactive({});
+    //this.formData = reactive({});
 
         // Instead of using $set, just update directly
         // formData.field1 = 'newvalue';
 
         onMounted(() => {
-      Object.keys(formFields).forEach((key) => {
-        formData[formFields[key].name] = formFields[key].value;
-      });
+    //   Object.keys(formFields).forEach((key) => {
+    //     formData[formFields[key].name] = formFields[key].value;
+    //   });
     });
 
     return {
       formFields,
-      formData
+     // formData
     };
     },
         methods: {
@@ -556,29 +583,32 @@ const error = ref(null)
 //         }
 
 //         }
-async fetchDataX() {
-    loading.value = true
+// async fetchDataX() {
+//     loading.value = true
+//     if(data.length < 1)
+//     {
+//         data = {};
+//     }
+// error.value = null
+// try {
+// const response = await fetch(routes["getform", [table, id]])
+// if (!response.ok) {
+// throw new Error('Network response was not ok')
+// }
+// data.value = await response.json();
+// this.formFields = data;
 
-error.value = null
-try {
-const response = await fetch(route("GetTableForm", [table, id]))
-if (!response.ok) {
-throw new Error('Network response was not ok')
-}
-data.value = await response.json();
-this.formFields = data;
-
-} catch (err) {
-error.value = err.message
-} finally {
-loading.value = false
-console.log("asd:" + JSON.stringify(data,null,2));
-}
-},
+// } catch (err) {
+// error.value = err.message
+// } finally {
+// loading.value = false
+// console.log("asd:" + JSON.stringify(data,null,2));
+// }
+// },
 
 
 fetchFormData() {
-    axios.get(route("GetTableForm", [table, id]))
+    axios.get(routes.getform(table, id))
         .then(response => {
             console.log("tables/form-data/" + table + "/" + id);
 
@@ -588,7 +618,7 @@ fetchFormData() {
             let obj = JSON.stringify(this.formFields, null, 2);
             obj = obj.replace(/"formFields": \[.*\]/, '');
             obj = obj.replace(/^\{|\}$/g, '');
-            obj = obj.replace(/}\s*,\s*\n\s*}/g, "},").replace(/[\[\]]/g, '').replace(/\[|\]$/, '');
+            obj = obj.replace(/}\s*,\s*\n\s*}/g, "},").replace(/[[\]]/g, '').replace(/\[|\]$/, '');
             obj = obj.replace(/,\s*\n\s*{/g, ',');
             obj = obj.replace(/\s*\}(?!,)\s*/g, '}');
             obj = obj.replace(/}},/g, '\n   },');
@@ -602,39 +632,19 @@ fetchFormData() {
                 console.log(field);
             });
 
-            this.formFields.forEach(field => {
-                this.formData[field.name] = field.value;
-            });
+            // this.formFields.forEach(field => {
+            //     this.formData[field.name] = field.value;
+            // });
         })
         .catch(error => {
             console.error("Fehler beim Abrufen der Formulardaten:", error);
         });
 },
-        submitForm() {
+
+submitForm() {
             console.log(JSON.stringify(this.formData,null,2)); // Formular-Daten absenden
         },
-        reldiv(div)
-        {
 
-document.addEventListener("DOMContentLoaded", function () {
-    function reloadDiv() {
-        fetch(location.href)
-            .then(response => response.text())
-            .then(html => {
-                let parser = new DOMParser();
-                let doc = parser.parseFromString(html, "text/html");
-                let newContent = doc.querySelector(div);
-
-                if (newContent) {
-                    document.querySelector("#reldiv").innerHTML = newContent.innerHTML;
-                }
-            })
-            .catch(error => console.error("Error loading content:", error));
-    }
-
-    reloadDiv(); // Falls du es direkt beim Laden ausführen möchtest
-})
-        },
             deleteTable() {
                 this.confirmingTableDeletion = false;
                 //
@@ -693,7 +703,7 @@ document.addEventListener("DOMContentLoaded", function () {
             updateData()
             {
                 if(!this.formData){
-            formData = {};
+            this.formData = {};
         }
         if (typeof this.formFields === 'object' && !Array.isArray(this.formFields)) {
         const fieldsArray = Object.values(this.formFields);
@@ -712,18 +722,18 @@ document.addEventListener("DOMContentLoaded", function () {
             },
         },
         mounted() {
-            // API-Anfrage zum Abrufen der Daten
-            axios.get(route("GetTableForm", [table, id]))  // Ersetze dies durch die tatsächliche API-URL
-        .then(response => {
-           //this.formFields = response.data;  // Setze die abgerufenen Daten in den lokalen Zustand
-        })
-        .catch(error => {
-            console.error('Fehler beim Abrufen der Daten:', error);
-        });
+        //     // API-Anfrage zum Abrufen der Daten
+        //     axios.get(routes["getform", [table, id]])  // Ersetze dies durch die tatsächliche API-URL
+        // .then(response => {
+        //    //this.formFields = response.data;  // Setze die abgerufenen Daten in den lokalen Zustand
+        // })
+        // .catch(error => {
+        //     console.error('Fehler beim Abrufen der Daten:', error);
+        // });
 
         //this.fetchDataX();
-        // this.fetchFormData();
-        this.updateData();
+//        this.fetchFormData();
+//        this.updateData();
 
 
     },

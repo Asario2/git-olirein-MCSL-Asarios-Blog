@@ -12,9 +12,9 @@
         :id="id"
         step="1"
         :name="name"
-        :value="value"
+
         :placeholder="placeholder"
-        class="w-full
+        class="
                p-2.5
                text-sm
                rounded-lg
@@ -42,7 +42,9 @@
 
                dark:selection:bg-layout-night-200
                dark:selection:text-layout-night-1000"
-      />
+
+               :value="modelValue"
+    @input="$emit('update:modelValue', $event.target.value)"/>
     </div>
   </template>
 
@@ -58,10 +60,7 @@
         type: String,
         required: true
       },
-      value: {
-        type: String,
-        default: ''
-      },
+      modelValue: { type: String, default: '' },
       placeholder: {
         type: String,
         default: ''

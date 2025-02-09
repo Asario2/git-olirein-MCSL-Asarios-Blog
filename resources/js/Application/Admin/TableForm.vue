@@ -27,117 +27,58 @@
                 <input-subtitle>Daten</input-subtitle>
                 <template style="display: inline-block">
                     <div>
-                        <!-- <pre>{{ formData }}</pre>
-                        <pre>{{ this.formFields }}</pre> -->
+                        <!-- <pre>{{ formData }}</pre> -->
+                        <!-- <pre>{{ this.ffo }}</pre> -->
 
                         <input-group>
                             <form @submit.prevent="submitForm">
-                                <div
-                                    class="maxx grid grid-cols-1 lg:grid-cols-2 mb-2 gap-2 lg:gap-x-6 mt-2"
-                                >
-                                    <span
-                                        v-for="(field, key) in this.formFields"
-                                        :key="key"
+                                <div class="maxx grid grid-cols-1 lg:grid-cols-2 mb-2 gap-2 lg:gap-x-6 mt-2">
+                                <template v-for="(field, key) in ffo" :key="key">
+                                    <input-container v-if="field.type === 'text'">
+                                        <InputFormText
+                                            :id="field.id || field.name"
+                                            :name="field.name"
+                                            v-model="field.value"
+                                            :placeholder="field.placeholder || ''"
+                                        >
+                                            <template #label>{{ field.label }}</template>
+                                        </InputFormText>
+                                    </input-container>
+
+                                    <input-container v-else-if="field.type === 'datetime'">
+                                        <InputFormDateTime
+                                            :id="field.id"
+                                            :name="field.name"
+                                            :ref="field.name"
+                                            v-model="field.value"
+                                            :placeholder="field.placeholder || ''"
+                                            :class="field.class"
+                                        >
+                                            <template #label>{{ field.label }}</template>
+                                        </InputFormDateTime>
+                                    </input-container>
+
+                                    <input-container
+                                        v-else-if="['textarea_short', 'textarea'].includes(field.type)"
+                                        :full-width="true"
+                                        class="lg:col-span-2"
                                     >
-                                        {{ field.type }}
-                                        <!-- Dynamische Felder basierend auf Feldtyp -->
-                                        <span
-                                            v-if="field && field.type == 'text'"
+                                        <InputFormTextArea
+                                            :id="field.id"
+                                            :name="field.name"
+                                            v-model="field.value"
+                                            :rows="field.rows"
+                                            :ref="field.name"
+                                            cols="25"
+                                            :placeholder="field.placeholder || ''"
+                                            :class="field.class"
                                         >
-                                            <input-container>
-                                                <InputFormText
-                                                    :id="field.id || field.name"
-                                                    :name="field.name"
-                                                    v-model="field.value"
-                                                    :placeholder="
-                                                        field.placeholder || ''
-                                                    "
-                                                >
-                                                    <template #label>{{
-                                                        field.label
-                                                    }}</template>
-                                                </InputFormText>
-                                            </input-container>
-                                        </span>
+                                            <template #label>{{ field.label }}</template>
+                                        </InputFormTextArea>
+                                    </input-container>
+                                </template>
+                            </div>
 
-                                        <span
-                                            v-if="
-                                                field &&
-                                                field.type == 'datetime'
-                                            "
-                                        >
-                                            <input-container>
-                                                <InputFormDateTime
-                                                    :id="field.id"
-                                                    :name="field.name"
-                                                    :ref="field.name"
-                                                    v-model="field.value"
-                                                    :placeholder="
-                                                        field.placeholder || ''
-                                                    "
-                                                    :class="field.class"
-                                                >
-                                                    <template #label>{{
-                                                        field.label
-                                                    }}</template>
-                                                </InputFormDateTime>
-                                            </input-container>
-                                        </span>
-
-                                        <span
-                                            v-if="
-                                                field &&
-                                                field.type == 'textarea_short'
-                                            "
-                                            class="maxx grid grid-cols-1 lg:grid-cols-2 mb-2 gap-2 lg:gap-x-6 mt-2"
-                                        >
-                                            <input-container :full-width="true">
-                                                <InputFormTextArea
-                                                    :id="field.id"
-                                                    :name="field.name"
-                                                    v-model="field.value"
-                                                    :value="field.value"
-                                                    :rows="field.rows"
-                                                    :ref="field.name"
-                                                    cols="25"
-                                                    :placeholder="
-                                                        field.placeholder || ''
-                                                    "
-                                                    :class="field.class"
-                                                    >{{ field.value }}
-                                                    <template #label>{{
-                                                        field.label
-                                                    }}</template>
-                                                </InputFormTextArea>
-                                            </input-container>
-                                        </span>
-                                        <span
-                                            v-if="
-                                                field &&
-                                                field.type == 'textarea'
-                                            "
-                                        >
-                                            <input-container>
-                                                <InputFormTextArea
-                                                    :id="field.id"
-                                                    :name="field.name"
-                                                    v-model="field.name"
-                                                    :value="field.value"
-                                                    :rows="field.rows"
-                                                    :ref="field.name"
-                                                    :placeholder="
-                                                        field.placeholder || ''
-                                                    "
-                                                    :class="field.class"
-                                                    >{{ field.value }}
-                                                    <template #label>{{
-                                                        field.label
-                                                    }}</template>
-                                                </InputFormTextArea>
-                                            </input-container>
-                                        </span>
-                                    </span>
-                                </div>
 
                                 <button
                                     type="submit"
@@ -224,7 +165,7 @@ import { defineComponent } from "vue";
 import axios from "axios";
 import pickBy from "lodash/pickBy";
 // import { usePage } from '@inertiajs/vue3';
-
+import { ref, watch } from "vue";
 // const page2 = usePage();
 
 // import { Ziggy } from 'ziggy-js';
@@ -502,9 +443,17 @@ export default defineComponent({
         },
     },
     defineProps() {
-        ffo: [String, Array, Object, Number];
+        // ffo: [String, Array, Object, Number];
     },
     setup() {
+        const ffo = ref(localStorage.getItem("ffo") || "Standardwert");
+
+watch(ffo, (newValue) => {
+    localStorage.setItem("ffo", newValue);
+});
+
+return { ffo };
+
         const formFields = reactive({
             idField: {
                 name: "id",
@@ -527,7 +476,7 @@ export default defineComponent({
             summaryField: {
                 name: "summary",
                 type: "textarea_short",
-                label: "Kurzfassung",
+                label: "Zusammenfassung",
                 value: "short description of this one",
                 id: "2",
                 class: "textarea_short",
@@ -574,72 +523,7 @@ export default defineComponent({
                     typeof value === "number",
             );
         },
-        //             async fetchFormData() {
-        //             try {
-
-        //             const response = await axios.get(route("GetTableForm", [table, id]));
-        //             // response=>response.json();
-        //             console.log("tables/form-data/"+ table +"/" + id);
-        //             // console.log(response.data);
-        //             this.formFields = response.data;
-        //             var formFields_old = response.data;
-        //             var obj = JSON.stringify(this.formFields,null,2);
-        //             obj = obj.replace(/"formFields": \[.*\]/, '');
-        //             obj =  obj.replace(/^\{|\}$/g, '');
-
-        //             obj = obj.replace(/}\s*,\s*\n\s*}/g, "},").replace(/[\[\]]/g, '').replace(/\[|\]$/, '');
-        //             // obj = obj.replace(/},/g, "");
-        //             obj = obj.replace(/,\s*\n\s*{/g, ',');
-
-        //             //     console.log("new:"+JSON.stringify(obj, null, 2));
-        //             obj = obj.replace(/\s*\}(?!,)\s*/g, '}');;
-        //             obj = obj.replace(/}},/g, '\n   },');
-        //             obj = obj.replace(/}}/g, '\n   }\n  }');
-
-        //             this.formFields = obj;
-        //             var fields = obj;
-        //             console.log(this.formFields);
-
-        //             formFields_old.forEach((field) => {
-        //             //this.$set(this.formData, field.name, field.value || '');
-        //             this.setFormField(field);
-
-        //             console.log(field);
-        //             });
-        // //            Initialisiere das Formular-Daten-Objekt
-        //             this.formFields.forEach(field => {
-        //                 this.formData[field.name] = field.value;
-        //              });
-        //         } catch (error) {
-        //             console.error("Fehler beim Abrufen der Formulardaten:", error);
-        //         }
-
-        //         }
-        // async fetchDataX() {
-        //     loading.value = true
-        //     if(data.length < 1)
-        //     {
-        //         data = {};
-        //     }
-        // error.value = null
-        // try {
-        // const response = await fetch(routes["getform", [table, id]])
-        // if (!response.ok) {
-        // throw new Error('Network response was not ok')
-        // }
-        // data.value = await response.json();
-        // this.formFields = data;
-
-        // } catch (err) {
-        // error.value = err.message
-        // } finally {
-        // loading.value = false
-        // console.log("asd:" + JSON.stringify(data,null,2));
-        // }
-        // },
-
         fetchFormData() {
-            console.log(table, id);
             axios
                 .get(routes.getform(table, id))
                 .then((response) => {
@@ -657,12 +541,11 @@ export default defineComponent({
                     obj = obj.replace(/}},/g, "\n   },");
                     obj = obj.replace(/}}/g, "\n   }\n  }");
 
-                    this.formFields = obj;
-                    console.log(this.formFields);
+                    this.ffo = JSON.parse(obj);
+                    ffo = this.ffo;
                     //            this.ffo = obj;
                     formFields_old.forEach((field) => {
                         this.setFormField(field);
-                        console.log(field);
                     });
 
                     // this.formFields.forEach(field => {
@@ -678,7 +561,7 @@ export default defineComponent({
         },
 
         submitForm() {
-            //console.log(JSON.stringify(this.formData, null, 2)); // Formular-Daten absenden
+            console.log(JSON.stringify(this.formData, null, 2)); // Formular-Daten absenden
         },
 
         deleteTable() {
@@ -758,19 +641,12 @@ export default defineComponent({
         },
     },
     mounted() {
-        //     // API-Anfrage zum Abrufen der Daten
-        //     axios.get(routes["getform", [table, id]])  // Ersetze dies durch die tatsächliche API-URL
-        // .then(response => {
-        //    //this.formFields = response.data;  // Setze die abgerufenen Daten in den lokalen Zustand
-        // })
-        // .catch(error => {
-        //     console.error('Fehler beim Abrufen der Daten:', error);
-        // });
-
-        //this.fetchDataX();
+         //this.fetchDataX();
         this.fetchFormData();
         this.updateData();
     },
-    created() {},
+    created() {
+        // this.fetchFormData();
+    },
 });
 </script>

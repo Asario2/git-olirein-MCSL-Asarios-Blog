@@ -109,8 +109,6 @@ import throttle from "lodash/throttle";
 const path = window.location.pathname; // Gibt "/admin/tables/show/Example" zurück
 const segments = path.split("/"); // Teilt den Pfad in Segmente auf
 const table = segments[segments.length - 1];
-console.log("Table:", table);
-
 
 export default {
     name: "Contents_Lists_ListContainer",
@@ -199,7 +197,7 @@ export default {
         },
         routeCreate: {
             type: String,
-            default: route('admin.tables.create', table),
+            default: table,
         },
         showDescription: {
             type: String,
@@ -220,7 +218,7 @@ export default {
             form: {
                 search: this.filters.search,
             },
-        // routeCreate: route('admin.tables.create', table),
+        routeCreate: "/admin/tables/create/" +table,
         };
     },
     //

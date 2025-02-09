@@ -311,7 +311,8 @@ class TablesController extends Controller
             $ord[1] = "DESC";
         }
         $id = (int)$id;
-        $id = $id == 0 ? "1" : $id;
+
+        $id = $id == 0 ? null : $id;
         $columns = Schema::getColumnListing($table);
         if($id)
         {
@@ -325,7 +326,8 @@ class TablesController extends Controller
 
             foreach($columns as $column)
             {
-              $fields[] = FormController::Fields($column,$tables->$column,$table,$create,@$id);
+                \Log::info(json_encode([$column,$tables->$column]));
+              $fields[] = FormController::Fields($column,$tables->$column,$table,$id,$create);
             }
             $formFields = array_filter($fields);
             // $formFields = json_decode(json_encode($formFields));

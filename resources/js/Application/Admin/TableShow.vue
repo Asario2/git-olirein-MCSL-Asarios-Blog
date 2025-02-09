@@ -19,7 +19,7 @@
           :edit-on="true"
           route-edit="admin.tables.edit"
           :create-on="true"
-          route-create="admin.tables.create"
+          :route-create="routeCreate"
           :delete-on="true"
           route-delete="admin.tables.destroy"
           >
@@ -154,10 +154,14 @@ let table = table_z.toLowerCase();
   computed: {
 
     routeCreate() {
-    return route( '/admin/tables/create/' + table);
+    return route( 'admin.tables.create', table);
   },
   showRoute() {
     return route('admin.tables.show', table);
+  },
+  createRoute()
+  {
+    return route('admin.tables.create', table);
   },
     formattedTableName() {
     //   return this.ucf(this.table_z);

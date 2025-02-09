@@ -30,7 +30,7 @@ class FormController extends Controller
 
     }
     //VUE Formmaker
-    public static function Fields($name,$value,$table,$create='',$id='')
+    public static function Fields($name,$value,$table,$id='',$create='')
     {
         if(!in_array($name,Settings::excl_cols))
         {
@@ -986,7 +986,6 @@ var $j = jQuery.noConflict(); // Weist jQuery einer anderen Variable zu, um Konf
                 ->where('id', $request->id)
                 ->update([$request->column => strtotime($request->value)]);
     $arr = [$request->id,$request->column,strtotime($request->valuef)];
-            \Log::info("ud:".json_encode($arr));
             if ($updated) {
                 return response()->json([
                     'success' => true,

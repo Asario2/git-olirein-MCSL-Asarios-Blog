@@ -117,12 +117,12 @@ export default defineComponent({
                         "home.blog.index",
                         Object.keys(query).length
                             ? query
-                            : { remember: "forget" }
+                            : { remember: "forget" },
                     ),
                     this.form,
                     {
                         preserveState: true,
-                    }
+                    },
                 );
             }, 150),
             deep: true,

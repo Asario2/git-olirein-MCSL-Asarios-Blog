@@ -1,10 +1,10 @@
-@import 'button.css';
-@import 'footer.css';
-@import 'form.css';
-@import 'markdown.css';
-@import 'navigation.css';
-@import 'table.css';
-@import 'v_tippy.css';
+@import "button.css";
+@import "footer.css";
+@import "form.css";
+@import "markdown.css";
+@import "navigation.css";
+@import "table.css";
+@import "v_tippy.css";
 
 @tailwind base;
 @tailwind components;
@@ -16,10 +16,9 @@
 ul {
     display: block;
     list-style-type: disc;
-    
 }
 ul {
-    list-style-position: outside; /* Bullet Points außerhalb */
+    list-style-position: outside; /* Bullet Points auï¿½erhalb */
     padding-left: 0px; /* Abstand von der linken Seite */
     margin-top: 0;
     margin-bottom: 0;
@@ -29,8 +28,8 @@ li {
     line-height: 1.5; /* Passt den Abstand zwischen Textzeilen an */
 }
 li {
-    /* display: flex; /* Flexbox verwenden */ 
-    /* align-items: center; /* Zentriert den Text vertikal mit dem Bullet */ 
+    /* display: flex; /* Flexbox verwenden */
+    /* align-items: center; /* Zentriert den Text vertikal mit dem Bullet */
 }
 ul {
     padding: 0;
@@ -38,59 +37,91 @@ ul {
 }
 
 li {
-     /* Standard-Bullet-Point */
-    margin-left: 1.5rem; /* Einrückung */
+    /* Standard-Bullet-Point */
+    margin-left: 1.5rem; /* Einrï¿½ckung */
     line-height: 1.8; /* Passt die Textausrichtung an */
-	
 }
-ul, li {
+ul,
+li {
     margin: 0;
     padding: 0;
-}	
+}
 ul {
     list-style-type: disc; /* Aktiviert Bullet Points */
-    list-style-position: outside; /* Bullet Points außerhalb des Textblocks */
-    margin-left: 20px; /* Abstand links für die Bullet Points */
-    padding-left: 20px; /* Zusätzliche Einrückung */
+    list-style-position: outside; /* Bullet Points auï¿½erhalb des Textblocks */
+    margin-left: 20px; /* Abstand links fï¿½r die Bullet Points */
+    padding-left: 20px; /* Zusï¿½tzliche Einrï¿½ckung */
 }
-	ul {
+ul {
     /* display: flex; */
     /* flex-direction: column; /* Vertikale Anor*/
     list-style-type: disc; /* Bullet Points aktivieren */
 }
 
 ul {
-    list-style-type: disc; /* Überschreibt globale Regeln */
+    list-style-type: disc; /* ï¿½berschreibt globale Regeln */
 }
 .fa-solid {
-    font-family: 'Font Awesome'; /* Specify the font family */
-	font-style: normal !important;
+    font-family: "Font Awesome"; /* Specify the font family */
+    font-style: normal !important;
 }
-.fa-trash-can:before{
-	content: "\f2ed";
-	color:#a00;
-	font-size:20px;
-	cursor:pointer;
+.fa-trash-can:before {
+    content: "\f2ed";
+    color: #a00;
+    font-size: 20px;
+    cursor: pointer;
 }
-.fa-pencil:before{
-	content: "\f303";
-	color:inherit;
-	font-size:20px;
-	cursor:pointer;
+.fa-pencil:before {
+    content: "\f303";
+    color: inherit;
+    font-size: 20px;
+    cursor: pointer;
 }
 @font-face {
-  font-family: 'Font Awesome';
-  font-style: normal;
-  font-weight: 900;
-    
+    font-family: "Font Awesome";
+    font-style: normal;
+    font-weight: 900;
 
-  font-display: block;
-  src: url("./fonts/fa-solid-900.eot");
-  src: url("./fonts/fa-solid-900.eot?#iefix") format("embedded-opentype"), url("./fonts/fa-solid-900.woff2") format("woff2"), url("./fonts/fa-solid-900.woff") format("woff"), url("./fonts/fa-solid-900.ttf") format("truetype"), url("./fonts/fa-solid-900.svg#fontawesome") format("svg");
+    font-display: block;
+    src: url("./fonts/fa-solid-900.eot");
+    src:
+        url("./fonts/fa-solid-900.eot?#iefix") format("embedded-opentype"),
+        url("./fonts/fa-solid-900.woff2") format("woff2"),
+        url("./fonts/fa-solid-900.woff") format("woff"),
+        url("./fonts/fa-solid-900.ttf") format("truetype"),
+        url("./fonts/fa-solid-900.svg#fontawesome") format("svg");
 }
-.transpar{
-	background-color:rgba(0,0,0,0) !important;
+.transpar {
+    background-color: rgba(0, 0, 0, 0) !important;
 }
 textarea {
-  resize: none;
+    resize: none;
+}
+textarea.txt {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    max-width: 450px !important;
+    /* width: 100%; */
+    box-sizing: border-box;
+    line-height: 1.2;
+
+    overflow: auto;
+}
+
+@media (min-width: 1025px) {
+    .maxx {
+        min-width: 100%;
+        max-width: 100%;
+    }
+    .txt {
+        max-width: 560px !important;
+    }
+}
+@media (max-width: 1024px) {
+    .txt {
+        width: 100%;
+        min-width: 100%;
+        max-width: 100%;
+    }
 }

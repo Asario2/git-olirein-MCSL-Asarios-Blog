@@ -16,7 +16,7 @@
                 title="Blogartikel"
                 :routeName="route('admin.blog.index')"
                 linkName="Liste der Blogartikel"
-                :routeName2="route('admin.blog.create')"
+                :routeName2="route('admin.blog.create', table)"
                 linkName2="Neuer Blogartikel"
                 :withIcon="true"
                 icon="IconBook"
@@ -36,16 +36,15 @@
                 :withIcon="true"
                 icon="IconBook"
             >
-                <template #description>
-                    Tabellen Verwalten
-                </template>
+                <!-- DB updaten -->
+                <template #description> Tabellen Verwalten </template>
             </navigation-card>
             <navigation-card
                 class="navigation_card"
                 title="Tabellen"
-                :routeName="route('admin.tables.index')"
+                :routeName="route('admin.tables.index', table)"
                 linkName="Inhalte Verwalten"
-                target="_blank"
+                target="_self"
                 :withIcon="true"
                 icon="IconBook"
             >

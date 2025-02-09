@@ -11,7 +11,9 @@
                 <div
                     class="container mx-auto md:max-w-6xl px-2 lg:px-8 py-2.5 rounded"
                 >
-                    <div class="flex flex-row justify-between items-center flex-nowrap text-sm font-medium">
+                    <div
+                        class="flex flex-row justify-between items-center flex-nowrap text-sm font-medium"
+                    >
                         <div>
                             <brand-header
                                 :route-name="route('home.index')"
@@ -21,9 +23,7 @@
                             ></brand-header>
                         </div>
 
-                        <div
-                            class="flex flex-col items-center justify-center"
-                        >
+                        <div class="flex flex-col items-center justify-center">
                             <link-header
                                 name="Home"
                                 :route-name="route('home.index')"
@@ -41,9 +41,7 @@
                     <slot name="logo" />
                 </div>
 
-                <div
-                    class="w-full sm:max-w-md mt-6 px-2 py-4 overflow-hidden"
-                >
+                <div class="w-full sm:max-w-md mt-6 px-2 py-4 overflow-hidden">
                     <slot />
                 </div>
             </div>

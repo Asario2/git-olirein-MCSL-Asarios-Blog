@@ -1,17 +1,17 @@
 /* .vitepress/theme/custom.css */
 /* https://github.com/vuejs/vitepress/blob/main/src/client/theme-default/styles/vars.css */
 :root {
-    --vp-c-brand: #0EA5E9;
-    --vp-c-brand-1: #0EA5E9;
-    --vp-c-brand-light: #0EA5E9;
-    --vp-c-brand-lighter: #0EA5E9;
+    --vp-c-brand: #0ea5e9;
+    --vp-c-brand-1: #0ea5e9;
+    --vp-c-brand-light: #0ea5e9;
+    --vp-c-brand-lighter: #0ea5e9;
     --vp-c-brand-lightest: #e1e9fd;
-    --vp-c-brand-dark: #0EA5E9;
-    --vp-c-brand-darker: #0EA5E9;
-    --vp-c-brand-darkest: #0EA5E9;
-    --vp-home-hero-name-color: #0EA5E9;
-    --vp-button-brand-hover-bg: #0EA5E9;
-    --vp-button-brand-bg: #0EA5E9;
+    --vp-c-brand-dark: #0ea5e9;
+    --vp-c-brand-darker: #0ea5e9;
+    --vp-c-brand-darkest: #0ea5e9;
+    --vp-home-hero-name-color: #0ea5e9;
+    --vp-button-brand-hover-bg: #0ea5e9;
+    --vp-button-brand-bg: #0ea5e9;
     --vp-c-brand-dimm-1: rgba(90, 141, 230, 0.05);
     --vp-c-brand-dimm-2: rgba(90, 141, 230, 0.2);
     --vp-c-brand-dimm-3: rgba(90, 141, 230, 0.5);
@@ -30,38 +30,37 @@
 .vp-doc h1,
 .vp-doc h2,
 .vp-doc h3 {
-    color: #0EA5E9
+    color: #0ea5e9;
 }
 
 .vp-doc h4 {
-    color: #0EA5E9
+    color: #0ea5e9;
 }
 
 .vp-doc h5 {
-    color: #0EA5E9
+    color: #0ea5e9;
 }
 
 .vp-doc h6 {
-    color: #0EA5E9
+    color: #0ea5e9;
 }
-
 
 .dark .vp-doc h1,
 .dark .vp-doc h2,
 .dark .vp-doc h3 {
-    color: #0EA5E9
+    color: #0ea5e9;
 }
 
 .dark .vp-doc h4 {
-    color: #0EA5E9
+    color: #0ea5e9;
 }
 
 .dark .vp-doc h5 {
-    color: #0EA5E9
+    color: #0ea5e9;
 }
 
 .dark .vp-doc h6 {
-    color: #0EA5E9
+    color: #0ea5e9;
 }
 
 .vp-doc h1 {

@@ -50,11 +50,11 @@ export default {
         },
         brand_1: {
             type: String,
-            default: "Starter",
+            default: "Asarios",
         },
         brand_2: {
             type: String,
-            default: "Eleven",
+            default: "Blog",
         },
         appName: {
             type: String,

@@ -25,7 +25,9 @@
             >
                 {{ blog.title }}
             </h2>
-            <div class="text-xs text-layout-sun-600 dark:text-layout-night-600 py-2">
+            <div
+                class="text-xs text-layout-sun-600 dark:text-layout-night-600 py-2"
+            >
                 <display-date :value="blog.blog_date" :time-on="false" />
                 von
                 <span>{{ blog.author_name }}</span>
@@ -43,24 +45,24 @@
     </Link>
 </template>
 <script>
-import { Link } from '@inertiajs/vue3'
+import { Link } from "@inertiajs/vue3";
 
-import DisplayDate from '@/Application/Components/Content/DisplayDate.vue'
-import DisplayNumber from '@/Application/Components/Content/DisplayNumber.vue'
+import DisplayDate from "@/Application/Components/Content/DisplayDate.vue";
+import DisplayNumber from "@/Application/Components/Content/DisplayNumber.vue";
 
 export default {
-    name: 'Homepage_Shared_BlogPreviewBig',
+    name: "Homepage_Shared_BlogPreviewBig",
     //
     components: {
         Link,
         DisplayDate,
-        DisplayNumber
+        DisplayNumber,
     },
 
     props: {
         blog: {
-            type: Object
-        }
-    }
-}
+            type: Object,
+        },
+    },
+};
 </script>

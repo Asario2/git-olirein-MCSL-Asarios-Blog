@@ -1,14 +1,15 @@
 <template>
-    <layout header-title="Pricing" :header-url="$page.props.saas_url + '/home/pricing'">
+    <layout
+        header-title="Pricing"
+        :header-url="$page.props.saas_url + '/home/pricing'"
+    >
         <page-content>
             <template #content>
                 <page-title>
                     <template #title>Pricing</template>
                 </page-title>
                 <page-paragraph>
-                    <template #paragraph>
-                        Text kommt noch.
-                    </template>
+                    <template #paragraph> Text kommt noch. </template>
                 </page-paragraph>
             </template>
         </page-content>

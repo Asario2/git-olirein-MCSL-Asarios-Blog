@@ -251,20 +251,27 @@ class TablesController extends Controller
     ->update([$name => $val]);
 
     }
-    function EditTables(Request $request,$table,$id = ''){
+    function CreateTable(Request $request,$table)
+    {
+        // return "test";
+        return $this->EditTables($request,0,$table);
+    }
+    function EditTables(Request $request,$id = '',$table='blogs'){
         $tablez = [];
+
 
         $edstate = !$id ? "Erstellen" : "Bearbeiten";
         $breadcrumbs = collect($tablez)->mapWithKeys(function ($item) {
-            return [$item->title => route('admin.tables.show', $item->id)];
+            //return [$item->title => route('admin.tables.show', $item->id)];
         });
 
         $breadcrumbs = $breadcrumbs->put('Liste der Tabellen', route('admin.tables.index'));
-        $breadcrumbs->put('Tabelle '.ucf($table), route('admin.tables.show',(["table_alt"=>$table])));
+        $breadcrumbs->put('Tabelle '.ucf($table), route('admin.tables.show',(["table"=>$table])));
         $breadcrumbs = $breadcrumbs->toArray();
 
         $tables = DB::table($table)->get();
-        \Log::info("ff:".$this->ExportFields($table,$id));
+        $exf = $this->ExportFields($table,$id);
+        // \Log::info("ff:".$this->ExportFields($table,$id));
         return Inertia::render('Admin/TableForm', [
             'datarows' => $tables,
             "rows" => $tables,
@@ -272,7 +279,7 @@ class TablesController extends Controller
             "table" => $tables,
             "ItemName" => "Beiträge",
             "itemName_des" => "Beitrags",
-            // "formFields"  => $this->ExportFields($table, $id),
+             "ffo"  => $exf,
             "tablez" => $table,
             'breadcrumbs' => $breadcrumbs,
         ])->withViewData(['debug' => true]);
@@ -280,7 +287,7 @@ class TablesController extends Controller
     public function ExportFields($table,$id)
     {
         $create = '';
-        if ($table == "blog_posts" || $table == "mindblog") {
+        if ($table == "blogs" || $table == "mindblog") {
             $ord[0] = "created_at";
             $ord[1] = "DESC";
         }
@@ -323,7 +330,7 @@ class TablesController extends Controller
             $formFields = array_filter($fields);
             // $formFields = json_decode(json_encode($formFields));
             $ar = ['formFields' => ($formFields)];
-            $ar = 'formFields: {
+            $ar2 = 'formFields: {
 
                 "idField": {
                   "name": "id",

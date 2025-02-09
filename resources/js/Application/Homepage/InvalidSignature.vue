@@ -44,7 +44,7 @@ export default defineComponent({
         PageContent,
         PageTitle,
         PageParagraph,
-        DisplayHyperlink
+        DisplayHyperlink,
     },
 });
 </script>

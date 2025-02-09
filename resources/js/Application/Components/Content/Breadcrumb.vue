@@ -25,9 +25,7 @@
             </li>
             <li v-if="startPage">
                 <div class="flex items-center py-1.5">
-                    <div
-                        class="ml-1 lg:ml-2 px-2 py-1.5 font-medium"
-                    >
+                    <div class="ml-1 lg:ml-2 px-2 py-1.5 font-medium">
                         <div class="flex items-center">
                             <icon-home
                                 class="hidden lg:block -mt-0.5 w-3 h-3"

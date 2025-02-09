@@ -110,7 +110,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::post('/admin/blogs/store', [BlogController::class, 'admin_blog_store'])
             ->name('admin.blog.store');
         // Edit des Blogartikels
-        Route::get('/admin/blogs/edit', [BlogController::class, 'admin_blog_edit'])
+        Route::get('/admin/blogs/{blog}/edit', [BlogController::class, 'admin_blog_edit'])
             ->name('admin.blog.edit');
         // Update des Blogartikels
         Route::put('/admin/blogs/{blog}', [BlogController::class, 'admin_blog_update'])
@@ -119,21 +119,22 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::post('/admin/tables/{table}/delete', [TablesController::class, 'DeleteTable'])
             ->name('admin.tables.delete');
         // Tables Create
-        Route::get('/admin/tables/create', [TablesController::class, 'CreateTable'])
+        Route::get('/admin/tables/create/{table}', [TablesController::class, 'CreateTable'])
             ->name('admin.tables.create');
         // Tables Index
         Route::get('/admin/tables/', [TablesController::class, 'ListTables'])
             ->name('admin.tables.index');
         // Tables Show
-        Route::get("admin/tables/show/{table_alt}",[TablesController::class,"ShowTable"])
-        ->name("admin.tables.show");
-        Route::get('/tables/form-data/{table}/{id?}', [TablesController::class, 'ExportFields'])->name("GetTableForm");
+        Route::get("admin/tables/show/{table}",[TablesController::class,"ShowTable"])
+            ->name("admin.tables.show");
+        Route::get('/tables/form-data/{table}/{id?}', [TablesController::class, 'ExportFields'])
+            ->name("GetTableForm");
         // Tables Edit table
-        Route::get("admin/tables/edit/{table_alt}/{id?}",[TablesController::class,"EditTables"])
+        Route::get("admin/tables/edit/{id}/{table}",[TablesController::class,"EditTables"])
             ->name("admin.tables.edit");
         // Tables Delete
         Route::delete("admin/tables/{table}/delete",[TablesController::class,"DeleteTables"])
-            ->name("admin,tables.delete");
+            ->name("admin.tables.delete");
 
         // Blogartikel Delete
         Route::delete('/admin/blogs/{blog}', [BlogController::class, 'admin_blog_delete'])

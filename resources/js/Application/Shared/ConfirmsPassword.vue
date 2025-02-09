@@ -28,7 +28,9 @@
 
             <template #footer>
                 <button-group>
-                    <input-white-button @click="closeModal"> Abbrechen </input-white-button>
+                    <input-white-button @click="closeModal">
+                        Abbrechen
+                    </input-white-button>
 
                     <input-button
                         class="ms-3"
@@ -70,7 +72,7 @@ export default {
         InputError,
         ButtonGroup,
         InputButton,
-        InputWhiteButton
+        InputWhiteButton,
     },
 
     props: {
@@ -117,7 +119,7 @@ export default {
                 .catch((error) => {
                     console.error(
                         "Error fetching password confirmation",
-                        error
+                        error,
                     );
                 });
         },

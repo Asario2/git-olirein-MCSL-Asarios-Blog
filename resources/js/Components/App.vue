@@ -1,18 +1,18 @@
 <!-- resources/js/components/App.vue -->
 <template>
     <div>
-      <h1>Vue App in Laravel</h1>
+        <h1>Vue App in Laravel</h1>
     </div>
-  </template>
+</template>
 
-  <script>
-  export default {
-    name: 'App'
-  }
-  </script>
+<script>
+export default {
+    name: "App",
+};
+</script>
 
-  <style scoped>
-  h1 {
+<style scoped>
+h1 {
     color: blue;
-  }
-  </style>
+}
+</style>

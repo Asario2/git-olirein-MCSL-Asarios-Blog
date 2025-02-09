@@ -39,7 +39,7 @@ export default {
     },
 
     components: {
-        Link
+        Link,
     },
 
     computed: {

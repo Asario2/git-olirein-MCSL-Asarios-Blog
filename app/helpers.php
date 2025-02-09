@@ -61,7 +61,7 @@ use App\Models\Settings;
 if (!Builder::hasMacro('filterdefault')) {
     Builder::macro('filterdefault', function ($filters) {
         if (!empty($filters['search'])) {
-            $whvals = @Settings::searchFields[$_GET['table_alt']] ?? []; // Rufe `whvals` korrekt auf
+            $whvals = @Settings::searchFields[$_GET['table']] ?? []; // Rufe `whvals` korrekt auf
             foreach ($whvals as $whn) {
                 $this->orWhere($whn, 'like', '%' . $filters['search'] . '%');
             }

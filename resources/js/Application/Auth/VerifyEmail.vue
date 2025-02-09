@@ -30,7 +30,6 @@
                             Abmelden</display-hyperlink
                         >
                     </input-container>
-
                 </input-group>
             </template>
             <template #actions>
@@ -52,7 +51,7 @@
 <script>
 import { defineComponent } from "vue";
 
-import { useForm } from '@inertiajs/vue3';
+import { useForm } from "@inertiajs/vue3";
 
 import Layout from "@/Application/Auth/Shared/Layout.vue";
 

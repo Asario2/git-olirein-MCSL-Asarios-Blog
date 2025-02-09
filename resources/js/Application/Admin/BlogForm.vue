@@ -112,7 +112,8 @@
                             Bitte beachte, dass ein Blogartikel im
                             Markdown-Format implementiert werden muss.
                             <br />
-                            Weitere Infos erhältst du vom Administrator des Starter-Eleven-Templates.
+                            Weitere Infos erhältst du vom Administrator des
+                            Starter-Eleven-Templates.
                         </alert>
                     </input-container>
 
@@ -410,7 +411,7 @@ export default defineComponent({
                     onError: () => {
                         this.loading = false;
                     },
-                }
+                },
             );
         },
 
@@ -447,7 +448,7 @@ export default defineComponent({
                     onError: () => {
                         this.loading = false;
                     },
-                }
+                },
             );
         },
 

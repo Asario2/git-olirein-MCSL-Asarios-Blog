@@ -14,6 +14,6 @@
 </template>
 <script>
 export default {
-    name: 'Youtube.svg'
-}
+    name: "Youtube.svg",
+};
 </script>

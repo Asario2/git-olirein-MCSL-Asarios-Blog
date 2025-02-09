@@ -4,7 +4,9 @@
             <div>
                 <favicon class="h-10 w-10 mr-4"></favicon>
             </div>
-            <div class="hidden lg:block flex-col items-start justify-center md:flex">
+            <div
+                class="hidden lg:block flex-col items-start justify-center md:flex"
+            >
                 <div
                     class="font-logo text-xl lg:text-3xl leading-snug whitespace-nowrap tracking-widest font-bold"
                 >
@@ -31,35 +33,35 @@
 </template>
 
 <script>
-import { Link } from '@inertiajs/vue3'
+import { Link } from "@inertiajs/vue3";
 
-import Favicon from '@/Application/Components/Logo/Favicon.vue'
+import Favicon from "@/Application/Components/Logo/Favicon.vue";
 
 export default {
-    name: 'Shared_BrandHeader',
+    name: "Shared_BrandHeader",
     //
     components: {
         Link,
-        Favicon
+        Favicon,
     },
     //
     props: {
         routeName: {
             type: String,
-            default: 'home'
+            default: "home",
         },
         brand_1: {
             type: String,
-            default: 'Starter'
+            default: "Asarios",
         },
         brand_2: {
             type: String,
-            default: 'Eleven'
+            default: "Blog",
         },
         appName: {
             type: String,
-            default: null
+            default: null,
         },
-    }
-}
+    },
+};
 </script>

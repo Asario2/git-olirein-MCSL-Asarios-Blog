@@ -61,7 +61,10 @@
             <template #actions>
                 <!-- Befehle -->
                 <button-group>
-                    <input-white-button type="button" @click.prevent="toggleRecovery">
+                    <input-white-button
+                        type="button"
+                        @click.prevent="toggleRecovery"
+                    >
                         <template v-if="!recovery">
                             Verwenden Sie einen Wiederherstellungscode
                         </template>
@@ -82,7 +85,7 @@
 <script>
 import { defineComponent } from "vue";
 
-import { useForm } from '@inertiajs/vue3';
+import { useForm } from "@inertiajs/vue3";
 
 import Layout from "@/Application/Auth/Shared/Layout.vue";
 
@@ -123,7 +126,7 @@ export default defineComponent({
         InputError,
         ButtonGroup,
         InputButton,
-        InputWhiteButton
+        InputWhiteButton,
     },
 
     data() {
@@ -145,16 +148,16 @@ export default defineComponent({
             this.$nextTick(() => {
                 if (this.recovery) {
                     this.$refs.recoveryCodeInput.focus();
-                    this.form.code = '';
+                    this.form.code = "";
                 } else {
                     this.$refs.codeInput.focus();
-                    this.form.recovery_code = '';
+                    this.form.recovery_code = "";
                 }
             });
         },
         submit() {
-            this.form.post(route('two-factor.login'));
-        }
+            this.form.post(route("two-factor.login"));
+        },
     },
 });
 </script>

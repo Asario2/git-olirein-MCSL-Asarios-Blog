@@ -20,7 +20,7 @@
                         class="flex justify-end items-start"
                     >
                         <div
-                            class="text-sm min-w-fit min-h-fit bg-primary-sun-500 text-primary-sun-800 dark:bg-primary-night-500 dark:text-primary-night-800   font-semibold px-2.5 py-0.5 rounded-lg whitespace-nowrap"
+                            class="text-sm min-w-fit min-h-fit bg-primary-sun-500 text-primary-sun-800 dark:bg-primary-night-500 dark:text-primary-night-800 font-semibold px-2.5 py-0.5 rounded-lg whitespace-nowrap"
                         >
                             {{ blog.blog_category.name }}
                         </div>
@@ -31,7 +31,9 @@
                     </h1>
 
                     <div class="flex items-end justify-between">
-                        <div class="text-layout-sun-600 dark:text-layout-night-600">
+                        <div
+                            class="text-layout-sun-600 dark:text-layout-night-600"
+                        >
                             <display-date
                                 :value="blog.blog_date"
                                 :time-on="false"
@@ -122,37 +124,27 @@
                         Informationen zu {{ blog.blog_author.name }}
                     </h2>
                     <div
-                    class="
-                        max-w-none
-                        min-h-full
-                        prose
-                        md:prose-md
-                        dark:prose-invert
-                        prose-headings:font-title
-                        prose-pre:bg-layout-sun-100
-                        prose-pre:text-layout-sun-800
-                        dark:prose-pre:bg-layout-night-100
-                        dark:prose-pre:text-layout-night-800
-                        "
-                    v-html="blog.blog_author.info"></div>
+                        class="max-w-none min-h-full prose md:prose-md dark:prose-invert prose-headings:font-title prose-pre:bg-layout-sun-100 prose-pre:text-layout-sun-800 dark:prose-pre:bg-layout-night-100 dark:prose-pre:text-layout-night-800"
+                        v-html="blog.blog_author.info"
+                    ></div>
                 </div>
             </div>
         </div>
     </div>
 </template>
 <script>
-import IconPause from '@/Application/Components/Icons/Pause.vue'
-import IconPlay from '@/Application/Components/Icons/Play.vue'
-import IconSpeakerWave from '@/Application/Components/Icons/SpeakerWave.vue'
-import IconStop from '@/Application/Components/Icons/Stop.vue'
+import IconPause from "@/Application/Components/Icons/Pause.vue";
+import IconPlay from "@/Application/Components/Icons/Play.vue";
+import IconSpeakerWave from "@/Application/Components/Icons/SpeakerWave.vue";
+import IconStop from "@/Application/Components/Icons/Stop.vue";
 
-import DisplayDate from '@/Application/Components/Content/DisplayDate.vue'
-import DisplayNumber from '@/Application/Components/Content/DisplayNumber.vue'
+import DisplayDate from "@/Application/Components/Content/DisplayDate.vue";
+import DisplayNumber from "@/Application/Components/Content/DisplayNumber.vue";
 
-import Markdown from '@/Application/Components/Content/Markdown.vue'
+import Markdown from "@/Application/Components/Content/Markdown.vue";
 
 export default {
-    name: 'Shared_BlogShow',
+    name: "Shared_BlogShow",
     //
     components: {
         IconPause,
@@ -161,51 +153,51 @@ export default {
         IconStop,
         DisplayDate,
         DisplayNumber,
-        Markdown
+        Markdown,
     },
 
     props: {
         blog: {
-            type: Object
+            type: Object,
         },
         blogarticle: {
-            type: String
-        }
+            type: String,
+        },
     },
 
-    data () {
+    data() {
         return {
             currentTime: 0,
-            seekValue: 0
-        }
+            seekValue: 0,
+        };
     },
 
     methods: {
-        play () {
-            this.$refs.audioPlayer.play()
+        play() {
+            this.$refs.audioPlayer.play();
         },
-        pause () {
-            this.$refs.audioPlayer.pause()
+        pause() {
+            this.$refs.audioPlayer.pause();
         },
-        stop () {
-            const { audioPlayer } = this.$refs
-            audioPlayer.pause()
-            audioPlayer.currentTime = 0
+        stop() {
+            const { audioPlayer } = this.$refs;
+            audioPlayer.pause();
+            audioPlayer.currentTime = 0;
         },
-        onPlaying () {
-            const { audioPlayer } = this.$refs
+        onPlaying() {
+            const { audioPlayer } = this.$refs;
             if (!audioPlayer) {
-                return
+                return;
             }
-            this.currentTime = Math.round(audioPlayer.currentTime)
+            this.currentTime = Math.round(audioPlayer.currentTime);
             this.seekValue =
-                (audioPlayer.currentTime / audioPlayer.duration) * 100
+                (audioPlayer.currentTime / audioPlayer.duration) * 100;
         },
-        onSeek () {
-            const { audioPlayer } = this.$refs
-            const seekto = audioPlayer.duration * (this.seekValue / 100)
-            audioPlayer.currentTime = seekto
-        }
-    }
-}
+        onSeek() {
+            const { audioPlayer } = this.$refs;
+            const seekto = audioPlayer.duration * (this.seekValue / 100);
+            audioPlayer.currentTime = seekto;
+        },
+    },
+};
 </script>

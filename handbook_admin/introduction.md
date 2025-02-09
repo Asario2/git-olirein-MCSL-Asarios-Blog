@@ -10,14 +10,16 @@ Willkommen im Laravel-Template **Starter Eleven**. Ein möglicher Ausgangspunkt 
 - **Authentifizierungssystem**: Vorgefertigte Laravel Authentifizierung für deine SaaS-Anwendung.
 - **Blog**: Erstellung von Blogartikeln, Anzeige einer Liste von Blogartikeln, Anzeige eines Blogartikels
 - **Anwendungsfamilie**:
-  - Homepage
-  - Authentifizierung
-  - Anwendung für Administratoren (Intranet)
-  - Anwendung für Mitarbeiter (Intranet)
-  - Anwendung für Kunden (Extranet)
+    - Homepage
+    - Authentifizierung
+    - Anwendung für Administratoren (Intranet)
+    - Anwendung für Mitarbeiter (Intranet)
+    - Anwendung für Kunden (Extranet)
 
 ## Autor
+
 Informationen zum Autor Oliver Reinking findest du unter [ReinkingConsulting](https://reinkingconsulting.de)
 
 ## Lizenz
+
 Das Laravel-Template **Starter Eleven** ist eine Open-Source-Software, lizenziert unter der [MIT-Lizenz](https://opensource.org/licenses/MIT).

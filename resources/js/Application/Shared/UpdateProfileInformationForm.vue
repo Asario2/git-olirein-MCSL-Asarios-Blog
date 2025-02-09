@@ -31,7 +31,6 @@
                             class="rounded-full h-20 w-20 object-cover"
                         />
                     </div>
-
                     <!-- New Profile Photo Preview -->
                     <div v-show="photoPreview" class="mt-4">
                         <span

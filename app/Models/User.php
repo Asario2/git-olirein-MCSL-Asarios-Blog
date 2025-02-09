@@ -49,7 +49,7 @@ class User extends Authenticatable implements MustVerifyEmail
         return [
             'email_verified_at' => 'datetime',
             'two_factor_confirmed_at' => 'datetime',
-            //'password' => 'hashed',
+            'password' => 'hashed',
             'last_login_at' => 'datetime',
             'is_admin' => 'boolean',
             'is_employee' => 'boolean',

@@ -44,6 +44,7 @@ class Eloquent extends Model
             }
         }
 
+
         return $query;
     }
 }

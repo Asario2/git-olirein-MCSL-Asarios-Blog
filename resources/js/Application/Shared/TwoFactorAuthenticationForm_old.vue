@@ -245,16 +245,19 @@ export default {
                 {
                     preserveScroll: true,
                     onSuccess: () => {
-                        Promise.all([this.showQrCode(), this.showSetupKey(), this.showRecoveryCodes()]);
+                        Promise.all([
+                            this.showQrCode(),
+                            this.showSetupKey(),
+                            this.showRecoveryCodes(),
+                        ]);
                         this.twoFactorEnabled = true;
                         this.confirming = true; // Direktes Setzen von confirming auf true
-
                     },
                     onFinish: () => {
                         this.enabling = false;
                         this.confirming = this.requiresConfirmation;
                     },
-                }
+                },
             );
         },
         showQrCode() {

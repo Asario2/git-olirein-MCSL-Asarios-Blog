@@ -1,5 +1,4 @@
 @layer utilities {
-
     .form_text_h3 {
         @apply text-lg font-medium text-layout-sun-900 dark:text-layout-night-900;
     }
@@ -26,11 +25,10 @@
     }
 
     .form_text_info {
-        @apply text-sm mt-2
+        @apply text-sm mt-2;
     }
 
     .form_text_info_success {
-        @apply text-sm mt-2 text-green-600 dark:text-green-400
+        @apply text-sm mt-2 text-green-600 dark:text-green-400;
     }
-
 }

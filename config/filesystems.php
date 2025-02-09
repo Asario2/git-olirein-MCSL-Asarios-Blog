@@ -43,13 +43,13 @@ return [
             'visibility' => 'public',
             'throw' => false,
         ],
-        'profile_pictures' => [
+        'public_uploads' => [
             'driver' => 'local',
             'root' => public_path(),
             'url' => public_path(),
             "throw" => false
 
-        ],  
+        ],
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),

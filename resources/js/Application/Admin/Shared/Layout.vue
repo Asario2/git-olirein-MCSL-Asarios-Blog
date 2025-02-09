@@ -69,14 +69,14 @@
                                             <img
                                                 class="h-8 w-8 rounded-full object-cover"
                                                 :src="
-                                                    $page.props.userdata
-                                                        .profile_photo_url
+                                               $page.props.auth.user.profile_photo_url.replace('storage/','')
                                                 "
                                                 :alt="
                                                     $page.props.userdata
                                                         .full_name
                                                 "
                                             />
+                                            {{  }}
                                         </button>
 
                                         <span
@@ -240,7 +240,10 @@
                         >
                             Dashboard
                         </ResponsiveNavLink>
-                        <ResponsiveNavLink :href="route('admin.handbook')" target="_blank">
+                        <ResponsiveNavLink
+                            :href="route('admin.handbook')"
+                            target="_blank"
+                        >
                             Handbuch
                         </ResponsiveNavLink>
                         <ResponsiveNavLink as="button">

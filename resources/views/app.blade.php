@@ -20,14 +20,15 @@ error_reporting(E_ALL);
     @vite(['resources/js/app.js', "resources/js/Application/{$page['component']}.vue"])
     @inertiaHead
     <!-- additional Scripts -->
-    <script src="{{ mix('js/user.js') }}"></script>
+    <script src="{{ mix('resources/js/user.js') }}"></script>
     <!-- https://github.com/whitecube/laravel-cookie-consent -->
     @cookieconsentscripts
 </head>
 
 <body class="font-sans antialiased">
     <input type="hidden" id="token" value="{{ csrf_token() }}">
-    @routes 
+    
+    @routes
     @inertia
 
     <!-- https://github.com/whitecube/laravel-cookie-consent -->

@@ -56,7 +56,7 @@ export default {
 
     components: {
         IconArrowLongRight,
-        IconBook
+        IconBook,
     },
 
     props: {
@@ -97,7 +97,7 @@ export default {
     computed: {
         dynamicIcon() {
             const icons = {
-                IconBook
+                IconBook,
             };
             //
             return icons[this.icon];

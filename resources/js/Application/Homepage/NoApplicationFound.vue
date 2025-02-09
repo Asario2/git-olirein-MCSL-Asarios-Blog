@@ -1,5 +1,8 @@
 <template>
-    <layout header-title="Keine Anwendung" :header-url="$page.props.saas_url + '/home/no_application_found'">
+    <layout
+        header-title="Keine Anwendung"
+        :header-url="$page.props.saas_url + '/home/no_application_found'"
+    >
         <page-content>
             <template #content>
                 <page-title>

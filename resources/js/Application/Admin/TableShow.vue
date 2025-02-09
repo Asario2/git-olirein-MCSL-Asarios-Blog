@@ -12,10 +12,10 @@
             <list-container
           :title="'Tabelle ' + tablez"
           :datarows="rows"
-          route-index="admin.tables.show"
+          :route-index="showRoute"
           :filters="filters"
-          :search-filter="true"
-          search-text="Suche nach Tabellen anhand ihres Namens oder ihrer Beschreibung."
+          search-filter="true"
+          search-text="Suche nach Inhalten anhand ihres Namens oder ihrer Beschreibung."
           :edit-on="true"
           route-edit="admin.tables.edit"
           :create-on="true"
@@ -47,7 +47,8 @@ const segments = path.split('/'); // Teilt den Pfad in Segmente auf
 const lastSegment = segments[segments.length - 1];
 let table_z = lastSegment;
 let table_alt = table_z;
-// let table_q = ucf(table_z);
+let table = table_z.toLowerCase();
+
   import { defineComponent } from "vue";
   import Layout from "@/Application/Admin/Shared/Layout.vue";
   import Breadcrumb from "@/Application/Components/Content/Breadcrumb.vue";
@@ -78,10 +79,10 @@ let table_alt = table_z;
       type: String,
       required: true,
     },
-    tablez: {
-      type: String,
-      required: true,
-    },
+    // tablez: {
+    //   type: String,
+    //   required: true,
+    // },
 
   startPage: {
     type: Boolean,
@@ -104,19 +105,29 @@ let table_alt = table_z;
       default: () => ({}),
     },
     rows: {
-        type: Array,
+        type: [Array,Object],
         required: true,
         default: () => [],
       },
       datarows: {
-        type: Array,
+        type: [Array,String],
         required: true,
         default: () => [],
     },
-    ItemName: {
-      type: String,
-      default: "",
+    // routeCreate: {
+    //     type: String,
+    //     default: route('admin.tables.create', table),
+    // },
+    current:{
+        type: String,
     },
+    applicationName:{
+        type: String,
+    },
+    // ItemName: {
+    //   type: String,
+    //   default: "",
+    // },
     itemName_des: {
       type: String,
       default: "",
@@ -128,20 +139,26 @@ let table_alt = table_z;
   },
   data() {
     return {
-      searchQuery: "", // Lokale Suchanfrage
+      searchQuery: "test", // Lokale Suchanfrage
     //   rows: this.rows, // Props in lokale Daten kopieren
       ItemName: "Tabellen", // Kann von Backend oder durch andere Logik kommen.
        // Initialisieren, falls leer
 
-
+    //    routeCreate:,
       tablez: this.ucf(table_z), // Hier kannst du den Wert von tablez setzen
-
+        table: table.toLowerCase()  ,
+        // showRoute : route("admin.tables.show",table),
 
     };
   },
   computed: {
 
-
+    routeCreate() {
+    return route( '/admin/tables/create/' + table);
+  },
+  showRoute() {
+    return route('admin.tables.show', table);
+  },
     formattedTableName() {
     //   return this.ucf(this.table_z);
     }
@@ -154,11 +171,11 @@ let table_alt = table_z;
       editRow(id) {
         alert(`Eintrag mit ID ${id} bearbeiten`);
       },
-      deleteRow(id) {
-        if (confirm(`Eintrag mit ID ${id} wirklich löschen?`)) {
-          this.rows = this.rows.filter((row) => row.id !== id);
-        }
-      },
+    //   deleteRow(id) {
+    //     if (confirm(`Eintrag mit ID ${id} wirklich löschen?`)) {
+    //       this.rows = this.rows.filter((row) => row.id !== id);
+    //     }
+    //   },
       getEditRoute(table) {
         return `admin/tables/${table}/edit`;
     },
@@ -171,9 +188,11 @@ let table_alt = table_z;
     },
   });
   var tb_alt = "admin_table";
-  const url = route('admin.tables.show', { table_alt: tb_alt });
+  const url = route('admin.tables.show', { table: tb_alt });
 console.log(url); // Prüfe, ob die URL korrekt ist
 // table_q = ucf(table_z);
+table = String(table_z).toLowerCase();
+
 </script>
 
   <style>

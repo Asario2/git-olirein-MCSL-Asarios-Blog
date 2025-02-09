@@ -5,7 +5,7 @@
         v-tippy
     >
         <div class="inline-flex items-center">
-            <div v-if="label">{{label }}</div>
+            <div v-if="label">{{ label }}</div>
             <div v-else><slot></slot></div>
             <icon-exclamation-circle
                 v-if="helptext"
@@ -17,28 +17,28 @@
 </template>
 
 <script>
-import IconExclamationCircle from '@/Application/Components/Icons/ExclamationCircle.vue'
+import IconExclamationCircle from "@/Application/Components/Icons/ExclamationCircle.vue";
 
 export default {
-    name: 'Contents_Form_InputLabel',
+    name: "Contents_Form_InputLabel",
 
     components: {
-        IconExclamationCircle
+        IconExclamationCircle,
     },
 
     props: {
         name: {
             type: String,
-            default: 'xxx'
+            default: "xxx",
         },
         label: {
             type: String,
-            default: ''
+            default: "",
         },
         helptext: {
             type: String,
-            default: ''
-        }
-    }
-}
+            default: "",
+        },
+    },
+};
 </script>

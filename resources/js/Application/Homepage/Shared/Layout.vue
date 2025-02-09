@@ -217,9 +217,9 @@
                                         ></link-footer>
                                     </li>
                                     <li>
-                                        <link-footer
-                                            @click="reopenCookieBanner"
-                                        >Cookie-Einstellungen</link-footer>
+                                        <link-footer @click="reopenCookieBanner"
+                                            >Cookie-Einstellungen</link-footer
+                                        >
                                     </li>
                                 </ul>
                             </div>
@@ -395,7 +395,9 @@ export default {
 
         reopenCookieBanner() {
             LaravelCookieConsent.reset();
-            this.$inertia.visit(this.route('home.index'), { preserveState: false });
+            this.$inertia.visit(this.route("home.index"), {
+                preserveState: false,
+            });
         },
     },
 };

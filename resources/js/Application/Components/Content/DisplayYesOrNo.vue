@@ -5,19 +5,19 @@
 </template>
 <script>
 export default {
-    name: 'Components_Content_DisplayYesOrNo',
+    name: "Components_Content_DisplayYesOrNo",
 
     props: {
         value: {
             type: [Boolean, Number, String],
-            default: false
-        }
+            default: false,
+        },
     },
 
     methods: {
-        isNumber (value) {
-            return typeof value === 'number'
-        }
-    }
-}
+        isNumber(value) {
+            return typeof value === "number";
+        },
+    },
+};
 </script>

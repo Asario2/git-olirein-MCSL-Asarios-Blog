@@ -1,4 +1,4 @@
-    <template>
+<template>
     <layout title="Profil">
         <template #header>
             <breadcrumb

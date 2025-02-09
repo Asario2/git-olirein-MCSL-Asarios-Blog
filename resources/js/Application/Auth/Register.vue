@@ -116,7 +116,6 @@
                         </input-checkbox>
                     </input-container>
                 </input-group>
-
             </template>
             <template #actions>
                 <!-- Befehle -->
@@ -216,4 +215,3 @@ export default defineComponent({
     },
 });
 </script>
-

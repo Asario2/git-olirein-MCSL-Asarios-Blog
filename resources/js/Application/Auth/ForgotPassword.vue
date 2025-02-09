@@ -6,7 +6,6 @@
 
         <SectionForm>
             <template #form>
-
                 <PageContent v-if="status">
                     <template #content>
                         <Alert

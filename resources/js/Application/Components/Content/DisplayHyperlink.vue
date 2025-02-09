@@ -60,14 +60,13 @@
 </template>
 
 <script>
-
-import { Link } from '@inertiajs/vue3';
+import { Link } from "@inertiajs/vue3";
 
 export default {
     name: "Components_Content_DisplayHyperlink",
 
     components: {
-        Link
+        Link,
     },
 
     props: {

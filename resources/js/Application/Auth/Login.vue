@@ -6,11 +6,7 @@
 
         <page-content v-if="status">
             <template #content>
-                <alert
-                    type="info"
-                    title="Hinweis"
-                    :description="status"
-                ></alert
+                <alert type="info" title="Hinweis" :description="status"></alert
             ></template>
         </page-content>
 

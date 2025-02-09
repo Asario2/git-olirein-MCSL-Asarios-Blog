@@ -10,25 +10,21 @@
                             {{ title }}
                         </div>
                         <div>
-                            <td>
-                                <button-group>
-                                    <input-icon-hyperlink
-                                        v-if="editOn"
-                                        :href="route(routeEdit,{table_alt:table_alt,id:datarows.id})"
-
-                                        display_type="table"
-                                    >
+                            <button-group>
+                                <input-icon-hyperlink
+                                    v-if="createOn"
+                                    :href="routeCreate"
+                                    display_type="table"
+                                >
                                     <template #icon>
-                                        <button v-tippy="{ content: createDescription }" class="flex items-center">
-                                            <icon-plus-circle class="w-6 h-6 mr-2" />
-                                            <strong>Erstellen</strong>
-                                        </button>
+                                        <icon-plus-circle
+                                            class="button_icon"
+                                        ></icon-plus-circle>
+                                        Erstelle
                                     </template>
-
-                                    </input-icon-hyperlink>
-                                    <slot name="button"></slot>
-                                </button-group>
-                            </td>
+                                </input-icon-hyperlink>
+                                <slot name="button"></slot>
+                            </button-group>
                         </div>
                     </div>
                 </div>
@@ -51,40 +47,20 @@
                     <thead class="np-dl-thead">
                         <slot name="header"></slot>
                     </thead>
-
-                    <tbody  v-if="numberOfRows > 0">
+                    <tbody v-if="numberOfRows > 0">
                         <tr
                             v-for="datarow in datarows.data"
                             :key="datarow[rowId]"
                             class="np-dl-tr"
                         >
                             <slot name="datarow" :datarow="datarow"></slot>
-
-
-
-
-                            <td  class="np-dl-td-normal">
-                                <ButtonGroup>
-                                    <a v-if="editOn"
-                                        :href="route(routeEdit, {table_alt:table_alt,id:datarow.id})"
-
-                                    >
-
-                                            <i class='fa-solid fa-pencil w-6 h-6' v-tippy></i>
-                                            <tippy>{{ editDescription }}</tippy>
-
-
-                                </a>
-                                </ButtonGroup>
-                            </td>
-
                             <td
-                                v-if="deleteOn"
+                                v-if="editOn"
                                 class="np-dl-td-edit"
-                                @click.prevent="deleteDataRow(table_alt)"
+                                @click.prevent="editDataRow(datarow[rowId])"
                             >
-                            <i class='fa-solid fa-trash-can w-6 h-6' v-tippy></i>
-                                <tippy>{{ deleteDescription }}</tippy>
+                                <icon-pencil class="w-6 h-6" v-tippy />
+                                <tippy>{{ editDescription }}</tippy>
                             </td>
                             <td
                                 v-if="showOn"
@@ -98,7 +74,7 @@
                     </tbody>
                 </table>
 
-                <pagination :links="datarows.links"  v-if="numberOfRows > 0" />
+                <pagination :links="datarows.links" v-if="numberOfRows > 0" />
             </div>
             <div v-if="numberOfRows == 0" class="np-dl-td-no-entries">
                 <alert type="info">
@@ -110,52 +86,31 @@
     <!-- ENDS Anzeige der Liste -->
 </template>
 <script>
+import { Link } from "@inertiajs/vue3";
+
+import SearchFilter from "@/Application/Components/Lists/SearchFilter.vue";
+import Pagination from "@/Application/Components/Lists/Pagination.vue";
+
+import ButtonGroup from "@/Application/Components/Form/ButtonGroup.vue";
+import InputIconHyperlink from "@/Application/Components/Form/InputIconHyperlink.vue";
+
+import ErrorList from "@/Application/Components/Form/ErrorList.vue";
+
+import IconPlusCircle from "@/Application/Components/Icons/PlusCircle.vue";
+import IconPencil from "@/Application/Components/Icons/Pencil.vue";
+import IconEye from "@/Application/Components/Icons/Eye.vue";
+
+import Alert from "@/Application/Components/Content/Alert.vue";
+
+import mapValues from "lodash/mapValues";
+import pickBy from "lodash/pickBy";
+import throttle from "lodash/throttle";
+
 const path = window.location.pathname; // Gibt "/admin/tables/show/Example" zurück
-const segments = path.split('/'); // Teilt den Pfad in Segmente auf
-var lastSegment = segments[segments.length - 1];
-if (!isNaN(Number(lastSegment))) {
-    lastSegment = segments[segments.length - 2];
-}
-if(lastSegment == "tables")
-{
-    lastSegment = '';
-}
-var tablez = lastSegment;
-console.log(lastSegment);
-var table_z = tablez;
+const segments = path.split("/"); // Teilt den Pfad in Segmente auf
+const table = segments[segments.length - 1];
+console.log("Table:", table);
 
-
-import { Link } from '@inertiajs/vue3'
-
-import SearchFilter from '@/Application/Components/Lists/SearchFilter.vue'
-import Pagination from '@/Application/Components/Lists/Pagination.vue'
-
-// import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-// import { library } from '@fortawesome/fontawesome-svg-core';
-// import { faEdit, faTimes } from '@fortawesome/free-solid-svg-icons';
-// import FontAwesomeIcon from '@/Application/Components/fa.vue'
-import ButtonGroup from '@/Application/Components/Form/ButtonGroup.vue'
-import InputIconHyperlink from '@/Application/Components/Form/InputIconHyperlink.vue'
-
-import ErrorList from '@/Application/Components/Form/ErrorList.vue'
-import IconDelete from '@/Application/Components/Icons/Delete.vue'
-import IconPlusCircle from '@/Application/Components/Icons/PlusCircle.vue'
-import IconPencil from '@/Application/Components/Icons/Pencil.vue'
-import IconEye from '@/Application/Components/Icons/Eye.vue'
-
-
-import Alert from '@/Application/Components/Content/Alert.vue'
-
-import mapValues from 'lodash/mapValues'
-import pickBy from 'lodash/pickBy'
-import throttle from 'lodash/throttle'
-
-// import { createApp } from 'vue';           // Importiere die `createApp`-Funktion von Vue
-// import App from './components/App.vue';    // Importiere die Hauptkomponente `App.vue`
-// import './assets/main.css';                // Optional: Importiere eine globale CSS-Datei
-
-// const app = createApp(App);               // Erstelle die Vue-Anwendung mit `App.vue` als Einstiegskomponente
-// app.mount('#app');
 
 export default {
     name: "Contents_Lists_ListContainer",
@@ -169,270 +124,181 @@ export default {
         ErrorList,
         IconPlusCircle,
         IconPencil,
-        IconDelete,
         IconEye,
-        Alert
+        Alert,
     },
     //
-    emits: ['list-container-search-reset'],
+    emits: ["list-container-search-reset"],
     //
     props: {
         withinAccordion: {
             type: Boolean,
-            default: false
+            default: false,
         },
         title: {
             type: String,
-            required: false
+            required: false,
         },
         rowId: {
             type: String,
-            default: 'id'
+            default: "id",
         },
         datarows: {
-            type: [Object, Array],
-            default: () => []
+            type: [Object, Array,String],
+            default: () => [],
         },
         noEntries: {
             type: String,
-            default: 'Es wurden keine Datensätze gefunden.'
+            default: "Es wurden keine Datensätze gefunden.",
         },
         filters: {
             type: [Object, Array],
-            default: () => []
+            default: () => [],
         },
         routeIndex: {
             type: String,
-            default: null
+            default: null,
         },
         routeParamName: {
             type: [Number, String],
-            default: null
+            default: "table",
         },
         routeParamValue: {
             type: [Number, String],
-            default: null
+            default: table,
         },
         searchFilter: {
             type: Boolean,
-            default: true
+            default: true,
         },
         searchText: {
             type: String,
-            default: 'Hier kannst du den Suchbegriff eingeben'
+            default: "Hier kannst du den Suchbegriff eingeben",
         },
         searchValue: {
             type: String,
-            default: null
+            default: null,
         },
         showOn: {
             type: Boolean,
-            default: false
+            default: false,
         },
         routeShow: {
-            type: String
+            type: String,
         },
         editOn: {
             type: Boolean,
-            default: false
+            default: false,
         },
         routeEdit: {
-            type: String
+            type: String,
         },
         createOn: {
             type: Boolean,
-            default: false
+            default: false,
         },
         routeCreate: {
-            type: String
-        },
-        deleteOn: {
-            type: Boolean,
-            default: false
-        },
-        routeDelete: {
-            type: String
+            type: String,
+            default: route('admin.tables.create', table),
         },
         showDescription: {
             type: String,
-            default: 'Daten anzeigen'
+            default: "Daten anzeigen",
         },
         editDescription: {
             type: String,
-            default: 'Daten ändern'
-        },
-        deleteDescription:{
-            type: String,
-            default: 'Daten Löschen'
+            default: "Daten ändern",
         },
         errors: {
             type: Object,
-            default: () => ({})
-        },
-        table_alt: {
-            type: String,
-            default:table_z,
-        },
-        tablez: {
-            type: String,
-            required: true,
+            default: () => ({}),
         },
     },
     //
-    data () {
+    data() {
         return {
             form: {
-                search: this.filters.search
+                search: this.filters.search,
             },
-
-
-        }
+        // routeCreate: route('admin.tables.create', table),
+        };
     },
     //
-    created () {
-        this.form.search = this.searchValue
+    created() {
+        this.form.search = this.searchValue;
     },
     //
     computed: {
-    numberOfRows() {
-      if (!this.datarows || typeof this.datarows !== 'object') {
-        return 0;
-      }
-      return Array.isArray(this.datarows)
-        ? this.datarows.length
-        : Object.keys(this.datarows).length;
+        numberOfRows() {
+            //console.log('numberOfRows')
+            if (Array.isArray(this.datarows.data)) {
+                return this.datarows.data.length;
+            } else if (typeof this.datarows === "object") {
+                return Object.keys(this.datarows.data).length;
+            } else {
+                return 0;
+            }
+        },
     },
-    formattedTableName() {
-      return this.ucf(this.table); // Hier wird die Methode `ucf` aufgerufen und das `table`-Datenfeld übergeben
-    }
-},
     //
-    // watch: {
-    //     form: {
-    //         handler: throttle(function () {
-    //             let query = pickBy(this.form)
-    //             //
-    //             let paramName = null
-    //             let paramValue = null
-    //             //
-    //             if (this.routeParamName && this.routeParamValue) {
-    //                 paramName = this.routeParamName
-    //                 paramValue = this.routeParamValue
-    //             }
-    //             //
-    //             if (this.searchFilter) {
-    //                 if (paramName && paramValue) {
-    //                     this.$inertia.get(
-    //                         this.route(this.routeIndex),
-    //                         {
-    //                             search: this.form.search,
-    //                             [paramName]: paramValue,
-    //                             page: 1
-    //                         },
-    //                         {
-    //                             preserveState: true
-    //                         }
-    //                     )
-    //                 }
-    //                 if (!paramName || !paramValue) {
-    //                     this.$inertia.get(
-    //                         this.route(
-    //                             this.routeIndex,
-    //                             Object.keys(query).length
-    //                                 ? query
-    //                                 : { remember: 'forget' }
-    //                         ),
-    //                         {
-    //                             search: this.form.search,
-    //                             page: 1
-    //                         },
-    //                         {
-    //                             preserveState: true
-    //                         }
-    //                     )
-    //                 }
-    //             }
-    //         }, 150),
-    //         deep: true
-    //     }
-    // },
     watch: {
-  form: {
+        form: {
+
     handler: throttle(function () {
-      let query = pickBy(this.form);
-      let paramName = 'table_alt';
-      const path = window.location.pathname; // Gibt "/admin/tables/show/Example" zurück
-      const segments = path.split('/'); // Teilt den Pfad in Segmente auf
-      const lastSegment = segments[segments.length - 1];
-      let paramValue = lastSegment;
-      let table_alt = lastSegment;
-      //   let paramValue = document.getElementById("tb_alt").value;
-
-      // Dynamische Parameter für die Route
-      if (this.routeParamName && this.routeParamValue) {
-        paramName = this.routeParamName; // z.B. 'table_alt'
-        paramValue = this.routeParamValue; // Der Wert, z.B. der Tabellenname
-      }
-
-      // Wenn ein Filter für die Suche existiert
-      if (this.searchFilter) {
-        // Wenn der dynamische Parameter existiert, Route mit dem Parameter aufrufen
-        if (paramName && paramValue) {
-
-          this.$inertia.get(
-
-
-            this.route(this.routeIndex, { [paramName]: paramValue }),// Ziggy erstellt die Route
-            {
-              search: this.form.search,
-              [paramName]: paramValue,  // Dynamischer Parameter
-              page: 1
-            },
-            {
-              preserveState: true
-            }
-          );
+        let query = pickBy(this.form);
+        let paramName = null
+        let paramValue = null
+        if (this.routeParamName && this.routeParamValue) {
+            paramName = this.routeParamName;
+            paramValue = this.routeParamValue;
         }
-        // Wenn kein dynamischer Parameter existiert, normale Route ohne Parameter
-        if (!paramName || !paramValue) {
-          this.$inertia.get(
-            this.route(
-              this.routeIndex,
-              Object.keys(query).length
-                ? query
-                : { remember: 'forget' } // Query-Parameter für Filter
-            ),
-            {
-              search: this.form.search,
-              page: 1
-            },
-            {
-              preserveState: true
-            }
-          );
+
+        let url = this.routeIndex;
+
+        // Prüfe, ob routeIndex bereits eine URL ist
+        if (!(typeof url === "string" && url.startsWith("http"))) {
+            url = this.route(this.routeIndex, Object.keys(query).length ? query : { remember: "forget" });
         }
-      }
+
+        if (this.searchFilter) {
+            if (paramName && paramValue) {
+                this.$inertia.get(url, {
+                    search: this.form.search,
+                    [paramName]: paramValue,
+                    page: 1,
+                }, {
+                    preserveState: true,
+                });
+            } else {
+                this.$inertia.get(url, {
+                    search: this.form.search,
+                    page: 1,
+                }, {
+                    preserveState: true,
+                });
+            }
+        }
     }, 150),
-    deep: true
-  }
-},
+    deep: true,
+}
 
+    },
     //
     methods: {
-        reset () {
-            this.form = mapValues(this.form, () => null)
-            this.$emit('list-container-search-reset')
+        reset() {
+            this.form = mapValues(this.form, () => null);
+            this.$emit("list-container-search-reset");
         },
-        editDataRow (id) {
-            this.$inertia.get(this.route(this.routeEdit,table_alt, id))
+        editDataRow(id) {
+            const path = window.location.pathname; // Gibt "/admin/tables/show/Example" zurück
+            const segments = path.split("/"); // Teilt den Pfad in Segmente auf
+            const table = segments[segments.length - 1];
+            this.$inertia.get(this.route(this.routeEdit, [id, table]));
         },
         //
-        showDataRow (id) {
-            this.$inertia.get(this.route(this.routeShow, id))
+        showDataRow(id) {
+            this.$inertia.get(this.route(this.routeShow, id));
         },
-
-    }
-}
+    },
+};
 </script>
-
-

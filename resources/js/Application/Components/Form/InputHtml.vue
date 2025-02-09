@@ -36,7 +36,6 @@
                 >
                     <b>H{{ i }}</b>
                 </button>
-
             </div>
         </div>
 
@@ -47,20 +46,7 @@
                 contenteditable="true"
                 @input="updateValue"
                 @focus="isFocused = true"
-                class="
-                max-w-none
-                min-h-full
-                prose
-                md:prose-md
-                dark:prose-invert
-                prose-headings:font-title
-                focus:outline-none
-
-                prose-pre:bg-layout-sun-100
-                prose-pre:text-layout-sun-800
-
-                dark:prose-pre:text-layout-night-100
-                dark:prose-pre:bg-layout-night-800"
+                class="max-w-none min-h-full prose md:prose-md dark:prose-invert prose-headings:font-title focus:outline-none prose-pre:bg-layout-sun-100 prose-pre:text-layout-sun-800 dark:prose-pre:text-layout-night-100 dark:prose-pre:bg-layout-night-800"
             ></div>
         </div>
     </div>
@@ -68,64 +54,64 @@
 
 <script>
 export default {
-    name: 'Contents_Form_InputHTML',
+    name: "Contents_Form_InputHTML",
 
     props: {
         modelValue: {
             type: String,
-            default: ''
-        }
+            default: "",
+        },
     },
 
-    data () {
+    data() {
         return {
-            isFocused: false
-        }
+            isFocused: false,
+        };
     },
 
-    mounted () {
-        this.$refs.editor.innerHTML = this.modelValue
+    mounted() {
+        this.$refs.editor.innerHTML = this.modelValue;
     },
 
     methods: {
-        toggleFormat (format) {
-            const selection = window.getSelection()
-            if (!selection.rangeCount) return
+        toggleFormat(format) {
+            const selection = window.getSelection();
+            if (!selection.rangeCount) return;
 
-            const range = selection.getRangeAt(0)
-            const selectedText = range.toString()
+            const range = selection.getRangeAt(0);
+            const selectedText = range.toString();
 
-            if (!selectedText) return
+            if (!selectedText) return;
 
-            let formattedText
+            let formattedText;
             switch (format) {
-                case 'bold':
-                    formattedText = `<strong>${selectedText}</strong>`
-                    break
-                case 'italic':
-                    formattedText = `<em>${selectedText}</em>`
-                    break
-                case 'h1':
-                case 'h2':
-                case 'h3':
-                case 'h4':
-                case 'h5':
-                case 'h6':
-                    formattedText = `<${format}>${selectedText}</${format}>`
-                    break
+                case "bold":
+                    formattedText = `<strong>${selectedText}</strong>`;
+                    break;
+                case "italic":
+                    formattedText = `<em>${selectedText}</em>`;
+                    break;
+                case "h1":
+                case "h2":
+                case "h3":
+                case "h4":
+                case "h5":
+                case "h6":
+                    formattedText = `<${format}>${selectedText}</${format}>`;
+                    break;
             }
 
-            range.deleteContents()
+            range.deleteContents();
             range.insertNode(
-                new DOMParser().parseFromString(formattedText, 'text/html').body
-                    .firstChild
-            )
-            this.updateValue()
+                new DOMParser().parseFromString(formattedText, "text/html").body
+                    .firstChild,
+            );
+            this.updateValue();
         },
 
-        updateValue () {
-            this.$emit('update:modelValue', this.$refs.editor.innerHTML)
-        }
-    }
-}
+        updateValue() {
+            this.$emit("update:modelValue", this.$refs.editor.innerHTML);
+        },
+    },
+};
 </script>

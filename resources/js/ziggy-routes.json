@@ -1,0 +1,1072 @@
+[
+    {
+        "domain": null,
+        "method": "GET|HEAD",
+        "uri": "\/",
+        "name": "home.index",
+        "action": "App\\Http\\Controllers\\HomeController@home_index",
+        "middleware": ["web"]
+    },
+    {
+        "domain": null,
+        "method": "GET|HEAD",
+        "uri": "_debugbar\/assets\/javascript",
+        "name": "debugbar.assets.js",
+        "action": "Barryvdh\\Debugbar\\Controllers\\AssetController@js",
+        "middleware": [
+            "Barryvdh\\Debugbar\\Middleware\\DebugbarEnabled",
+            "Closure"
+        ]
+    },
+    {
+        "domain": null,
+        "method": "GET|HEAD",
+        "uri": "_debugbar\/assets\/stylesheets",
+        "name": "debugbar.assets.css",
+        "action": "Barryvdh\\Debugbar\\Controllers\\AssetController@css",
+        "middleware": [
+            "Barryvdh\\Debugbar\\Middleware\\DebugbarEnabled",
+            "Closure"
+        ]
+    },
+    {
+        "domain": null,
+        "method": "DELETE",
+        "uri": "_debugbar\/cache\/{key}\/{tags?}",
+        "name": "debugbar.cache.delete",
+        "action": "Barryvdh\\Debugbar\\Controllers\\CacheController@delete",
+        "middleware": [
+            "Barryvdh\\Debugbar\\Middleware\\DebugbarEnabled",
+            "Closure"
+        ]
+    },
+    {
+        "domain": null,
+        "method": "GET|HEAD",
+        "uri": "_debugbar\/clockwork\/{id}",
+        "name": "debugbar.clockwork",
+        "action": "Barryvdh\\Debugbar\\Controllers\\OpenHandlerController@clockwork",
+        "middleware": [
+            "Barryvdh\\Debugbar\\Middleware\\DebugbarEnabled",
+            "Closure"
+        ]
+    },
+    {
+        "domain": null,
+        "method": "GET|HEAD",
+        "uri": "_debugbar\/open",
+        "name": "debugbar.openhandler",
+        "action": "Barryvdh\\Debugbar\\Controllers\\OpenHandlerController@handle",
+        "middleware": [
+            "Barryvdh\\Debugbar\\Middleware\\DebugbarEnabled",
+            "Closure"
+        ]
+    },
+    {
+        "domain": null,
+        "method": "POST",
+        "uri": "_debugbar\/queries\/explain",
+        "name": "debugbar.queries.explain",
+        "action": "Barryvdh\\Debugbar\\Controllers\\QueriesController@explain",
+        "middleware": [
+            "Barryvdh\\Debugbar\\Middleware\\DebugbarEnabled",
+            "Closure"
+        ]
+    },
+    {
+        "domain": null,
+        "method": "POST",
+        "uri": "_ignition\/execute-solution",
+        "name": "ignition.executeSolution",
+        "action": "Spatie\\LaravelIgnition\\Http\\Controllers\\ExecuteSolutionController",
+        "middleware": [
+            "Spatie\\LaravelIgnition\\Http\\Middleware\\RunnableSolutionsEnabled"
+        ]
+    },
+    {
+        "domain": null,
+        "method": "GET|HEAD",
+        "uri": "_ignition\/health-check",
+        "name": "ignition.healthCheck",
+        "action": "Spatie\\LaravelIgnition\\Http\\Controllers\\HealthCheckController",
+        "middleware": [
+            "Spatie\\LaravelIgnition\\Http\\Middleware\\RunnableSolutionsEnabled"
+        ]
+    },
+    {
+        "domain": null,
+        "method": "POST",
+        "uri": "_ignition\/update-config",
+        "name": "ignition.updateConfig",
+        "action": "Spatie\\LaravelIgnition\\Http\\Controllers\\UpdateConfigController",
+        "middleware": [
+            "Spatie\\LaravelIgnition\\Http\\Middleware\\RunnableSolutionsEnabled"
+        ]
+    },
+    {
+        "domain": null,
+        "method": "GET|HEAD",
+        "uri": "admin",
+        "name": "admin.redirect",
+        "action": "Closure",
+        "middleware": [
+            "web",
+            "Illuminate\\Auth\\Middleware\\Authenticate:sanctum",
+            "Illuminate\\Auth\\Middleware\\EnsureEmailIsVerified",
+            "App\\Http\\Middleware\\UserIsAdmin"
+        ]
+    },
+    {
+        "domain": null,
+        "method": "GET|HEAD",
+        "uri": "admin\/api_tokens",
+        "name": "admin.api_tokens.index",
+        "action": "App\\Http\\Controllers\\DashboardAdminController@admin_api_tokens_index",
+        "middleware": [
+            "web",
+            "Illuminate\\Auth\\Middleware\\Authenticate:sanctum",
+            "Illuminate\\Auth\\Middleware\\EnsureEmailIsVerified",
+            "App\\Http\\Middleware\\UserIsAdmin"
+        ]
+    },
+    {
+        "domain": null,
+        "method": "GET|HEAD",
+        "uri": "admin\/blogs\/create",
+        "name": "admin.blog.create",
+        "action": "App\\Http\\Controllers\\BlogController@admin_blog_create",
+        "middleware": [
+            "web",
+            "Illuminate\\Auth\\Middleware\\Authenticate:sanctum",
+            "Illuminate\\Auth\\Middleware\\EnsureEmailIsVerified",
+            "App\\Http\\Middleware\\UserIsAdmin"
+        ]
+    },
+    {
+        "domain": null,
+        "method": "GET|HEAD",
+        "uri": "admin\/blogs\/index",
+        "name": "admin.blog.index",
+        "action": "App\\Http\\Controllers\\BlogController@admin_blog_index",
+        "middleware": [
+            "web",
+            "Illuminate\\Auth\\Middleware\\Authenticate:sanctum",
+            "Illuminate\\Auth\\Middleware\\EnsureEmailIsVerified",
+            "App\\Http\\Middleware\\UserIsAdmin",
+            "Reinink\\RememberQueryStrings"
+        ]
+    },
+    {
+        "domain": null,
+        "method": "POST",
+        "uri": "admin\/blogs\/store",
+        "name": "admin.blog.store",
+        "action": "App\\Http\\Controllers\\BlogController@admin_blog_store",
+        "middleware": [
+            "web",
+            "Illuminate\\Auth\\Middleware\\Authenticate:sanctum",
+            "Illuminate\\Auth\\Middleware\\EnsureEmailIsVerified",
+            "App\\Http\\Middleware\\UserIsAdmin"
+        ]
+    },
+    {
+        "domain": null,
+        "method": "PUT",
+        "uri": "admin\/blogs\/{blog}",
+        "name": "admin.blog.update",
+        "action": "App\\Http\\Controllers\\BlogController@admin_blog_update",
+        "middleware": [
+            "web",
+            "Illuminate\\Auth\\Middleware\\Authenticate:sanctum",
+            "Illuminate\\Auth\\Middleware\\EnsureEmailIsVerified",
+            "App\\Http\\Middleware\\UserIsAdmin"
+        ]
+    },
+    {
+        "domain": null,
+        "method": "DELETE",
+        "uri": "admin\/blogs\/{blog}",
+        "name": "admin.blog.delete",
+        "action": "App\\Http\\Controllers\\BlogController@admin_blog_delete",
+        "middleware": [
+            "web",
+            "Illuminate\\Auth\\Middleware\\Authenticate:sanctum",
+            "Illuminate\\Auth\\Middleware\\EnsureEmailIsVerified",
+            "App\\Http\\Middleware\\UserIsAdmin"
+        ]
+    },
+    {
+        "domain": null,
+        "method": "GET|HEAD",
+        "uri": "admin\/blogs\/{blog}\/edit",
+        "name": "admin.blog.edit",
+        "action": "App\\Http\\Controllers\\BlogController@admin_blog_edit",
+        "middleware": [
+            "web",
+            "Illuminate\\Auth\\Middleware\\Authenticate:sanctum",
+            "Illuminate\\Auth\\Middleware\\EnsureEmailIsVerified",
+            "App\\Http\\Middleware\\UserIsAdmin"
+        ]
+    },
+    {
+        "domain": null,
+        "method": "GET|HEAD",
+        "uri": "admin\/dashboard",
+        "name": "admin.dashboard",
+        "action": "App\\Http\\Controllers\\DashboardAdminController@admin_index",
+        "middleware": [
+            "web",
+            "Illuminate\\Auth\\Middleware\\Authenticate:sanctum",
+            "Illuminate\\Auth\\Middleware\\EnsureEmailIsVerified",
+            "App\\Http\\Middleware\\UserIsAdmin"
+        ]
+    },
+    {
+        "domain": null,
+        "method": "GET|HEAD",
+        "uri": "admin\/handbook",
+        "name": "admin.handbook",
+        "action": "App\\Http\\Controllers\\HandbookController@admin_handbook",
+        "middleware": [
+            "web",
+            "Illuminate\\Auth\\Middleware\\Authenticate:sanctum",
+            "Illuminate\\Auth\\Middleware\\EnsureEmailIsVerified",
+            "App\\Http\\Middleware\\UserIsAdmin"
+        ]
+    },
+    {
+        "domain": null,
+        "method": "GET|HEAD",
+        "uri": "admin\/laravel_log",
+        "name": "admin.laravel_log",
+        "action": "Rap2hpoutre\\LaravelLogViewer\\LogViewerController@index",
+        "middleware": [
+            "web",
+            "Illuminate\\Auth\\Middleware\\Authenticate:sanctum",
+            "Illuminate\\Auth\\Middleware\\EnsureEmailIsVerified",
+            "App\\Http\\Middleware\\UserIsAdmin"
+        ]
+    },
+    {
+        "domain": null,
+        "method": "GET|HEAD",
+        "uri": "admin\/profile",
+        "name": "admin.profile",
+        "action": "App\\Http\\Controllers\\DashboardAdminController@admin_profile",
+        "middleware": [
+            "web",
+            "Illuminate\\Auth\\Middleware\\Authenticate:sanctum",
+            "Illuminate\\Auth\\Middleware\\EnsureEmailIsVerified",
+            "App\\Http\\Middleware\\UserIsAdmin"
+        ]
+    },
+    {
+        "domain": null,
+        "method": "GET|HEAD",
+        "uri": "admin\/tables",
+        "name": "admin.tables.index",
+        "action": "App\\Http\\Controllers\\TablesController@ListTables",
+        "middleware": [
+            "web",
+            "Illuminate\\Auth\\Middleware\\Authenticate:sanctum",
+            "Illuminate\\Auth\\Middleware\\EnsureEmailIsVerified",
+            "App\\Http\\Middleware\\UserIsAdmin"
+        ]
+    },
+    {
+        "domain": null,
+        "method": "GET|HEAD",
+        "uri": "admin\/tables\/create\/{table?}",
+        "name": "admin.tables.create",
+        "action": "App\\Http\\Controllers\\TablesController@CreateTable",
+        "middleware": [
+            "web",
+            "Illuminate\\Auth\\Middleware\\Authenticate:sanctum",
+            "Illuminate\\Auth\\Middleware\\EnsureEmailIsVerified",
+            "App\\Http\\Middleware\\UserIsAdmin"
+        ]
+    },
+    {
+        "domain": null,
+        "method": "GET|HEAD",
+        "uri": "admin\/tables\/edit\/{id}\/{table}",
+        "name": "admin.tables.edit",
+        "action": "App\\Http\\Controllers\\TablesController@EditTables",
+        "middleware": [
+            "web",
+            "Illuminate\\Auth\\Middleware\\Authenticate:sanctum",
+            "Illuminate\\Auth\\Middleware\\EnsureEmailIsVerified",
+            "App\\Http\\Middleware\\UserIsAdmin"
+        ]
+    },
+    {
+        "domain": null,
+        "method": "GET|HEAD",
+        "uri": "admin\/tables\/show\/{table}",
+        "name": "admin.tables.show",
+        "action": "App\\Http\\Controllers\\TablesController@ShowTable",
+        "middleware": [
+            "web",
+            "Illuminate\\Auth\\Middleware\\Authenticate:sanctum",
+            "Illuminate\\Auth\\Middleware\\EnsureEmailIsVerified",
+            "App\\Http\\Middleware\\UserIsAdmin"
+        ]
+    },
+    {
+        "domain": null,
+        "method": "POST",
+        "uri": "admin\/tables\/{table}\/delete",
+        "name": "admin.tables.delete",
+        "action": "App\\Http\\Controllers\\TablesController@DeleteTable",
+        "middleware": [
+            "web",
+            "Illuminate\\Auth\\Middleware\\Authenticate:sanctum",
+            "Illuminate\\Auth\\Middleware\\EnsureEmailIsVerified",
+            "App\\Http\\Middleware\\UserIsAdmin"
+        ]
+    },
+    {
+        "domain": null,
+        "method": "DELETE",
+        "uri": "admin\/tables\/{table}\/delete",
+        "name": "admin,tables.delete",
+        "action": "App\\Http\\Controllers\\TablesController@DeleteTables",
+        "middleware": [
+            "web",
+            "Illuminate\\Auth\\Middleware\\Authenticate:sanctum",
+            "Illuminate\\Auth\\Middleware\\EnsureEmailIsVerified",
+            "App\\Http\\Middleware\\UserIsAdmin"
+        ]
+    },
+    {
+        "domain": null,
+        "method": "GET|HEAD",
+        "uri": "api\/api\/table-rows",
+        "name": "Api.Get.Tables",
+        "action": "App\\Http\\Controllers\\TablesController@GetTables",
+        "middleware": ["api"]
+    },
+    {
+        "domain": null,
+        "method": "GET|HEAD",
+        "uri": "api\/tables\/form-data\/{table}\/{id?}",
+        "name": "GetTableForm",
+        "action": "App\\Http\\Controllers\\TablesController@ExportFields",
+        "middleware": ["api"]
+    },
+    {
+        "domain": null,
+        "method": "GET|HEAD",
+        "uri": "api\/tables\/form_data\/{table}\/{id?}",
+        "name": "GetTableForm",
+        "action": "App\\Http\\Controllers\\TablesController@ExportFields",
+        "middleware": ["api"]
+    },
+    {
+        "domain": null,
+        "method": "GET|HEAD",
+        "uri": "api\/user",
+        "name": null,
+        "action": "Closure",
+        "middleware": [
+            "api",
+            "Illuminate\\Auth\\Middleware\\Authenticate:sanctum"
+        ]
+    },
+    {
+        "domain": null,
+        "method": "GET|HEAD",
+        "uri": "applicationswitch",
+        "name": "applicationswitch",
+        "action": "App\\Http\\Controllers\\ApplicationController@index",
+        "middleware": [
+            "web",
+            "Illuminate\\Auth\\Middleware\\Authenticate:sanctum",
+            "Illuminate\\Auth\\Middleware\\EnsureEmailIsVerified"
+        ]
+    },
+    {
+        "domain": null,
+        "method": "GET|HEAD",
+        "uri": "blogs",
+        "name": "home.blog.index",
+        "action": "App\\Http\\Controllers\\HomeController@home_blog_index",
+        "middleware": ["web", "Reinink\\RememberQueryStrings"]
+    },
+    {
+        "domain": null,
+        "method": "GET|HEAD",
+        "uri": "blogs\/show\/{slug}",
+        "name": "home.blog.show",
+        "action": "App\\Http\\Controllers\\HomeController@home_blog_show",
+        "middleware": ["web"]
+    },
+    {
+        "domain": null,
+        "method": "GET|HEAD",
+        "uri": "central\/dashboard",
+        "name": "central.dashboard",
+        "action": "App\\Http\\Controllers\\DashboardCentralController@central_index",
+        "middleware": [
+            "web",
+            "Illuminate\\Auth\\Middleware\\Authenticate:sanctum",
+            "Illuminate\\Auth\\Middleware\\EnsureEmailIsVerified"
+        ]
+    },
+    {
+        "domain": null,
+        "method": "POST",
+        "uri": "cookie-consent\/accept-all",
+        "name": "cookieconsent.accept.all",
+        "action": "Whitecube\\LaravelCookieConsent\\Http\\Controllers\\AcceptAllController",
+        "middleware": []
+    },
+    {
+        "domain": null,
+        "method": "POST",
+        "uri": "cookie-consent\/accept-essentials",
+        "name": "cookieconsent.accept.essentials",
+        "action": "Whitecube\\LaravelCookieConsent\\Http\\Controllers\\AcceptEssentialsController",
+        "middleware": []
+    },
+    {
+        "domain": null,
+        "method": "POST",
+        "uri": "cookie-consent\/configure",
+        "name": "cookieconsent.accept.configuration",
+        "action": "Whitecube\\LaravelCookieConsent\\Http\\Controllers\\ConfigureController",
+        "middleware": []
+    },
+    {
+        "domain": null,
+        "method": "POST",
+        "uri": "cookie-consent\/reset",
+        "name": "cookieconsent.reset",
+        "action": "Whitecube\\LaravelCookieConsent\\Http\\Controllers\\ResetController",
+        "middleware": []
+    },
+    {
+        "domain": null,
+        "method": "GET|HEAD",
+        "uri": "cookie-consent\/script",
+        "name": "cookieconsent.script",
+        "action": "Whitecube\\LaravelCookieConsent\\Http\\Controllers\\ScriptController",
+        "middleware": []
+    },
+    {
+        "domain": null,
+        "method": "GET|HEAD",
+        "uri": "customer\/dashboard",
+        "name": "customer.dashboard",
+        "action": "App\\Http\\Controllers\\DashboardCustomerController@customer_index",
+        "middleware": [
+            "web",
+            "Illuminate\\Auth\\Middleware\\Authenticate:sanctum",
+            "Illuminate\\Auth\\Middleware\\EnsureEmailIsVerified",
+            "App\\Http\\Middleware\\UserIsCustomer"
+        ]
+    },
+    {
+        "domain": null,
+        "method": "GET|HEAD",
+        "uri": "db-check",
+        "name": null,
+        "action": "Closure",
+        "middleware": ["web"]
+    },
+    {
+        "domain": null,
+        "method": "POST",
+        "uri": "email\/verification-notification",
+        "name": "verification.send",
+        "action": "Laravel\\Fortify\\Http\\Controllers\\EmailVerificationNotificationController@store",
+        "middleware": [
+            "web",
+            "Illuminate\\Auth\\Middleware\\Authenticate:web",
+            "Illuminate\\Routing\\Middleware\\ThrottleRequests:6,1"
+        ]
+    },
+    {
+        "domain": null,
+        "method": "GET|HEAD",
+        "uri": "email\/verify",
+        "name": "verification.notice",
+        "action": "Laravel\\Fortify\\Http\\Controllers\\EmailVerificationPromptController@__invoke",
+        "middleware": ["web", "Illuminate\\Auth\\Middleware\\Authenticate:web"]
+    },
+    {
+        "domain": null,
+        "method": "GET|HEAD",
+        "uri": "email\/verify\/{id}\/{hash}",
+        "name": "verification.verify",
+        "action": "Laravel\\Fortify\\Http\\Controllers\\VerifyEmailController@__invoke",
+        "middleware": [
+            "web",
+            "Illuminate\\Auth\\Middleware\\Authenticate:web",
+            "Illuminate\\Routing\\Middleware\\ValidateSignature",
+            "Illuminate\\Routing\\Middleware\\ThrottleRequests:6,1"
+        ]
+    },
+    {
+        "domain": null,
+        "method": "GET|HEAD",
+        "uri": "employee\/dashboard",
+        "name": "employee.dashboard",
+        "action": "App\\Http\\Controllers\\DashboardEmployeeController@employee_index",
+        "middleware": [
+            "web",
+            "Illuminate\\Auth\\Middleware\\Authenticate:sanctum",
+            "Illuminate\\Auth\\Middleware\\EnsureEmailIsVerified",
+            "App\\Http\\Middleware\\UserIsEmployee"
+        ]
+    },
+    {
+        "domain": null,
+        "method": "GET|HEAD",
+        "uri": "forgot-password",
+        "name": "password.request",
+        "action": "Laravel\\Fortify\\Http\\Controllers\\PasswordResetLinkController@create",
+        "middleware": [
+            "web",
+            "Illuminate\\Auth\\Middleware\\RedirectIfAuthenticated:web"
+        ]
+    },
+    {
+        "domain": null,
+        "method": "POST",
+        "uri": "forgot-password",
+        "name": "password.email",
+        "action": "Laravel\\Fortify\\Http\\Controllers\\PasswordResetLinkController@store",
+        "middleware": [
+            "web",
+            "Illuminate\\Auth\\Middleware\\RedirectIfAuthenticated:web"
+        ]
+    },
+    {
+        "domain": null,
+        "method": "GET|HEAD",
+        "uri": "home\/get_started",
+        "name": "home.get_started",
+        "action": "App\\Http\\Controllers\\HomeController@home_get_started",
+        "middleware": ["web"]
+    },
+    {
+        "domain": null,
+        "method": "GET|HEAD",
+        "uri": "home\/imprint",
+        "name": "home.imprint",
+        "action": "App\\Http\\Controllers\\HomeController@home_imprint",
+        "middleware": ["web"]
+    },
+    {
+        "domain": null,
+        "method": "GET|HEAD",
+        "uri": "home\/invalid_signature",
+        "name": "home.invalid_signature",
+        "action": "App\\Http\\Controllers\\HomeController@home_invalid_signature",
+        "middleware": ["web"]
+    },
+    {
+        "domain": null,
+        "method": "GET|HEAD",
+        "uri": "home\/no_application_found",
+        "name": "home.no_application_found",
+        "action": "App\\Http\\Controllers\\HomeController@home_no_application_found",
+        "middleware": ["web"]
+    },
+    {
+        "domain": null,
+        "method": "GET|HEAD",
+        "uri": "home\/pricing",
+        "name": "home.pricing",
+        "action": "App\\Http\\Controllers\\HomeController@home_pricing",
+        "middleware": ["web"]
+    },
+    {
+        "domain": null,
+        "method": "GET|HEAD",
+        "uri": "home\/privacy",
+        "name": "home.privacy",
+        "action": "App\\Http\\Controllers\\HomeController@home_privacy",
+        "middleware": ["web"]
+    },
+    {
+        "domain": null,
+        "method": "GET|HEAD",
+        "uri": "home\/terms",
+        "name": "home.terms",
+        "action": "App\\Http\\Controllers\\HomeController@home_terms",
+        "middleware": ["web"]
+    },
+    {
+        "domain": null,
+        "method": "GET|HEAD",
+        "uri": "home\/user_is_no_admin",
+        "name": "home.user_is_no_admin",
+        "action": "App\\Http\\Controllers\\HomeController@home_user_is_no_admin",
+        "middleware": ["web"]
+    },
+    {
+        "domain": null,
+        "method": "GET|HEAD",
+        "uri": "home\/user_is_no_customer",
+        "name": "home.user_is_no_customer",
+        "action": "App\\Http\\Controllers\\HomeController@home_user_is_no_customer",
+        "middleware": ["web"]
+    },
+    {
+        "domain": null,
+        "method": "GET|HEAD",
+        "uri": "home\/user_is_no_employee",
+        "name": "home.user_is_no_employee",
+        "action": "App\\Http\\Controllers\\HomeController@home_user_is_no_employee",
+        "middleware": ["web"]
+    },
+    {
+        "domain": null,
+        "method": "GET|HEAD",
+        "uri": "log-viewer",
+        "name": "log-viewer::dashboard",
+        "action": "Arcanedev\\LogViewer\\Http\\Controllers\\LogViewerController@index",
+        "middleware": []
+    },
+    {
+        "domain": null,
+        "method": "GET|HEAD",
+        "uri": "log-viewer\/logs",
+        "name": "log-viewer::logs.list",
+        "action": "Arcanedev\\LogViewer\\Http\\Controllers\\LogViewerController@listLogs",
+        "middleware": []
+    },
+    {
+        "domain": null,
+        "method": "DELETE",
+        "uri": "log-viewer\/logs\/delete",
+        "name": "log-viewer::logs.delete",
+        "action": "Arcanedev\\LogViewer\\Http\\Controllers\\LogViewerController@delete",
+        "middleware": []
+    },
+    {
+        "domain": null,
+        "method": "GET|HEAD",
+        "uri": "log-viewer\/logs\/{date}",
+        "name": "log-viewer::logs.show",
+        "action": "Arcanedev\\LogViewer\\Http\\Controllers\\LogViewerController@show",
+        "middleware": []
+    },
+    {
+        "domain": null,
+        "method": "GET|HEAD",
+        "uri": "log-viewer\/logs\/{date}\/download",
+        "name": "log-viewer::logs.download",
+        "action": "Arcanedev\\LogViewer\\Http\\Controllers\\LogViewerController@download",
+        "middleware": []
+    },
+    {
+        "domain": null,
+        "method": "GET|HEAD",
+        "uri": "log-viewer\/logs\/{date}\/{level}",
+        "name": "log-viewer::logs.filter",
+        "action": "Arcanedev\\LogViewer\\Http\\Controllers\\LogViewerController@showByLevel",
+        "middleware": []
+    },
+    {
+        "domain": null,
+        "method": "GET|HEAD",
+        "uri": "log-viewer\/logs\/{date}\/{level}\/search",
+        "name": "log-viewer::logs.search",
+        "action": "Arcanedev\\LogViewer\\Http\\Controllers\\LogViewerController@search",
+        "middleware": []
+    },
+    {
+        "domain": null,
+        "method": "GET|HEAD",
+        "uri": "login",
+        "name": "login",
+        "action": "Laravel\\Fortify\\Http\\Controllers\\AuthenticatedSessionController@create",
+        "middleware": [
+            "web",
+            "Illuminate\\Auth\\Middleware\\RedirectIfAuthenticated:web"
+        ]
+    },
+    {
+        "domain": null,
+        "method": "POST",
+        "uri": "login",
+        "name": "login.store",
+        "action": "Laravel\\Fortify\\Http\\Controllers\\AuthenticatedSessionController@store",
+        "middleware": [
+            "web",
+            "Illuminate\\Auth\\Middleware\\RedirectIfAuthenticated:web",
+            "Illuminate\\Routing\\Middleware\\ThrottleRequests:login"
+        ]
+    },
+    {
+        "domain": null,
+        "method": "POST",
+        "uri": "logout",
+        "name": "logout",
+        "action": "Laravel\\Fortify\\Http\\Controllers\\AuthenticatedSessionController@destroy",
+        "middleware": ["web", "Illuminate\\Auth\\Middleware\\Authenticate:web"]
+    },
+    {
+        "domain": null,
+        "method": "GET|HEAD",
+        "uri": "privacy-policy",
+        "name": "policy.show",
+        "action": "Laravel\\Jetstream\\Http\\Controllers\\Inertia\\PrivacyPolicyController@show",
+        "middleware": ["web"]
+    },
+    {
+        "domain": null,
+        "method": "GET|HEAD",
+        "uri": "register",
+        "name": "register",
+        "action": "Laravel\\Fortify\\Http\\Controllers\\RegisteredUserController@create",
+        "middleware": [
+            "web",
+            "Illuminate\\Auth\\Middleware\\RedirectIfAuthenticated:web"
+        ]
+    },
+    {
+        "domain": null,
+        "method": "POST",
+        "uri": "register",
+        "name": "register.store",
+        "action": "Laravel\\Fortify\\Http\\Controllers\\RegisteredUserController@store",
+        "middleware": [
+            "web",
+            "Illuminate\\Auth\\Middleware\\RedirectIfAuthenticated:web"
+        ]
+    },
+    {
+        "domain": null,
+        "method": "POST",
+        "uri": "reset-password",
+        "name": "password.update",
+        "action": "Laravel\\Fortify\\Http\\Controllers\\NewPasswordController@store",
+        "middleware": [
+            "web",
+            "Illuminate\\Auth\\Middleware\\RedirectIfAuthenticated:web"
+        ]
+    },
+    {
+        "domain": null,
+        "method": "GET|HEAD",
+        "uri": "reset-password\/{token}",
+        "name": "password.reset",
+        "action": "Laravel\\Fortify\\Http\\Controllers\\NewPasswordController@create",
+        "middleware": [
+            "web",
+            "Illuminate\\Auth\\Middleware\\RedirectIfAuthenticated:web"
+        ]
+    },
+    {
+        "domain": null,
+        "method": "GET|HEAD",
+        "uri": "sanctum\/csrf-cookie",
+        "name": "sanctum.csrf-cookie",
+        "action": "Laravel\\Sanctum\\Http\\Controllers\\CsrfCookieController@show",
+        "middleware": ["web"]
+    },
+    {
+        "domain": null,
+        "method": "GET|HEAD",
+        "uri": "tables\/form-data\/{table}\/{id?}",
+        "name": "GetTableForm",
+        "action": "App\\Http\\Controllers\\TablesController@ExportFields",
+        "middleware": [
+            "web",
+            "Illuminate\\Auth\\Middleware\\Authenticate:sanctum",
+            "Illuminate\\Auth\\Middleware\\EnsureEmailIsVerified",
+            "App\\Http\\Middleware\\UserIsAdmin"
+        ]
+    },
+    {
+        "domain": null,
+        "method": "GET|HEAD",
+        "uri": "tables\/form_data\/{table}\/{id?}",
+        "name": "GetTableForm",
+        "action": "App\\Http\\Controllers\\TablesController@ExportFields",
+        "middleware": ["web"]
+    },
+    {
+        "domain": null,
+        "method": "GET|HEAD",
+        "uri": "terms-of-service",
+        "name": "terms.show",
+        "action": "Laravel\\Jetstream\\Http\\Controllers\\Inertia\\TermsOfServiceController@show",
+        "middleware": ["web"]
+    },
+    {
+        "domain": null,
+        "method": "POST",
+        "uri": "toggle-dark-mode",
+        "name": "toggle-dark-mode",
+        "action": "App\\Http\\Controllers\\ApplicationController@toggleDarkMode",
+        "middleware": ["web"]
+    },
+    {
+        "domain": null,
+        "method": "GET|HEAD",
+        "uri": "two-factor-challenge",
+        "name": "two-factor.login",
+        "action": "Laravel\\Fortify\\Http\\Controllers\\TwoFactorAuthenticatedSessionController@create",
+        "middleware": [
+            "web",
+            "Illuminate\\Auth\\Middleware\\RedirectIfAuthenticated:web"
+        ]
+    },
+    {
+        "domain": null,
+        "method": "POST",
+        "uri": "two-factor-challenge",
+        "name": "two-factor.login.store",
+        "action": "Laravel\\Fortify\\Http\\Controllers\\TwoFactorAuthenticatedSessionController@store",
+        "middleware": [
+            "web",
+            "Illuminate\\Auth\\Middleware\\RedirectIfAuthenticated:web",
+            "Illuminate\\Routing\\Middleware\\ThrottleRequests:two-factor"
+        ]
+    },
+    {
+        "domain": null,
+        "method": "GET|HEAD",
+        "uri": "up",
+        "name": null,
+        "action": "Closure",
+        "middleware": []
+    },
+    {
+        "domain": null,
+        "method": "DELETE",
+        "uri": "user",
+        "name": "current-user.destroy",
+        "action": "Laravel\\Jetstream\\Http\\Controllers\\Inertia\\CurrentUserController@destroy",
+        "middleware": [
+            "web",
+            "Illuminate\\Auth\\Middleware\\Authenticate:sanctum",
+            "Laravel\\Jetstream\\Http\\Middleware\\AuthenticateSession"
+        ]
+    },
+    {
+        "domain": null,
+        "method": "GET|HEAD",
+        "uri": "user\/api-tokens",
+        "name": "api-tokens.index",
+        "action": "Laravel\\Jetstream\\Http\\Controllers\\Inertia\\ApiTokenController@index",
+        "middleware": [
+            "web",
+            "Illuminate\\Auth\\Middleware\\Authenticate:sanctum",
+            "Laravel\\Jetstream\\Http\\Middleware\\AuthenticateSession",
+            "Illuminate\\Auth\\Middleware\\EnsureEmailIsVerified"
+        ]
+    },
+    {
+        "domain": null,
+        "method": "POST",
+        "uri": "user\/api-tokens",
+        "name": "api-tokens.store",
+        "action": "Laravel\\Jetstream\\Http\\Controllers\\Inertia\\ApiTokenController@store",
+        "middleware": [
+            "web",
+            "Illuminate\\Auth\\Middleware\\Authenticate:sanctum",
+            "Laravel\\Jetstream\\Http\\Middleware\\AuthenticateSession",
+            "Illuminate\\Auth\\Middleware\\EnsureEmailIsVerified"
+        ]
+    },
+    {
+        "domain": null,
+        "method": "PUT",
+        "uri": "user\/api-tokens\/{token}",
+        "name": "api-tokens.update",
+        "action": "Laravel\\Jetstream\\Http\\Controllers\\Inertia\\ApiTokenController@update",
+        "middleware": [
+            "web",
+            "Illuminate\\Auth\\Middleware\\Authenticate:sanctum",
+            "Laravel\\Jetstream\\Http\\Middleware\\AuthenticateSession",
+            "Illuminate\\Auth\\Middleware\\EnsureEmailIsVerified"
+        ]
+    },
+    {
+        "domain": null,
+        "method": "DELETE",
+        "uri": "user\/api-tokens\/{token}",
+        "name": "api-tokens.destroy",
+        "action": "Laravel\\Jetstream\\Http\\Controllers\\Inertia\\ApiTokenController@destroy",
+        "middleware": [
+            "web",
+            "Illuminate\\Auth\\Middleware\\Authenticate:sanctum",
+            "Laravel\\Jetstream\\Http\\Middleware\\AuthenticateSession",
+            "Illuminate\\Auth\\Middleware\\EnsureEmailIsVerified"
+        ]
+    },
+    {
+        "domain": null,
+        "method": "GET|HEAD",
+        "uri": "user\/confirm-password",
+        "name": "password.confirm",
+        "action": "Laravel\\Fortify\\Http\\Controllers\\ConfirmablePasswordController@show",
+        "middleware": ["web", "Illuminate\\Auth\\Middleware\\Authenticate:web"]
+    },
+    {
+        "domain": null,
+        "method": "POST",
+        "uri": "user\/confirm-password",
+        "name": "password.confirm.store",
+        "action": "Laravel\\Fortify\\Http\\Controllers\\ConfirmablePasswordController@store",
+        "middleware": ["web", "Illuminate\\Auth\\Middleware\\Authenticate:web"]
+    },
+    {
+        "domain": null,
+        "method": "GET|HEAD",
+        "uri": "user\/confirmed-password-status",
+        "name": "password.confirmation",
+        "action": "Laravel\\Fortify\\Http\\Controllers\\ConfirmedPasswordStatusController@show",
+        "middleware": ["web", "Illuminate\\Auth\\Middleware\\Authenticate:web"]
+    },
+    {
+        "domain": null,
+        "method": "POST",
+        "uri": "user\/confirmed-two-factor-authentication",
+        "name": "two-factor.confirm",
+        "action": "Laravel\\Fortify\\Http\\Controllers\\ConfirmedTwoFactorAuthenticationController@store",
+        "middleware": [
+            "web",
+            "Illuminate\\Auth\\Middleware\\Authenticate:web",
+            "Illuminate\\Auth\\Middleware\\RequirePassword"
+        ]
+    },
+    {
+        "domain": null,
+        "method": "DELETE",
+        "uri": "user\/other-browser-sessions",
+        "name": "other-browser-sessions.destroy",
+        "action": "Laravel\\Jetstream\\Http\\Controllers\\Inertia\\OtherBrowserSessionsController@destroy",
+        "middleware": [
+            "web",
+            "Illuminate\\Auth\\Middleware\\Authenticate:sanctum",
+            "Laravel\\Jetstream\\Http\\Middleware\\AuthenticateSession"
+        ]
+    },
+    {
+        "domain": null,
+        "method": "PUT",
+        "uri": "user\/password",
+        "name": "user-password.update",
+        "action": "Laravel\\Fortify\\Http\\Controllers\\PasswordController@update",
+        "middleware": ["web", "Illuminate\\Auth\\Middleware\\Authenticate:web"]
+    },
+    {
+        "domain": null,
+        "method": "GET|HEAD",
+        "uri": "user\/profile",
+        "name": "profile.show",
+        "action": "Laravel\\Jetstream\\Http\\Controllers\\Inertia\\UserProfileController@show",
+        "middleware": [
+            "web",
+            "Illuminate\\Auth\\Middleware\\Authenticate:sanctum",
+            "Laravel\\Jetstream\\Http\\Middleware\\AuthenticateSession"
+        ]
+    },
+    {
+        "domain": null,
+        "method": "PUT",
+        "uri": "user\/profile-information",
+        "name": "user-profile-information.update",
+        "action": "Laravel\\Fortify\\Http\\Controllers\\ProfileInformationController@update",
+        "middleware": ["web", "Illuminate\\Auth\\Middleware\\Authenticate:web"]
+    },
+    {
+        "domain": null,
+        "method": "DELETE",
+        "uri": "user\/profile-photo",
+        "name": "current-user-photo.destroy",
+        "action": "Laravel\\Jetstream\\Http\\Controllers\\Inertia\\ProfilePhotoController@destroy",
+        "middleware": [
+            "web",
+            "Illuminate\\Auth\\Middleware\\Authenticate:sanctum",
+            "Laravel\\Jetstream\\Http\\Middleware\\AuthenticateSession"
+        ]
+    },
+    {
+        "domain": null,
+        "method": "POST",
+        "uri": "user\/two-factor-authentication",
+        "name": "two-factor.enable",
+        "action": "Laravel\\Fortify\\Http\\Controllers\\TwoFactorAuthenticationController@store",
+        "middleware": [
+            "web",
+            "Illuminate\\Auth\\Middleware\\Authenticate:web",
+            "Illuminate\\Auth\\Middleware\\RequirePassword"
+        ]
+    },
+    {
+        "domain": null,
+        "method": "DELETE",
+        "uri": "user\/two-factor-authentication",
+        "name": "two-factor.disable",
+        "action": "Laravel\\Fortify\\Http\\Controllers\\TwoFactorAuthenticationController@destroy",
+        "middleware": [
+            "web",
+            "Illuminate\\Auth\\Middleware\\Authenticate:web",
+            "Illuminate\\Auth\\Middleware\\RequirePassword"
+        ]
+    },
+    {
+        "domain": null,
+        "method": "GET|HEAD",
+        "uri": "user\/two-factor-qr-code",
+        "name": "two-factor.qr-code",
+        "action": "Laravel\\Fortify\\Http\\Controllers\\TwoFactorQrCodeController@show",
+        "middleware": [
+            "web",
+            "Illuminate\\Auth\\Middleware\\Authenticate:web",
+            "Illuminate\\Auth\\Middleware\\RequirePassword"
+        ]
+    },
+    {
+        "domain": null,
+        "method": "GET|HEAD",
+        "uri": "user\/two-factor-recovery-codes",
+        "name": "two-factor.recovery-codes",
+        "action": "Laravel\\Fortify\\Http\\Controllers\\RecoveryCodeController@index",
+        "middleware": [
+            "web",
+            "Illuminate\\Auth\\Middleware\\Authenticate:web",
+            "Illuminate\\Auth\\Middleware\\RequirePassword"
+        ]
+    },
+    {
+        "domain": null,
+        "method": "POST",
+        "uri": "user\/two-factor-recovery-codes",
+        "name": null,
+        "action": "Laravel\\Fortify\\Http\\Controllers\\RecoveryCodeController@store",
+        "middleware": [
+            "web",
+            "Illuminate\\Auth\\Middleware\\Authenticate:web",
+            "Illuminate\\Auth\\Middleware\\RequirePassword"
+        ]
+    },
+    {
+        "domain": null,
+        "method": "GET|HEAD",
+        "uri": "user\/two-factor-secret-key",
+        "name": "two-factor.secret-key",
+        "action": "Laravel\\Fortify\\Http\\Controllers\\TwoFactorSecretKeyController@show",
+        "middleware": [
+            "web",
+            "Illuminate\\Auth\\Middleware\\Authenticate:web",
+            "Illuminate\\Auth\\Middleware\\RequirePassword"
+        ]
+    },
+    {
+        "domain": null,
+        "method": "GET|HEAD",
+        "uri": "{fallbackPlaceholder}",
+        "name": null,
+        "action": "Closure",
+        "middleware": ["web"]
+    }
+]

@@ -1,5 +1,8 @@
 <template>
-    <layout header-title="Anwender ist kein Administrator" :header-url="$page.props.saas_url + '/home/user_is_no_admin'">
+    <layout
+        header-title="Anwender ist kein Administrator"
+        :header-url="$page.props.saas_url + '/home/user_is_no_admin'"
+    >
         <page-content>
             <template #content>
                 <page-title>
@@ -7,7 +10,8 @@
                 </page-title>
                 <page-paragraph>
                     <template #paragraph>
-                        Die gewünschte Seite ist nicht zugänglich, da du nicht über Administratorrechte verfügst!
+                        Die gewünschte Seite ist nicht zugänglich, da du nicht
+                        über Administratorrechte verfügst!
                     </template>
                 </page-paragraph>
             </template>

@@ -1,5 +1,4 @@
 @layer utilities {
-
     .np-dl-outer-container {
         @apply border rounded-lg border-layout-sun-100 dark:border-layout-night-100 bg-layout-sun-0 text-layout-sun-800 dark:bg-layout-night-0 dark:text-layout-night-800;
     }
@@ -107,5 +106,4 @@
     .np-dl-td-no-entries {
         @apply border-t px-2 py-2;
     }
-
 }

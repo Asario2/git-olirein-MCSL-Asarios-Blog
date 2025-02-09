@@ -32,7 +32,6 @@ class BlogController extends Controller
             ->paginate(20)
             ->withQueryString();
         //
-        \Log::info('blg:'.json_encode($blogs, JSON_PRETTY_PRINT));
         return Inertia::render('Admin/BlogList', [
             'filters' => Request::all('search'),
             'blogs' => $blogs,
@@ -92,16 +91,12 @@ class BlogController extends Controller
         //
         $blog_images = CustomHelpers::determinePluckBlogImages();
         //
-
-
-
         return Inertia::render('Admin/BlogForm', [
             'blog' => $blog,
             'blog_authors' => $blog_authors,
             'blog_categories' => $blog_categories,
             'blog_images' => $blog_images,
         ]);
-
     }
     //
     public function admin_blog_update(Blog $blog, RequestAdminStoreAndUpdateBlog $request)

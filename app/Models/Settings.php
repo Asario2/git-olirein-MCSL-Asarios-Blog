@@ -77,6 +77,7 @@ class Settings extends Model
         "didyouknow" => 'headline',
         "users" => 'name',
         "users_rights" => 'name',
+        "camera"=>"name"
 
 ];
 const searchFields =
@@ -91,6 +92,7 @@ const searchFields =
         "didyouknow" => ['headline'],
         "users" => ['name'],
         "users_rights" => ['name'],
+        "camera" => ['name'],
 
 ];
 const otherField = [
@@ -98,6 +100,6 @@ const otherField = [
 'blog_images'=> 'url',
 'blogs'=> 'summary',
 "images"=> "message",
-
+"camera"=> "Longname",
 ];
 }

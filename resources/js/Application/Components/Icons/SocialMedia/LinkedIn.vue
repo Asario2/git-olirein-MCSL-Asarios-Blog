@@ -14,6 +14,6 @@
 </template>
 <script>
 export default {
-    name: 'LinkedIn.svg'
-}
+    name: "LinkedIn.svg",
+};
 </script>

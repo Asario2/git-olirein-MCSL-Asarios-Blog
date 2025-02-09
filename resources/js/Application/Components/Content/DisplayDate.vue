@@ -18,7 +18,11 @@ export default {
     //
     computed: {
         displaydate() {
-            if (this.value == null || this.value == undefined || this.value == 0) {
+            if (
+                this.value == null ||
+                this.value == undefined ||
+                this.value == 0
+            ) {
                 return "-";
             }
             var convertDate = new Date(this.value);

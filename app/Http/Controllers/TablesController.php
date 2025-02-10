@@ -314,6 +314,7 @@ class TablesController extends Controller
 
         $id = $id == 0 ? null : $id;
         $columns = Schema::getColumnListing($table);
+        $columns = array_diff($columns, ['id']);
         if($id)
         {
             $tables = DB::table($table)->where('id',$id)->orderBy($ord[0],$ord[1])->first();

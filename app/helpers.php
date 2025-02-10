@@ -63,8 +63,12 @@ if (!Builder::hasMacro('filterdefault')) {
         if (!empty($filters['search'])) {
             $whvals = @Settings::searchFields[$_GET['table']] ?? []; // Rufe `whvals` korrekt auf
             foreach ($whvals as $whn) {
-                $this->orWhere($whn, 'like', '%' . $filters['search'] . '%');
+                $this->orWhereRaw("LOWER(`$whn`) LIKE ?", ['%' . strtolower($filters['search']) . '%']);
             }
+            $table = last(request()->segments());
+
+            $columns = Schema::getColumnListing($table);
+            if(in_array("created_at",$columns))
             $this->orWhere("created_at", 'like', '%'.$filters['search']. '%');
         }
 

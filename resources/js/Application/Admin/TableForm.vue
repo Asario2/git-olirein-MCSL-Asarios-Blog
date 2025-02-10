@@ -163,6 +163,7 @@ const routes = {
 
 import { defineComponent } from "vue";
 import axios from "axios";
+import $ from "jquery";
 import pickBy from "lodash/pickBy";
 // import { usePage } from '@inertiajs/vue3';
 import { ref, watch } from "vue";
@@ -171,7 +172,7 @@ import { ref, watch } from "vue";
 // import { Ziggy } from 'ziggy-js';
 // import route from 'ziggy';
 
-import { onMounted } from "vue";
+import { onMounted, watchEffect } from "vue";
 import Layout from "@/Application/Admin/Shared/Layout.vue";
 import Breadcrumb from "@/Application/Components/Content/Breadcrumb.vue";
 
@@ -450,9 +451,89 @@ export default defineComponent({
 
 watch(ffo, (newValue) => {
     localStorage.setItem("ffo", newValue);
+    var $_GET = {};
+if(document.location.toString().indexOf('?') !== -1) {
+    var query = document.location
+                   .toString()
+                   // get the query string
+                   .replace(/^.*?\?/, '')
+                   // and remove any existing hash string (thanks, @vrijdenker)
+                   .replace(/#.*$/, '')
+                   .split('&');
+
+    for(var i=0, l=query.length; i<l; i++) {
+       var aux = decodeURIComponent(query[i]).split('=');
+       $_GET[aux[0]] = aux[1];
+    }
+}
+const routes = {
+    getform: (table, id) => `/tables/form-data/${table}/${id}`,
+};
+function fetchFormData() {
+            axios
+                .get(routes.getform(table, id))
+                .then((response) => {
+                    this.formFields = response.data;
+                    var formFields_old = response.data;
+                    let obj = JSON.stringify(this.formFields, null, 2);
+                    obj = obj.replace(/"formFields": \[.*\]/, "");
+                    obj = obj.replace(/^\{|\}$/g, "");
+                    obj = obj
+                        .replace(/}\s*,\s*\n\s*}/g, "},")
+                        .replace(/[[\]]/g, "")
+                        .replace(/\[|\]$/, "");
+                    obj = obj.replace(/,\s*\n\s*{/g, ",");
+                    obj = obj.replace(/\s*\}(?!,)\s*/g, "}");
+                    obj = obj.replace(/}},/g, "\n   },");
+                    obj = obj.replace(/}}/g, "\n   }\n  }");
+
+                    this.ffo = JSON.parse(obj);
+                    const ffo = this.ffo;
+                    //            this.ffo = obj;
+                    formFields_old.forEach((field) => {
+                        this.setFormField(field);
+                    });
+
+                    // this.formFields.forEach(field => {
+                    //     this.formData[field.name] = field.value;
+                    // });
+                })
+                .catch((error) => {
+                    console.error(
+                        "Fehler beim Abrufen der Formulardaten:",
+                        error,
+                    );
+                });
+        }
+    if(!$_GET['rl'])
+    {
+       location.href = location.href + "?rl=2";
+
+
+//     $(document).ready(function () {
+//     // Prüfen, ob 'rl' in der URL vorhanden ist
+//     const urlParams = new URLSearchParams(window.location.search);
+
+//     if (!urlParams.has("rl")) {
+//         urlParams.set("rl", "2"); // 'rl=2' hinzufügen
+//         const newUrl = window.location.pathname + "?" + urlParams.toString();
+
+//         $.ajax({
+//             url: newUrl,
+//             success: function (data) {
+//                 history.pushState(null, "", newUrl); // URL in der Adressleiste aktualisieren
+//                 $("body").html($(data).find("body").html()); // Nur den Body ersetzen
+//             }
+//         });
+//     }
+// })
+}
 });
 
 return { ffo };
+
+
+        return { ffor };
 
         const formFields = reactive({
             idField: {
@@ -524,6 +605,7 @@ return { ffo };
             );
         },
         fetchFormData() {
+
             axios
                 .get(routes.getform(table, id))
                 .then((response) => {
@@ -542,7 +624,7 @@ return { ffo };
                     obj = obj.replace(/}}/g, "\n   }\n  }");
 
                     this.ffo = JSON.parse(obj);
-                    ffo = this.ffo;
+                    const ffo = this.ffo;
                     //            this.ffo = obj;
                     formFields_old.forEach((field) => {
                         this.setFormField(field);

@@ -111,8 +111,8 @@ textarea.txt {
 
 @media (min-width: 1025px) {
     .maxx {
-        min-width: 200%;
-        max-width: 200%;
+        min-width: 267%;
+        max-width: 267%;
     }
     .txt {
         max-width: 560px !important;

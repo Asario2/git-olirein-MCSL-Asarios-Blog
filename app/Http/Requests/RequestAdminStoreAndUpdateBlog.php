@@ -16,9 +16,9 @@ class RequestAdminStoreAndUpdateBlog extends FormRequest
     {
         $rules = [];
 
-        $rules['blog_author_id'] = ['required', 'exists:blog_authors,id'];
-        $rules['blog_category_id'] = ['required', 'exists:blog_categories,id'];
-        $rules['blog_image_id'] = ['required', 'exists:blog_images,id'];
+        $rules['blog_authors_id'] = ['required', 'exists:blog_authors,id'];
+        $rules['blog_categories_id'] = ['required', 'exists:blog_categories,id'];
+        $rules['blog_images_id'] = ['required', 'exists:blog_images,id'];
         $rules['blog_date'] = ['required', 'date'];
         $rules['title'] = ['required', 'max:100'];
         $rules['summary'] = ['required', 'min:10'];
@@ -38,12 +38,12 @@ class RequestAdminStoreAndUpdateBlog extends FormRequest
     public function messages()
     {
         return [
-            'blog_author_id.required' => 'Bitte gebe den Autor ein.',
-            'blog_author_id.exists' => 'Der ausgewählte Autor ist nicht vorhanden.',
-            'blog_category_id.required' => 'Bitte gebe die Kategorie ein.',
-            'blog_category_id.exists' => 'Die ausgewählte Kategorie ist nicht vorhanden.',
-            'blog_image_id.required' => 'Bitte wähle ein Artikelbild aus.',
-            'blog_image_id.exists' => 'Das ausgewählte Artikelbild ist nicht vorhanden.',
+            'blog_authors_id.required' => 'Bitte gebe den Autor ein.',
+            'blog_authors_id.exists' => 'Der ausgewählte Autor ist nicht vorhanden.',
+            'blog_categories_id.required' => 'Bitte gebe die Kategorie ein.',
+            'blog_categories_id.exists' => 'Die ausgewählte Kategorie ist nicht vorhanden.',
+            'blog_images_id.required' => 'Bitte wähle ein Artikelbild aus.',
+            'blog_images_id.exists' => 'Das ausgewählte Artikelbild ist nicht vorhanden.',
             'blog_date.required' => 'Bitte gebe das Artikeldatum ein.',
             'blog_date.date' => 'Bitte ein gültiges Artikeldatum ein.',
             'title.required' => 'Bitte gebe den Titel des Blogartikels ein.',

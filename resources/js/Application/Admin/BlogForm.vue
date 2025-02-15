@@ -68,21 +68,22 @@
                             v-model="form.blog_category_id"
                             :options="blog_categories"
                             ref="blog_category_id"
+                            :name="form.name"
                         ></input-select>
                         <input-error :message="errors.blog_category_id" />
                     </input-container>
 
                     <input-container>
                         <input-label
-                            name="blog_author_id"
+                            name="blog_authors_id"
                             label="Autor"
                         ></input-label>
                         <input-select
-                            v-model="form.blog_author_id"
+                            v-model="form.blog_authors_id"
                             :options="blog_authors"
-                            ref="blog_author_id"
+                            ref="blog_authors_id"
                         ></input-select>
-                        <input-error :message="errors.blog_author_id" />
+                        <input-error :message="errors.blog_authors_id" />
                     </input-container>
 
                     <input-container :full-width="true">
@@ -200,7 +201,7 @@
                                 <div
                                     class="border-4 rounded-lg p-1 cursor-pointer"
                                     :class="
-                                        image.id == form.blog_image_id
+                                        image.id == form.blog_images_id
                                             ? 'border-primary-sun-500 dark:border-primary-night-500'
                                             : 'border-transparent'
                                     "
@@ -218,7 +219,7 @@
                                 </div>
                             </div>
                         </div>
-                        <input-error :message="errors.blog_image_id" />
+                        <input-error :message="errors.blog_images_id" />
                     </input-container>
                 </input-group>
             </template>
@@ -375,10 +376,10 @@ export default defineComponent({
             confirmingBlogDeletion: false,
             //
             form: {
-                blog_author_id: this.blog.blog_author_id,
+                blog_authors_id: this.blog.blog_authors_id,
                 blog_category_id: this.blog.blog_category_id,
                 markdown_on: this.blog.markdown_on,
-                blog_image_id: this.blog.blog_image_id,
+                blog_images_id: this.blog.blog_images_id,
                 blog_date: this.blog.blog_date,
                 title: this.blog.title,
                 summary: this.blog.summary,
@@ -454,7 +455,7 @@ export default defineComponent({
 
         selectBlogImage(id) {
             console.log("selectBlogImage id:", id);
-            this.form.blog_image_id = id;
+            this.form.blog_images_id = id;
         },
     },
 });

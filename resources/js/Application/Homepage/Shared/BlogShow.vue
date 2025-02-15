@@ -4,8 +4,8 @@
     >
         <div class="flex flex-col max-w-6xl mx-auto overflow-hidden rounded">
             <img
-                :src="blog.blog_image.url"
-                :alt="blog.blog_image.name"
+                :src="blog.blog_images.url"
+                :alt="blog.blog_images.name"
                 loading="lazy"
                 width="480"
                 height="360"

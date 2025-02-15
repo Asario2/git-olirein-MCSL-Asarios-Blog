@@ -284,6 +284,11 @@ class TablesController extends Controller
             'breadcrumbs' => $breadcrumbs,
         ])->withViewData(['debug' => true]);
     }
+    public function getOptionz($column)
+    {
+        $sortop = FormController::getOptions($column);
+        return response()->json([$column.".sortedOptions" => $sortop]);
+    }
     public function ExportFields($table,$id)
     {
         $create = '';

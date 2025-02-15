@@ -25,8 +25,8 @@ class BlogController extends Controller
             'blog_authors.name as author_name',
             'blog_categories.name as category_name',
         )
-            ->join('blog_authors', 'blog_authors.id', '=', 'blogs.blog_author_id')
-            ->join('blog_categories', 'blog_categories.id', '=', 'blogs.blog_category_id')
+            ->join('blog_authors', 'blog_authors.id', '=', 'blogs.blog_authors_id')
+            ->join('blog_categories', 'blog_categories.id', '=', 'blogs.blog_categories_id')
             ->filterBlog(Request::only('search'))
             ->orderBy('blog_date', 'desc')
             ->paginate(20)
@@ -42,9 +42,9 @@ class BlogController extends Controller
     {
         $blog = new Blog;
         $blog->id = 0;
-        $blog->blog_author_id = 1;
-        $blog->blog_category_id = 1;
-        $blog->blog_image_id = 1;
+        $blog->blog_authors_id = 1;
+        $blog->blog_categories_id = 1;
+        $blog->blog_images_id = 1;
         $blog->blog_date = Carbon::now();
         $blog->reading_time = 5;
         //
@@ -65,9 +65,9 @@ class BlogController extends Controller
     public function admin_blog_store(RequestAdminStoreAndUpdateBlog $request)
     {
         $blog = Blog::Create([
-            'blog_author_id' => $request->blog_author_id,
-            'blog_category_id' => $request->blog_category_id,
-            'blog_image_id' => $request->blog_image_id,
+            'blog_authors_id' => $request->blog_authors_id,
+            'blog_categories_id' => $request->blog_categories_id,
+            'blog_images_id' => $request->blog_images_id,
             'blog_date' => $request->blog_date,
             'title' => $request->title,
             'summary' => $request->summary,
@@ -101,9 +101,9 @@ class BlogController extends Controller
     //
     public function admin_blog_update(Blog $blog, RequestAdminStoreAndUpdateBlog $request)
     {
-        $blog->blog_author_id = $request->blog_author_id;
-        $blog->blog_category_id = $request->blog_category_id;
-        $blog->blog_image_id = $request->blog_image_id;
+        $blog->blog_authors_id = $request->blog_authors_id;
+        $blog->blog_categories_id = $request->blog_categories_id;
+        $blog->blog_images_id = $request->blog_images_id;
         $blog->blog_date = $request->blog_date;
         $blog->title = $request->title;
         $blog->summary = $request->summary;

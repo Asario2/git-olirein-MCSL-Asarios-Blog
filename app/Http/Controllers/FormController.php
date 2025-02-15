@@ -43,20 +43,22 @@ class FormController extends Controller
         $class = FormController::getClass($name,1);
         $type = FormController::getClass($name);
         $rows = FormController::getRows($type);
+
             $namefield = $name."Field";
-        // $fields = new \stdClass();
 
 
-            $fields[$name . 'Field'] = [
-                'name'  => "$name",
-                'type'  => "$type",
-                'label' => "$label",
-                'value' => "$value",
-                'id'    => "$id",
-                'class' => "$class",
-                'rows'  => "$rows",
+
+
+            $fields[$name] = [
+                'name'  => $name,
+                'type'  => $type,
+                'label' => $label,
+                'value' => $value,
+                'id'    => $id,
+                'class' => $class,
+                'rows'  => $rows,
+               // Hier ohne zusätzliche Array-Klammern!
             ];
-
         // $fields[$namefield] = [
         //     'name'  => "$name",
         //     'type'  => "$type",
@@ -66,7 +68,12 @@ class FormController extends Controller
         //     'class' => "$class",
         //     'rows' => "$rows",
         // ];
+        if(!empty($sortop)){
+            \Log::info("Options: " . json_encode($fields, JSON_PRETTY_PRINT));
+
+        }
         return $fields;
+
         }
     }
     public static function getRows($type,$cl=''){
@@ -75,6 +82,23 @@ class FormController extends Controller
             return "4";
         }
         return "10";
+    }
+    public static function getOptions($name)
+    {
+        if(!substr_count($name,"_id"))
+        {
+            return [];
+        }
+        $table = str_replace("_id",'',$name);
+        $tabs = DB::table($table)->select("id", "name")->get();
+
+        $result = [];
+
+        foreach ($tabs as $item) {
+            $result[$item->id] = $item->name; // <- Hier '->' statt '[]' verwenden
+        }
+
+        return $result;
     }
     public static function getClass($name,$cl='')
     {
@@ -99,7 +123,7 @@ class FormController extends Controller
             case "summary":
             return "textarea_short";
             break;
-            case "blog_category_id":
+            case "blog_categories_id":
                 return "select_id";
             break;
             case "blog_authors_id":

@@ -12,9 +12,9 @@ class Settings extends Model
     const excl_heads = ["date_begin"];
     const excl_disabled = ['id'];
     const excl_datefields  = ['birthday','created_at'];
-    const exl = ["title"=>"Titel","content_en"=>"Text Englisch","blog_category_id"=>"Kategorie",'title_en'=>"Titel Englisch",'users_id'=>"Autor","moderator_id"=>"Moderator","images_cat_id"=>"Bildergruppe","to_address"=>'Empfängeradresse','subject'=>'Betreff','pub'=>"Öffentlich",
+    const exl = ["title"=>"Titel","content_en"=>"Text Englisch","blog_categories_id"=>"Kategorie",'title_en'=>"Titel Englisch",'users_id'=>"Autor","moderator_id"=>"Moderator","images_cat_id"=>"Bildergruppe","to_address"=>'Empfängeradresse','subject'=>'Betreff','pub'=>"Öffentlich",
                  'view_table'=>'Sichtbar','add_table'=>'Hinzufügen','publish_table'=>'Veröffentlichen','date_table'=>"Datum Ändern",'delete_table'=>"Löschen",'edit_table'=>"Editieren","content"=>"Text","xis_ai"=>"KI Bild","summary"=>"Zusammenfassung",
-                 "blog_author_id"=>"Autor",'date_end'=>"Online Von/Bis",'post_id'=>"Post ID",'categories_id'=>"Kategorie",'xis_IsSaleable'=>"Verkäuflich",'xkis_Ticker'=>"Ticker Aktivieren","created_at"=>'Erstellt am:','headline'=>'Überschrift','headline_en'=>'Überschrift Englisch',"answer"=>"Antwort","date"=>"Datum",'birthday' => 'Alter','occupation'=>'Beschäftigung',"interests"=>"Hobbys","music"=>'Musik','prename'=>"Vorname",'id'=>'ID','image_path'=>"Bild","email"=>'Email','name'=>"Name"];
+                 "blog_authors_id"=>"Autor",'date_end'=>"Online Von/Bis",'post_id'=>"Post ID",'categories_id'=>"Kategorie",'xis_IsSaleable'=>"Verkäuflich",'xkis_Ticker'=>"Ticker Aktivieren","created_at"=>'Erstellt am:','headline'=>'Überschrift','headline_en'=>'Überschrift Englisch',"answer"=>"Antwort","date"=>"Datum",'birthday' => 'Alter','occupation'=>'Beschäftigung',"interests"=>"Hobbys","music"=>'Musik','prename'=>"Vorname",'id'=>'ID','image_path'=>"Bild","email"=>'Email','name'=>"Name"];
     const no_req = ['modul','image_path','link','format','preis','format_en','music','interests','occupation','birthday','prename','xis_ai','id_new'];
     const big_thumb = ["users","blog_posts","images"];
     const int_date_tables = ["didyouknow"];
@@ -77,7 +77,8 @@ class Settings extends Model
         "didyouknow" => 'headline',
         "users" => 'name',
         "users_rights" => 'name',
-        "camera"=>"name"
+        "camera"=>"name",
+        "testfield"=>"title",
 
 ];
 const searchFields =
@@ -93,6 +94,7 @@ const searchFields =
         "users" => ['name'],
         "users_rights" => ['name'],
         "camera" => ['name'],
+        "testfield" => ['title'.'content'],
 
 ];
 const othafieldz = [
@@ -104,5 +106,6 @@ const otherField = [
 'blogs'=> 'summary',
 "images"=> "message",
 "camera"=> "Longname",
+'testfield' => "content"
 ];
 }

@@ -3,7 +3,7 @@
         :header-title="blog.title"
         :header-description="blog.description"
         :header-url="$page.props.saas_url + 'blogs/show/' + blog.slug"
-        :header-image="$page.props.saas_url + 'big/' + blog.blog_image.url"
+        :header-image="$page.props.saas_url + 'big/' + blog.blog_images.url"
     >
         <blog-show :blog="blog" :blogarticle="blogarticle"></blog-show>
     </layout>

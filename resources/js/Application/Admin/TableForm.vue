@@ -28,7 +28,7 @@
                 <template style="display: inline-block">
                     <div>
                         <!-- <pre>{{ formData }}</pre> -->
-                        <!-- <pre>{{ this.ffo }}</pre> -->
+                        <!-- <pre>{{ quotebrace(this.sortedOptions) }}</pre> -->
 
                         <input-group>
                             <form @submit.prevent="submitForm">
@@ -36,7 +36,7 @@
                                 <template v-for="(field, key) in ffo" :key="key">
                                     <input-container v-if="field.type === 'text'">
                                         <InputFormText
-                                            :id="field.id || field.name"
+                                            :id="field.name + '_' + field.id"
                                             :name="field.name"
                                             v-model="field.value"
                                             :placeholder="field.placeholder || ''"
@@ -47,7 +47,7 @@
 
                                     <input-container v-else-if="field.type === 'datetime'">
                                         <InputFormDateTime
-                                            :id="field.id"
+                                            :id="field.name + '_' + field.id"
                                             :name="field.name"
                                             :ref="field.name"
                                             v-model="field.value"
@@ -61,10 +61,10 @@
                                     <input-container
                                         v-else-if="['textarea_short', 'textarea'].includes(field.type)"
                                         :full-width="true"
-                                        class="lg:col-span-2"
+
                                     >
                                         <InputFormTextArea
-                                            :id="field.id"
+                                            :id="field.name + '_' + field.id"
                                             :name="field.name"
                                             v-model="field.value"
                                             :rows="field.rows"
@@ -75,6 +75,53 @@
                                         >
                                             <template #label>{{ field.label }}</template>
                                         </InputFormTextArea>
+                                    </input-container>
+                                    <input-container
+                                    v-else-if="field.type === 'select_id'"
+                                    ><!--<pre>
+                                     {{ this.sortedOptions.find(obj => obj[field.name])?.[field.name]    || 'Keine Kategorien gefunden' }}
+                                    </pre> -->
+
+
+                                    <!---<InputSelect
+                                            :id="field.name + '_' + field.id"
+                                            :name="field.name"
+                                            v-model="field.value"
+                                            :ref="field.name"
+                                            :placeholder="field.placeholder || ''"
+                                            :class="field.class"
+                                            :sortedOptions="'sortedOptions:' + JSON.stringify( sortedOptions.find(obj => obj[field.name])?.[field.name]    || [] )"
+
+                                        >
+                                        <template #label>{{ field.label }}</template>
+
+                                    </InputSelect>-->
+                                    <InputLabel
+                                        :name="field.name"
+                                        :label="field.label"
+                                    ></InputLabel>
+                                    <InputSelect
+                                        :id="field.name + '_' + field.id"
+                                        :v-model="field.value"
+                                        :options="'options:' + (this.sortedOptions.length > 0)
+                                            ? this.sortedOptions.find(obj => obj[field.name])?.[field.name] || []
+                                            : []"
+                                        ref="select"
+                                        :name="field.name"
+                                        :xval="field.value"
+                                        :xname="field.name"
+                                    />
+                                    <!-- <input-select
+                                        v-model="field.value"
+                                        :options="'sortedOptions:' + JSON.parse(JSON.stringify(
+                                            (Array.isArray(this.sortedOptions)
+                                                ? this.sortedOptions.find(obj => obj[field.name])?.[field.name]
+                                                : {}))   || []
+                                        )"
+                                        :ref="field.name"
+                                        :name="field.name"
+                                    ></input-select> -->
+                                    <!-- <input-error :message="errors.xname" />< -->
                                     </input-container>
                                 </template>
                             </div>
@@ -159,8 +206,12 @@ const id = segments[segments.length - 2];
 const table = segments[segments.length - 1];
 const routes = {
     getform: (table, id) => `/tables/form-data/${table}/${id}`,
+    getselroute: (name) => `/tables/sort-data/${name}`,
 };
-
+// this.sortOptions = this.sortOptions ?? {}
+let sortOptions;
+sortOptions = sortOptions ?? {};
+console.log(routes.getselroute("blog_authors"));
 import { defineComponent } from "vue";
 import axios from "axios";
 import $ from "jquery";
@@ -178,10 +229,10 @@ import Breadcrumb from "@/Application/Components/Content/Breadcrumb.vue";
 
 import SmoothScroll from "@/Application/Components/SmoothScroll.vue";
 
-// import PageTitle from "@/Application/Components/Content/PageTitle.vue";
+import PageTitle from "@/Application/Components/Content/PageTitle.vue";
 
 import SectionForm from "@/Application/Components/Content/SectionForm.vue";
-// import SectionBorder from "@/Application/Components/Content/SectionBorder.vue";
+import SectionBorder from "@/Application/Components/Content/SectionBorder.vue";
 
 import ButtonGroup from "@/Application/Components/Form/ButtonGroup.vue";
 import InputButton from "@/Application/Components/Form/InputButton.vue";
@@ -197,17 +248,17 @@ import ErrorList from "@/Application/Components/Form/ErrorList.vue";
 import InputSubtitle from "@/Application/Components/Form/InputSubtitle.vue";
 import InputGroup from "@/Application/Components/Form/InputGroup.vue";
 import InputContainer from "@/Application/Components/Form/InputContainer.vue";
-// import InputLabel from "@/Application/Components/Form/InputLabel.vue";
-// import InputElement from "@/Application/Components/Form/InputElement.vue";
-// import InputCheckbox from "@/Application/Components/Form/InputCheckbox.vue";
-// import InputSelect from "@/Application/Components/Form/InputSelect.vue";
-// import InputTextarea from "@/Application/Components/Form/InputTextarea.vue";
-// import InputHtml from "@/Application/Components/Form/InputHtml.vue";
-// import InputError from "@/Application/Components/Form/InputError.vue";
+import InputLabel from "@/Application/Components/Form/InputLabel.vue";
+import InputElement from "@/Application/Components/Form/InputElement.vue";
+import InputCheckbox from "@/Application/Components/Form/InputCheckbox.vue";
+import InputSelect from "@/Application/Components/Form/InputSelect.vue";
+import InputTextarea from "@/Application/Components/Form/InputTextarea.vue";
+import InputHtml from "@/Application/Components/Form/InputHtml.vue";
+import InputError from "@/Application/Components/Form/InputError.vue";
 import { throttle } from "lodash";
 import DialogModal from "@/Application/Components/DialogModal.vue";
 import { reactive } from "vue";
-// import Alert from "@/Application/Components/Content/Alert.vue";
+import Alert from "@/Application/Components/Content/Alert.vue";
 
 export default defineComponent({
     name: "Admin_TableForm",
@@ -229,16 +280,16 @@ export default defineComponent({
         InputSubtitle,
         InputContainer,
         InputGroup,
-        // InputLabel,
-        // InputElement,
-        // InputCheckbox,
-        // InputSelect,
-        // InputTextarea,
-        // InputHtml,
+         InputLabel,
+         InputElement,
+        InputCheckbox,
+         InputSelect,
+         InputTextarea,
+         InputHtml,
         InputFormTextArea,
-        // InputError,
+        InputError,
         DialogModal,
-        // Alert,
+         Alert,
     },
 
     props: {
@@ -287,10 +338,10 @@ export default defineComponent({
             type: Object,
             required: true,
         },
-        // formData:{
-        //     type: Array,
-        //     default: [],
-        // },
+        id:{
+            type: [String,Number],
+            default: '',
+        },
     },
 
     data() {
@@ -303,15 +354,14 @@ export default defineComponent({
             // }],
             // formFields:  {},
             ///formFields:[],
-
+            options: this.options ?? {},
             //   formData: {},
             // formData: [{ name: '', label: '', type:'' } ],
 
             formData: {},
-
-            // formFields: {}, // FormField-Daten
+           // formFields: {}, // FormField-Daten
             //formData: reactive({}), // Dynamisch erstelltes Formular-Objekt
-
+                sdata: {},
             loading: false,
             loadingText: null,
             //
@@ -337,6 +387,22 @@ export default defineComponent({
         };
     },
     computed: {
+        sortedOptions() {
+            this.sortedOptions = this.sortedOptions ?? {};
+            this.options = this.options ?? this.sortedOptions;
+
+            if(Array.isArray(this.options)) {
+            // Falls `this.options` bereits ein korrektes Array ist, direkt zurückgeben
+            return this.options;
+        }
+        else if (typeof this.options === "object" && this.options !== null) {
+            // Falls `this.options` ein Objekt ist, in ein Array von Arrays umwandeln
+            return Object.entries(this.options);
+        }
+        // Falls `this.options` nicht gültig ist, ein leeres Array zurückgeben
+        console.log("options:" + this.options);
+        return [];
+    },
         filters() {
             return this.$page.props.filters;
         },
@@ -466,48 +532,46 @@ if(document.location.toString().indexOf('?') !== -1) {
        $_GET[aux[0]] = aux[1];
     }
 }
-const routes = {
-    getform: (table, id) => `/tables/form-data/${table}/${id}`,
-};
-function fetchFormData() {
-            axios
-                .get(routes.getform(table, id))
-                .then((response) => {
-                    this.formFields = response.data;
-                    var formFields_old = response.data;
-                    let obj = JSON.stringify(this.formFields, null, 2);
-                    obj = obj.replace(/"formFields": \[.*\]/, "");
-                    obj = obj.replace(/^\{|\}$/g, "");
-                    obj = obj
-                        .replace(/}\s*,\s*\n\s*}/g, "},")
-                        .replace(/[[\]]/g, "")
-                        .replace(/\[|\]$/, "");
-                    obj = obj.replace(/,\s*\n\s*{/g, ",");
-                    obj = obj.replace(/\s*\}(?!,)\s*/g, "}");
-                    obj = obj.replace(/}},/g, "\n   },");
-                    obj = obj.replace(/}}/g, "\n   }\n  }");
+// function fetchFormData() {
+    //         axios
+    //             .get(routes.getform(table, id))
+    //             .then((response) => {
+    //                 this.formFields = response.data;
+    //                 var formFields_old = response.data;
+    //                 let obj = JSON.stringify(this.formFields, null, 2);
+    //                 obj = obj.replace(/"formFields": \[.*\]/, "");
+    //                 obj = obj.replace(/^\{|\}$/g, "");
+    //                 obj = obj
+    //                     .replace(/}\s*,\s*\n\s*}/g, "},")
+    //                     .replace(/[[\]]/g, "")
+    //                     .replace(/\[|\]$/, "");
+    //                 obj = obj.replace(/,\s*\n\s*{/g, ",");
+    //                 obj = obj.replace(/\s*\}(?!,)\s*/g, "}");
+    //                 obj = obj.replace(/}},/g, "\n   },");
+    //                 obj = obj.replace(/}}/g, "\n   }\n  }");
 
-                    this.ffo = JSON.parse(obj);
-                    const ffo = this.ffo;
-                    //            this.ffo = obj;
-                    formFields_old.forEach((field) => {
-                        this.setFormField(field);
-                    });
+    //                 this.ffo = JSON.parse(obj);
+    //                 const ffo = this.ffo;
+    //                 //            this.ffo = obj;
+    //                 formFields_old.forEach((field) => {
+    //                     this.setFormField(field);
+    //                 });
 
-                    // this.formFields.forEach(field => {
-                    //     this.formData[field.name] = field.value;
-                    // });
-                })
-                .catch((error) => {
-                    console.error(
-                        "Fehler beim Abrufen der Formulardaten:",
-                        error,
-                    );
-                });
-        }
+    //                 // this.formFields.forEach(field => {
+    //                 //     this.formData[field.name] = field.value;
+    //                 // });
+    //             })
+    //             .catch((error) => {
+    //                 console.error(
+    //                     "Fehler beim Abrufen der Formulardaten:",
+    //                     error,
+    //                 );
+    //             });
+    //     }
     if(!$_GET['rl'])
     {
        location.href = location.href + "?rl=2";
+    }
 
 
 //     $(document).ready(function () {
@@ -527,7 +591,7 @@ function fetchFormData() {
 //         });
 //     }
 // })
-}
+
 });
 
 return { ffo };
@@ -590,9 +654,21 @@ return { ffo };
         };
     },
     methods: {
-        setFormField(field) {
+        setFormField(field,name) {
+
             // Directly setting the value in formData
+            console.log(field);
+            console.log(field.name);
+            console.log(field.type);
+            if(field.type == "select_id")
+            {
+
+                this.getsel(field.name);
+
+            }
+
             this.formData[field.name] = field.value || "";
+
         },
         confirmTableDeletion() {
             this.confirmingTableDeletion = true;
@@ -604,35 +680,67 @@ return { ffo };
                     typeof value === "number",
             );
         },
-        fetchFormData() {
-
+        getsel(name)
+        {
+            var sortedOptions = this.sortedOptions ?? [];
+            let sdata = this.sdata ?? {};
             axios
-                .get(routes.getform(table, id))
+                .get(routes.getselroute(name))
                 .then((response) => {
-                    this.formFields = response.data;
-                    var formFields_old = response.data;
-                    let obj = JSON.stringify(this.formFields, null, 2);
-                    obj = obj.replace(/"formFields": \[.*\]/, "");
-                    obj = obj.replace(/^\{|\}$/g, "");
-                    obj = obj
-                        .replace(/}\s*,\s*\n\s*}/g, "},")
-                        .replace(/[[\]]/g, "")
-                        .replace(/\[|\]$/, "");
-                    obj = obj.replace(/,\s*\n\s*{/g, ",");
-                    obj = obj.replace(/\s*\}(?!,)\s*/g, "}");
-                    obj = obj.replace(/}},/g, "\n   },");
-                    obj = obj.replace(/}}/g, "\n   }\n  }");
+                    sdata = JSON.stringify(response.data);
+                    //sdata = sdata.replace(new RegExp(name, "g"), '');
+                    sdata = JSON.parse(sdata);
+                    // 1. JSON-String in Objekt umwandeln
+                    // const parsedData = JSON.parse(jsonString);
 
-                    this.ffo = JSON.parse(obj);
-                    const ffo = this.ffo;
-                    //            this.ffo = obj;
-                    formFields_old.forEach((field) => {
-                        this.setFormField(field);
-                    });
+                    // 2. Nur das ".sortedOptions" Objekt extrahieren
+                    // const sortedOptionsData = parsedData[".sortedOptions"];
 
-                    // this.formFields.forEach(field => {
-                    //     this.formData[field.name] = field.value;
+                    // 3. In `sortedOptions` speichern
+                    if (!Array.isArray(this.sortedOptions)) {
+                        this.sortedOptions = []; // Leeres Array initialisieren
+                    }
+                    // this.sortedOptions[name] = sortedOptionsData;
+
+                                       // sortedOptions[name] = sortedOptionsData;
+
+
+                    // Die Struktur umkehren
+                    // Object.entries(this.sortedOptions).forEach(([key, value]) => {
+                    //     if (value.sortedOptions) {
+                    //         sortedOptions[key] = value.sortedOptions;
+                    //     }
                     // });
+
+                    const input = (sdata);
+                    const output = {};
+
+                    // Durch alle Einträge iterieren und die Keys umwandeln
+                    Object.entries(input).forEach(([key, value]) => {
+                        // Entfernen von "sortedOptions" aus dem Key, falls vorhanden
+                        const cleanedKey = key.replace('.sortedOptions', '');
+
+                        // Überprüfen, ob der Key ein String ist und ob er einen Punkt enthält
+                        if (typeof cleanedKey === 'string' && cleanedKey.includes('.')) {
+                            const parts = cleanedKey.split('.'); // Key in zwei Teile aufteilen
+
+                            if (parts.length === 2) {
+                                const [prefix, suffix] = parts;
+                                const newKey = `${suffix}.${prefix}`; // Reihenfolge umdrehen
+                                output[newKey] = value;
+                            } else {
+                                output[cleanedKey] = value;
+                            }
+                        } else {
+                            // Falls der Key keinen Punkt enthält, oder nicht als String vorliegt, Key unverändert lassen
+                            output[cleanedKey] = value;
+                        }
+                    });
+                    // output = (JSON.stringify(output));
+
+                    this.sortedOptions.push(output);
+                    this.options = this.sortedOptions;
+
                 })
                 .catch((error) => {
                     console.error(
@@ -640,11 +748,66 @@ return { ffo };
                         error,
                     );
                 });
-        },
 
-        submitForm() {
-            console.log(JSON.stringify(this.formData, null, 2)); // Formular-Daten absenden
         },
+        fetchFormData() {
+    axios
+        .get(routes.getform(table, id))
+        .then((response) => {
+            this.formFields = response.data;
+            let formFields_old = response.data;
+
+            // JSON bereinigen
+            let obj = JSON.stringify(this.formFields, null, 2)
+                .replace(/"formFields": \[.*\]/, "")
+                .replace(/^\{|\}$/g, "")
+                .replace(/}\s*,\s*\n\s*}/g, "},")
+                .replace(/[[\]]/g, "")
+                .replace(/\[|\]$/, "")
+                .replace(/,\s*\n\s*{/g, ",")
+                .replace(/\s*\}(?!,)\s*/g, "}")
+                .replace(/}},/g, "\n   },")
+                .replace(/}}/g, "\n   }\n  }");
+
+            this.ffo = JSON.parse(obj);
+            const ffo = this.ffo;
+            // 💡 Konvertiere das Objekt in ein Array
+            const formFieldsArray = Object.values(formFields_old);
+
+            console.log("FormFields als Array:", formFieldsArray);
+
+            formFieldsArray.forEach((field) => {
+                if (typeof field === "object" && field !== null) {
+                    Object.entries(field).forEach(([subKey, subValue]) => {
+                        console.log("  SubKey:", subKey, "SubValue:", subValue);
+                        this.setFormField(subValue, subValue.name);
+                    });
+                }
+
+            });
+
+        })
+        .catch((error) => {
+            console.error("Fehler beim Abrufen der Formulardaten:", error);
+        });
+},
+quotebrace(obj){
+    obj = typeof obj !== String ? JSON.stringify(obj,null,2) : obj;
+                obj.replace(/^\{|\}$/g, "")
+                .replace("[{|}]")
+                .replace(/}\s*,\s*\n\s*}/g, "},")
+                .replace(/[[\]]/g, "")
+                .replace(/\[|\]$/, "")
+                .replace(/,\s*\n\s*{/g, ",")
+                .replace(/\s*\}(?!,)\s*/g, "}")
+                .replace(/}},/g, "\n   },")
+                .replace(/}}/g, "\n   }\n  }");
+                return JSON.parse(obj);
+},
+submitForm() {
+    console.log(JSON.stringify(this.formData, null, 2)); // Formular-Daten absenden
+},
+
 
         deleteTable() {
             this.confirmingTableDeletion = false;
@@ -726,6 +889,10 @@ return { ffo };
          //this.fetchDataX();
         this.fetchFormData();
         this.updateData();
+    //     console.log("sortedOptions:", this.sortedOptions);
+    // console.log("field.name:", this.field?.name);
+    // console.log("sortedOptions[field.name]:", this.sortedOptions[this.field.name]);
+    // console.log("field.name:", this.field?.name);
     },
     created() {
         // this.fetchFormData();

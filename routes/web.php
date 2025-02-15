@@ -129,6 +129,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
             ->name("admin.tables.show");
         Route::get('/tables/form-data/{table}/{id?}', [TablesController::class, 'ExportFields'])
             ->name("GetTableForm");
+        Route::get('/tables/sort-data/{name}', [TablesController::class, 'getOptionz'])
+            ->name("GetTableOpt");
         // Tables Edit table
         Route::get("admin/tables/edit/{id}/{table}",[TablesController::class,"EditTables"])
             ->name("admin.tables.edit");

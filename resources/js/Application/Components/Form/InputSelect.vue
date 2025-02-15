@@ -4,8 +4,10 @@
         :value="modelValue"
         @change="$emit('update:modelValue', $event.target.value)"
         ref="select"
+        :name="this.name"
     >
         <template v-if="sortedOptions.constructor.name === 'Array'">
+
             <option
                 v-for="(option, key) in sortedOptions"
                 :value="option[0]"
@@ -14,28 +16,31 @@
             >
                 {{ option[1] }}
             </option>
+
         </template>
         <template v-if="sortedOptions.constructor.name === 'Object'">
+
             <option
                 v-for="(option, key) in sortedOptions"
-                :value="key"
+                :value="String(option[0])"
                 :key="key"
-                :selected="option === modelValue"
+                :selected="String(option[0]) === String(modelValue)"
             >
-                {{ option }}
+                {{ option[1] }}
             </option>
         </template>
+
     </select>
 </template>
 <script>
 export default {
-    name: "Contents_Form_InputSelect",
+    name: "InputSelect",
 
     props: {
-        modelValue: {
-            type: [String, Number],
-            default: "",
-        },
+        // modelValue: {
+        //     type: [String, Number],
+        //     default: "",
+        // },
         options: {
             type: [Array, Object],
             required: true,
@@ -44,51 +49,71 @@ export default {
             type: Number,
             default: 1,
         },
+        xval:{
+            type: [String,Number],
+            default: 1,
+        },
+        name:{
+            type: [String,Number],
+
+        },
+
     },
 
     emits: ["update:modelValue"],
-
+    watch: {
+    options: {
+        handler(newOptions) {
+            console.log("Options geändert:", newOptions);
+        },
+        deep: true,  // Achtet auch auf verschachtelte Änderungen
+        immediate: true, // Führt den Watcher sofort aus
+    }
+},
     computed: {
-        sortedOptions() {
-            if (this.options.constructor.name === "Array") {
-                //
-                return this.options.sort((a, b) => {
-                    if (a[1] < b[1]) return -1;
-                    if (a[1] > b[1]) return 1;
-                    return 0;
-                });
-            } else if (this.options.constructor.name === "Object") {
-                //
-                if (this.sortColumn == 1) {
+        modelValue() {
+            return this.modelValue || (this.xval ??  "");
+        },
+            sortedOptions() {
+                if (this.options.constructor.name === "Array") {
+                    //
+                    return this.options.sort((a, b) => {
+                        if (a[1] < b[1]) return -1;
+                        if (a[1] > b[1]) return 1;
+                        return 0;
+                    });
+                } else if (this.options.constructor.name === "Object") {
+                    //
+                    if (this.sortColumn == 1) {
+                        return Object.entries(this.options).sort(function (a, b) {
+                            //
+                            if (a[1] < b[1]) {
+                                return -1;
+                            }
+                            if (a[1] > b[1]) {
+                                return 1;
+                            }
+                            return 0;
+                        });
+                    }
+                    //
                     return Object.entries(this.options).sort(function (a, b) {
                         //
-                        if (a[1] < b[1]) {
+                        if (Number(a[0]) < Number(b[0])) {
+                            //
                             return -1;
                         }
-                        if (a[1] > b[1]) {
+                        if (Number(a[0]) > Number(b[0])) {
+                            //
                             return 1;
                         }
+                        //
                         return 0;
                     });
                 }
-                //
-                return Object.entries(this.options).sort(function (a, b) {
-                    //
-                    if (Number(a[0]) < Number(b[0])) {
-                        //
-                        return -1;
-                    }
-                    if (Number(a[0]) > Number(b[0])) {
-                        //
-                        return 1;
-                    }
-                    //
-                    return 0;
-                });
-            }
-            // Sonstige Fälle
-            return this.options;
-        },
+                // Sonstige Fälle
+                return this.options;
+            },
     },
 
     methods: {

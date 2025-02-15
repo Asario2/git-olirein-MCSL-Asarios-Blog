@@ -36,19 +36,19 @@ class Blog extends Model
     // Ein Blog (blogs) gehört zu genau einem Blogautor (blog_authors)
     public function blog_author()
     {
-        return $this->belongsTo('App\Models\BlogAuthor', 'blog_author_id', 'id');
+        return $this->belongsTo('App\Models\BlogAuthor', 'blog_authors_id', 'id');
     }
 
     // Ein Blog (blogs) gehört zu genau einem Blogbild (blog_images)
-    public function blog_image()
+    public function blog_images()
     {
-        return $this->belongsTo('App\Models\BlogImage', 'blog_image_id', 'id');
+        return $this->belongsTo('App\Models\BlogImage', 'blog_images_id', 'id');
     }
 
     // Ein Blog (blogs) gehört zu genau einer Blogkategorie (blog_categories)
     public function blog_category()
     {
-        return $this->belongsTo('App\Models\BlogCategory', 'blog_category_id', 'id');
+        return $this->belongsTo('App\Models\BlogCategory', 'blog_categories_id', 'id');
     }
 
     public function scopeFilterBlog($query, array $filters)

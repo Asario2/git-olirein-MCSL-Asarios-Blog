@@ -20,7 +20,7 @@
 import IconExclamationCircle from "@/Application/Components/Icons/ExclamationCircle.vue";
 
 export default {
-    name: "Contents_Form_InputLabel",
+    name: "InputLabel",
 
     components: {
         IconExclamationCircle,

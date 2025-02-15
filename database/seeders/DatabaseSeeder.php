@@ -116,18 +116,18 @@ class CreateBlogWithMarkdownFormat extends Seeder
     {
         Blog::truncate();
         // für den ersten Artikel setze markdown_on auf true
-        $blog_author_id = 1;
-        $blog_image_id = 1;
-        $blog_category_id = 1;
+        $blog_authors_id = 1;
+        $blog_images_id = 1;
+        $blog_categories_id = 1;
         $title = "Laravel 11 - Kickstart für deine SaaS-Anwendungen";
         $summary = "Im Fachbuch 'Laravel 11 - Dein Startschuss für SaaS-Anwendungen' führt der Autor Oliver Reinking detailliert durch ein Laravel-Template, das als Grundlage für die Entwicklung von SaaS-Anwendungen dient.";
         $blog_date = "2024-04-01";
         $reading_time = 4;
         //
         Blog::create([
-            'blog_author_id' => $blog_author_id,
-            'blog_image_id' => $blog_image_id,
-            'blog_category_id' => $blog_category_id,
+            'blog_authors_id' => $blog_authors_id,
+            'blog_images_id' => $blog_images_id,
+            'blog_categories_id' => $blog_categories_id,
             'title' => $title,
             'summary' => $summary,
             'blog_date' => $blog_date,

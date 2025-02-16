@@ -137,7 +137,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         // Tables Delete
         Route::delete("admin/tables/{table}/delete",[TablesController::class,"DeleteTables"])
             ->name("admin.tables.delete");
-
+        // Tables UPDATE
+        Route::put("admin/tables/update/{table}/{id}",[TablesController::class,"UpdateTable"])
+            ->name("admin.table.update");
         // Blogartikel Delete
         Route::delete('/admin/blogs/{blog}', [BlogController::class, 'admin_blog_delete'])
             ->name('admin.blog.delete');

@@ -9,9 +9,9 @@
         </template>
 
         <section-form>
-            <template #title>{ItemName}-Daten</template>
+            <template #title>{{ItemName}}-Daten</template>
             <template #description
-                >Hier kannst du alle Daten {ItemName_des} ändern
+                >Hier kannst du alle Daten {{ItemName_des}} ändern
                 <!-- Loading -->
                 <input-loading
                     :loading="loading"
@@ -101,12 +101,16 @@
                                         :label="field.label"
                                     ></InputLabel>
                                     <InputSelect
+
+
+
+
                                         :id="field.name + '_' + field.id"
                                         :v-model="field.value"
                                         :options="'options:' + (this.sortedOptions.length > 0)
                                             ? this.sortedOptions.find(obj => obj[field.name])?.[field.name] || []
                                             : []"
-                                        ref="select"
+                                        ref="field.name"
                                         :name="field.name"
                                         :xval="field.value"
                                         :xname="field.name"
@@ -138,8 +142,9 @@
                     </div>
                 </template>
             </template>
+            <pre>{{ tables }}</pre>
 
-            <template #actions>
+            <template #actions style="display:inline-block;">
                 <!-- Befehle -->
                 <button-group>
                     <input-danger-button
@@ -147,14 +152,14 @@
                         type="button"
                         @click.prevent="confirmTableDeletion"
                     >
-                        {ItemName} löschen
+                        {{ItemName}} löschen
                     </input-danger-button>
                     <smooth-scroll href="#app-layout-start" v-if="table.id > 0">
                         <input-button
                             type="button"
-                            @click.prevent="updateTableData"
+                            @click.prevent="debugUpdateTableData"
                         >
-                            {ItemName} ändern
+                            {{ItemName}} ändern
                         </input-button>
                     </smooth-scroll>
                     <smooth-scroll
@@ -165,7 +170,7 @@
                             type="button"
                             @click.prevent="createTableData"
                         >
-                            {ItemName} erstellen
+                            {{ItemName}} erstellen
                         </input-button>
                     </smooth-scroll>
                 </button-group>
@@ -178,10 +183,10 @@
             :show="confirmingTableDeletion"
             @close="close_confirmingTableDeletion"
         >
-            <template #title> {ItemName} löschen </template>
+            <template #title> {{ItemName}} löschen </template>
 
             <template #content>
-                Bist du sicher, dass du diesen {ItemName} löschen willst?
+                Bist du sicher, dass du diesen {{ItemName}} löschen willst?
             </template>
 
             <template #footer>
@@ -191,7 +196,7 @@
                     </input-button>
 
                     <input-danger-button @click="deleteTable">
-                        {ItemName} jetzt löschen
+                        {{ItemName}} jetzt löschen
                     </input-danger-button>
                 </button-group>
             </template>
@@ -203,15 +208,18 @@
 const path = window.location.pathname; // Gibt "/admin/tables/show/Example" zurück
 const segments = path.split("/"); // Teilt den Pfad in Segmente auf
 const id = segments[segments.length - 2];
-const table = segments[segments.length - 1];
+const tablex = segments[segments.length - 1];
+const table_z = tablex;
+let xid = segments[segments.length - 2];
 const routes = {
-    getform: (table, id) => `/tables/form-data/${table}/${id}`,
+    getform: (tablex, id) => `/tables/form-data/${tablex}/${id}`,
     getselroute: (name) => `/tables/sort-data/${name}`,
+    putdata: (table,id) => `admin/tables/update/${tablex}/${id}`,
 };
 // this.sortOptions = this.sortOptions ?? {}
 let sortOptions;
 sortOptions = sortOptions ?? {};
-console.log(routes.getselroute("blog_authors"));
+// console.log(routes.getselroute("blog_authors"));
 import { defineComponent } from "vue";
 import axios from "axios";
 import $ from "jquery";
@@ -293,10 +301,10 @@ export default defineComponent({
     },
 
     props: {
-        table: {
-            type: Object,
-            default: () => ({}),
-        },
+        // table: {
+        //     type: Object,
+        //     default: () => ({}),
+        // },
         // formFields:{
         //     type: Object,
         //     default: () => ({}),
@@ -322,10 +330,10 @@ export default defineComponent({
             type: Object,
             default: () => ({}),
         },
-        // table_alt: {
-        //     type: String,
-        //     default:table_z,
-        // },
+        tablex: {
+            type: String,
+            default:table_z,
+        },
         // tablez: {
         //     type: String,
         //     default:table_z,
@@ -340,12 +348,15 @@ export default defineComponent({
         },
         id:{
             type: [String,Number],
-            default: '',
+            default: '1',
         },
     },
 
     data() {
         return {
+            table: reactive({ id: "1" }),// Standardwert setzen, falls leer
+
+        ItemName: "Beitrag",  // Falls nicht definiert
             //     formFields: [{
 
             //         name: "testname",
@@ -356,9 +367,9 @@ export default defineComponent({
             ///formFields:[],
             options: this.options ?? {},
             //   formData: {},
-            // formData: [{ name: '', label: '', type:'' } ],
+            field: [{ name: '', label: '', type:'' } ],
 
-            formData: {},
+            // formData: {},
            // formFields: {}, // FormField-Daten
             //formData: reactive({}), // Dynamisch erstelltes Formular-Objekt
                 sdata: {},
@@ -375,7 +386,7 @@ export default defineComponent({
                 // table_date: this.table.table_date,
                 // title: this.table.title,
                 // summary: this.table.summary,
-                content: this.table.content,
+                //content: this.table.content,
                 // reading_time: this.table.reading_time,
                 // audio_on: this.table.audio_on,
                 // audio_url: this.table.audio_url,
@@ -388,7 +399,7 @@ export default defineComponent({
     },
     computed: {
         sortedOptions() {
-            this.sortedOptions = this.sortedOptions ?? {};
+            // this.sortedOptions = this.sortedOptions ?? {};
             this.options = this.options ?? this.sortedOptions;
 
             if(Array.isArray(this.options)) {
@@ -459,6 +470,7 @@ export default defineComponent({
                 const segments = path.split("/"); // Teilt den Pfad in Segmente auf
                 const lastSegment = segments[segments.length - 1];
                 let paramValue = lastSegment;
+
 
                 //   let paramValue = document.getElementById("tb_alt").value;
 
@@ -570,7 +582,12 @@ if(document.location.toString().indexOf('?') !== -1) {
     //     }
     if(!$_GET['rl'])
     {
-       location.href = location.href + "?rl=2";
+       //location.href = location.href + "?rl=2";
+    }
+    if($_GET['rl']  == "2")
+    {
+        let url = location.href.replace(/\?rl=2/g, '');
+        history.pushState(null, "", url);
     }
 
 
@@ -670,6 +687,10 @@ return { ffo };
             this.formData[field.name] = field.value || "";
 
         },
+        debugUpdateTableData() {
+            console.log("updateTableData wird aufgerufen!");
+            this.updateTableData();
+        },
         confirmTableDeletion() {
             this.confirmingTableDeletion = true;
         },
@@ -752,7 +773,7 @@ return { ffo };
         },
         fetchFormData() {
     axios
-        .get(routes.getform(table, id))
+        .get(routes.getform(tablex, id))
         .then((response) => {
             this.formFields = response.data;
             let formFields_old = response.data;
@@ -779,7 +800,6 @@ return { ffo };
             formFieldsArray.forEach((field) => {
                 if (typeof field === "object" && field !== null) {
                     Object.entries(field).forEach(([subKey, subValue]) => {
-                        console.log("  SubKey:", subKey, "SubValue:", subValue);
                         this.setFormField(subValue, subValue.name);
                     });
                 }
@@ -804,16 +824,99 @@ quotebrace(obj){
                 .replace(/}}/g, "\n   }\n  }");
                 return JSON.parse(obj);
 },
-submitForm() {
-    console.log(JSON.stringify(this.formData, null, 2)); // Formular-Daten absenden
+remom(str){
+// Variable, um die Anzahl der Vorkommen von ","
+let commaCount = 0;
+// str = Object.entries(str);
+// Ersetze jedes ungerade Vorkommen von ","
+//  var str = JSON.stringify(str);
+// str = str.replace(/[^:]*:\s*{/g, '{');
+// console.log(str);
+str = Object.entries((str));
+str.forEach(([key, value]) => {
+    console.log(`${key}: ${value['value']}`);
+    this.formData[value['name']] = value['value'];
+});
+var modifiedStr;
+// str = this.objectToCSVArray(str);
+console.log("FD:" + JSON.stringify(this.formData));
+modifiedStr  = this.formData;
+// str.replace(/,/g, (match) => {
+//   commaCount++;
+//   return commaCount % 2 !== 0 ? ':' : ',';
+// });
+return modifiedStr;
 },
+// getData($obje){
+//     this.obje.find(obj => obj[field.value])?.[field.value];
+//     console.log("obj: " + obje);
+// },
+objectToCSVArray(obj) {
+    let csvArray = [];
+
+    // Überschriften (Header)
+    let headers = Object.keys(obj);
+    csvArray.push(headers.join(',')); // Als CSV-String speichern
+
+    // Werte extrahieren
+    let values = Object.values(obj);
+    csvArray.push(values.join(',')); // Als CSV-String speichern
+
+    return csvArray; // Gibt das CSV als Array zurück
+},
+async submitForm() {
+
+        try {
+            this.formData2 = JSON.stringify(this.remom(this.ffo));
+            console.log("Daten, die gesendet werden:",this.formData);
+            const path = window.location.pathname; // Gibt "/admin/tables/show/Example" zurück
+            const segments = path.split("/"); // Teilt den Pfad in Segmente auf
+            this.xid = segments[segments.length - 2];
+            const response = await axios.put(`/admin/tables/update/${this.tablex}/${this.xid}`, {
+                formData: this.formData
+            });
+
+        //     await axios.post('/admin/table/update', {
+        //     table: this.tablex,  // Dynamische Tabelle
+        //     id: this.id,         // Die ID des Datensatzes
+        //     ...this.formData     // Formulardaten direkt mit spread-Operator einfügen
+        // });
+
+            console.log("tf:"+this.formData);
+            console.log("Formular erfolgreich gesendet:", response.data);
+
+        } catch (error) {
+            console.error("Fehler beim Absenden:", error);
+        }
+    },
+// async submitForm() {
+//         // Überprüfen, ob `this.ffo` ein Objekt ist
+
+//         if (typeof this.ffo === 'object') {
+//             // Umwandlung von `this.ffo` in ein Array von [key, value] Paaren
+//             let formData = Object.entries(this.ffo).reduce((acc, [key, value]) => {
+//                 acc[key] = Object.entries(value);
+//                 return acc;
+//             }, {});
+
+//             try {
+
+//                 const response = await axios("admin.table.update",[formData,id,table]);
+//                 console.log("Formular erfolgreich gesendet!", response.data);
+//             } catch (error) {
+//                 console.error("Fehler beim Absenden:", error.response.data);
+//             }
+//         } else {
+//             console.error("this.ffo ist kein Objekt!");
+//         }
+//     },
 
 
         deleteTable() {
             this.confirmingTableDeletion = false;
             //
             this.loading = true;
-            this.loadingText = "Der {ItemName} wird gelöscht!";
+            this.loadingText = "Der {{ItemName}} wird gelöscht!";
             //
             this.$inertia.delete(
                 this.route("admin.table.delete", this.table.id),
@@ -834,7 +937,7 @@ submitForm() {
 
         createTableData() {
             this.loading = true;
-            this.loadingText = "Der neue {ItemName} wird gespeichert!";
+            this.loadingText = "Der neue {{ItemName}} wird gespeichert!";
             //
             this.$inertia.post(this.route("admin.table.store"), this.form, {
                 onSuccess: () => {
@@ -848,11 +951,10 @@ submitForm() {
 
         updateTableData() {
             this.loading = true;
-            this.loadingText =
-                "Die geänderten Daten des {ItemName} werden jetzt gespeichert!";
+            this.loadingText = "Die geänderten Daten des {{ItemName}} werden jetzt gespeichert!";
             //
             this.$inertia.put(
-                this.route("admin.table.update", this.table.id),
+                this.route("admin.table.update",[table, id]),
                 this.form,
                 {
                     onSuccess: () => {

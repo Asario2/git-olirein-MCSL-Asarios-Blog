@@ -1145,7 +1145,7 @@ public function GetTables()
         $imul = new IMULController();
         $imagePath = null;
         $count = false;
-        \Log::info("asd:".json_encode($request->input));
+        // \Log::info("asd:".json_encode($request->input));
         if(is_dir(public_path("/images/$table/big/")))
         {
             $count = true;
@@ -1229,7 +1229,30 @@ public function GetTables()
     {
         return DB::table($table)->where('title', $title)->whereNot("id",$id)->value('id');
     }
-    public function updateTable(Request $request)
+    public function UpdateTable(Request $request, $table, $id)
+    {
+        // Zugriff auf die übergebenen Daten
+        $formData = $request->input('formData');  // Formulardaten
+        \Log::info("fd:".json_encode(  $request));
+        if (!Schema::hasTable($table)) {
+            return response()->json(['error' => 'Tabelle nicht gefunden'], 404);
+        }
+        $record = DB::table($table)->where('id', $id)->first();
+            if (!$record) {
+                return response()->json(['error' => 'Eintrag nicht gefunden'], 404);
+            }
+        // Beispiel: Dynamische Tabelle anhand des Parameters "table"
+        // if (in_array($table, ['valid_table_1', 'valid_table_2'])) {  // Überprüfe, ob die Tabelle gültig ist
+            $updated = DB::table($table)->where('id', $id)->update($request);
+
+            if ($updated) {
+                return response()->json(['message' => 'Daten erfolgreich aktualisiert!']);
+            } else {
+                return response()->json(['message' => 'Fehler beim Aktualisieren der Daten.'], 500);
+            }
+ 
+    }
+    public function def_updateTable(Request $request)
     {
         $table = $request->table;  // Die Tabelle, die bearbeitet wird
         $id = $request->id;        // Die ID der Zeile

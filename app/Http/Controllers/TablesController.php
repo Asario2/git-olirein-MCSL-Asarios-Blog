@@ -332,7 +332,7 @@ class TablesController extends Controller
 
             foreach($columns as $column)
             {
-                \Log::info(json_encode([$column,$tables->$column]));
+                // \Log::info(json_encode([$column,$tables->$column]));
               $fields[] = FormController::Fields($column,$tables->$column,$table,$id,$create);
             }
             $formFields = array_filter($fields);
@@ -1399,10 +1399,10 @@ class TablesController extends Controller
     {
         return DB::table($table)->where('title', $title)->whereNot("id",$id)->value('id');
     }
-    public function updateTable(Request $request)
+    public function old_updateTable(Request $request,$table,$id)
     {
-        $table = $request->table;  // Die Tabelle, die bearbeitet wird
-        $id = $request->id;        // Die ID der Zeile
+        // $table = $request->table;  // Die Tabelle, die bearbeitet wird
+        // $id = $request->id;        // Die ID der Zeile
         $field = $request->field;  // Das Feld, das aktualisiert wird
         $value = $request->value;  // Der neue Wert
         file_put_contents(storage_path("logs/asd.log"),"table6: ".$table."\nfield: ".$field."\nval: ".$value."\nid: ".$id);
@@ -1421,6 +1421,41 @@ class TablesController extends Controller
 
        return response()->json(['success' => false, 'message' => 'Ungültige Tabelle oder Spalte'], 404);
     }
+    public function UpdateTable(Request $request,$table, $id)
+    {
+            // Zugriff auf die übergebenen Daten
+        $formData = $request->input('formData');  // Formulardaten
+        // $formData = $formData;
+        \Log::info("fd:".implode("|",$formData));
+        if (!Schema::hasTable($table)) {
+            return response()->json(['error' => 'Tabelle nicht gefunden'], 404);
+        }
+        $record = DB::table($table)->where('id', $id)->first();
+            if (!$record) {
+                return response()->json(['error' => 'Eintrag nicht gefunden'], 404);
+            }
+        // Beispiel: Dynamische Tabelle anhand des Parameters "table"
+        // if (in_array($table, ['valid_table_1', 'valid_table_2'])) {  // Überprüfe, ob die Tabelle gültig ist
+            //$updatedRows = DB::table($table)->where('id', $id)->update($formData);
+            // if ($updatedRows > 0) {
+            //     \Log::info('Update erfolgreich: ' . $updatedRows . ' Zeilen betroffen.');
+            // } else {
+            //     \Log::info('Kein Update durchgeführt.');
+            // }
+            // DB::enableQueryLog();  // Aktiviert das Query Log
+
+            $updated = DB::table($table)->where('id', $id)->update($formData);
+            // $queries = DB::getQueryLog();
+            // \Log::info('ID:', $id);
+            // \Log::info('FormData:', $formData);
+            // \Log::info($updated);
+            if ($updated) {
+                return response()->json(['message' => 'Daten erfolgreich aktualisiert!']);
+            } else {
+                return response()->json(['message' => 'Fehler beim Aktualisieren der Daten.'], 507);
+            }
+    }
+
 
     function update_entry(Request $request)
     {

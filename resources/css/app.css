@@ -125,3 +125,6 @@ textarea.txt {
         max-width: 100%;
     }
 }
+.button-group {
+    background-color: red !important;
+  }

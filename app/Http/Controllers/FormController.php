@@ -709,7 +709,7 @@ var $j = jQuery.noConflict(); // Weist jQuery einer anderen Variable zu, um Konf
             ->update([$validated['column'] => $validated['value']]);
         if($res)
         {
-            \Log::info("res:".json_encode($res,$validated['id']));
+            // \Log::info("res:".json_encode($res,$validated['id']));
             return response()->json(['success' => true]);
         }
 

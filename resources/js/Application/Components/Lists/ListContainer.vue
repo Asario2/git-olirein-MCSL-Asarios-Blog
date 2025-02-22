@@ -63,12 +63,12 @@
                                 <tippy>{{ editDescription }}</tippy>
                             </td>
                             <td
-                                v-if="showOn"
+                                v-if="deleteOn"
                                 class="np-dl-td-edit"
-                                @click.prevent="showDataRow(datarow[rowId])"
+                                @click="deleteDataRow(datarow[rowId])"
                             >
-                                <icon-eye class="w-6 h-6" v-tippy />
-                                <tippy>{{ showDescription }}</tippy>
+                                <icon-trash class="w-6 h-6" v-tippy />
+                                <tippy>{{ deleteDescription }}</tippy>
                             </td>
                         </tr>
                     </tbody>
@@ -99,6 +99,8 @@ import ErrorList from "@/Application/Components/Form/ErrorList.vue";
 import IconPlusCircle from "@/Application/Components/Icons/PlusCircle.vue";
 import IconPencil from "@/Application/Components/Icons/Pencil.vue";
 import IconEye from "@/Application/Components/Icons/Eye.vue";
+import IconTrash from "@/Application/Components/Icons/Trash.vue";
+
 
 import Alert from "@/Application/Components/Content/Alert.vue";
 
@@ -109,6 +111,7 @@ import throttle from "lodash/throttle";
 const path = window.location.pathname; // Gibt "/admin/tables/show/Example" zurück
 const segments = path.split("/"); // Teilt den Pfad in Segmente auf
 const table = segments[segments.length - 1];
+const id = segments[segments.length - 2];
 
 export default {
     name: "Contents_Lists_ListContainer",
@@ -122,13 +125,17 @@ export default {
         ErrorList,
         IconPlusCircle,
         IconPencil,
+        IconTrash,
         IconEye,
         Alert,
     },
     //
-    emits: ["list-container-search-reset"],
+    emits: ["list-container-search-reset", "deleted",'update-list'],
     //
     props: {
+        items:{
+
+        },
         withinAccordion: {
             type: Boolean,
             default: false,
@@ -184,6 +191,13 @@ export default {
         routeShow: {
             type: String,
         },
+        routeDelete: {
+            type: String,
+        },
+        deleteOn: {
+            type: Boolean,
+            default: false,
+        },
         editOn: {
             type: Boolean,
             default: false,
@@ -194,10 +208,6 @@ export default {
         createOn: {
             type: Boolean,
             default: false,
-        },
-        routeCreate: {
-            type: String,
-            default: table,
         },
         showDescription: {
             type: String,
@@ -218,7 +228,8 @@ export default {
             form: {
                 search: this.filters.search,
             },
-        routeCreate: "/admin/tables/create/" +table,
+        routeCreate: "/admin/tables/create/" + table,
+        routeDelete: "/admin/tables/delete/" + table + "/",
         };
     },
     //
@@ -287,6 +298,12 @@ export default {
             this.form = mapValues(this.form, () => null);
             this.$emit("list-container-search-reset");
         },
+        async confirmDelete(id) {
+            if (confirm("Wollen Sie diesen Beitrag wirklich löschen?")) {
+                await axios.delete(this.routeDelete);
+                this.$emit("update-list", id); // Sendet die ID an die Parent-Komponente
+            }
+        },
         editDataRow(id) {
             const path = window.location.pathname; // Gibt "/admin/tables/show/Example" zurück
             const segments = path.split("/"); // Teilt den Pfad in Segmente auf
@@ -297,6 +314,29 @@ export default {
         showDataRow(id) {
             this.$inertia.get(this.route(this.routeShow, id));
         },
+        deleteDataRow(id) {
+
+            if (confirm("Wollen Sie diesen Beitrag wirklich löschen?")) {
+                axios
+                    .delete(this.routeDelete + id)
+                    .then(() => {
+                        this.$emit("deleted"); // Event nach erfolgreichem Löschen
+                        console.log(this.routeDelete + id);
+                        location.reload();
+                    })
+                    .catch((error) => {
+                        console.error("Fehler beim Löschen:", error);
+                    });
+            }
+        },
+        // async confirmDelete(id) {
+        //     if (confirm("Wollen Sie diesen Beitrag wirklich löschen?")) {
+        //     await axios.delete(this.routeDelete);
+        //     this.items = this.items.filter(item => item.id !== id);
+        //     }
+        // }
+
+
     },
 };
 </script>

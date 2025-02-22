@@ -1,13 +1,18 @@
+
 import { defineConfig } from "vite";
 import laravel from "laravel-vite-plugin";
-import vue from "@vitejs/plugin-vue";
+import vue from '@vitejs/plugin-vue';
 
+// Exportiere die Vite-Konfiguration korrekt
 export default defineConfig({
-    plugins: [
-        laravel({
-            input: "resources/js/app.js",
-            refresh: true,
-        }),
+  plugins: [
+    laravel({
+      input: [
+        'resources/js/app.js',
+        
+      ],
+      refresh: true,  // Optional: Aktiviert das automatische Neu Laden bei Änderungen
+    }),
         vue({
             template: {
                 transformAssetUrls: {
@@ -17,4 +22,7 @@ export default defineConfig({
             },
         }),
     ],
+	 css: {
+    postcss: './postcss.config.js',
+  },
 });

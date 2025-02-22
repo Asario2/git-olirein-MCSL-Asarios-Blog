@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
 use Inertia\Inertia;
 use Auth;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use App\Http\Controllers\IMULController;
@@ -306,10 +307,10 @@ class TablesController extends Controller
             $ord[0] = "id";
             $ord[1] = "DESC";
         }
-/*      elseif (Schema::hasColumn($table, "position")) {
-            $ord[0] = 'position';
-            $ord[1] = 'ASC';
-        }*/
+        // elseif ($table == "images") {
+        //     $ord[0] = 'headline';
+        //     $ord[1] = 'ASC';
+        // }
 
         else {
             $ord[0] = "id";
@@ -320,9 +321,22 @@ class TablesController extends Controller
         $id = $id == 0 ? null : $id;
         $columns = Schema::getColumnListing($table);
         $columns = array_diff($columns, ['id']);
+        if (Schema::hasColumn($table, 'pub')) {
+            $query = DB::table($table)->where("pub", "=", 1);
+        } else {
+            $query = DB::table($table);
+        }
         if($id)
         {
-            $tables = DB::table($table)->where('id',$id)->orderBy($ord[0],$ord[1])->first();
+            // dd($table);
+            $tables = $query->where('id', $id)->orderBy($ord[0], $ord[1])->first();
+            $exists = $query->where('id', $id)->exists();
+            $ffoo = ["formFields" => ["defekt" => "true"]];
+            if (!$exists) {
+                //\Log::info("exists:".json_encode($ffoo));
+               return response()->json($ffoo);
+            }
+
         }
         else{
             $tables  = DB::table($table)->orderBy($ord[0],$ord[1])->first();
@@ -1421,12 +1435,21 @@ class TablesController extends Controller
 
        return response()->json(['success' => false, 'message' => 'Ungültige Tabelle oder Spalte'], 404);
     }
+    public function StoreTable(Request $request,$table)
+    {
+        // Erstelle einen neuen Datensatz mit den validierten Eingabedaten
+        $table_res = DB::table($table)->insert(
+        $request->input("formData")
+        );
+
+        // Rückgabe der Antwort, z.B. Weiterleitung oder JSON-Antwort
+        return response()->json(['message' => 'Daten erfolgreich gespeichert!']);
+    }
     public function UpdateTable(Request $request,$table, $id)
     {
             // Zugriff auf die übergebenen Daten
         $formData = $request->input('formData');  // Formulardaten
         // $formData = $formData;
-        \Log::info("fd:".implode("|",$formData));
         if (!Schema::hasTable($table)) {
             return response()->json(['error' => 'Tabelle nicht gefunden'], 404);
         }
@@ -1452,7 +1475,8 @@ class TablesController extends Controller
             if ($updated) {
                 return response()->json(['message' => 'Daten erfolgreich aktualisiert!']);
             } else {
-                return response()->json(['message' => 'Fehler beim Aktualisieren der Daten.'], 507);
+                \Log::info("fd: ".json_encode($formData));
+                return response()->json(['error' => implode("|",$formData)], 507);
             }
     }
 
@@ -1461,7 +1485,14 @@ class TablesController extends Controller
     {
 
     }
+    public function DeleteTables(Request $request,$table,$id)
+    {
+        if (!Schema::hasTable($table)) {
+            return redirect()->back()->withErrors(['error' => 'Tabelle existiert nicht']);
+        }
+        DB::table($table)->where('id', $id)->delete();
 
+    }
     // Funktion zum Löschen eines Eintrags
     public function destroy($table, $id)
     {

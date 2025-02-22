@@ -40,7 +40,8 @@
                                             :name="field.name"
                                             v-model="field.value"
                                             :placeholder="field.placeholder || ''"
-                                        >
+                                            :required="isRequired(field.required)"
+                                            >
                                             <template #label>{{ field.label }}</template>
                                         </InputFormText>
                                     </input-container>
@@ -53,7 +54,8 @@
                                             v-model="field.value"
                                             :placeholder="field.placeholder || ''"
                                             :class="field.class"
-                                        >
+                                            :required="isRequired(field.required)"
+                                            >
                                             <template #label>{{ field.label }}</template>
                                         </InputFormDateTime>
                                     </input-container>
@@ -72,41 +74,42 @@
                                             cols="25"
                                             :placeholder="field.placeholder || ''"
                                             :class="field.class"
+                                            :required="isRequired(field.required)"
                                         >
                                             <template #label>{{ field.label }}</template>
                                         </InputFormTextArea>
                                     </input-container>
                                     <input-container
-                                    v-else-if="field.type === 'select_id'"
-                                    ><!--<pre>
-                                     {{ this.sortedOptions.find(obj => obj[field.name])?.[field.name]    || 'Keine Kategorien gefunden' }}
-                                    </pre> -->
-
-
-                                    <!---<InputSelect
-                                            :id="field.name + '_' + field.id"
-                                            :name="field.name"
+                                    v-else-if="field.type === 'checkbox'" :full-width="true"
+                                    >
+                                        <input-checkbox
+                                            name="markdown_on"
                                             v-model="field.value"
-                                            :ref="field.name"
-                                            :placeholder="field.placeholder || ''"
-                                            :class="field.class"
-                                            :sortedOptions="'sortedOptions:' + JSON.stringify( sortedOptions.find(obj => obj[field.name])?.[field.name]    || [] )"
-
+                                            :required="isRequired(field.required)"
                                         >
-                                        <template #label>{{ field.label }}</template>
+                                            Liegt der Artikel im Markdown-Format
+                                            vor?</input-checkbox
+                                        >
+                                    </input-container>
 
-                                    </InputSelect>-->
-                                    <InputLabel
+
+                                    <input-container
+                                        v-else-if="field.type === 'select_id'"
+
+                                    >
+                                        <!-- Weitere Inhalte für die select_id-Komponente -->
+
+                                        <InputLabel
                                         :name="field.name"
-                                        :label="field.label"
-                                    ></InputLabel>
+                                        :label="field.label">
+                                    </InputLabel>
                                     <InputSelect
 
 
-
+                                    @input-change="updateFormData"
 
                                         :id="field.name + '_' + field.id"
-                                        :v-model="field.value"
+                                        v-model="this.xval"
                                         :options="'options:' + (this.sortedOptions.length > 0)
                                             ? this.sortedOptions.find(obj => obj[field.name])?.[field.name] || []
                                             : []"
@@ -114,19 +117,12 @@
                                         :name="field.name"
                                         :xval="field.value"
                                         :xname="field.name"
-                                    />
-                                    <!-- <input-select
-                                        v-model="field.value"
-                                        :options="'sortedOptions:' + JSON.parse(JSON.stringify(
-                                            (Array.isArray(this.sortedOptions)
-                                                ? this.sortedOptions.find(obj => obj[field.name])?.[field.name]
-                                                : {}))   || []
-                                        )"
-                                        :ref="field.name"
-                                        :name="field.name"
-                                    ></input-select> -->
-                                    <!-- <input-error :message="errors.xname" />< -->
-                                    </input-container>
+                                        :required="isRequired(field.required)"
+                                    >
+
+                                </InputSelect>
+
+                                </input-container>
                                 </template>
                             </div>
 
@@ -208,9 +204,10 @@
 const path = window.location.pathname; // Gibt "/admin/tables/show/Example" zurück
 const segments = path.split("/"); // Teilt den Pfad in Segmente auf
 const id = segments[segments.length - 2];
-const tablex = segments[segments.length - 1];
+let tablex = segments[segments.length - 1]; // Muss ein ref sein, wenn es reaktiv sein soll
 const table_z = tablex;
 let xid = segments[segments.length - 2];
+
 const routes = {
     getform: (tablex, id) => `/tables/form-data/${tablex}/${id}`,
     getselroute: (name) => `/tables/sort-data/${name}`,
@@ -267,7 +264,9 @@ import { throttle } from "lodash";
 import DialogModal from "@/Application/Components/DialogModal.vue";
 import { reactive } from "vue";
 import Alert from "@/Application/Components/Content/Alert.vue";
-
+onMounted(() => {
+  this.fetchFormData();
+});
 export default defineComponent({
     name: "Admin_TableForm",
 
@@ -355,7 +354,7 @@ export default defineComponent({
     data() {
         return {
             table: reactive({ id: "1" }),// Standardwert setzen, falls leer
-
+            formDatas: {},
         ItemName: "Beitrag",  // Falls nicht definiert
             //     formFields: [{
 
@@ -437,7 +436,11 @@ export default defineComponent({
         // },
         dynamicFormData() {
             return this.formFields.reduce((acc, field) => {
-                acc[field.name] = this.formData[field.name] || field.value;
+                if (!field.name.includes("_id"))
+                {
+                    acc[field.name] = this.formData[field.name] || field.value;
+                }
+
                 return acc;
             }, {});
         },
@@ -453,7 +456,7 @@ export default defineComponent({
             ) {
                 const fieldsArray = Object.values(this.formFields);
                 fieldsArray.forEach((field) => {
-                    if (field.name) {
+                    if (!field.name.includes("_id")){
                         this.formData[field.name] = field.value || "";
                     }
                 });
@@ -582,7 +585,7 @@ if(document.location.toString().indexOf('?') !== -1) {
     //     }
     if(!$_GET['rl'])
     {
-       //location.href = location.href + "?rl=2";
+       location.href = location.href + "?rl=2";
     }
     if($_GET['rl']  == "2")
     {
@@ -671,6 +674,25 @@ return { ffo };
         };
     },
     methods: {
+   removeNumericKeys(obj) {
+        let newObj = {};
+
+        Object.values(obj).forEach(value => {
+            Object.assign(newObj, value);
+        });
+
+        return newObj;
+    },
+    isRequired(value) {
+      return value === "required" || value === true; // Falls Laravel `true` statt `"required"` sendet
+    },
+        updateFormData(value, fieldName) {
+            let formDatas = {};
+            if (fieldName.includes("_id")){
+            this.formDatas[fieldName] = value;
+            }
+            console.log("aaaaaaaa" + JSON.stringify(this.formDatas,null,2));
+        },
         setFormField(field,name) {
 
             // Directly setting the value in formData
@@ -683,9 +705,12 @@ return { ffo };
                 this.getsel(field.name);
 
             }
-
-            this.formData[field.name] = field.value || "";
-
+            if (field.name.includes("_id")) {
+                this.formData[field.name] = this.formDatas[field.name];
+            }
+            else{
+                this.formData[field.name] = field.value || "";
+            }
         },
         debugUpdateTableData() {
             console.log("updateTableData wird aufgerufen!");
@@ -708,7 +733,9 @@ return { ffo };
             axios
                 .get(routes.getselroute(name))
                 .then((response) => {
+
                     sdata = JSON.stringify(response.data);
+
                     //sdata = sdata.replace(new RegExp(name, "g"), '');
                     sdata = JSON.parse(sdata);
                     // 1. JSON-String in Objekt umwandeln
@@ -779,8 +806,9 @@ return { ffo };
             let formFields_old = response.data;
 
             // JSON bereinigen
-            let obj = JSON.stringify(this.formFields, null, 2)
-                .replace(/"formFields": \[.*\]/, "")
+            let obj = JSON.stringify(this.formFields,null,2)
+
+            obj = obj.replace(/"formFields": \[.*\]/, "")
                 .replace(/^\{|\}$/g, "")
                 .replace(/}\s*,\s*\n\s*}/g, "},")
                 .replace(/[[\]]/g, "")
@@ -788,9 +816,14 @@ return { ffo };
                 .replace(/,\s*\n\s*{/g, ",")
                 .replace(/\s*\}(?!,)\s*/g, "}")
                 .replace(/}},/g, "\n   },")
-                .replace(/}}/g, "\n   }\n  }");
+                .replace(/}}/g, "\n   }\n  }")
+                .replace(/"\d+"\s*:\s*{/g, '{')
+                .replace(/},\s*{/g, '},');
 
-            this.ffo = JSON.parse(obj);
+            obj = JSON.parse(obj);
+
+            console.log(obj);
+            this.ffo = obj
             const ffo = this.ffo;
             // 💡 Konvertiere das Objekt in ein Array
             const formFieldsArray = Object.values(formFields_old);
@@ -834,12 +867,19 @@ let commaCount = 0;
 // console.log(str);
 str = Object.entries((str));
 str.forEach(([key, value]) => {
-    console.log(`${key}: ${value['value']}`);
+
+    if (!key.includes("_id")){
     this.formData[value['name']] = value['value'];
+    console.log("NO ID@" + key);
+    console.log(`${key}: ${value['value']}`);
+
+    }
+    else{
+        this.formData[key] = this.formDatas[key];
+    }
 });
 var modifiedStr;
 // str = this.objectToCSVArray(str);
-console.log("FD:" + JSON.stringify(this.formData));
 modifiedStr  = this.formData;
 // str.replace(/,/g, (match) => {
 //   commaCount++;
@@ -872,9 +912,20 @@ async submitForm() {
             const path = window.location.pathname; // Gibt "/admin/tables/show/Example" zurück
             const segments = path.split("/"); // Teilt den Pfad in Segmente auf
             this.xid = segments[segments.length - 2];
-            const response = await axios.put(`/admin/tables/update/${this.tablex}/${this.xid}`, {
+            tablex = segments[segments.length - 1];
+            let response;
+            if(segments[segments.length - 2] == "create")
+            {
+                response = await axios.post(`/admin/tables/store/${this.tablex}`, {
                 formData: this.formData
             });
+            }
+            else{
+                response = await axios.put(`/admin/tables/update/${this.tablex}/${this.xid}`, {
+                formData: this.formData
+            });
+            }
+
 
         //     await axios.post('/admin/table/update', {
         //     table: this.tablex,  // Dynamische Tabelle
@@ -949,23 +1000,23 @@ async submitForm() {
             });
         },
 
-        updateTableData() {
-            this.loading = true;
-            this.loadingText = "Die geänderten Daten des {{ItemName}} werden jetzt gespeichert!";
-            //
-            this.$inertia.put(
-                this.route("admin.table.update",[table, id]),
-                this.form,
-                {
-                    onSuccess: () => {
-                        this.loading = false;
-                    },
-                    onError: () => {
-                        this.loading = false;
-                    },
-                },
-            );
-        },
+        async updateTableData() {
+    try {
+        this.loading = true;
+        this.loadingText = `Die geänderten Daten des ${this.ItemName} werden jetzt gespeichert!`;
+
+        const response = await axios.put(`/admin/tables/update/${this.tablex}/${this.id}`,{formData: this.formData});
+
+        if (response.data) {
+            this.loading = false;
+            console.log("Daten erfolgreich gespeichert!", response.data);
+        }
+    } catch (error) {
+        this.loading = false;
+        console.error("Fehler beim Speichern der Daten:", error);
+    }
+},
+
         updateData() {
             if (!this.formData) {
                 this.formData = {};
@@ -976,7 +1027,7 @@ async submitForm() {
             ) {
                 const fieldsArray = Object.values(this.formFields);
                 fieldsArray.forEach((field) => {
-                    if (field.name) {
+                    if (!field.name.includes("_id")) {
                         this.formData[field.name] = field.value || "";
                     }
                 });
@@ -986,11 +1037,18 @@ async submitForm() {
             console.log("selectTableImage id:", id);
             this.form.table_image_id = id;
         },
+        emptyChecker(){
+            if(this.formData.length < 1)
+            {
+                alert("empty");
+            }
+        }
     },
     mounted() {
          //this.fetchDataX();
         this.fetchFormData();
         this.updateData();
+        this.emptyChecker();
     //     console.log("sortedOptions:", this.sortedOptions);
     // console.log("field.name:", this.field?.name);
     // console.log("sortedOptions[field.name]:", this.sortedOptions[this.field.name]);

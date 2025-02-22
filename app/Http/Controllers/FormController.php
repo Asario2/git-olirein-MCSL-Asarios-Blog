@@ -41,6 +41,7 @@ class FormController extends Controller
 
         $label = isset(Settings::exl[$name]) ? Settings::exl[$name] : $name;
         $class = FormController::getClass($name,1);
+        $req   = FormController::getReq($name);
         $type = FormController::getClass($name);
         $rows = FormController::getRows($type);
 
@@ -57,6 +58,7 @@ class FormController extends Controller
                 'id'    => $id,
                 'class' => $class,
                 'rows'  => $rows,
+                "required" => $req,
                // Hier ohne zusätzliche Array-Klammern!
             ];
         // $fields[$namefield] = [
@@ -76,6 +78,15 @@ class FormController extends Controller
 
         }
     }
+    public static function getReq($name)
+    {
+        $req = Settings::no_req;
+        if(!in_array($name,$req))
+        {
+            return "required";
+        }
+        return;
+    }
     public static function getRows($type,$cl=''){
         if($type == "textarea_short")
         {
@@ -90,12 +101,23 @@ class FormController extends Controller
             return [];
         }
         $table = str_replace("_id",'',$name);
-        $tabs = DB::table($table)->select("id", "name")->get();
+        if (Schema::hasColumn($table, 'possition')) {
+        $id = 'position';
+        }
+        else{$id = "id";}
+        if (Schema::hasColumn($table, 'pub')) {
+            $query = DB::table($table)->where("pub", "=", 1);
+        } else {
+            $query = DB::table($table);
+        }
+        // \Log::info($query->select($id, "name")->orderBy('name', 'ASC')->toSql());
+
+        $tabs = $query->select($id, "name")->reorder() ->orderBy("name","ASC")->get();
 
         $result = [];
 
         foreach ($tabs as $item) {
-            $result[$item->id] = $item->name; // <- Hier '->' statt '[]' verwenden
+            $result[$item->$id] = $item->name; // <- Hier '->' statt '[]' verwenden
         }
 
         return $result;
@@ -120,6 +142,15 @@ class FormController extends Controller
             case "content":
             return "textarea";
             break;
+            case "content_en":
+                return "textarea";
+            break;
+            case "message":
+                return "textarea";
+            break;
+            case "message_en":
+                return "textarea";
+            break;
             case "summary":
             return "textarea_short";
             break;
@@ -128,6 +159,23 @@ class FormController extends Controller
             break;
             case "blog_authors_id":
                 return "select_id";
+            break;
+            case "users_id":
+                return "select_id";
+            break;
+            case "images_categories_id":
+                return "select_id";
+            break;
+            case "pub":
+                return "pub";
+            break;
+            case "markdown_on":
+                if($cl)
+                {
+                    return "xis";
+                }
+                return "checkbox";
+
             default:
                 return "text";
             break;
@@ -214,7 +262,7 @@ class FormController extends Controller
             case "camera_id":
                 return  FormController::ImSelect($name,$value,$table,"camera","name",$id,1);
             break;
-            case "images_cat_id":
+            case "images_categories_id":
                 return  FormController::ImSelect($name,$value,$table,"images_cat","shortname",$id,1);
             break;
             case "password":
@@ -273,7 +321,7 @@ class FormController extends Controller
             case "users_id":
                 return  "<td class='selectable table-cell' data-field='".$name."'>".FormController::author($name,$value,$table,$id)."</td>";
             break;
-            case "images_cat_id":
+            case "images_categories_id":
                 return "<td  class='selectable table-cell' data-field='".$name."'>".FormController::uid($name,$value,$table,$id,"images_cat","name",$id)."</td>";
             break;
             case "camera_id":

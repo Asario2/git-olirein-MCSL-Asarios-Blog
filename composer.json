@@ -10,7 +10,9 @@
     "require": {
         "php": "^8.2",
         "arcanedev/log-viewer": "^11.0",
+        "arnoson/kirby-vite": "^5.4",
         "bacon/bacon-qr-code": "^3.0",
+        "contributte/vite": "^0.2.0",
         "endroid/qr-code": "^6.0",
         "envatic/laravel-vue-i18n-generator": "*",
         "ezyang/htmlpurifier": "^4.18",
@@ -27,7 +29,6 @@
         "rap2hpoutre/laravel-log-viewer": "^2.4",
         "reinink/remember-query-strings": "^0.1.2",
         "spatie/laravel-sitemap": "^7.2",
-        "stevebauman/purify": "^6.2",
         "tightenco/ziggy": "2.4.2",
         "whitecube/laravel-cookie-consent": "^1.2",
         "ziggeo/ziggeophpsdk": "^0.1.30"
@@ -86,7 +87,8 @@
         "sort-packages": true,
         "allow-plugins": {
             "pestphp/pest-plugin": true,
-            "php-http/discovery": true
+            "php-http/discovery": true,
+            "getkirby/composer-installer": true
         }
     },
     "minimum-stability": "stable",

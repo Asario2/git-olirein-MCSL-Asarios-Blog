@@ -10,7 +10,10 @@ use Laravel\Jetstream\Jetstream;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Session;
 use League\CommonMark\CommonMarkConverter;
-
+if(!session_id())
+{
+    session_start();
+}
 class HomeController extends Controller
 {
     //
@@ -40,7 +43,7 @@ class HomeController extends Controller
             'blog_categories.name as category_name',
         )
             ->join('blog_authors', 'blog_authors.id', '=', 'blogs.blog_authors_id')
-            ->join('blog_images', 'blog_images.id', '=', 'blogs.blog_images_id')
+            ->join('blog_images', 'blog_images.id', '=', 'blogs.blog_images_xid')
             ->join('blog_categories', 'blog_categories.id', '=', 'blogs.blog_categories_id')
             //
             ->whereDate('blog_date', '<=', $zeitpunkt)
@@ -59,6 +62,7 @@ class HomeController extends Controller
             $blog->title = html_entity_decode($blog->title);
             return $blog;
         });
+        $blogs->iOverlayImage = "ai-".$_SESSION['dm'].".png";
         return Inertia::render('Homepage/BlogList', [
             'filters' => Request::all('search'),
             'blogs' => $blogs,

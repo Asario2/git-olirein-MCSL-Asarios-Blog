@@ -6,10 +6,22 @@ use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-
+if(!session_id())
+{
+    session_start();
+}
 class Blog extends Model
 {
     use HasFactory;
+
+    protected $appends = ['aiOverlayImage'];
+
+    public function getAiOverlayImageAttribute()
+    {
+        // Setze den Standardwert, falls kein Wert vorhanden ist
+        $dm = $_SESSION['dm'] ?? "dark";
+        return $this->attributes['aiOverlayImage'] ?? 'ai-'.$dm.'.png';
+    }
 
     protected $guarded = [];
 
@@ -42,7 +54,7 @@ class Blog extends Model
     // Ein Blog (blogs) gehört zu genau einem Blogbild (blog_images)
     public function blog_images()
     {
-        return $this->belongsTo('App\Models\BlogImage', 'blog_images_id', 'id');
+        return $this->belongsTo('App\Models\BlogImage', 'blog_images_xid', 'id');
     }
 
     // Ein Blog (blogs) gehört zu genau einer Blogkategorie (blog_categories)

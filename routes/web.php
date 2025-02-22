@@ -3,6 +3,7 @@
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\NameBindingsController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\HandbookController;
 use App\Http\Controllers\ApplicationController;
@@ -17,7 +18,7 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 
 
 GlobalController::SetDomain();
-
+// include __DIR__."/extraroutes.php";
 Route::get('/db-check', function () {
     try {
         DB::connection()->getPdo();
@@ -26,7 +27,11 @@ Route::get('/db-check', function () {
         return 'Fehler: ' . $e->getMessage();
     }
 });
+Route::get('/namebindings', [NameBindingsController::class, 'RefreshFields'])->name("ColumnFetcher");
 
+
+Route::get('/tables/form-data/{table}/{id}', [TablesController::class, 'ExportFields'])
+->name("GetTableForm");
 // ========
 // Homepage
 // ========
@@ -60,6 +65,29 @@ Route::get('/home/user_is_no_customer', [HomeController::class, 'home_user_is_no
 
 // Mail-Verifizierungs-Signatur ist abgelaufen
 Route::get('/home/invalid_signature', [HomeController::class, 'home_invalid_signature'])->name('home.invalid_signature');
+
+Route::get('/pictures', [App\Http\Controllers\PagesController::class, 'ab_images'])->name('images');
+Route::get('/pictures/{pic}/',[App\Http\Controllers\PagesController::class, 'ab_images_cat'])->name('pictures');
+Route::get('/blogposts', [BlogPostController::class, 'index'])->name('blogposts.index');
+Route::get('/devmod', function () {
+    // ShowRepo();
+    //IMULController::smpix();
+     DevMod();
+    //  small_images(public_path()."/images/_ab/users");
+     // Hauptprogramm
+    // $viewsPath = resource_path('views/layouts'); // Pfad zu den Blade-Dateien
+    // $publicJsPath = public_path('js');          // Zielordner für JavaScript-Dateien
+    // $publicCssPath = public_path('css');        // Zielordner für CSS-Dateien
+    // updateBladeFiles($viewsPath, $publicJsPath, $publicCssPath);
+
+
+    })->name('devmod');
+    Route::post('/toggle-darkmode', [App\Http\Controllers\DarkModeController::class, 'toggle'])->name('toggle.darkmode');
+    Route::get('tables/{table}/create', [TablesController::class, 'createEntryForm'])->name('tables.create-table');
+    Route::post('/comments/store/{table}', [CommentController::class, 'store_alt'])->name('comments.store_alt');
+    Route::post('/comments/{table}/{id}', [CommentController::class, 'store'])->name('comments.store');
+    Route::get('/{table}/{cat?}#headline_{id}', [PostController::class, 'show'])->name('posts.show');
+
 
 // ===============================
 // Routen für angemeldete Anwender
@@ -115,6 +143,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         // Update des Blogartikels
         Route::put('/admin/blogs/{blog}', [BlogController::class, 'admin_blog_update'])
             ->name('admin.blog.update');
+        // Store Table Entry
+        Route::post('/admin/tables/store/{table}', [TablesController::class, 'StoreTable'])
+            ->name('admin.tables.store');
         // Delete table
         Route::post('/admin/tables/{table}/delete', [TablesController::class, 'DeleteTable'])
             ->name('admin.tables.delete');
@@ -127,15 +158,13 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         // Tables Show
         Route::get("admin/tables/show/{table}",[TablesController::class,"ShowTable"])
             ->name("admin.tables.show");
-        Route::get('/tables/form-data/{table}/{id?}', [TablesController::class, 'ExportFields'])
-            ->name("GetTableForm");
         Route::get('/tables/sort-data/{name}', [TablesController::class, 'getOptionz'])
             ->name("GetTableOpt");
         // Tables Edit table
         Route::get("admin/tables/edit/{id}/{table}",[TablesController::class,"EditTables"])
             ->name("admin.tables.edit");
         // Tables Delete
-        Route::delete("admin/tables/{table}/delete",[TablesController::class,"DeleteTables"])
+        Route::delete("admin/tables/delete/{table}/{id}",[TablesController::class,"DeleteTables"])
             ->name("admin.tables.delete");
         // Tables UPDATE
         Route::put("admin/tables/update/{table}/{id}",[TablesController::class,"UpdateTable"])
@@ -159,6 +188,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
         });
 
+
+
     // ====================
     // APPLICATION EMPLOYEE
     // ====================
@@ -180,6 +211,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 Route::get('/tables/form_data/{table}/{id?}', [TablesController::class, 'ExportFields'])->name("GetTableForm");
 // Darkmode Route
 Route::post('/toggle-dark-mode', [ApplicationController::class, 'toggleDarkMode'])->name('toggle-dark-mode');
+Route::post('/get-dark-mode', [ApplicationController::class, 'session_dm'])->name('get-dark-mode');
 //
 // ==============
 // Fallback-Route

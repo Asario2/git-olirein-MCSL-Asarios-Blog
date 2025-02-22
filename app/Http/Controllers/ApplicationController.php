@@ -8,6 +8,10 @@ use Illuminate\Http\Request;
 use Laravel\Jetstream\Agent;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+if(!session_id())
+{
+    session_start();
+}
 
 class ApplicationController extends Controller
 {
@@ -96,7 +100,15 @@ class ApplicationController extends Controller
     public function toggleDarkMode(Request $request)
     {
         $darkMode = $request->input('dark_mode', false);
-        session(['dark_mode' => $darkMode]); // Präferenz in der Session speichern
+        session(['dark_mode' => $darkMode]);
+        $_SESSION['dm'] = $darkMode ?? "dark"; // Präferenz in der Session speichern
+        echo "<script>alert('yes');</script>";
         return response()->json(['dark_mode' => $darkMode]);
     }
+    public function session_dm() {
+
+        echo json_encode(['dm' => $_SESSION['dm']]);
+    }
+
+
 }

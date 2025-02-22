@@ -1233,7 +1233,7 @@ public function GetTables()
     {
         // Zugriff auf die übergebenen Daten
         $formData = $request->input('formData');  // Formulardaten
-        \Log::info("fd:".json_encode(  $request));
+
         if (!Schema::hasTable($table)) {
             return response()->json(['error' => 'Tabelle nicht gefunden'], 404);
         }
@@ -1250,7 +1250,7 @@ public function GetTables()
             } else {
                 return response()->json(['message' => 'Fehler beim Aktualisieren der Daten.'], 500);
             }
- 
+
     }
     public function def_updateTable(Request $request)
     {

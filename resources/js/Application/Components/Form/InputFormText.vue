@@ -12,6 +12,7 @@
         :name="name"
         max-length="95"
         :placeholder="placeholder"
+        :required="required"
         class="txt
         w-full
         p-2.5
@@ -53,7 +54,8 @@
     id: { type: String, required: true },
     name: { type: String, required: true },
     modelValue: { type: String, default: '' },  // Use modelValue instead of value
-    placeholder: { type: String, default: '' }
+    placeholder: { type: String, default: '' },
+    required: {type:[String,Boolean ], default:''},
 
     }
   };

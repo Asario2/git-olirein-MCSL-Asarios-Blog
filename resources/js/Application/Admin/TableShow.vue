@@ -31,7 +31,7 @@
               <th class="np-dl-th-normal" colspan="2"></th>
             </tr>
           </template>
-          <template v-slot:datarow="data">
+          <template v-slot:datarow="data" :items="items" @update-list="removeItem">
               <td class="np-dl-td-normal">{{ data.datarow.id }}</td>
               <td class="np-dl-td-normal">{{ data.datarow.name }}</td>
               <td class="np-dl-td-normal">{{ data.datarow.description }}</td>
@@ -172,6 +172,9 @@ let table = table_z.toLowerCase();
       createNew() {
         alert("Neuer Eintrag erstellen");
       },
+      removeItem(id) {
+      this.items = this.items.filter((item) => item.id !== id);
+    },
       editRow(id) {
         alert(`Eintrag mit ID ${id} bearbeiten`);
       },

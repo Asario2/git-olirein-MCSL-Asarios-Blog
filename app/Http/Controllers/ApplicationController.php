@@ -102,7 +102,7 @@ class ApplicationController extends Controller
         $darkMode = $request->input('dark_mode', false);
         session(['dark_mode' => $darkMode]);
         $_SESSION['dm'] = $darkMode ?? "dark"; // Präferenz in der Session speichern
-        echo "<script>alert('yes');</script>";
+        \Log::info("dm: ".$darkMode);
         return response()->json(['dark_mode' => $darkMode]);
     }
     public function session_dm() {

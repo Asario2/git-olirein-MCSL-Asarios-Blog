@@ -332,7 +332,17 @@ import IconClose from "@/Application/Components/Icons/Close.vue";
 import IconFacebook from "@/Application/Components/Icons/SocialMedia/Facebook.vue";
 import IconLinkedIn from "@/Application/Components/Icons/SocialMedia/LinkedIn.vue";
 import IconYoutube from "@/Application/Components/Icons/SocialMedia/Youtube.vue";
+import { ref, provide } from "vue";
 
+const darkMode = ref(localStorage.getItem("darkMode") === "true");
+
+provide("darkMode", darkMode); // 👈 Hier stellen wir `darkMode` bereit
+
+function toggleDarkMode() {
+  darkMode.value = !darkMode.value;
+  localStorage.setItem("darkMode", darkMode.value);
+  document.documentElement.classList.toggle("dark", darkMode.value);
+}   
 export default {
     name: "Homepage_Shared_Layout",
 

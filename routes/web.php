@@ -212,6 +212,16 @@ Route::get('/tables/form_data/{table}/{id?}', [TablesController::class, 'ExportF
 // Darkmode Route
 Route::post('/toggle-dark-mode', [ApplicationController::class, 'toggleDarkMode'])->name('toggle-dark-mode');
 Route::post('/get-dark-mode', [ApplicationController::class, 'session_dm'])->name('get-dark-mode');
+Route::get('/api/dark-mode-status', function (Request $request) {
+    return response()->json(['dark_mode' => Session::get('dark_mode', false)]);
+});
+Route::get('/api/dark-mode', function () {
+    if($_COOKIE['darkMode'])
+    {
+        return response()->json(['darkMode' => $_COOKIE['darkMode']]);
+    }
+    return response()->json(['darkMode' => session('dark_mode', 'dark')]);
+});
 //
 // ==============
 // Fallback-Route

@@ -97,6 +97,9 @@ export default defineComponent({
             type: Object,
             default: () => ({}),
         },
+        blogImage: {
+       
+    },
     },
 
     data() {

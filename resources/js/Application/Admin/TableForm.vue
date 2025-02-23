@@ -585,7 +585,7 @@ if(document.location.toString().indexOf('?') !== -1) {
     //     }
     if(!$_GET['rl'])
     {
-       location.href = location.href + "?rl=2";
+       //location.href = location.href + "?rl=2";
     }
     if($_GET['rl']  == "2")
     {

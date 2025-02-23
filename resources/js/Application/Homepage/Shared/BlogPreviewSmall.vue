@@ -2,7 +2,7 @@
     <Link
         :href="route('home.blog.show', blog.slug)"
         class="min-w-full max-w-sm mx-auto group rounded hover:no-underline focus:no-underline bg-layout-sun-100 dark:bg-layout-night-100"
-    >
+    ><div class="relative lg:col-span-7">
         <img
             role="presentation"
             class="object-cover w-full rounded h-44 bg-layout-sun-500 dark:bg-layout-night-500"
@@ -12,7 +12,8 @@
             width="480"
             height="360"
         />
-
+        <AiButton class="ai-button-image" :overlayImage="images/icons/blog.aiOverlayImage || 'images/icons/ai-dark.png'"></AiButton>
+    </div>
         <div class="p-6 space-y-2">
             <div class="flex justify-end items-start">
                 <div
@@ -51,6 +52,7 @@ import { Link } from "@inertiajs/vue3";
 
 import DisplayDate from "@/Application/Components/Content/DisplayDate.vue";
 import DisplayNumber from "@/Application/Components/Content/DisplayNumber.vue";
+import AiButton from "@/Application/Components/Content/AiButton.vue";
 
 export default {
     name: "Shared_Homepage_BlogPreviewSmall",
@@ -59,11 +61,15 @@ export default {
         Link,
         DisplayDate,
         DisplayNumber,
+        AiButton,
     },
 
     props: {
         blog: {
             type: Object,
+        },
+        aiOverlayImage: {
+            type: String,
         },
     },
 };

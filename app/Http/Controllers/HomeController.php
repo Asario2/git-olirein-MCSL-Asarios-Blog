@@ -62,7 +62,7 @@ class HomeController extends Controller
             $blog->title = html_entity_decode($blog->title);
             return $blog;
         });
-        $blogs->iOverlayImage = "ai-".$_SESSION['dm'].".png";
+        $blogs->aiOverlayImage = "ai-".$_SESSION['dm'].".png";
         return Inertia::render('Homepage/BlogList', [
             'filters' => Request::all('search'),
             'blogs' => $blogs,

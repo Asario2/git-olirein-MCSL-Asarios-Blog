@@ -15,7 +15,7 @@
         />
 
         <!-- Der AI-Button wird hier angezeigt -->
-        <AiButton id="aibtn" :overlayImage="images/icons/blog.aiOverlayImage || 'images/icons/ai-dark.png'"></AiButton>
+        <AiButton class="ai-button-image" :overlayImage="images/icons/blog.aiOverlayImage || 'images/icons/ai-dark.png'"></AiButton>
 
         </div>
         <div class="p-6 space-y-2 lg:col-span-5">

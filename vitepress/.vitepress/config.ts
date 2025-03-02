@@ -4,6 +4,9 @@ import { defineConfig } from 'vitepress'
 export default defineConfig({
   title: "Asarios Blog",
   description: "Asarios personal Blog",
+  lang:'de',
+  outDir: './../public/handbook_admin',
+  base: './handbook_admin/',
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [

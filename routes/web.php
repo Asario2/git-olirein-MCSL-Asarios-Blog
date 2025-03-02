@@ -12,6 +12,7 @@ use App\Http\Controllers\DashboardAdminController;
 use App\Http\Controllers\DashboardCentralController;
 use App\Http\Controllers\DashboardCustomerController;
 use App\Http\Controllers\DashboardEmployeeController;
+use App\Http\Controllers\ImageUploadController;
 use League\CommonMark\CommonMarkConverter;
 use App\Http\Controllers\TablesController;
 use Laravel\Fortify\TwoFactorAuthenticatable;
@@ -28,6 +29,7 @@ Route::get('/db-check', function () {
     }
 });
 Route::get('/namebindings', [NameBindingsController::class, 'RefreshFields'])->name("ColumnFetcher");
+Route::post('/upload-image', [ImageUploadController::class, 'upload'])->name('upload.image');
 
 
 Route::get('/tables/form-data/{table}/{id}', [TablesController::class, 'ExportFields'])
@@ -47,6 +49,8 @@ Route::get('/home/imprint', [HomeController::class, 'home_imprint'])->name('home
 Route::get('/home/privacy', [HomeController::class, 'home_privacy'])->name('home.privacy');
 // Terms
 Route::get('/home/terms', [HomeController::class, 'home_terms'])->name('home.terms');
+// Ai Content
+Route::get('/home/ai', [HomeController::class, 'home_AI'])->name('home.ai');
 // Liste der Blogartikel
 Route::get('/blogs', [HomeController::class, 'home_blog_index'])->name('home.blog.index')->middleware('remember');
 // Display Blogartikel
@@ -167,11 +171,12 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::delete("admin/tables/delete/{table}/{id}",[TablesController::class,"DeleteTables"])
             ->name("admin.tables.delete");
         // Tables UPDATE
-        Route::put("admin/tables/update/{table}/{id}",[TablesController::class,"UpdateTable"])
+        Route::patch("admin/tables/update/{table}/{id}",[TablesController::class,"UpdateTable"])
             ->name("admin.table.update");
         // Blogartikel Delete
         Route::delete('/admin/blogs/{blog}', [BlogController::class, 'admin_blog_delete'])
             ->name('admin.blog.delete');
+
         // =======
         // Profile
         // =======
@@ -226,6 +231,10 @@ Route::get('/api/dark-mode', function () {
 // ==============
 // Fallback-Route
 // ==============
+Route::get("api/images/{table}/{id}",[TablesController::class,"GetImageUrl"])
+        ->name("api-get-image-url");
+        Route::get("api/get-image-id/{table}/{id}",[TablesController::class,"GetImageId"])
+        ->name("api-get-image-id");
 Route::fallback(function () {
     return Inertia::render('Homepage/NoPageFound');
 });

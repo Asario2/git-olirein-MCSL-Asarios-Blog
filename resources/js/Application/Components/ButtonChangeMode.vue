@@ -2,8 +2,9 @@
     <button
         type="button"
         @click="changeMode"
+
         class="flex items-center flex-nowrap cursor-pointer rounded-md px-4 py-2 border border-transparent leading-4 font-medium bg-transparent transition focus:outline-none"
-        :class="class"
+
     >
         <span v-if="mode === 'light'">
             <IconNight class="w-4 h-4"></IconNight>
@@ -55,7 +56,7 @@ export default defineComponent({
                 // changeImg(newMode);
                 emit("changeMode", newMode);
                 reloadQrCode();
-                updateAiButtonImage(newMode);
+               // updateAiButtonImage(newMode);
             });
 
 
@@ -63,7 +64,9 @@ export default defineComponent({
             document.querySelectorAll(".ai-button").forEach((aibut) => {
                 aibut.src = `/images/icons/ai-${newMode}.png`;
                 });
-
+                document.querySelectorAll("#ai-image").forEach((aiim) => {
+                aiim.src = `/images/_ab/ai-teaser-${newMode}.jpg`;
+                });
         }
         // function changeImg(mode)
         // {

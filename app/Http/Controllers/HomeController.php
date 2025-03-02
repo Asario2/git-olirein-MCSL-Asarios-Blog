@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use App\Models\Blog;
 use Inertia\Inertia;
 use Illuminate\Support\Str;
@@ -25,6 +26,12 @@ class HomeController extends Controller
         //
         return Inertia::render('Homepage/Home');
     }
+    public function home_AI()
+    {
+        $data = DB::table("texts")->select('texts.*','blog_authors.name as author_name')->leftJoin('blog_authors', 'blog_authors.id', '=', 'texts.author_id')->where("texts.id","9")->first();
+        $data->text = Str::markdown($data->text);
+        return Inertia::render('Homepage/AiContent', ["data" => [$data]]); // <-- in Array umwandeln
+    }
     //
     public function home_blog_index()
     {
@@ -41,9 +48,10 @@ class HomeController extends Controller
             'blog_images.url as url',
             'blog_images.name as name',
             'blog_categories.name as category_name',
+            "blogs.xis_aiImage as madewithai",
         )
             ->join('blog_authors', 'blog_authors.id', '=', 'blogs.blog_authors_id')
-            ->join('blog_images', 'blog_images.id', '=', 'blogs.blog_images_xid')
+            ->join('blog_images', 'blog_images.id', '=', 'blogs.blog_images_iid')
             ->join('blog_categories', 'blog_categories.id', '=', 'blogs.blog_categories_id')
             //
             ->whereDate('blog_date', '<=', $zeitpunkt)
@@ -62,7 +70,7 @@ class HomeController extends Controller
             $blog->title = html_entity_decode($blog->title);
             return $blog;
         });
-        $blogs->aiOverlayImage = "ai-".$_SESSION['dm'].".png";
+        $blogs->aiOverlayImage = "ai-".@$_SESSION['dm'].".png";
         return Inertia::render('Homepage/BlogList', [
             'filters' => Request::all('search'),
             'blogs' => $blogs,
@@ -88,6 +96,7 @@ class HomeController extends Controller
             // $blogarticle = Str::markdown(file_get_contents($blogarticleFile));
         }
         //
+        // \Log::info("bl: ".json_encode($blog));
         return Inertia::render('Homepage/BlogShow', [
             'blog' => $blog,
             'blogarticle' => $blogarticle

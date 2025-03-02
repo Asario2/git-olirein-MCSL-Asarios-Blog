@@ -1,6 +1,7 @@
 <template>
-    <div class="absolute bottom-4 right-4 z-10">
-        <img :src="aiButtonImage" alt="AI Button" class="object-contain ai-button x64" />
+    <div class="absolute bottom-4 right-4 z-10" @click.stop>
+
+        <a href="/home/ai"><img src="images/icons/ai-dark.png" alt="Made with AI" title="Made with AI" class="object-contain ai-button x64" /></a>
     </div>
 </template>
 

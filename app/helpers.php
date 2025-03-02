@@ -33,16 +33,23 @@ use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
         return shorter($text,$count);
     }
 }
+if(!function_exists("RUMLAUT"))
+{
+    function RUMLAUT($string)
+    {
+        return str_replace(array("---",'Ãœ',"Ã","Ã¶",'Ã"Y','Ã¼','Ã¤','ÃŸ',"âEUR¦"),array("<hr>","&Uuml;","&szlig;","&ouml;","&szlig;","&uuml;","&auml;","&szlig;",''),$string);
+    }
+}
 if(!function_exists("shorter"))
 {
     function shorter($str,$count)
     {
         $string = iconv('UTF-8', 'ISO-8859-1//TRANSLIT', $str);
         $string = iconv('ISO-8859-1','UTF-8', $string);
-        $string = str_replace(array("---","Ã","Ã¶",'Ã"Y','Ã¼','Ã¤',"âEUR¦"),array("<hr>","&szlig;","&ouml;","&szlig;","&uuml;","&auml;",''),$string);
+        $string = RUMLAUT($string);
         $str2 = wordwrap($string,$count,"<br />");
         $str3 = explode("<br />",$str2);
-        if(@$str3[5 ])
+        if(@$str3[5])
         {
             $hl = "&hellip;";
         }
@@ -73,6 +80,7 @@ if (!Builder::hasMacro('filterdefault')) {
             if(in_array("created_at",$columns))
             $this->orWhere("created_at", 'like', '%'.$filters['search']. '%');
         }
+        $this->orWhere("id","like",'%'.$filters['search'].'%');
 
         return $this;
     });
@@ -122,7 +130,7 @@ if(!function_exists("smi"))
         $string = str_replace("<br />#","<br />\n#",$string);
         $string = str_replace("<p></p>","\n",$string);
         $string = renderMarkdown($string);
-        $string = str_replace(array("---","Ã","Ã¶",'Ã"Y','Ã¼','Ã¤',"âEUR¦"),array("<hr>","&szlig;","&ouml;","&szlig;","&uuml;","&auml;",''),$string);
+        $string = RUMLAUT($string);
         return $string;
     }
 }

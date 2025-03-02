@@ -102,7 +102,7 @@
                             name="markdown_on"
                             v-model="form.markdown_on"
                         >
-                            Liegt der Artikel im Markdown-Format
+                            {{label}}
                             vor?</input-checkbox
                         >
                     </input-container>

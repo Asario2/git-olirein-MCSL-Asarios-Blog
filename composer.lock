@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "74cf6f963750704a849dcabb0adc1cca",
+    "content-hash": "d9bc41d222fcc05eb8c07812477f581d",
     "packages": [
         {
             "name": "arcanedev/log-viewer",
@@ -5731,21 +5731,21 @@
         },
         {
             "name": "spatie/laravel-sitemap",
-            "version": "7.3.4",
+            "version": "7.3.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/laravel-sitemap.git",
-                "reference": "5606b9e7b1cb2785218999a6f2ee11e0dbdcfb56"
+                "reference": "329b23c8bc6396de2d47d0633ce2cd3f04921399"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/laravel-sitemap/zipball/5606b9e7b1cb2785218999a6f2ee11e0dbdcfb56",
-                "reference": "5606b9e7b1cb2785218999a6f2ee11e0dbdcfb56",
+                "url": "https://api.github.com/repos/spatie/laravel-sitemap/zipball/329b23c8bc6396de2d47d0633ce2cd3f04921399",
+                "reference": "329b23c8bc6396de2d47d0633ce2cd3f04921399",
                 "shasum": ""
             },
             "require": {
                 "guzzlehttp/guzzle": "^7.8",
-                "illuminate/support": "^10.0|^11.0",
+                "illuminate/support": "^11.0|^12.0",
                 "nesbot/carbon": "^2.71|^3.0",
                 "php": "^8.2||^8.3||^8.4",
                 "spatie/crawler": "^8.0.1",
@@ -5754,8 +5754,8 @@
             },
             "require-dev": {
                 "mockery/mockery": "^1.6.6",
-                "orchestra/testbench": "^8.14|^9.0",
-                "pestphp/pest": "^2.24",
+                "orchestra/testbench": "^9.0|^10.0",
+                "pestphp/pest": "^3.7.4",
                 "spatie/pest-plugin-snapshots": "^2.1",
                 "spatie/phpunit-snapshot-assertions": "^5.1.2",
                 "spatie/temporary-directory": "^2.2"
@@ -5792,7 +5792,7 @@
                 "spatie"
             ],
             "support": {
-                "source": "https://github.com/spatie/laravel-sitemap/tree/7.3.4"
+                "source": "https://github.com/spatie/laravel-sitemap/tree/7.3.5"
             },
             "funding": [
                 {
@@ -5800,7 +5800,7 @@
                     "type": "custom"
                 }
             ],
-            "time": "2025-01-31T08:53:45+00:00"
+            "time": "2025-02-21T09:20:51+00:00"
         },
         {
             "name": "spatie/robots-txt",
@@ -8636,26 +8636,26 @@
         },
         {
             "name": "whitecube/laravel-cookie-consent",
-            "version": "v1.2.6",
+            "version": "v1.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/whitecube/laravel-cookie-consent.git",
-                "reference": "7f2df9798bf6b33a3c35fafdfe6c40f9e3df9fdd"
+                "reference": "a94f920af53f3b0c4e084f4689ae3866428216cd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/whitecube/laravel-cookie-consent/zipball/7f2df9798bf6b33a3c35fafdfe6c40f9e3df9fdd",
-                "reference": "7f2df9798bf6b33a3c35fafdfe6c40f9e3df9fdd",
+                "url": "https://api.github.com/repos/whitecube/laravel-cookie-consent/zipball/a94f920af53f3b0c4e084f4689ae3866428216cd",
+                "reference": "a94f920af53f3b0c4e084f4689ae3866428216cd",
                 "shasum": ""
             },
             "require": {
-                "laravel/framework": "^9|^10|^11",
+                "laravel/framework": "^9|^10|^11|^12",
                 "php": ">=8.1"
             },
             "require-dev": {
                 "mockery/mockery": "^1.5",
-                "orchestra/testbench": "^8.5|^9.0",
-                "pestphp/pest": "^2.6"
+                "orchestra/testbench": "^8.5|^9.0|^10.0",
+                "pestphp/pest": "^2.0|^3.7"
             },
             "type": "library",
             "extra": {
@@ -8699,7 +8699,7 @@
             ],
             "support": {
                 "issues": "https://github.com/whitecube/laravel-cookie-consent/issues",
-                "source": "https://github.com/whitecube/laravel-cookie-consent/tree/v1.2.6"
+                "source": "https://github.com/whitecube/laravel-cookie-consent/tree/v1.3.0"
             },
             "funding": [
                 {
@@ -8707,7 +8707,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-02-12T09:19:56+00:00"
+            "time": "2025-02-24T20:30:28+00:00"
         },
         {
             "name": "ziggeo/ziggeophpsdk",

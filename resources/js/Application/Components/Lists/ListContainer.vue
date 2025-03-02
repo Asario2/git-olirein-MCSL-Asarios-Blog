@@ -209,9 +209,9 @@ export default {
             type: Boolean,
             default: false,
         },
-        showDescription: {
+        deleteDescription: {
             type: String,
-            default: "Daten anzeigen",
+            default: "Datendatz löschen",
         },
         editDescription: {
             type: String,

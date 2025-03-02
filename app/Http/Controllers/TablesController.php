@@ -1466,24 +1466,42 @@ class TablesController extends Controller
             //     \Log::info('Kein Update durchgeführt.');
             // }
             // DB::enableQueryLog();  // Aktiviert das Query Log
-
+            DB::enableQueryLog();
             $updated = DB::table($table)->where('id', $id)->update($formData);
             // $queries = DB::getQueryLog();
             // \Log::info('ID:', $id);
             // \Log::info('FormData:', $formData);
             // \Log::info($updated);
+            $queries = DB::getQueryLog();
+            \Log::info($queries);
             if ($updated) {
                 return response()->json(['message' => 'Daten erfolgreich aktualisiert!']);
             } else {
-                \Log::info("fd: ".json_encode($formData));
+
                 return response()->json(['error' => implode("|",$formData)], 507);
             }
     }
 
 
-    function update_entry(Request $request)
+    function GetImageUrl($table,$id)
     {
+        $res = DB::table($table)->where("id", $id)->value("url");
 
+        //\Log::info("res: ".json_encode($res));
+        return response()->json($res);
+    }
+    function GetImageId($table,$id)
+    {
+        // DB::enableQueryLog();
+        $res = DB::table('blogs')
+            ->leftJoin('blog_images', 'blogs.blog_images_iid', '=', 'blog_images.id') // LEFT JOIN
+            ->where('blogs.id', $id)  // Füge die Bedingung hinzu, um nach der ID zu filtern
+            ->select('blogs.blog_images_iid as iid', 'blog_images.url as url') // Wähle die benötigten Spalten aus
+            ->first();
+        // $res2 = DB::getQueryLog();
+
+        // \Log::info("res: ".json_encode([$table,$id,$res2]));
+        return response()->json($res);
     }
     public function DeleteTables(Request $request,$table,$id)
     {

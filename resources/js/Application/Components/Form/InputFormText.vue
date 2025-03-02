@@ -6,14 +6,15 @@
       >
         <slot name="label">Label</slot>
       </label>
-      <input
-        type="text"
-        :id="id"
-        :name="name"
-        max-length="95"
-        :placeholder="placeholder"
-        :required="required"
-        class="txt
+        <input
+            type="text"
+            :id="id"
+            :name="name"
+            max-length="95"
+            :placeholder="placeholder"
+            :required="required"
+            :disabled="disabled"
+            class="txt
         w-full
         p-2.5
         text-sm
@@ -56,6 +57,7 @@
     modelValue: { type: String, default: '' },  // Use modelValue instead of value
     placeholder: { type: String, default: '' },
     required: {type:[String,Boolean ], default:''},
+    disabled: Boolean,
 
     }
   };

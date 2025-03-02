@@ -44,7 +44,7 @@ class BlogController extends Controller
         $blog->id = 0;
         $blog->blog_authors_id = 1;
         $blog->blog_categories_id = 1;
-        $blog->blog_images_xid = 1;
+        $blog->blog_images_iid = 1;
         $blog->blog_date = Carbon::now();
         $blog->reading_time = 5;
         //
@@ -67,7 +67,7 @@ class BlogController extends Controller
         $blog = Blog::Create([
             'blog_authors_id' => $request->blog_authors_id,
             'blog_categories_id' => $request->blog_categories_id,
-            'blog_images_xid' => $request->blog_images_xid,
+            'blog_images_iid' => $request->blog_images_iid,
             'blog_date' => $request->blog_date,
             'title' => $request->title,
             'summary' => $request->summary,
@@ -103,7 +103,7 @@ class BlogController extends Controller
     {
         $blog->blog_authors_id = $request->blog_authors_id;
         $blog->blog_categories_id = $request->blog_categories_id;
-        $blog->blog_images_xid = $request->blog_images_xid;
+        $blog->blog_images_iid = $request->blog_images_iid;
         $blog->blog_date = $request->blog_date;
         $blog->title = $request->title;
         $blog->summary = $request->summary;

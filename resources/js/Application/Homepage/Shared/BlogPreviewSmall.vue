@@ -12,7 +12,9 @@
             width="480"
             height="360"
         />
-        <AiButton class="ai-button-image" :overlayImage="images/icons/blog.aiOverlayImage || 'images/icons/ai-dark.png'"></AiButton>
+        <div v-if="blog.madewithai">
+            <AiButton class="ai-button-image" :overlayImage="images/icons/blog.aiOverlayImage || 'images/icons/ai-dark.png'"></AiButton>
+        </div>
     </div>
         <div class="p-6 space-y-2">
             <div class="flex justify-end items-start">

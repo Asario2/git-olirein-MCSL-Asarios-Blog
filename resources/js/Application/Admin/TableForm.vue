@@ -19,7 +19,6 @@
                 ></input-loading>
                 <!-- ENDS Loading -->
             </template>
-
             <template #form>
                 <!-- Liste der Fehler -->
                 <error-list :errors="errors" />
@@ -31,66 +30,104 @@
                         <!-- <pre>{{ quotebrace(this.sortedOptions) }}</pre> -->
 
                         <input-group>
-                            <form @submit.prevent="submitForm">
-                                <div class="maxx grid grid-cols-1 lg:grid-cols-2 mb-2 gap-2 lg:gap-x-6 mt-2">
-                                <template v-for="(field, key) in ffo" :key="key">
-                                    <input-container v-if="field.type === 'text'">
-                                        <InputFormText
-                                            :id="field.name + '_' + field.id"
-                                            :name="field.name"
-                                            v-model="field.value"
-                                            :placeholder="field.placeholder || ''"
-                                            :required="isRequired(field.required)"
-                                            >
-                                            <template #label>{{ field.label }}</template>
-                                        </InputFormText>
-                                    </input-container>
+    <form @submit.prevent="submitForm" enctype="multipart/form-data">
+        <div class="maxx grid grid-cols-1 lg:grid-cols-2 mb-2 gap-2 lg:gap-x-6 mt-2">
+            <template v-for="(field, key) in ffo" :key="key">
 
-                                    <input-container v-else-if="field.type === 'datetime'">
-                                        <InputFormDateTime
-                                            :id="field.name + '_' + field.id"
-                                            :name="field.name"
-                                            :ref="field.name"
-                                            v-model="field.value"
-                                            :placeholder="field.placeholder || ''"
-                                            :class="field.class"
-                                            :required="isRequired(field.required)"
-                                            >
-                                            <template #label>{{ field.label }}</template>
-                                        </InputFormDateTime>
-                                    </input-container>
 
-                                    <input-container
-                                        v-else-if="['textarea_short', 'textarea'].includes(field.type)"
-                                        :full-width="true"
+                <input-container v-if="field.name === 'reading_time'">
+                    <InputFormText
+                        :id="field.name + '_' + field.id"
+                        :name="field.name"
+                        v-model="readingTime"
+                        :placeholder="field.placeholder || ''"
+                        readonly
+                        :disabled="true"
+                        :required="isRequired(field.required)"
 
-                                    >
-                                        <InputFormTextArea
-                                            :id="field.name + '_' + field.id"
-                                            :name="field.name"
-                                            v-model="field.value"
-                                            :rows="field.rows"
-                                            :ref="field.name"
-                                            cols="25"
-                                            :placeholder="field.placeholder || ''"
-                                            :class="field.class"
-                                            :required="isRequired(field.required)"
-                                        >
-                                            <template #label>{{ field.label }}</template>
-                                        </InputFormTextArea>
-                                    </input-container>
-                                    <input-container
-                                    v-else-if="field.type === 'checkbox'" :full-width="true"
-                                    >
-                                        <input-checkbox
-                                            name="markdown_on"
-                                            v-model="field.value"
-                                            :required="isRequired(field.required)"
-                                        >
-                                            Liegt der Artikel im Markdown-Format
-                                            vor?</input-checkbox
-                                        >
-                                    </input-container>
+                        @input="handleInput"
+                        >
+                        <template #label>{{ field.label }}</template>
+
+                    </InputFormText>
+                </input-container>
+
+                <!-- Textarea für den Inhalt -->
+                <input-container v-else-if="['textarea_short', 'textarea'].includes(field.type)" :full-width="true">
+                    <InputFormTextArea
+                        :id="field.name + '_' + field.id"
+                        :name="field.name"
+                        v-model="field.value"
+                        :rows="field.rows"
+                        :ref="field.name"
+                        cols="25"
+                        :placeholder="field.placeholder || ''"
+                        :class="field.class"
+                        :required="isRequired(field.required)"
+                    >
+                        <template #label>{{ field.label }}</template>
+                    </InputFormTextArea>
+                </input-container>
+
+                <input-container v-else-if="field.type === 'text'">
+                    <InputFormText
+                        :id="field.name + '_' + field.id"
+                        :name="field.name"
+                        v-model="field.value"
+                        :placeholder="field.placeholder || ''"
+                        :required="isRequired(field.required)"
+                        >
+                        <template #label>{{ field.label }}</template>
+                    </InputFormText>
+                </input-container>
+                <input-container v-else-if="field.type ==='IID'">
+                <ImageUploadModal
+                    :isOpen="isModalOpen"
+                    :tablex="this.table_x"
+                    :column="field.name"
+                    :path="tablex"
+                    :ref="field.name"
+                    :value="imageId"
+                    :image="field.value"
+                    :namee="field.value"
+                    @close="closeModal"
+                    @imageUploaded="handleImageUpload"
+                />
+                <button type="button" @click="openModal">
+
+                    <p v-if="this.uploadedImageUrl">Hochgeladenes Bild: <img :src="'/images/blogs/thumbs/' + this.uploadedImageUrl" width="100" alt="Vorschau" title="Vorschau"/></p>
+                    <img v-else-if="this.imageUrle" :src="this.imageUrle" alt="Bild" width="100">
+                    <span v-else><img src="/images/blogs/thumbs/009.jpg" alt="Jetzt Bild Hochladen" width="100"  title="Jetzt Bild Hochladen" ></span>
+                    <input type="hidden" :name="field.name" :id="field.name" :ref="field.name" :value="this.imageId">
+                </button>
+                </input-container>
+                <input-container v-else-if="field.type === 'datetime'">
+                    <InputFormDateTime
+                        :id="field.name + '_' + field.id"
+                        :name="field.name"
+                        :ref="field.name"
+                        v-model="field.value"
+                        :placeholder="field.placeholder || ''"
+                        :class="field.class"
+                        :required="isRequired(field.required)"
+                        >
+                        <template #label>{{ field.label }}</template>
+                    </InputFormDateTime>
+                </input-container>
+                <input-container
+                v-else-if="field.type === 'checkbox'" :full-width="true"
+                >
+                    <input-checkbox
+                        :name="field.name"
+                        v-model="field.value"
+                        :value='field.value'
+                        :checked="field.value"
+                        :id="field.name + '_' +  field.id"
+                        :required="isRequired(field.required)"
+                    >
+                        {{field.label}}</input-checkbox
+                    >
+                </input-container>
 
 
                                     <input-container
@@ -109,7 +146,8 @@
                                     @input-change="updateFormData"
 
                                         :id="field.name + '_' + field.id"
-                                        v-model="this.xval"
+                                        :model-value="field.value"
+
                                         :options="'options:' + (this.sortedOptions.length > 0)
                                             ? this.sortedOptions.find(obj => obj[field.name])?.[field.name] || []
                                             : []"
@@ -138,7 +176,11 @@
                     </div>
                 </template>
             </template>
-            <pre>{{ tables }}</pre>
+            <template>
+
+</template>
+
+
 
             <template #actions style="display:inline-block;">
                 <!-- Befehle -->
@@ -221,10 +263,11 @@ import { defineComponent } from "vue";
 import axios from "axios";
 import $ from "jquery";
 import pickBy from "lodash/pickBy";
+import { computed } from "vue";
 // import { usePage } from '@inertiajs/vue3';
 import { ref, watch } from "vue";
 // const page2 = usePage();
-
+import ImageUploadModal from '@/Application/Components/ImageUploadModal.vue';
 // import { Ziggy } from 'ziggy-js';
 // import route from 'ziggy';
 
@@ -264,9 +307,11 @@ import { throttle } from "lodash";
 import DialogModal from "@/Application/Components/DialogModal.vue";
 import { reactive } from "vue";
 import Alert from "@/Application/Components/Content/Alert.vue";
+// import { console } from "inspector/promises";
 onMounted(() => {
   this.fetchFormData();
 });
+
 export default defineComponent({
     name: "Admin_TableForm",
 
@@ -297,9 +342,17 @@ export default defineComponent({
         InputError,
         DialogModal,
          Alert,
+         ImageUploadModal,
     },
 
     props: {
+        modelValue: {
+        type: [String, Number],
+    },
+    xval: {
+        type: [String, Number],
+        default: 1,
+    },
         // table: {
         //     type: Object,
         //     default: () => ({}),
@@ -349,24 +402,33 @@ export default defineComponent({
             type: [String,Number],
             default: '1',
         },
+        field: Object,
+
     },
 
     data() {
         return {
             table: reactive({ id: "1" }),// Standardwert setzen, falls leer
-            formDatas: {},
-        ItemName: "Beitrag",  // Falls nicht definiert
-            //     formFields: [{
-
+        formDatas: {},
+        uploadedIid: null,
+        ItemName: "Beitrag",
+        isModalOpen: false,
+        uploadedImageUrl: null,
+        csrfToken: document.getElementById('token').value,
+        preview_image: {},
+            ffo: [],
+            ulimage: null,
+            readingTime: 0,
+            readingTime: this.reading_time || 1,
             //         name: "testname",
             //         type: "text",
             //         value: "valuei"
             // }],
             // formFields:  {},
             ///formFields:[],
-            options: this.options ?? {},
+            options: {},
             //   formData: {},
-            field: [{ name: '', label: '', type:'' } ],
+            // field: [{ name: '', label: '', type:'' } ],
 
             // formData: {},
            // formFields: {}, // FormField-Daten
@@ -397,21 +459,36 @@ export default defineComponent({
         };
     },
     computed: {
-        sortedOptions() {
-            // this.sortedOptions = this.sortedOptions ?? {};
-            this.options = this.options ?? this.sortedOptions;
+    //     sortedOptions() {
+    //         // this.sortedOptions = this.sortedOptions ?? {};
+    //         this.options = this.options ?? this.sortedOptions;
 
-            if(Array.isArray(this.options)) {
-            // Falls `this.options` bereits ein korrektes Array ist, direkt zurückgeben
-            return this.options;
+    //         if(Array.isArray(this.options)) {
+    //         // Falls `this.options` bereits ein korrektes Array ist, direkt zurückgeben
+    //         return this.options;
+    //     }
+    //     else if (typeof this.options === "object" && this.options !== null) {
+    //         // Falls `this.options` ein Objekt ist, in ein Array von Arrays umwandeln
+    //         return Object.entries(this.options);
+    //     }
+    //     // Falls `this.options` nicht gültig ist, ein leeres Array zurückgeben
+    //     // console.log("options:" + this.options);
+    //     return [];
+    // },
+    sortedOptions() {
+        let options;
+        if (Array.isArray(this.options)) {
+            options = [...this.options];  // Kopiere das Array
+        } else if (typeof this.options === 'object') {
+            options = Object.entries(this.options).map(([key, value]) => [key, value]);
+        } else {
+            options = [];
         }
-        else if (typeof this.options === "object" && this.options !== null) {
-            // Falls `this.options` ein Objekt ist, in ein Array von Arrays umwandeln
-            return Object.entries(this.options);
-        }
-        // Falls `this.options` nicht gültig ist, ein leeres Array zurückgeben
-        console.log("options:" + this.options);
-        return [];
+        console.log('sortedOptions:', options); // Überprüfe den Inhalt von sortedOptions
+        return options;
+    },
+    fieldValue() {
+        return this.field?.value || "";
     },
         filters() {
             return this.$page.props.filters;
@@ -436,7 +513,7 @@ export default defineComponent({
         // },
         dynamicFormData() {
             return this.formFields.reduce((acc, field) => {
-                if (!field.name.includes("_id"))
+                if (!field.name.includes("_id") && !field.name.includes("_iid"))
                 {
                     acc[field.name] = this.formData[field.name] || field.value;
                 }
@@ -444,8 +521,63 @@ export default defineComponent({
                 return acc;
             }, {});
         },
+        readingTime() {
+            return this.field.value || 1; // Falls field.value leer ist, dann 0 setzen
+        },
     },
-    watch: {
+    watch:{
+        ffo: {
+            deep: true,
+            handler(newFields) {
+                const textareaField = Object.values(newFields).find(field =>
+                    ["textarea"].includes(field.type)
+                );
+                if (textareaField) {
+
+                    this.readingTime = this.calculateReadingTime(textareaField.value);
+                    this.readingTime = this.readingTime  < 1 ? "1" : this.readingTime;
+                    console.log("RT:"+this.readingTime);
+                }
+                let fod = {};
+
+            }
+
+        },
+        'field.value': {
+      immediate: true, // Direkt beim Laden ausführen
+      handler(newId) {
+        if (newId) {
+          this.fetchImage(newId,this.tablex);
+        }
+      }
+    },
+    field: {
+        handler(newField) {
+      this.readingTime = newField?.value || 1;
+    },
+    deep: true, // Falls field ein Objekt ist
+    immediate: true // Setzt den Wert direkt nach dem Mounten
+
+        // handler(newField) {
+        //     if (Array.isArray(newField) && newField.length > 0) {
+        //         this.fieldValue = newField[0]?.value || "";
+        //     }
+        // },
+        // immediate: true, // Führt den Watcher direkt beim Mounten aus
+
+    },
+
+
+
+        fieldValue(newValue) {
+      this.readingTime = Math.ceil(newValue.trim().split(/\s+/).length / 200);
+
+      if(this.readingTime == "0")
+      {
+        // this.readingTime = 1;
+      }
+      console.log("Berechnete Lesezeit:", this.readingTime);
+    },
         updateData() {
             if (this.formData.length < 1) {
                 this.formData = {};
@@ -463,7 +595,7 @@ export default defineComponent({
             }
         },
         formFields(newVal) {
-            console.log("formFields geändert:", newVal);
+            // console.log("formFields geändert:", newVal);
         },
         form: {
             handler: throttle(function () {
@@ -523,6 +655,10 @@ export default defineComponent({
             }, 150),
             deep: true,
         },
+        modelValue(newValue) {
+        this.selectedValue = newValue;
+        this.xval = newValue;
+    }
     },
     defineProps() {
         // ffo: [String, Array, Object, Number];
@@ -585,7 +721,7 @@ if(document.location.toString().indexOf('?') !== -1) {
     //     }
     if(!$_GET['rl'])
     {
-       //location.href = location.href + "?rl=2";
+       location.href = location.href + "?rl=2";
     }
     if($_GET['rl']  == "2")
     {
@@ -674,7 +810,63 @@ return { ffo };
         };
     },
     methods: {
-   removeNumericKeys(obj) {
+        async fetchImage(id,table) {
+      try {
+        if(!id){
+            id = this.imageId;
+        }
+        const response = await axios.get(`/api/images/${table}/${id}`); // Laravel API-Route
+        console.log(response);
+        if (response.data.url) {
+
+          this.ulimage = response.data.url;
+        } else {
+          console.warn("Keine URL gefunden für ID:", id);
+        }
+      } catch (error) {
+        console.error("Fehler beim Laden des Bildes:", error);
+      }
+
+  },
+        openModal() {
+      this.isModalOpen = true;  // Öffne das Modal
+    },
+    getValue() {
+      console.log("Input Value:", this.$refs.blog_images_iid?.value || "Ref nicht gefunden");
+    },
+    closeModal() {
+      this.isModalOpen = false;  // Schließe das Modal
+    },
+    handleInput(event) {
+    this.readingTime = event.target.value;
+    this.updateFormData();
+  },
+    handleImageUpload([iid, imageUrl]) {
+      console.log("Bild-URL:", imageUrl, "Bild-ID:", iid);
+      this.uploadedImageUrl = imageUrl;
+       this.imageId = iid;
+    },
+
+        updateReadingTime() {
+            if (!Array.isArray(this.ffo) || this.ffo.length === 0) {
+                console.warn("FFO ist leer oder kein Array:", this.ffo);
+                return;
+            }
+            if (!this.ffo || this.ffo.length === 0) return;
+            // console.log("ft:" + field.type);
+            const textareaField = this.ffo.find(field => ['textarea'].includes(field.type));
+            if (textareaField) {
+
+                this.readingTime = this.calculateReadingTime(textareaField.value);
+            }
+        },
+        calculateReadingTime(text) {
+            if (!text) return 0;
+            const wordsPerMinute = 190;
+            const words = text.trim().split(/\s+/).length;
+            return Math.round(words / wordsPerMinute,1);
+        },
+        removeNumericKeys(obj) {
         let newObj = {};
 
         Object.values(obj).forEach(value => {
@@ -691,15 +883,30 @@ return { ffo };
             if (fieldName.includes("_id")){
             this.formDatas[fieldName] = value;
             }
-            console.log("aaaaaaaa" + JSON.stringify(this.formDatas,null,2));
+            if(field.name.includes("_iid"))
+            {
+                this.formData[fieldName] = value;
+            }
+            // console.log("aaaaaaaa" + JSON.stringify(this.formDatas,null,2));
         },
         setFormField(field,name) {
 
             // Directly setting the value in formData
-            console.log(field);
-            console.log(field.name);
-            console.log(field.type);
-            if(field.type == "select_id")
+            // console.log(field);
+            // console.log(field.name);
+            // console.log(field.type);
+            if(field.name == "rading_time")
+            {
+                // this.formData['reading_time'] = this.readingTime;
+            }
+            if(field.type == "IID")
+            {
+                this.formData[field.name] = this.ref2;
+            }
+
+
+            console.log("iid"+this.iid);
+            if(field.type === "select_id")
             {
 
                 this.getsel(field.name);
@@ -708,12 +915,17 @@ return { ffo };
             if (field.name.includes("_id")) {
                 this.formData[field.name] = this.formDatas[field.name];
             }
+            else if(field.type === "IID")
+            {
+                this.formData[field.name] = this.formDatas[field.name];
+            }
             else{
                 this.formData[field.name] = field.value || "";
             }
+
         },
         debugUpdateTableData() {
-            console.log("updateTableData wird aufgerufen!");
+            // console.log("updateTableData wird aufgerufen!");
             this.updateTableData();
         },
         confirmTableDeletion() {
@@ -821,14 +1033,14 @@ return { ffo };
                 .replace(/},\s*{/g, '},');
 
             obj = JSON.parse(obj);
-
-            console.log(obj);
+            this.obj2 = obj;
+            // console.log(obj);
             this.ffo = obj
             const ffo = this.ffo;
             // 💡 Konvertiere das Objekt in ein Array
             const formFieldsArray = Object.values(formFields_old);
 
-            console.log("FormFields als Array:", formFieldsArray);
+            // console.log("FormFields als Array:", formFieldsArray);
 
             formFieldsArray.forEach((field) => {
                 if (typeof field === "object" && field !== null) {
@@ -870,8 +1082,8 @@ str.forEach(([key, value]) => {
 
     if (!key.includes("_id")){
     this.formData[value['name']] = value['value'];
-    console.log("NO ID@" + key);
-    console.log(`${key}: ${value['value']}`);
+    // console.log("NO ID@" + key);
+    // console.log(`${key}: ${value['value']}`);
 
     }
     else{
@@ -907,22 +1119,46 @@ objectToCSVArray(obj) {
 async submitForm() {
 
         try {
-            this.formData2 = JSON.stringify(this.remom(this.ffo));
+
+            var inputRef = this.$refs.blog_images_iid;
+            if (Array.isArray(inputRef) && inputRef.length > 0) {
+                this.ref2 = inputRef[1]._value;
+
+                this.formData['blog_images_iid']  = this.ref2;
+
+            }
+
+
+
+
+            // console.log("ref: " + this.$refs.blog_images_iid.value);
+                       this.formData2 = JSON.stringify(this.remom(this.ffo));
             console.log("Daten, die gesendet werden:",this.formData);
             const path = window.location.pathname; // Gibt "/admin/tables/show/Example" zurück
             const segments = path.split("/"); // Teilt den Pfad in Segmente auf
             this.xid = segments[segments.length - 2];
             tablex = segments[segments.length - 1];
             let response;
+            if(typeof this.ref2 !== "undefined")
+            {
+                this.formData['blog_images_iid'] = this.ref2;
+
+            }
+            if(this.textareaField)
+            {
+                this.formData['reading_time'] = this.readingTime;
+            }
             if(segments[segments.length - 2] == "create")
             {
                 response = await axios.post(`/admin/tables/store/${this.tablex}`, {
                 formData: this.formData
             });
             }
+
             else{
-                response = await axios.put(`/admin/tables/update/${this.tablex}/${this.xid}`, {
-                formData: this.formData
+                // const formData = {...this.formData };
+                response = await axios.patch(`/admin/tables/update/${this.tablex}/${this.xid}`, {
+                formData : this.formData,
             });
             }
 
@@ -933,8 +1169,8 @@ async submitForm() {
         //     ...this.formData     // Formulardaten direkt mit spread-Operator einfügen
         // });
 
-            console.log("tf:"+this.formData);
-            console.log("Formular erfolgreich gesendet:", response.data);
+            // console.log("tf:"+this.formData);
+            // console.log("Formular erfolgreich gesendet:", response.data);
 
         } catch (error) {
             console.error("Fehler beim Absenden:", error);
@@ -1009,7 +1245,7 @@ async submitForm() {
 
         if (response.data) {
             this.loading = false;
-            console.log("Daten erfolgreich gespeichert!", response.data);
+            // console.log("Daten erfolgreich gespeichert!", response.data);
         }
     } catch (error) {
         this.loading = false;
@@ -1034,7 +1270,7 @@ async submitForm() {
             }
         },
         selectTableImage(id) {
-            console.log("selectTableImage id:", id);
+            // console.log("selectTableImage id:", id);
             this.form.table_image_id = id;
         },
         emptyChecker(){
@@ -1042,20 +1278,57 @@ async submitForm() {
             {
                 alert("empty");
             }
-        }
+        },
+        getImageUrl()
+        {
+            const path = window.location.pathname; // Gibt "/admin/tables/show/Example" zurück
+            const segments = path.split("/"); // Teilt den Pfad in Segmente auf
+            const id = segments[segments.length - 2];
+            let table = segments[segments.length - 1]
+console.log(`/api/get-image-id/${table}/${id}`);
+        // Axios Anfrage
+        axios.get(`/api/get-image-id/${table}/${id}`)
+             .then(response => {
+                // Die Antwort enthält die URL des Bildes
+                const imageId = response.data.iid;
+                this.imageId = imageId;
+                const imageUrle = response.data.url;
+                this.imageUrle = imageUrle;
+                console.log(this.imageUrle);
+                return imageUrle;
+            })
+            .catch(error => {
+                console.error("Fehler beim Abrufen der URL:", error);
+            });
+
+    },
+
     },
     mounted() {
          //this.fetchDataX();
+         this.getImageUrl();
         this.fetchFormData();
         this.updateData();
         this.emptyChecker();
+        this.updateReadingTime();
+        this.table_image = "blog_images";
+        // const inputRef = this.$refs.blog_images_iid?.value;
+        // console.log("iR:" + inputRef);
+        //     if (Array.isArray(inputRef) && inputRef.length > 0) {
+        //         this.ref2 = inputRef[1]._value;
+        //     }
+
+        this.fetchImage(this.ref3,this.table_image);
+        // alert("yes");
     //     console.log("sortedOptions:", this.sortedOptions);
     // console.log("field.name:", this.field?.name);
     // console.log("sortedOptions[field.name]:", this.sortedOptions[this.field.name]);
     // console.log("field.name:", this.field?.name);
     },
     created() {
+        this.updateReadingTime();
         // this.fetchFormData();
+        // console.log("FIELD:", this.field); // 👀 Prüfen, ob es existiert
     },
 });
 </script>

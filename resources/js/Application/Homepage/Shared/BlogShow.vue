@@ -4,8 +4,8 @@
     >
         <div class="flex flex-col max-w-6xl mx-auto overflow-hidden rounded">
             <img
-                :src="blog.blog_images.url"
-                :alt="blog.blog_images.name"
+                :src="blog?.blog_images?.url || '/images/blogs/big/008.jpg'"
+                :alt="blog.title"
                 loading="lazy"
                 width="480"
                 height="360"
@@ -115,10 +115,10 @@
                 </div>
                 <div class="text-layout-sun-800 dark:text-layout-night-800">
                     <div v-if="blog.markdown_on">
-                        <markdown :markdown="blogarticle"></markdown>
+                        <markdown :markdown="blog.content"></markdown>
                     </div>
 
-                    <div v-else v-html="blog.content"></div>
+                    <div v-else v-html="blog.content    "></div>
 
                     <h2 id="author_info">
                         Informationen zu {{ blog.blog_author.name }}

@@ -54,7 +54,7 @@ class Blog extends Model
     // Ein Blog (blogs) gehört zu genau einem Blogbild (blog_images)
     public function blog_images()
     {
-        return $this->belongsTo('App\Models\BlogImage', 'blog_images_xid', 'id');
+        return $this->belongsTo('App\Models\BlogImage', 'blog_images_iid', 'id');
     }
 
     // Ein Blog (blogs) gehört zu genau einer Blogkategorie (blog_categories)
@@ -72,7 +72,8 @@ class Blog extends Model
                 ->orWhere('blogs.summary', 'like', '%' . $search . '%')
                 ->orWhere('blogs.content', 'like', '%' . $search . '%')
                 ->orWhere('blog_authors.name', 'like', '%' . $search . '%')
-                ->orWhere('blog_categories.name', 'like', '%' . $search . '%');
+                ->orWhere('blog_categories.name', 'like', '%' . $search . '%')
+                ->orWhere('blogs.id', 'like', '%' . $search . '%');
         }
         //
         return $query;

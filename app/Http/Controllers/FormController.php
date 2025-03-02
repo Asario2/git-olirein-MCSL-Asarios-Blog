@@ -34,10 +34,18 @@ class FormController extends Controller
     {
         if(!in_array($name,Settings::excl_cols))
         {
-            if($create)
+            if($create && $name == "blog_images_iid"){
+                $value = "1";
+            }
+            elseif($create && !substr_count($name,"_at") && $name != "blog_date")
             {
                 $value = NULL;
             }
+            elseif(substr_count($name,"_at") || $name == "blog_date" && $create)
+            {
+                $value = date('Y-m-d H:i:s');
+            }
+
 
         $label = isset(Settings::exl[$name]) ? Settings::exl[$name] : $name;
         $class = FormController::getClass($name,1);
@@ -133,8 +141,14 @@ class FormController extends Controller
                 }
                 return "text";
             break;
+            case "reading_time":
+                return "reading_time";
+            break;
             case "name":
                 return "text";
+            break;
+            case "blog_date":
+                return "datetime";
             break;
             case "created_at":
                 return "datetime";
@@ -169,13 +183,23 @@ class FormController extends Controller
             case "pub":
                 return "pub";
             break;
+            case "xis_aiImage":
+                if($cl)
+                {
+                    return "xis";
+                }
+                return "checkbox";
+            break;
             case "markdown_on":
                 if($cl)
                 {
                     return "xis";
                 }
                 return "checkbox";
-
+            break;
+            case "blog_images_iid":
+                return "IID";
+            break;
             default:
                 return "text";
             break;

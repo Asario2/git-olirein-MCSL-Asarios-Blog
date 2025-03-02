@@ -34,6 +34,7 @@ class FormController extends Controller
     {
         if(!in_array($name,Settings::excl_cols))
         {
+
             if($create && $name == "blog_images_iid"){
                 $value = "1";
             }
@@ -41,7 +42,7 @@ class FormController extends Controller
             {
                 $value = NULL;
             }
-            elseif(substr_count($name,"_at") || $name == "blog_date" && $create)
+            elseif((substr_count($name,"_at") || $name == "blog_date") && !empty($create))
             {
                 $value = date('Y-m-d H:i:s');
             }

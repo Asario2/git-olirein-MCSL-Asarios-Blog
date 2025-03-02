@@ -31,7 +31,7 @@ export default {
             type: String,
             required: true,
         },
-        modelValue: { type: String, default: "" },
+        modelValue: { type: String, },
         placeholder: {
             type: String,
             default: "",

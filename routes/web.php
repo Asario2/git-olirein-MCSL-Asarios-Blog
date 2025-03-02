@@ -176,7 +176,10 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         // Blogartikel Delete
         Route::delete('/admin/blogs/{blog}', [BlogController::class, 'admin_blog_delete'])
             ->name('admin.blog.delete');
-
+        Route::get("api/images/{table}/{id}",[TablesController::class,"GetImageUrl"])
+            ->name("api-get-image-url");
+        Route::get("api/get-image-id/{table}/{id}",[TablesController::class,"GetImageId"])
+            ->name("api-get-image-id");
         // =======
         // Profile
         // =======
@@ -231,10 +234,7 @@ Route::get('/api/dark-mode', function () {
 // ==============
 // Fallback-Route
 // ==============
-Route::get("api/images/{table}/{id}",[TablesController::class,"GetImageUrl"])
-        ->name("api-get-image-url");
-        Route::get("api/get-image-id/{table}/{id}",[TablesController::class,"GetImageId"])
-        ->name("api-get-image-id");
+
 Route::fallback(function () {
     return Inertia::render('Homepage/NoPageFound');
 });

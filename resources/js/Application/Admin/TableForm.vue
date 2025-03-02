@@ -107,6 +107,7 @@
                         :name="field.name"
                         :ref="field.name"
                         v-model="field.value"
+                        :value="field.value"
                         :placeholder="field.placeholder || ''"
                         :class="field.class"
                         :required="isRequired(field.required)"

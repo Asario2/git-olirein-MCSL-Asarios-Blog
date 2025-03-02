@@ -45,6 +45,13 @@ class ImageUploadController extends Controller
         $imageName = md5($image->getClientOriginalName()."_".Auth::id()).".".$image->getClientOriginalExtension();
         //$imagePath = $image->storeAs($path, $imageName, 'public');
 
+        $filename = $imageName;
+        // Speicherpfad definieren
+        $IMOpath =  public_path("images/{$table}/orig/{$filename}");
+        $tmpname = $_FILES['image']['tmp_name'];
+        // \Log::info("ii: ".json_encode($tmpname));
+
+        copy($tmpname,$IMOpath);
         // Bildgrößen anpassen und speichern
         $sizes = [300, 600, 1400];  // Beispiel für 3 verschiedene Auflösungen
         $big = ["300"=>"/thumbs/","600"=>'/',"1400"=>"/big/"];

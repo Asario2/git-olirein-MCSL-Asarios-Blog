@@ -67,7 +67,21 @@
             </div>
 
             <input-group class="mt-4">
-                <input-container :full-width="true">
+            <input-container :full-width="true">
+                    <input-label
+                        name="nick_name"
+                        label="Nickname"
+                    ></input-label>
+                    <input-element
+                        type="text"
+                        name="nick_name"
+                        v-model="form.nick_name"
+                        placeholder="Nickname"
+                        ref="nick_name"
+                    ></input-element>
+                    <input-error :message="form.errors.nick_name" />
+                </input-container>
+            <input-container :full-width="true">
                     <input-label
                         name="first_name"
                         label="Vorname"
@@ -82,20 +96,7 @@
                     <input-error :message="form.errors.first_name" />
                 </input-container>
 
-                <input-container :full-width="true">
-                    <input-label
-                        name="last_name"
-                        label="Nachname"
-                    ></input-label>
-                    <input-element
-                        type="text"
-                        name="last_name"
-                        v-model="form.last_name"
-                        placeholder="Nachname"
-                        ref="last_name"
-                    ></input-element>
-                    <input-error :message="form.errors.last_name" />
-                </input-container>
+
 
                 <input-container :full-width="true">
                     <input-label name="email" label="Mailadresse"></input-label>
@@ -109,6 +110,65 @@
                     <input-error :message="form.errors.email" />
                 </input-container>
 
+
+                <input-container :full-width="true">
+                    <input-label name="birthday" label="Geburtstag"></input-label>
+                    <input-element
+                        type="date"
+                        name="birthday"
+                        v-model="form.birthday"
+                        placeholder="Geburtstag"
+                        ref="birthday"
+                    ></input-element>
+                    <input-error :message="form.errors.birthday" />
+                </input-container>
+
+
+                <input-container :full-width="true">
+                    <input-label
+                        name="music"
+                        label="Musik"
+                    ></input-label>
+                    <input-element
+                        type="text"
+                        name="music"
+                        v-model="form.music"
+                        placeholder="Lieblingsmusik"
+                        ref="music"
+                    ></input-element>
+                    <input-error :message="form.errors.music" />
+                </input-container>
+
+
+                <input-container :full-width="true">
+                    <input-label
+                        name="occupation"
+                        label="Beschäftigung"
+                    ></input-label>
+                    <input-element
+                        type="text"
+                        name="occupation"
+                        v-model="form.occupation"
+                        placeholder="Deine Beschäftigung"
+                        ref="occupation"
+                    ></input-element>
+                    <input-error :message="form.errors.occupation" />
+                </input-container>
+
+                <input-container :full-width="true">
+                    <input-label
+                        name="interests"
+                        label="Interessen"
+                    ></input-label>
+                    <input-element
+                        type="text"
+                        name="interests"
+                        v-model="form.interests"
+                        placeholder="Deine Interessen"
+                        ref="interests"
+                    ></input-element>
+                    <input-error :message="form.errors.interests" />
+                </input-container>
                 <input-container
                     :full-width="true"
                     v-if="
@@ -207,7 +267,11 @@ export default {
             form: useForm({
                 _method: "PUT",
                 first_name: this.user.first_name,
-                last_name: this.user.last_name,
+                nick_name: this.user.nick_name,
+                music: this.user.music,
+                birthday: this.user.birthday,
+                interests: this.user.interests,
+                occupation: this.user.occupation,
                 email: this.user.email,
                 photo: null,
             }),

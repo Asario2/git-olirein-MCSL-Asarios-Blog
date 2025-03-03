@@ -157,7 +157,7 @@ class HomeController extends Controller
 
     public function home_no_application_found()
     {
-        return Inertia::render('Homepage/NoApplicationFound');
+        return Inertia::render('Homepage/Home');
     }
 
     public function home_user_is_no_admin()

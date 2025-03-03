@@ -142,23 +142,36 @@ class FormController extends Controller
                 }
                 return "text";
             break;
-            case "reading_time":
-                return "reading_time";
+
+            case "blog_authors_id":
+                return "select_id";
             break;
-            case "name":
-                return "text";
+            case "blog_categories_id":
+                return "select_id";
             break;
             case "blog_date":
                 return "datetime";
             break;
-            case "created_at":
-                return "datetime";
+            case "blog_images_iid":
+                return "IID";
             break;
             case "content":
-            return "textarea";
+                return "textarea";
             break;
             case "content_en":
                 return "textarea";
+            break;
+            case "created_at":
+                return "datetime";
+            break;
+            case "images_categories_id":
+                return "select_id";
+            break;
+            case "markdown_on":
+                if ($cl) {
+                    return "xis";
+                }
+                return "checkbox";
             break;
             case "message":
                 return "textarea";
@@ -166,40 +179,26 @@ class FormController extends Controller
             case "message_en":
                 return "textarea";
             break;
-            case "summary":
-            return "textarea_short";
-            break;
-            case "blog_categories_id":
-                return "select_id";
-            break;
-            case "blog_authors_id":
-                return "select_id";
-            break;
-            case "users_id":
-                return "select_id";
-            break;
-            case "images_categories_id":
-                return "select_id";
+            case "name":
+                return "text";
             break;
             case "pub":
                 return "pub";
             break;
+            case "reading_time":
+                return "reading_time";
+            break;
+            case "summary":
+                return "textarea_short";
+            break;
+            case "users_id":
+                return "select_id";
+            break;
             case "xis_aiImage":
-                if($cl)
-                {
+                if ($cl) {
                     return "xis";
                 }
                 return "checkbox";
-            break;
-            case "markdown_on":
-                if($cl)
-                {
-                    return "xis";
-                }
-                return "checkbox";
-            break;
-            case "blog_images_iid":
-                return "IID";
             break;
             default:
                 return "text";

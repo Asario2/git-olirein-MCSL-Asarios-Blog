@@ -279,7 +279,7 @@
                                     class="font-medium text-base text-gray-800 dark:text-gray-200"
                                 >
                                     {{ $page.props.auth.user.first_name }}
-                                    {{ $page.props.auth.user.last_name }}
+                                    {{ $page.props.auth.user.nick_name }}
                                 </div>
                                 <div class="font-medium text-sm text-gray-500">
                                     {{ $page.props.auth.user.email }}

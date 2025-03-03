@@ -19,7 +19,21 @@
                 <error-list :errors="errors" />
 
                 <input-group>
-                    <input-container :full-width="true">
+                <input-container :full-width="true">
+                        <input-label
+                            name="nick_name"
+                            label="Nickname"
+                        ></input-label>
+                        <input-element
+                            type="text"
+                            name="nick_name"
+                            v-model="form.nick_name"
+                            placeholder="Nickname"
+                            ref="nick_name"
+                        ></input-element>
+                        <input-error :message="errors.nick_name" />
+                    </input-container>
+                <input-container :full-width="true">
                         <input-label
                             name="first_name"
                             label="Vorname"
@@ -32,21 +46,6 @@
                             ref="first_name"
                         ></input-element>
                         <input-error :message="errors.first_name" />
-                    </input-container>
-
-                    <input-container :full-width="true">
-                        <input-label
-                            name="last_name"
-                            label="Nachname"
-                        ></input-label>
-                        <input-element
-                            type="text"
-                            name="last_name"
-                            v-model="form.last_name"
-                            placeholder="Nachname"
-                            ref="last_name"
-                        ></input-element>
-                        <input-error :message="errors.last_name" />
                     </input-container>
 
                     <input-container :full-width="true">
@@ -187,7 +186,7 @@ export default defineComponent({
             //
             form: {
                 first_name: "",
-                last_name: "",
+                nick_name: "",
                 email: "",
                 password: "",
                 password_confirmation: "",

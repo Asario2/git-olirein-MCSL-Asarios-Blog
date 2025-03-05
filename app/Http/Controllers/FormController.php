@@ -48,7 +48,7 @@ class FormController extends Controller
             }
             elseif((substr_count($name,"_at") || $name == "blog_date"))
             {
-                $value = date('Y-m-d H:i:s',$value);
+                $value = $value;
             }
 
 
@@ -1170,7 +1170,7 @@ var $j = jQuery.noConflict(); // Weist jQuery einer anderen Variable zu, um Konf
         }
         else
         {
-            $date2 = date("d.m.Y",$v);
+            $date2 = $v;
         }
 
 

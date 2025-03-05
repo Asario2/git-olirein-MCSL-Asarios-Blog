@@ -3,7 +3,9 @@
 <a :href="'admin/tables/edit/'+ id+ '/' + table + ''" @click.stop><IconPencil class="sm-pencil"></IconPencil></a>
 </span>&nbsp;&nbsp;
 <span v-if="Rdelete == '1'">
-<a :href="'admin/tables/delete/'+ id+ '/' + table + ''" @click.stop><IconTrash class="sm-pencil"></IconTrash></a>
+<form @submit.prevent="deletePost" style="display:inline">
+    <button @click.stop type="submit" onclick="return confirm('Sind Sie sicher, dass Sie diesen Blogbeitrag löschen möchten?');"><IconTrash class="sm-pencil"></IconTrash></button>
+</form>
 </span>
 
 </template>
@@ -21,13 +23,33 @@ export default {
         Rdelete: {String, default: 0,},
                 id: { type: Number },
         table: { type: String },
+        id: Number,
     },
     mounted() {
-        console.log("Redit:", this.Redit);
-        console.log("Rdelete:", this.Rdelete);
-        console.log("id:", this.id);
-        console.log("table:", this.table);
+        // console.log("Redit:", this.Redit);
+        // console.log("Rdelete:", this.Rdelete);
+        // console.log("id:", this.id);
+        // console.log("table:", this.table);
     },
+    methods: {
+    async deletePost() {
+        try {
+            console.log(`aad: admin/tables/delete/${this.table}/${this.id}`);
+            // DELETE-Anfrage mit Parametern in der URL
+            await axios.delete(`admin/tables/delete/${this.table}/${this.id}`, {
+                params: {
+                    edit: "blogposts.index",
+                }
+            });
+
+            alert("Post erfolgreich gelöscht");
+            // Optional: Seite neu laden oder Liste aktualisieren
+        } catch (error) {
+            console.error("Fehler beim Löschen:", error);
+        }
+    },
+},
+
 };
 
 </script>

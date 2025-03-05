@@ -791,7 +791,7 @@ public function GetTables()
             \Log::info("uuni:" . json_encode($hcode . $request->input($hcode)));
             $exists = DB::table($table)
                 ->where($hcode, $request->input($hcode))
-                ->where("created_at", ">", time() - 2)
+                ->where("created_at", ">", Carbon::now()->subSeconds(2))
                 ->exists();
 
             if ($exists) {
@@ -803,7 +803,7 @@ public function GetTables()
             $hcodeValue = $request->input($hcode); // Beispiel: $request->input('hcode')
 
             // Zeitstempel vor 2 Sekunden
-            $twoSecondsAgo = time() - 2;
+            $twoSecondsAgo = Carbon::now()->subSeconds(2);
 
             // Prüfe, ob ein Eintrag mit dem gleichen hcode existiert
             $existingEntry = DB::table($table)
@@ -849,7 +849,7 @@ public function GetTables()
                 \Log::info("uuni:".json_encode($hcode.$request->input($hcode)));
                 $exists = DB::table($table)
                     ->where($hcode, $request->input($hcode))
-                    ->where("created_at",">",time()-2)
+                    ->where("created_at",">",Carbon::now()->subSeconds(2))
                     ->exists();
 
                 if ($exists) {
@@ -861,7 +861,7 @@ public function GetTables()
             $hcodeValue = $request->input($hcode); // Beispiel: $request->input('hcode')
 
             // Zeitstempel vor 2 Sekunden
-            $twoSecondsAgo = time()-2;
+            $twoSecondsAgo = Carbon::now()->subSeconds(2);
 
             // Prüfe, ob ein Eintrag mit dem gleichen hcode existiert
             $existingEntry = DB::table($table)
@@ -912,8 +912,8 @@ public function GetTables()
             $hcodeValue = $request->input($hcode);  // z.B. $request->input('hcode')
 
             // Zeitstempel vor 2 Sekunden
-            $twoSecondsAgo = time(); // 2 Sekunden vor der aktuellen Zeit
-            $twoSecondsAgo = time()-2;
+            $twoSecondsAgo = now(); // 2 Sekunden vor der aktuellen Zeit
+            $twoSecondsAgo = Carbon::now()->subSeconds(2);
             // Prüfe, ob ein Eintrag existiert
             $existingEntry = DB::table($table)
                 ->where($hcode, $hcodeValue)->first();  // Prüfe auf das Vorhandensein des Wertes in der hcode-Spalte
@@ -945,7 +945,7 @@ public function GetTables()
        public function removeDuplicateEntries($table, $hcode)
 {
     // Aktueller Zeitstempel minus 4 Sekunden
-     $twoSecondsAgo = time();
+     $twoSecondsAgo = now();
 
     // // Finde doppelte Einträge
     // $duplicates = DB::table($table)
@@ -972,7 +972,7 @@ public function GetTables()
     // }
     $duplicates = DB::table($table)
         ->select($hcode, DB::raw('MIN(id) as min_id'), DB::raw('COUNT(*) as count'))
-        // ->where('created_at', '>', time() - 10) // UNIX-Zeitstempel verwenden
+        // ->where('created_at', '>',Carbon::now()->subSeconds(10)) // UNIX-Zeitstempel verwenden
         ->groupBy($hcode)
         ->having('count', '>', 1)
         ->get();
@@ -1039,7 +1039,7 @@ public function GetTables()
     }
     function deleteRecentDuplicates($table, $hcode) {
         // Zeitmarke: Nur Einträge der letzten Sekunde betrachten
-        $oneSecondAgo = time()-1;
+        $oneSecondAgo = Carbon::now()->subSeconds(1);
 
         // Finde doppelte Einträge, die innerhalb der letzten Sekunde erstellt wurden
         $duplicates = DB::table($table)
@@ -1082,7 +1082,7 @@ public function GetTables()
     }
         public static function removeDuplicates($table, $hcode) {
 
-       $twoSecondsAgo = time()-1;
+       $twoSecondsAgo = Carbon::now()->subSeconds(1);
 
         // Finde doppelte Einträge basierend auf der Spalte $hcode
         $duplicates = DB::table($table)
@@ -1182,15 +1182,15 @@ public function GetTables()
 
 
         $data = $request->only($columns); // Nur erlaubte Felder speichern
-        $data['created_at'] = strtotime($data['created_at']);
+        $data['created_at'] = $data['created_at'];
         if(@$data['birthday'])
         {
-            $data['birthday'] = strtotime($data['birthday']);
+            $data['birthday'] = $data['birthday'];
         }
         if(@$data['date_begin'])
         {
-            $data['date_begin'] = strtotime($data['date_begin']);
-            $data['date_end'] = strtotime($data['date_end']);
+            $data['date_begin'] = ($data['date_begin']);
+            $data['date_end'] = ($data['date_end']);
 
 
         }

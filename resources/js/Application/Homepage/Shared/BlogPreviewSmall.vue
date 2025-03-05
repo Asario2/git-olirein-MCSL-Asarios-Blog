@@ -30,13 +30,24 @@
             >
                 {{ blog.title }}
             </h2>
-            <span
+            <div class="flex justify-between items-center">
+                <div class="text-xs text-layout-sun-600 dark:text-layout-night-600 py-2">
+                    <display-date :value="blog.blog_date" :time-on="false" />
+                    von
+                    <span>{{ blog.author_name }}</span>
+                </div>
+                <div class="rl">
+                    <editbtns :Redit="blog.editRights" :id="blog.id" table="blogs" :Rdelete="blog.deleteRights"></editbtns>
+                </div>
+            </div>
+
+            <!-- <span
                 class="text-xs text-layout-sun-600 dark:text-layout-night-600"
             >
                 <display-date :value="blog.blog_date" :time-on="false" />
                 von
                 <span>{{ blog.author_name }}</span>
-            </span>
+            </span> -->
             <p v-html="blog.summary"></p>
             <p>
                 <display-number
@@ -55,6 +66,7 @@ import { Link } from "@inertiajs/vue3";
 import DisplayDate from "@/Application/Components/Content/DisplayDate.vue";
 import DisplayNumber from "@/Application/Components/Content/DisplayNumber.vue";
 import AiButton from "@/Application/Components/Content/AiButton.vue";
+import editbtns from "@/Application/Components/Form/editbtns.vue";
 
 export default {
     name: "Shared_Homepage_BlogPreviewSmall",
@@ -64,6 +76,7 @@ export default {
         DisplayDate,
         DisplayNumber,
         AiButton,
+        editbtns,
     },
 
     props: {

@@ -419,7 +419,7 @@
                 loading = true;
                 document.getElementById("loading").style.display = "block";
 
-                fetch(`/pictures/load-more/{{ $post->images_categories_id }}?offset=${offset}`)
+                fetch(`/pictures/load-more/{{ $post->image_categories_id }}?offset=${offset}`)
                     .then(response => response.text())
                     .then(data => {
                         if (data.trim() !== "") {

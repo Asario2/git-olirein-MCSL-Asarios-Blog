@@ -151,8 +151,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::post('/admin/tables/store/{table}', [TablesController::class, 'StoreTable'])
             ->name('admin.tables.store');
         // Delete table
-        Route::post('/admin/tables/{table}/delete', [TablesController::class, 'DeleteTable'])
-            ->name('admin.tables.delete');
+        // Route::post('/admin/tables/{table}/delete', [TablesController::class, 'DeleteTable'])
+        //     ->name('admin.tables.delete');
         // Tables Create
         Route::get('/admin/tables/create/{table}', [TablesController::class, 'CreateTable'])
             ->name('admin.tables.create');
@@ -216,7 +216,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
             ->name('customer.dashboard');
     });
 });
-Route::get('/tables/form_data/{table}/{id?}', [TablesController::class, 'ExportFields'])->name("GetTableForm");
 // Darkmode Route
 Route::post('/toggle-dark-mode', [ApplicationController::class, 'toggleDarkMode'])->name('toggle-dark-mode');
 Route::post('/get-dark-mode', [ApplicationController::class, 'session_dm'])->name('get-dark-mode');

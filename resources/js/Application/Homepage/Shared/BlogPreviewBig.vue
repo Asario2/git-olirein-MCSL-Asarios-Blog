@@ -39,11 +39,17 @@
             </h2>
 
             <!-- Datum und Autor -->
-            <div class="text-xs text-layout-sun-600 dark:text-layout-night-600 py-2">
-                <display-date :value="blog.blog_date" :time-on="false" />
-                von
-                <span>{{ blog.author_name }}</span>
+            <div class="flex justify-between items-center">
+                <div class="text-xs text-layout-sun-600 dark:text-layout-night-600 py-2">
+                    <display-date :value="blog.blog_date" :time-on="false" />
+                    von
+                    <span>{{ blog.author_name }}</span>
+                </div>
+                <div class="rl">
+                    <editbtns :Redit="blog.editRights" :id="blog.id" table="blogs" :Rdelete="blog.deleteRights"></editbtns>
+                </div>
             </div>
+
 
             <!-- Blog-Zusammenfassung -->
             <div v-html="blog.summary" class="pb-6"></div>
@@ -67,7 +73,7 @@ import { Link } from "@inertiajs/vue3";
 import DisplayDate from "@/Application/Components/Content/DisplayDate.vue";
 import DisplayNumber from "@/Application/Components/Content/DisplayNumber.vue";
 import AiButton from "@/Application/Components/Content/AiButton.vue";
-
+import editbtns from "@/Application/Components/Form/editbtns.vue";
 export default {
     name: "Homepage_Shared_BlogPreviewBig",
     components: {
@@ -75,6 +81,7 @@ export default {
         DisplayDate,
         DisplayNumber,
         AiButton,
+        editbtns,
     },
     props: {
         blog: {
@@ -82,11 +89,25 @@ export default {
         },
         aiOverlayImage: {
             type: String,
-        }
+        },
+        tablename:{
+            type: String,
+        },
+        editRights:{
+            type: Number,
+        },
+        deleteRights:{
+            type: Number,
+        },
     },
 };
 </script>
 
 <style scoped>
+.rl{
+    display:inline;
+    margin-top:-5px;
+
+}
 /* Hier kannst du zusätzliche Anpassungen vornehmen, falls nötig */
 </style>

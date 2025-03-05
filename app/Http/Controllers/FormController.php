@@ -46,6 +46,10 @@ class FormController extends Controller
             {
                 $value = date('Y-m-d H:i:s');
             }
+            elseif((substr_count($name,"_at") || $name == "blog_date"))
+            {
+                $value = date('Y-m-d H:i:s',$value);
+            }
 
 
         $label = isset(Settings::exl[$name]) ? Settings::exl[$name] : $name;
@@ -164,7 +168,7 @@ class FormController extends Controller
             case "created_at":
                 return "datetime";
             break;
-            case "images_categories_id":
+            case "image_categories_id":
                 return "select_id";
             break;
             case "markdown_on":
@@ -286,7 +290,7 @@ class FormController extends Controller
             case "camera_id":
                 return  FormController::ImSelect($name,$value,$table,"camera","name",$id,1);
             break;
-            case "images_categories_id":
+            case "image_categories_id":
                 return  FormController::ImSelect($name,$value,$table,"images_cat","shortname",$id,1);
             break;
             case "password":
@@ -345,7 +349,7 @@ class FormController extends Controller
             case "users_id":
                 return  "<td class='selectable table-cell' data-field='".$name."'>".FormController::author($name,$value,$table,$id)."</td>";
             break;
-            case "images_categories_id":
+            case "image_categories_id":
                 return "<td  class='selectable table-cell' data-field='".$name."'>".FormController::uid($name,$value,$table,$id,"images_cat","name",$id)."</td>";
             break;
             case "camera_id":

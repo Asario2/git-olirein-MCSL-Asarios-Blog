@@ -782,7 +782,7 @@ if(!function_exists("shariff"))
     {
         if($table == "pictures")
         {
-        $cat = DB::table('images_categories')->where("id",$post->images_categories_id)->select('shortname')->first();
+        $cat = DB::table('image_categories')->where("id",$post->image_categories_id)->select('shortname')->first();
             $table .= "/".@$cat->shortname;
         }
         $post->title = $post->title ?? $post->headline;

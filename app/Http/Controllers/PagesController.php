@@ -66,7 +66,7 @@ class PagesController extends Controller
                     ->joinSub(
                         DB::table('images')
                                 ->select('id', DB::raw('MAX(created_at) as latest_created_at'))
-                                ->where('images_categories_id', $tid)
+                                ->where('image_categories_id', $tid)
                                 ->where('pub', 1)
                                 ->groupBy('id'),
                             'subquery',
@@ -105,7 +105,7 @@ $table = "images";
 }
     public function ab_images()
     {
-        $data = DB::table("images_categories")->orderBy("name","ASC")->where('pub',"1")->get();
+        $data = DB::table("image_categories")->orderBy("name","ASC")->where('pub',"1")->get();
         // vde($data);
         return view("ab.images",compact("data"));
     }
@@ -127,8 +127,8 @@ $table = "images";
             $ord[1] = "ASC";
         }
         $data = DB::table('images')
-            ->join('images_categories', 'images.images_categories_id', '=', 'images_categories.id')
-            ->where('images_categories.shortname', '=', $gallery)
+            ->join('image_categories', 'images.image_categories_id', '=', 'image_categories.id')
+            ->where('image_categories.shortname', '=', $gallery)
             ->where("images.pub","1")
             ->orderBy($ord[0],$ord[1])
             ->select('images.*') // Wählt alle Spalten aus der Tabelle "images"

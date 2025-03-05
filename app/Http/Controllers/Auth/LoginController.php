@@ -52,7 +52,7 @@ class LoginController extends Controller
         if (GoogleAuthenticatorHelper::verifyCode($user->google2fa_secret, $otp)) {
             $user->is_two_factor_authenticated = true;
             $user->two_factor_authenticated = true;
-            $user->updated_at = time();
+            $user->updated_at = now();
             $user->save();
             Auth::login($user);
 

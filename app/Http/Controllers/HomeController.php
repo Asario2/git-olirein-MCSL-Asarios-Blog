@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Models\Blog;
 use Inertia\Inertia;
@@ -49,7 +50,7 @@ class HomeController extends Controller
             'blog_images.name as name',
             'blog_categories.name as category_name',
             "blogs.xis_aiImage as madewithai",
-        )
+            )
             ->join('blog_authors', 'blog_authors.id', '=', 'blogs.blog_authors_id')
             ->join('blog_images', 'blog_images.id', '=', 'blogs.blog_images_iid')
             ->join('blog_categories', 'blog_categories.id', '=', 'blogs.blog_categories_id')
@@ -70,7 +71,19 @@ class HomeController extends Controller
             $blog->title = html_entity_decode($blog->title);
             return $blog;
         });
+
+        $table = "blogs";
         $blogs->aiOverlayImage = "ai-".@$_SESSION['dm'].".png";
+        foreach ($blogs as $blog) {
+            $blog->editRights = CheckRights(Auth::id(), $table, "edit");
+            $blog->viewRights = CheckRights(Auth::id(), $table, "view");
+            $blog->deleteRights = CheckRights(Auth::id(), $table, "delete");
+            $blog->addRights = CheckRights(Auth::id(), $table, "add");
+            $blog->date_tableRights = CheckRights(Auth::id(), $table, "date_table");
+        }
+            // \Log::info(json_encode($blogs, JSON_PRETTY_PRINT));
+            // \Log::info("Test-Log-Eintrag");
+
         return Inertia::render('Homepage/BlogList', [
             'filters' => Request::all('search'),
             'blogs' => $blogs,

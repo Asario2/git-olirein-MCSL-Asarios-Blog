@@ -11,8 +11,8 @@ class Settings extends Model
                        'two_factor_enabled','reserved_at','available_at','is_two_factor_enabled','temp_google2fa_secret','new_email','email_change_token','email_verification_token','two_factor_token',"author_name","users_rights_id","chg_date","xico_doms",'xkis_IsFeed','xis_mailed'];
     const excl_heads = ["date_begin"];
     const excl_disabled = ['id'];
-    const excl_datefields  = ['birthday','created_at'];
-    const exl = ["title"=>"Titel","content_en"=>"Text Englisch","blog_categories_id"=>"Kategorie",'title_en'=>"Titel Englisch",'users_id'=>"Autor","moderator_id"=>"Moderator","images_categories_id"=>"Bildergruppe","to_address"=>'Empfängeradresse','subject'=>'Betreff','pub'=>"Öffentlich",
+    const excl_datefields  = []; //['birthday','created_at'];
+    const exl = ["title"=>"Titel","content_en"=>"Text Englisch","blog_categories_id"=>"Kategorie",'title_en'=>"Titel Englisch",'users_id'=>"Autor","moderator_id"=>"Moderator","image_categories_id"=>"Bildergruppe","to_address"=>'Empfängeradresse','subject'=>'Betreff','pub'=>"Öffentlich",
                  'view_table'=>'Sichtbar','add_table'=>'Hinzufügen','publish_table'=>'Veröffentlichen','date_table'=>"Datum Ändern",'delete_table'=>"Löschen",'edit_table'=>"Editieren","content"=>"Text","xis_ai"=>"KI Bild","summary"=>"Zusammenfassung",
                  "blog_authors_id"=>"Autor",'date_end'=>"Online Von/Bis",'post_id'=>"Post ID",'categories_id'=>"Kategorie",'xis_IsSaleable'=>"Verkäuflich",'xkis_Ticker'=>"Ticker Aktivieren","created_at"=>'Erstellt am:','headline'=>'Überschrift','headline_en'=>'Überschrift Englisch',
                  "answer"=>"Antwort","date"=>"Datum",'birthday' => 'Alter','occupation'=>'Beschäftigung',"interests"=>"Hobbys","music"=>'Musik','prename'=>"Vorname",'id'=>'ID','image_path'=>"Bild","email"=>'Email',
@@ -20,7 +20,7 @@ class Settings extends Model
 "Passwort","users_rights_id" => "Benutzergruppe","profile_photo_path" => "Profilbild","is_admin" => "Administrator","is_employee" => "Mitarbeiter","is_customer" => "Kunde","admin_id" => "Admin ID","company_id" => "Firmen ID","customer_id" => "Kunden ID","last_login_at" =>
 "Letzter Login","two_factor_secret" => "2fa Secret","two_factor_recovery_codes" => "2fa Recovery Codes","two_factor_confirmed_at" => "2fa bestätigt am","remember_token" => "Login merken","position" => "Position","shortname" => "Kurzname","xkis_AdminPanel" => "AdminPanel Zugriff","xkis_UserRights" =>
 "Benutzergruppen Zugriff","xkis_SendMail" => "Email Senden","xkis_SandMail" => "Email Senden","xkis_CommentsCenter" => "Commentscenter","author_id" => "Autor","chg_date" => "Geändert am:","table_name" => "Tabellenname","description" => "Beschreibung","modul" => "Modul","published_at" => "Veröffentlicht am:","name_en" =>
-"Name Englisch","heading_alt" => "Überschrift","heading_alt_en" => "Überschrift Englisch","img_icon" => "Icon","AscName" => "Name","AscName_en" => "Name","description_en" => "Beschreibung Englisch","itemscope" => "ItemScope","xis_shopable" => "Verkäuflich","images_categories_id" => "Bilder Kategorie","status" =>
+"Name Englisch","heading_alt" => "Überschrift","heading_alt_en" => "Überschrift Englisch","img_icon" => "Icon","AscName" => "Name","AscName_en" => "Name","description_en" => "Beschreibung Englisch","itemscope" => "ItemScope","xis_shopable" => "Verkäuflich","image_categories_id" => "Bilder Kategorie","status" =>
 "Status","message" => "Text","message_en" => "Text","camera_id" => "Kamera","link" => "Link","Format" => "Format","Format_en" => "Format Englisch","preis" => "Preis","tablename" => "Tabelle","xis_checked" => "checked","ordering" => "Position","Longname" => "Langer Name","Mpixel" =>
 "Megapixel","short_tag" => "Tag","exif_copyright" => "Exif copy","exif_comp" => "exif Comp","exif_model" => "Exif Model"];
 

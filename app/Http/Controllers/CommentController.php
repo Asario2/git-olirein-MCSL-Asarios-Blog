@@ -62,8 +62,8 @@ class CommentController extends Controller
             'rating' => $request->rating,
         ]);
         }
-        $upd = ["created_at"=>time()];
-        $updu = ["updated_at"=>time()];
+        $upd = ["created_at"=>now()];
+        $updu = ["updated_at"=>now()];
         DB::table("ratings")->where("users_id",$userId)->where("image_id",$request->id)->where("table",$request->table)->where("created_at",NULL)->update($upd);
         DB::table("ratings")->where("users_id",$userId)->where("image_id",$request->id)->where("table",$request->table)->update($updu);
 
@@ -86,8 +86,8 @@ class CommentController extends Controller
         $comment = new Comment();
         $comment->content = $request->input('comment2') ?? $request->comment;
         $comment->users_id = auth()->id(); // Beispiel für Benutzer-ID
-        $comment->created_at = time();
-        $comment->updated_at = time();
+        $comment->created_at = now();
+        $comment->updated_at = now();
         $comment->email = $user->email;
         $comment->tablename = $table;
         $comment->post_id = $request->post_id;
@@ -115,8 +115,8 @@ class CommentController extends Controller
         $comment = new Comment();
         $comment->content = $request->input('comment2') ?? $request->comment;
         $comment->users_id = auth()->id(); // Beispiel für Benutzer-ID
-        $comment->created_at = time();
-        $comment->updated_at = time();
+        $comment->created_at = now();
+        $comment->updated_at = now();
         $comment->email = $user->email;
         $comment->tablename = $table;
         $comment->post_id = $request->post_id;

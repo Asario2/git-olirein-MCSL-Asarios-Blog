@@ -6,14 +6,14 @@
         <img
             role="presentation"
             class="object-cover w-full rounded h-44 bg-layout-sun-500 dark:bg-layout-night-500"
-            :src="blog.url"
+            :src="blog.url?.replace(/\/blogs\//, '/blogs/thumbs/') || '/images/blogs/008.jpg'"
             :alt="blog.name"
             loading="lazy"
             width="480"
             height="360"
         />
         <div v-if="blog.madewithai">
-            <AiButton class="ai-button-image" :overlayImage="images/icons/blog.aiOverlayImage || 'images/icons/ai-dark.png'"></AiButton>
+        <AiButton class="ai-button-image" :overlayImage="images/icons/blog?.aiOverlayImage || 'images/icons/ai-light.png'"></AiButton>
         </div>
     </div>
         <div class="p-6 space-y-2">
@@ -86,6 +86,14 @@ export default {
         aiOverlayImage: {
             type: String,
         },
+        dma:{
+            type: String,
+        },
     },
+    data() {
+    return {
+        dma: localStorage.getItem('theme'), // Wert aus localStorage speichern
+    };
+},
 };
 </script>

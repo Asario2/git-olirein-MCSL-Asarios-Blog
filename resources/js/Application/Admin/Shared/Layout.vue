@@ -33,7 +33,13 @@
                             <div
                                 class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex"
                             >
-                                <NavLink
+                            <NavLink
+                                    :routeName="route('home.index')"
+                                    :active="route().current('home.index')"
+                                    label="Home"
+                                >
+                                </NavLink>
+                            <NavLink
                                     :routeName="route('admin.dashboard')"
                                     :active="route().current('admin.dashboard')"
                                     label="Dashboard"

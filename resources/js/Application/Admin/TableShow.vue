@@ -65,6 +65,7 @@ let table = table_z.toLowerCase();
     applicationName: {
     type: String,
     required: true,
+    default: "Administrator-Anwendung",
   },
   table_alt: {
     type: String,
@@ -121,9 +122,9 @@ let table = table_z.toLowerCase();
     current:{
         type: String,
     },
-    applicationName:{
-        type: String,
-    },
+    // applicationName:{
+    //     type: String,
+    // },
     // ItemName: {
     //   type: String,
     //   default: "",

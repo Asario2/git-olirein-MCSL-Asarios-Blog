@@ -180,6 +180,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
             ->name("api-get-image-url");
         Route::get("api/get-image-id/{table}/{id}",[TablesController::class,"GetImageId"])
             ->name("api-get-image-id");
+        Route::get('/admin', function () {
+            return Redirect::route('admin.dashboard');
+        })->name('admin.redirect.route');
         // =======
         // Profile
         // =======
@@ -190,9 +193,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         // ==========
         Route::get('/admin/api_tokens', [DashboardAdminController::class, 'admin_api_tokens_index'])
             ->name('admin.api_tokens.index');
-            Route::get('/admin', function () {
-                return Redirect::route('admin.dashboard');
-            })->name('admin.redirect');
+
 
         });
 
@@ -233,7 +234,8 @@ Route::get('/api/dark-mode', function () {
 // ==============
 // Fallback-Route
 // ==============
-
+Route::get('/tables/sort-enum/{table}/{name}', [TablesController::class, 'getOptionz_sel'])
+        ->name("GetTableEnum");
 Route::fallback(function () {
     return Inertia::render('Homepage/NoPageFound');
 });

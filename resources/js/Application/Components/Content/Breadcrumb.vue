@@ -86,7 +86,7 @@ export default {
         },
         applicationName: {
             type: String,
-            default: "",
+            default: "Administrator-Anwendung",
         },
         current: {
             type: String,
@@ -106,7 +106,7 @@ export default {
         routeDashboard() {
             const appName = this.applicationName;
             const apps = this.$page.props.applications;
-
+            console.log(apps);
             if (appName === apps.app_central_name) {
                 return "central.dashboard";
             } else if (appName === apps.app_admin_name) {

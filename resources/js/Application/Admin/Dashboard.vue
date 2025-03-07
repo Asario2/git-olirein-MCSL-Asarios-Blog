@@ -14,7 +14,7 @@
             <navigation-card
                 class="navigation_card"
                 title="Blogartikel"
-                :routeName="route('admin.blog.index')"
+                :routeName="route('admin.tables.show','blogs')"
                 linkName="Liste der Blogartikel"
                 :routeName2="route('admin.blog.create', table)"
                 linkName2="Neuer Blogartikel"
@@ -25,20 +25,22 @@
                     Hier findest du eine Liste aller Blogartikel.
                 </template>
             </navigation-card>
-
-            <!-- laravel.log -->
+            <!-- Bilder -->
             <navigation-card
                 class="navigation_card"
-                title="Log"
-                :routeName="route('admin.laravel_log')"
-                linkName="Zum Laravel-Log"
-                target="_blank"
+                title="Bilder"
+                :routeName="route('admin.tables.show','images')"
+                linkName="Überblick Bilder"
+                :routeName2="route('admin.tables.store', 'images')"
+                linkName2="Neues Bild"
                 :withIcon="true"
                 icon="IconBook"
             >
-                <!-- DB updaten -->
-                <template #description> Tabellen Verwalten </template>
+                <template #description>
+                    Hier findest du eine Liste aller Bilder.
+                </template>
             </navigation-card>
+            <!-- Tabellen Overview -->
             <navigation-card
                 class="navigation_card"
                 title="Tabellen"
@@ -51,6 +53,19 @@
                 <template #description>
                     Hier kannst du alle Datenbankinhalte bearbeiten
                 </template>
+            </navigation-card>
+            <!-- laravel.log -->
+            <navigation-card
+                class="navigation_card"
+                title="Log"
+                :routeName="route('admin.laravel_log')"
+                linkName="Zum Laravel-Log"
+                target="_blank"
+                :withIcon="true"
+                icon="IconBook"
+            >
+                <!-- DB updaten -->
+                <template #description> Tabellen Verwalten </template>
             </navigation-card>
         </div>
     </layout>

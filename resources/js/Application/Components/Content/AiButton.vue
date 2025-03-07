@@ -1,47 +1,34 @@
 <template>
     <div class="absolute bottom-4 right-4 z-10" @click.stop>
 
-        <a href="/home/ai"><img src="images/icons/ai-dark.png" alt="Made with AI" title="Made with AI" class="object-contain ai-button x64" /></a>
+        <a href="/home/ai">
+  <img :src="'images/icons/ai-' + dma + '.png'" alt="Made with AI" title="Made with AI" class="object-contain ai-button x64" />
+</a>
+
     </div>
 </template>
 
 <script>
-
-    // setup() {
-//         const darkMode = ref("light"); // Default-Wert
-//         const aiButtonImage = ref("");
-
-//         async function loadDarkMode() {
-//             // Prüfen, ob `window.darkMode` aus Blade verfügbar ist
-//             if (window.darkMode) {
-//                 darkMode.value = window.darkMode;
-//             } else {
-//                 try {
-
-//                     const response = await fetch("/api/dark-mode");
-//                     const data = await response.json();
-//                     darkMode.value = data.darkMode;
-//                     // console.log("DMM:" + data.darkMode);
-
-//                 } catch (error) {
-//                     console.error("Fehler beim Laden des Dark Modes:", error);
-//                 }
-//             }
-//             // Dark Mode in localStorage speichern
-//             if(localStorage.getItem("darkMode") != darkMode.value){
-//                 localStorage.setItem("darkMode", darkMode.value);
-
-//             }
-
-//             // Dynamischen Bild-Pfad setzen
-//             aiButtonImage.value = `/images/icons/ai-${darkMode.value}.png`;
-//         }
-
-//         onMounted(loadDarkMode);
-
-//         return { aiButtonImage };
-//     },
-
+export default {
+    name: "AiButton",
+    //
+props: {
+        blog: {
+            type: Object,
+        },
+        aiOverlayImage: {
+            type: String,
+        },
+        dma:{
+            type: String,
+        },
+    },
+    data() {
+    return {
+        dma: localStorage.getItem('theme'), // Wert aus localStorage speichern
+    };
+},
+    }
 </script>
 
 

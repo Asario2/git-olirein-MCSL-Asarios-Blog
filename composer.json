@@ -17,6 +17,7 @@
         "envatic/laravel-vue-i18n-generator": "*",
         "ezyang/htmlpurifier": "^4.18",
         "inertiajs/inertia-laravel": "^1.0",
+        "intervention/image": "^3.11",
         "laraeast/laravel-vue-i18n-generator": "*",
         "laravel/fortify": "^1.25",
         "laravel/framework": "^11.0",

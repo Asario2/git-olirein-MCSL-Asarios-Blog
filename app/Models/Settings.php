@@ -22,7 +22,7 @@ class Settings extends Model
 "Benutzergruppen Zugriff","xkis_SendMail" => "Email Senden","xkis_SandMail" => "Email Senden","xkis_CommentsCenter" => "Commentscenter","author_id" => "Autor","chg_date" => "Geändert am:","table_name" => "Tabellenname","description" => "Beschreibung","modul" => "Modul","published_at" => "Veröffentlicht am:","name_en" =>
 "Name Englisch","heading_alt" => "Überschrift","heading_alt_en" => "Überschrift Englisch","img_icon" => "Icon","AscName" => "Name","AscName_en" => "Name","description_en" => "Beschreibung Englisch","itemscope" => "ItemScope","xis_shopable" => "Verkäuflich","image_categories_id" => "Bilder Kategorie","status" =>
 "Status","message" => "Text","message_en" => "Text","camera_id" => "Kamera","link" => "Link","Format" => "Format","Format_en" => "Format Englisch","preis" => "Preis","tablename" => "Tabelle","xis_checked" => "checked","ordering" => "Position","Longname" => "Langer Name","Mpixel" =>
-"Megapixel","short_tag" => "Tag","exif_copyright" => "Exif copy","exif_comp" => "exif Comp","exif_model" => "Exif Model"];
+"Megapixel","short_tag" => "Tag","exif_copyright" => "Exif copy","admin_table_id"=>"Tabelle","exif_comp" => "exif Comp","exif_model" => "Exif Model"];
 
     const no_req = ['modul','image_path','link','format','preis','format_en','music','interests','occupation','birthday','prename','xis_ai','id_new','exif_comp','exif_model'];
     const big_thumb = ["users","blog_posts","images"];
@@ -84,6 +84,7 @@ class Settings extends Model
         "blog_images" => 'name',
         "images"=>'headline',
         "comments" => 'content',
+        "image_categories" => 'name',
         "didyouknow" => 'headline',
         "users" => 'name',
         "users_rights" => 'name',
@@ -91,6 +92,7 @@ class Settings extends Model
         "testfield"=>"title",
 
 ];
+const statusvals  = ["empty"=>" ","forsale"=>"Zu Verkaufen","givenaway"=>"Verschenkt","sold"=>"Verkauft","unsaleable"=>"Unverkäuflich","lost"=>"Verloren","inwork"=>"In Arbeit"];
 const searchFields =
     [
         "admin_table" => ['table_name'],
@@ -99,13 +101,16 @@ const searchFields =
         "blog_categories" => ['name',"summary"],
         "blog_images" => ['name'],
         "images"=> ['headline',"message"],
-        "comments" => ['content'],
+        "comments" => ['content',"email","tablename"],
         "didyouknow" => ['headline'],
         "users" => ['name'],
         "users_rights" => ['name'],
         "camera" => ['name'],
         "testfield" => ['title'.'content'],
 
+];
+const underCals=[
+'comments' => "nick_name",
 ];
 const othafieldz = [
     // "blogs"=>
@@ -117,6 +122,7 @@ const otherField = [
 "blog_categories" => "summary",
 "images"=> "message",
 "camera"=> "Longname",
-'testfield' => "content"
+'testfield' => "content",
+'comments'      => 'users_idd',
 ];
 }

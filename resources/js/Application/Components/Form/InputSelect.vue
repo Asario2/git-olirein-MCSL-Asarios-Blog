@@ -117,14 +117,18 @@ methods: {
 computed: {
     sortedOptions() {
         if (Array.isArray(this.options)) {
-            return [...this.options];
-        } else if (typeof this.options === "object") {
-            return Object.fromEntries(Object.entries(this.options));
+            // Falls es ein Array ist, sortiere nach `name`
+            return [...this.options].sort((a, b) => a.name.localeCompare(b.name));
+        } else if (typeof this.options === "object" && this.options !== null) {
+            // Falls es ein Objekt ist, konvertiere es in ein Array, sortiere nach `name`, dann zurück in ein Objekt
+            return Object.fromEntries(
+                Object.entries(this.options)
+                    .sort(([, nameA], [, nameB]) => nameA.localeCompare(nameB))
+            );
         }
         return this.options;
     }
 },
-
 mounted() {
     this.actsel(); // Methode wird nach dem Mounten ausgeführt
 }

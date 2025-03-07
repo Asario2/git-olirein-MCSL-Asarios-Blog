@@ -84,17 +84,17 @@ class FormController extends Controller
         //     'rows' => "$rows",
         // ];
         if(!empty($sortop)){
-            \Log::info("Options: " . json_encode($fields, JSON_PRETTY_PRINT));
+            // \Log::info("Options: " . json_encode($fields, JSON_PRETTY_PRINT));
 
         }
         return $fields;
 
         }
     }
-    public static function getReq($name)
+    public static function getReq($oname)
     {
         $req = Settings::no_req;
-        if(!in_array($name,$req))
+        if(!in_array(strtolower($oname),$req))
         {
             return "required";
         }
@@ -108,33 +108,83 @@ class FormController extends Controller
         return "10";
     }
     public static function getOptions($name)
-    {
-        if(!substr_count($name,"_id"))
-        {
-            return [];
-        }
-        $table = str_replace("_id",'',$name);
-        if (Schema::hasColumn($table, 'possition')) {
-        $id = 'position';
-        }
-        else{$id = "id";}
-        if (Schema::hasColumn($table, 'pub')) {
-            $query = DB::table($table)->where("pub", "=", 1);
-        } else {
-            $query = DB::table($table);
-        }
-        // \Log::info($query->select($id, "name")->orderBy('name', 'ASC')->toSql());
-
-        $tabs = $query->select($id, "name")->reorder() ->orderBy("name","ASC")->get();
-
-        $result = [];
-
-        foreach ($tabs as $item) {
-            $result[$item->$id] = $item->name; // <- Hier '->' statt '[]' verwenden
-        }
-
-        return $result;
+{
+    if (!substr_count($name, "_id")) {
+        return [];
     }
+
+    $table = str_replace("_id", '', $name);
+
+    // Bestimmen, welche ID-Spalte verwendet werden soll
+    $id = 'id'; // Standardmäßig 'id'
+
+    // Abfrage vorbereiten, abhängig von der Spalte 'pub'
+    if (Schema::hasColumn($table, 'pub')) {
+        $query = DB::table($table)->where("pub", "=", 1)->orderBy("name", "ASC");  // Nach 'name' sortieren
+    } else {
+        $query = DB::table($table)->orderBy("name", "ASC");  // Nach 'name' sortieren
+    }
+
+    // Hole nur die 'id' und 'name' Felder
+    $tabs = $query->select($id, "name")->get();
+    \Log::info($tabs);
+    // Erstelle das Ergebnis-Array
+    $result = [];
+    foreach ($tabs as $item) {
+        $result[$item->$id] = $item->name; // ID als Schlüssel, Name als Wert
+    }
+
+    // Das Array ist bereits nach 'name' sortiert, daher ist keine zusätzliche Sortierung notwendig.
+    return $result;
+}
+
+
+
+    // public static function getOptions($name)
+    // {
+    //     if(!substr_count($name,"_id"))
+    //     {
+    //         return [];
+    //     }
+    //     $table = str_replace("_id",'',$name);
+    //     if (Schema::hasColumn($table, 'possition')) {
+    //     $id = 'position';
+    //     }
+    //     else{$id = "id";}
+    //     if (Schema::hasColumn($table, 'pub')) {
+    //         $query = DB::table($table)->where("pub", "=", 1)->orderBy("name","ASC");
+    //     } else {
+    //         $query = DB::table($table)->orderBy("name","ASC");
+    //     }
+    //     // \Log::info($query->select($id, "name")->orderBy('name', 'ASC')->toSql());
+
+    //     $tabs = $query->select($id, "name")->reorder()->orderBy("{$table}.name","ASC")->get();
+
+    //     $result = [];
+
+    //     foreach ($tabs as $item) {
+    //         $result[$item->$id] = $item->name; // <- Hier '->' statt '[]' verwenden
+    //     }
+    //     asort($result);
+    //     return $result;
+    // }
+    public static function getOptions_sel($table, $name)
+{
+    $statusvals = [
+        ["id" => "empty", "name" => " "],
+        ["id" => "forsale", "name" => "Zu Verkaufen"],
+        ["id" => "givenaway", "name" => "Verschenkt"],
+        ["id" => "sold", "name" => "Verkauft"],
+        ["id" => "unsaleable", "name" => "Unverkäuflich"],
+        ["id" => "lost", "name" => "Verloren"],
+        ["id" => "inwork", "name" => "In Arbeit"]
+    ];
+
+    // Direkt als assoziatives Array aufbauen
+    $result = array_column($statusvals, 'name', 'id');
+
+    return $result;
+}
     public static function getClass($name,$cl='')
     {
         switch($name)
@@ -146,7 +196,9 @@ class FormController extends Controller
                 }
                 return "text";
             break;
-
+            case "admin_table_id":
+                return "select_id";
+            break;
             case "blog_authors_id":
                 return "select_id";
             break;
@@ -158,6 +210,9 @@ class FormController extends Controller
             break;
             case "blog_images_iid":
                 return "IID";
+            break;
+            case "camera_id":
+                return "select_id";
             break;
             case "content":
                 return "textarea";
@@ -186,11 +241,17 @@ class FormController extends Controller
             case "name":
                 return "text";
             break;
+            case "preis":
+                return "price";
+            break;
             case "pub":
                 return "pub";
             break;
             case "reading_time":
                 return "reading_time";
+            break;
+            case "status":
+                return "select";
             break;
             case "summary":
                 return "textarea_short";
@@ -199,6 +260,18 @@ class FormController extends Controller
                 return "select_id";
             break;
             case "xis_aiImage":
+                if ($cl) {
+                    return "xis";
+                }
+                return "checkbox";
+            break;
+            case "xis_IsSaleable":
+                if ($cl) {
+                    return "xis";
+                }
+                return "checkbox";
+            break;
+            case "xkis_Ticker":
                 if ($cl) {
                     return "xis";
                 }
@@ -826,7 +899,7 @@ var $j = jQuery.noConflict(); // Weist jQuery einer anderen Variable zu, um Konf
             $v = 0;
         }
         return '<div class="age-wrapper" id="w_'.$id.'" style="display:none;">
-                   <nobr> <input data-id="'.$id.'" data-table="'.$t.'" data-column="'.$n.'"  class="age datetimepicker2 datetime-input_alt" id="age_'.$id.'" name="'.$n.'" type="date" value="'.date("Y-m-d",$v).'" maxlength="12" size="12">
+                   <nobr> <input data-id="'.$id.'" data-table="'.$t.'" data-column="'.$n.'"  class="age datetimepicker2 datetime-input_alt" id="age_'.$id.'" name="'.$n.'" type="date" value="'.$v.'" maxlength="12" size="12">
 
                     <span class="log">
                     <i class="fa-regular fa-calendar calendar-icon"></i>
@@ -923,13 +996,13 @@ var $j = jQuery.noConflict(); // Weist jQuery einer anderen Variable zu, um Konf
     {
         $disp = empty($v) ? "block" : 'none';
         \Log::info("v1:".$v1);
-        $tt = empty($v) ? 0 : date("Y-m-d H:i",$v);
-        $v1 = empty($v1) ? time() : $v1;
+        $tt = empty($v) ? 0 : $v;
+        $v1 = empty($v1) ? now() : $v1;
         $disp2 = empty($v) ? "none" : 'block';
         $dm = $_SESSION['dm'] ?? "dark";
         return "<div class='datetime-wrapper' id='dtw'>
     <!-- Erster Datetimepicker -->
-        <nobr><span style='border-radius:4px;'>Von: <input type='datetime-local' id='datetimepicker1_".$id."' value='".date("Y-m-d H:i",$v1)."' name='date_begin' class=' xtop datetimepicker3 datetime-input'>
+        <nobr><span style='border-radius:4px;'>Von: <input type='datetime-local' id='datetimepicker1_".$id."' value='".$v1."' name='date_begin' class=' xtop datetimepicker3 datetime-input'>
         <i class='fa-regular fa-calendar datetime-icon' style='position:relative;right:25px;top:-0px;'></i></span></nobr>
         <br />
     <!-- Wrapper für zweiten Datetimepicker -->
@@ -1063,7 +1136,7 @@ var $j = jQuery.noConflict(); // Weist jQuery einer anderen Variable zu, um Konf
     public static function date($n,$v,$t,$crea,$id)
     {
         return  '<div id="graphicWrapper" class="datetime-wrapper" style="position: relative; display: inline-block;">
-            <input data-id="'.$id.'" data-table="'.$t.'" data-column="'.$n.'" type="date" id="datetimepicker_'.$id.'" class="datetimepicker2" name="'.$n.'" value="'.date("Y-m-d",$v).'" maxlength="12" size="12" style="border-radius:5px;">
+            <input data-id="'.$id.'" data-table="'.$t.'" data-column="'.$n.'" type="date" id="datetimepicker_'.$id.'" class="datetimepicker2" name="'.$n.'" value="'.$v.'" maxlength="12" size="12" style="border-radius:5px;">
         <i class="fa-regular fa-calendar datetime-icon4"></i></div>
     ';
     }
@@ -1479,7 +1552,7 @@ let isPickerOpen_".$id." = false;
     // Dynamische Methode für das Geburtsdatumsfeld
     public static function BdayField($name, $value = '')
     {
-        $value = date("Y-m-d",$value);
+        $value = $value;
 //         return "
 // <div class='input-group datepicker-wrapper'>
 //     <input type='date' name='birthday' value='$value' class='form-control'>

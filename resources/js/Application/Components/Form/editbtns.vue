@@ -42,7 +42,7 @@ export default {
                 }
             });
 
-            alert("Post erfolgreich gelöscht");
+           location.reload();   
             // Optional: Seite neu laden oder Liste aktualisieren
         } catch (error) {
             console.error("Fehler beim Löschen:", error);

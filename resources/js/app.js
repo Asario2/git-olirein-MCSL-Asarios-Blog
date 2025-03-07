@@ -25,10 +25,6 @@ import "@fontsource/ubuntu/index.css";
 import { Ziggy } from "./ziggy"; // Importiere Ziggy
 // import Ziggy from './ziggy-routes.json' assert { type: 'json' };
 import { route } from "ziggy-js";
-
-console.log(route("admin.tables.create", { table: "blogs" }, undefined, Ziggy));
-console.log(Ziggy);
-
 import App from "./app.vue";
 
 // use the plugin v-tippy (https://thecodewarrior.github.io/Tippy.vue/getting-started.html)

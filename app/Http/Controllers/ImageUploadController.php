@@ -53,8 +53,8 @@ class ImageUploadController extends Controller
 
         copy($tmpname,$IMOpath);
         // Bildgrößen anpassen und speichern
-        $sizes = [300, 600, 1400];  // Beispiel für 3 verschiedene Auflösungen
-        $big = ["300"=>"/thumbs/","600"=>'/',"1400"=>"/big/"];
+        $sizes = [350, 800, 1400];  // Beispiel für 3 verschiedene Auflösungen
+        $big = ["350"=>"/thumbs/","800"=>'/',"1400"=>"/big/"];
         foreach ($sizes as $size) {
             // Neues Imagick-Objekt erstellen
             $imagick = new \Imagick();

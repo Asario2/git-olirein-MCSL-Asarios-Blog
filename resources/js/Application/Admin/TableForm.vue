@@ -80,6 +80,17 @@
                         <template #label>{{ field.label }}</template>
                     </InputFormText>
                 </input-container>
+                <input-container v-else-if="field.type === 'price'">
+                    <InputFormPrice
+                        :id="field.name + '_' + field.id"
+                        :name="field.name"
+                        v-model="field.value"
+                        :placeholder="field.placeholder || ''"
+                        :required="isRequired(field.required)"
+                        >
+                        <template #label>{{ field.label }}</template>
+                    </InputFormPrice>
+                </input-container>
                 <input-container v-else-if="field.type ==='IID'">
                 <ImageUploadModal
                     :isOpen="isModalOpen"
@@ -96,7 +107,7 @@
                 <button type="button" @click="openModal">
 
                     <p v-if="this.uploadedImageUrl">Hochgeladenes Bild: <img :src="'/images/blogs/thumbs/' + this.uploadedImageUrl" width="100" alt="Vorschau" title="Vorschau"/></p>
-                    <img v-else-if="this.imageUrle" :src="this.imageUrle" alt="Bild" width="100">
+                    <img v-else-if="this.imageUrle && this.imageUrle !='/images/blogs/008.jpg'" :src="this.imageUrle" alt="Bild" width="100">
                     <span v-else><img src="/images/blogs/thumbs/009.jpg" alt="Jetzt Bild Hochladen" width="100"  title="Jetzt Bild Hochladen" ></span>
                     <input type="hidden" :name="field.name" :id="field.name" :ref="field.name" :value="this.imageId">
                 </button>
@@ -151,6 +162,37 @@
 
                                         :options="'options:' + (this.sortedOptions.length > 0)
                                             ? this.sortedOptions.find(obj => obj[field.name])?.[field.name] || []
+                                            : []"
+                                        ref="field.name"
+                                        :name="field.name"
+                                        :xval="field.value"
+                                        :xname="field.name"
+                                        :required="isRequired(field.required)"
+                                    >
+
+                                </InputSelect>
+
+                                </input-container>
+                                <input-container
+                                        v-else-if="field.type === 'select'"
+
+                                    >
+
+
+                                        <InputLabel
+                                        :name="field.name"
+                                        :label="field.label">
+                                    </InputLabel>
+                                    <InputSelect
+
+
+                                    @input-change="updateFormData"
+
+                                        :id="field.name + '_' + field.id"
+                                        :model-value="field.value"
+
+                                        :options="'options:' + (this.sortedOptions_sel.length > 0)
+                                            ? this.sortedOptions_sel.find(obj => obj[field.name])?.[field.name] || []
                                             : []"
                                         ref="field.name"
                                         :name="field.name"
@@ -249,13 +291,18 @@ const segments = path.split("/"); // Teilt den Pfad in Segmente auf
 const id = segments[segments.length - 2];
 let tablex = segments[segments.length - 1]; // Muss ein ref sein, wenn es reaktiv sein soll
 const table_z = tablex;
+let table = tablex;
 let xid = segments[segments.length - 2];
 
 const routes = {
     getform: (tablex, id) => `/tables/form-data/${tablex}/${id}`,
     getselroute: (name) => `/tables/sort-data/${name}`,
+    getselenumroute: (table,name) => `/tables/sort-enum/${table}/${name}`,
+
     putdata: (table,id) => `admin/tables/update/${tablex}/${id}`,
 };
+console.log("RTE " + routes.getselenumroute("images", "status"));
+
 // this.sortOptions = this.sortOptions ?? {}
 let sortOptions;
 sortOptions = sortOptions ?? {};
@@ -301,6 +348,8 @@ import InputLabel from "@/Application/Components/Form/InputLabel.vue";
 import InputElement from "@/Application/Components/Form/InputElement.vue";
 import InputCheckbox from "@/Application/Components/Form/InputCheckbox.vue";
 import InputSelect from "@/Application/Components/Form/InputSelect.vue";
+import InputFormPrice from "@/Application/Components/Form/InputFormPrice.vue";
+import InputFormSelect from "@/Application/Components/Form/InputFormSelect.vue";
 import InputTextarea from "@/Application/Components/Form/InputTextarea.vue";
 import InputHtml from "@/Application/Components/Form/InputHtml.vue";
 import InputError from "@/Application/Components/Form/InputError.vue";
@@ -340,6 +389,8 @@ export default defineComponent({
          InputTextarea,
          InputHtml,
         InputFormTextArea,
+        InputFormPrice,
+        InputFormSelect,
         InputError,
         DialogModal,
          Alert,
@@ -413,6 +464,8 @@ export default defineComponent({
         formDatas: {},
         uploadedIid: null,
         ItemName: "Beitrag",
+
+
         isModalOpen: false,
         uploadedImageUrl: null,
         csrfToken: document.getElementById('token').value,
@@ -428,6 +481,7 @@ export default defineComponent({
             // formFields:  {},
             ///formFields:[],
             options: {},
+            options_sel: {},
             //   formData: {},
             // field: [{ name: '', label: '', type:'' } ],
 
@@ -488,6 +542,18 @@ export default defineComponent({
         console.log('sortedOptions:', options); // Überprüfe den Inhalt von sortedOptions
         return options;
     },
+    sortedOptions_sel() {
+        let options_sel;
+        if (Array.isArray(this.options_sel)) {
+            options_sel = [...this.options_sel];  // Kopiere das Array
+        } else if (typeof this.options_sel === 'object') {
+            options_sel = Object.entries(this.options_sel).map(([key, value]) => [key, value]);
+        } else {
+            options_sel = [];
+        }
+        console.log('sortedOptions_sel:',options_sel); // Überprüfe den Inhalt von sortedOptions
+        return options_sel;
+    },
     fieldValue() {
         return this.field?.value || "";
     },
@@ -537,7 +603,7 @@ export default defineComponent({
 
                     this.readingTime = this.calculateReadingTime(textareaField.value);
                     this.readingTime = this.readingTime  < 1 ? "1" : this.readingTime;
-                    console.log("RT:"+this.readingTime);
+                    //console.log("RT:"+this.readingTime);
                 }
                 let fod = {};
 
@@ -577,7 +643,7 @@ export default defineComponent({
       {
         // this.readingTime = 1;
       }
-      console.log("Berechnete Lesezeit:", this.readingTime);
+      //console.log("Berechnete Lesezeit:", this.readingTime);
     },
         updateData() {
             if (this.formData.length < 1) {
@@ -881,10 +947,10 @@ return { ffo };
     },
         updateFormData(value, fieldName) {
             let formDatas = {};
-            if (fieldName.includes("_id")){
+            if (fieldName.includes("_id") || fieldName == "status"){
             this.formDatas[fieldName] = value;
             }
-            if(field.name.includes("_iid"))
+            if(fieldName.includes("_iid"))
             {
                 this.formData[fieldName] = value;
             }
@@ -904,19 +970,25 @@ return { ffo };
             {
                 this.formData[field.name] = this.ref2;
             }
-
-
-            console.log("iid"+this.iid);
             if(field.type === "select_id")
             {
 
                 this.getsel(field.name);
 
             }
+            if(field.type === "select")
+            {
+                this.getsel_enum(field.name,this.tablex);
+                console.log("sso:" + JSON.stringify(this.options));
+            }
             if (field.name.includes("_id")) {
                 this.formData[field.name] = this.formDatas[field.name];
             }
             else if(field.type === "IID")
+            {
+                this.formData[field.name] = this.formDatas[field.name];
+            }
+            else if(field.type === "select")
             {
                 this.formData[field.name] = this.formDatas[field.name];
             }
@@ -1001,6 +1073,78 @@ return { ffo };
 
                     this.sortedOptions.push(output);
                     this.options = this.sortedOptions;
+
+                })
+                .catch((error) => {
+                    console.error(
+                        "Fehler beim Abrufen der Formulardaten:",
+                        error,
+                    );
+                });
+
+        },
+        getsel_enum(name,table)
+        {
+            var sortedOptions_sel = this.sortedOptions_sel ?? [];
+            let sdata_sel = this.sdata_sel ?? {};
+            axios
+                .get(routes.getselenumroute(table,name))
+                .then((response) => {
+
+                    sdata_sel = JSON.stringify(response.data);
+
+                    //sdata = sdata.replace(new RegExp(name, "g"), '');
+                    sdata_sel = JSON.parse(sdata_sel);
+                    // 1. JSON-String in Objekt umwandeln
+                    // const parsedData = JSON.parse(jsonString);
+
+                    // 2. Nur das ".sortedOptions" Objekt extrahieren
+                    // const sortedOptionsData = parsedData[".sortedOptions"];
+
+                    // 3. In `sortedOptions` speichern
+                    if (!Array.isArray(this.sortedOptions_sel)) {
+                        this.sortedOptions_sel = []; // Leeres Array initialisieren
+                    }
+                    // this.sortedOptions[name] = sortedOptionsData;
+
+                                       // sortedOptions[name] = sortedOptionsData;
+
+
+                    // Die Struktur umkehren
+                    // Object.entries(this.sortedOptions).forEach(([key, value]) => {
+                    //     if (value.sortedOptions) {
+                    //         sortedOptions[key] = value.sortedOptions;
+                    //     }
+                    // });
+
+                    const input = (sdata_sel);
+                    const output = {};
+
+                    // Durch alle Einträge iterieren und die Keys umwandeln
+                    Object.entries(input).forEach(([key, value]) => {
+                        // Entfernen von "sortedOptions" aus dem Key, falls vorhanden
+                        const cleanedKey = key.replace('.sortedOptions_sel', '');
+
+                        // Überprüfen, ob der Key ein String ist und ob er einen Punkt enthält
+                        if (typeof cleanedKey === 'string' && cleanedKey.includes('.')) {
+                            const parts = cleanedKey.split('.'); // Key in zwei Teile aufteilen
+
+                            if (parts.length === 2) {
+                                const [prefix, suffix] = parts;
+                                const newKey = `${suffix}.${prefix}`; // Reihenfolge umdrehen
+                                output[newKey] = value;
+                            } else {
+                                output[cleanedKey] = value;
+                            }
+                        } else {
+                            // Falls der Key keinen Punkt enthält, oder nicht als String vorliegt, Key unverändert lassen
+                            output[cleanedKey] = value;
+                        }
+                    });
+                    // output = (JSON.stringify(output));
+
+                    this.sortedOptions_sel.push(output);
+                    this.options_sel = this.sortedOptions_sel;
 
                 })
                 .catch((error) => {

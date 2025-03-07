@@ -290,6 +290,11 @@ class TablesController extends Controller
         $sortop = FormController::getOptions($column);
         return response()->json([$column.".sortedOptions" => $sortop]);
     }
+    public function getOptionz_sel($table,$name)
+    {
+        $sortop = FormController::getOptions_sel($table,$name);
+        return response()->json([$name.".sortedOptions_sel" => $sortop]);
+    }
     public function ExportFields($table,$id)
     {
         $create = '';
@@ -415,14 +420,29 @@ class TablesController extends Controller
         if(@Settings::otherField[$table])
         {
         $otherField =    Settings::otherField[$table]." as description";
+        }$table_alt = $table;
+        $of = $otherField;
+        if(substr_count($otherField,"_idd"))
+        {
+            $otherField = str_replace(["_idd","_id"],"",Settings::otherField[$table]);
+            $oa = true;
+            $col = str_replace("_idd","_id",$otherField);
+            $name = $otherField;
+            $table_alt = $col;
+            $of = Settings::underCals[$table];
+           // $qryadd  = join($name ON $table.$table."_id" = $name."id");
+           \Log::info($otherField);
         }
 
 
         $otherField = $otherField ?? '';
         $search = trim(request('search', ''));
-
+        //$qryadd  = join($name ON $table.$table."_id" = $name."id");
         $tables = DB::table($table)
-            ->select("{$table}.*", "{$table}.$headline as name","{$table}.$otherField")
+            ->select("{$table}.*", "{$table}.$headline as name","{$table_alt}.$of as description")
+            ->when($oa === true, function ($query) use ($name, $table,$col) {
+                return $query->join($name, "{$table }.{$name}_id", "=", "{$name}.id"); // JOIN nur wenn $otherField 'users_idd' ist
+            })
             ->filterdefault(['search' => request('search')])
             ->orderby($ord[0], $ord[1])
             ->paginate(20)
@@ -1507,6 +1527,12 @@ class TablesController extends Controller
     {
         if (!Schema::hasTable($table)) {
             return redirect()->back()->withErrors(['error' => 'Tabelle existiert nicht']);
+        }
+        if(!CheckRights(Auth::id(),$table,"delete"))
+        {
+            \Log::warning("no rights to delete in table ".$table." with UID ".Auth::id());
+            return redirect()->back()->withErrors(['error' => 'Sie haben nicht die benötigten Rechte']);
+
         }
         DB::table($table)->where('id', $id)->delete();
 

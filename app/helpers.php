@@ -64,27 +64,74 @@ if(!function_exists("renderText"))
         return html_entity_decode(html_entity_decode(smi(htmlentities(nl2br($txt)))));
     }
 }
-
 use Illuminate\Database\Query\Builder;
 use App\Models\Settings;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Schema;
+
 if (!Builder::hasMacro('filterdefault')) {
     Builder::macro('filterdefault', function ($filters) {
+        // Überprüfen, ob der 'search' Filter gesetzt ist
         if (!empty($filters['search'])) {
-            $whvals = @Settings::searchFields[$_GET['table']] ?? []; // Rufe `whvals` korrekt auf
-            foreach ($whvals as $whn) {
-                $this->orWhereRaw("LOWER(`$whn`) LIKE ?", ['%' . strtolower($filters['search']) . '%']);
-            }
-            $table = last(request()->segments());
+            // Überprüfen, ob der 'table' Parameter in $_GET vorhanden ist
+            $table = $_GET['table'] ?? session('table');
 
+            // Wenn der 'table' Parameter nicht gesetzt ist, breche die Funktion ab oder gebe eine Fehlermeldung aus
+            if (!$table) {
+                return $this; // oder eine Ausnahme werfen, falls notwendig
+            }
+
+            // Speichere den 'table' Parameter in der Session für zukünftige Anfragen
+            session(['table' => $table]);
+
+            // Hole die Filterfelder aus den Einstellungen
+            $whvals = Settings::searchFields[$table] ?? [];
+
+            // Wenn Filterfelder existieren, durchlaufe sie und füge OR WHERE-Klauseln hinzu
+            foreach ($whvals as $whn) {
+                $this->orWhereRaw("LOWER(`$table`.`$whn`) LIKE ?", ['%' . strtolower($filters['search']) . '%']);
+            }
+
+            // Überprüfen, ob die Spalte 'created_at' in der Tabelle existiert
             $columns = Schema::getColumnListing($table);
-            if(in_array("created_at",$columns))
-            $this->orWhere("created_at", 'like', '%'.$filters['search']. '%');
+            if (in_array("created_at", $columns)) {
+                $this->orWhere("$table.created_at", 'like', '%' . $filters['search'] . '%');
+            }
+
+            // Weitere Filterung auf der 'id' Spalte
+            $this->orWhere("{$table}.id", "like", '%' . $filters['search'] . '%');
         }
-        $this->orWhere("id","like",'%'.$filters['search'].'%');
 
         return $this;
     });
 }
+        
+    // use Illuminate\Database\Query\Builder;
+    // use App\Models\Settings;
+    // if (!Builder::hasMacro('filterdefault')) {
+    //     Builder::macro('filterdefault', function ($filters) {
+    //         if (!empty($filters['search'])) {
+    //             $whvals = @Settings::searchFields[$_GET['table']] ?? []; // Rufe `whvals` korrekt auf
+    //             session(['table' => $_GET['table']]);
+
+    //             // Abrufen des Wertes aus der Session
+    //             $table = session('table');
+    //             foreach ($whvals as $whn) {
+    //                                     $this->orWhereRaw("LOWER(`$table` . `$whn`) LIKE ?", ['%' . strtolower($filters['search']) . '%']);
+    //             }
+
+
+    //             $columns = Schema::getColumnListing($table);
+    //             if(in_array("created_at",$columns)){
+    //                 $this->orWhere("$table.created_at", 'like', '%'.$filters['search']. '%');
+    //             }
+
+    //         }
+    //         $this->orWhere("{$table}.id","like",'%'.$filters['search'].'%');
+
+    //         return $this;
+    //     });
+    // }
 
 
 if(!function_exists("renderMarkdown"))
@@ -947,6 +994,7 @@ if(!function_exists("getPositionOfTable"))
 if(!function_exists('ageofArticle'))
 {
     function ageofArticle($time){
+        return Carbon::createFromTimestamp($time)->diffForHumans();
         $seconds = (time()-@$time);
         $minutes = ceil($seconds/60);
         $hours = $minutes/60;

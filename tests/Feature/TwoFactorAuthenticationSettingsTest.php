@@ -19,7 +19,7 @@ class TwoFactorAuthenticationSettingsTest extends TestCase
 
         $this->actingAs($user = User::factory()->create());
 
-        $this->withSession(['auth.password_confirmed_at' => time()]);
+        $this->withSession(['auth.password_confirmed_at' => now()]);
 
         $response = $this->post('/user/two-factor-authentication');
 
@@ -35,7 +35,7 @@ class TwoFactorAuthenticationSettingsTest extends TestCase
 
         $this->actingAs($user = User::factory()->create());
 
-        $this->withSession(['auth.password_confirmed_at' => time()]);
+        $this->withSession(['auth.password_confirmed_at' => now()]);
 
         $this->post('/user/two-factor-authentication');
         $this->post('/user/two-factor-recovery-codes');
@@ -56,7 +56,7 @@ class TwoFactorAuthenticationSettingsTest extends TestCase
 
         $this->actingAs($user = User::factory()->create());
 
-        $this->withSession(['auth.password_confirmed_at' => time()]);
+        $this->withSession(['auth.password_confirmed_at' => now()]);
 
         $this->post('/user/two-factor-authentication');
 

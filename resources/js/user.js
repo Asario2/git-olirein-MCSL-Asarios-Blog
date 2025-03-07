@@ -32,7 +32,7 @@ const aiButtonImage = '';
 
 async function loadDarkMode() {
     document.addEventListener("DOMContentLoaded", async () => {
-        console.log("Dark Mode wird geladen...");
+       // console.log("Dark Mode wird geladen...");
 
         let mode = "light"; // Standardwert
 

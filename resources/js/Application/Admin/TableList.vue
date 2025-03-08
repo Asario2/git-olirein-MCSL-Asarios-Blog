@@ -37,7 +37,7 @@
 
                             class="text-blue-600 dark:text-blue-600 hover:underline"
                         >
-                            {{ data.datarow.table_name }}</a
+                            {{ data.datarow.name }}</a
                         >
                     </td>
                     <td class="np-dl-td-normal">

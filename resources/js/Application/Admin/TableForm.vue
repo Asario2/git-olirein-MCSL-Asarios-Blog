@@ -308,6 +308,8 @@ let sortOptions;
 sortOptions = sortOptions ?? {};
 // console.log(routes.getselroute("blog_authors"));
 import { defineComponent } from "vue";
+import { nextTick } from 'vue';
+
 import axios from "axios";
 import $ from "jquery";
 import pickBy from "lodash/pickBy";
@@ -514,34 +516,51 @@ export default defineComponent({
         };
     },
     computed: {
-    //     sortedOptions() {
-    //         // this.sortedOptions = this.sortedOptions ?? {};
-    //         this.options = this.options ?? this.sortedOptions;
 
-    //         if(Array.isArray(this.options)) {
-    //         // Falls `this.options` bereits ein korrektes Array ist, direkt zurückgeben
-    //         return this.options;
+
+sortedOptions() {
+    if (!this.options || !Array.isArray(this.options)) return [];
+
+    console.log("Vor der Sortierung:", JSON.stringify(this.options, null, 2));
+
+    const sorted = this.options.map(obj => {
+        return Object.fromEntries(
+            Object.entries((obj)).map(([outerKey, innerObj]) => {
+                const rawInnerObj = (innerObj);
+
+                const sortedInner = Object.fromEntries(
+                    Object.entries(rawInnerObj)
+                        .sort(([, a], [, b]) => a.localeCompare(b))
+                );
+
+                return [outerKey, sortedInner];
+            })
+        );
+    });
+
+    // Warten, bis Vue den neuen Status rendern kann
+    nextTick(() => {
+        console.log("Nach der Sortierung:", JSON.stringify(sorted, null, 2));
+    });
+
+    return sorted;
+}
+,
+
+
+    // sortedOptions() {
+    //     let options;
+    //     if (Array.isArray(this.options)) {
+    //         options = [...this.options];  // Kopiere das Array
+    //     } else if (typeof this.options === 'object') {
+    //         options = Object.entries(this.options).map(([key, value]) => [key, value]);
+    //     } else {
+    //         options = [];
     //     }
-    //     else if (typeof this.options === "object" && this.options !== null) {
-    //         // Falls `this.options` ein Objekt ist, in ein Array von Arrays umwandeln
-    //         return Object.entries(this.options);
-    //     }
-    //     // Falls `this.options` nicht gültig ist, ein leeres Array zurückgeben
-    //     // console.log("options:" + this.options);
-    //     return [];
+    //     console.log('sortedOptions:', options); // Überprüfe den Inhalt von sortedOptions
+    //     console.log(JSON.stringify(this.options));
+    //     return options;
     // },
-    sortedOptions() {
-        let options;
-        if (Array.isArray(this.options)) {
-            options = [...this.options];  // Kopiere das Array
-        } else if (typeof this.options === 'object') {
-            options = Object.entries(this.options).map(([key, value]) => [key, value]);
-        } else {
-            options = [];
-        }
-        console.log('sortedOptions:', options); // Überprüfe den Inhalt von sortedOptions
-        return options;
-    },
     sortedOptions_sel() {
         let options_sel;
         if (Array.isArray(this.options_sel)) {
@@ -1461,7 +1480,7 @@ console.log(`/api/get-image-id/${table}/${id}`);
         // console.log("iR:" + inputRef);
         //     if (Array.isArray(inputRef) && inputRef.length > 0) {
         //         this.ref2 = inputRef[1]._value;
-        //     }
+        //
 
         this.fetchImage(this.ref3,this.table_image);
         // alert("yes");

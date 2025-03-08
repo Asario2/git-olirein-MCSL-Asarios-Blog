@@ -513,8 +513,8 @@ class TablesController extends Controller
     public function ListTables(Request $request,$table_alt='')
     {
         $table = $table_alt;
-        $tables = Table::select("admin_table.table_name as full_name","admin_table.table_name","admin_table.*")->filterBlog($request->only('search'))
-            ->orderBy('table_name', 'ASC')
+        $tables = Table::select("admin_table.name as full_name","admin_table.name","admin_table.*")->filterBlog($request->only('search'))
+            ->orderBy('name', 'ASC')
             ->paginate(20)
             ->withQueryString();
 

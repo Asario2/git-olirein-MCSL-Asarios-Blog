@@ -117,6 +117,12 @@ class FormController extends Controller
 
     // Bestimmen, welche ID-Spalte verwendet werden soll
     $id = 'id'; // Standardmäßig 'id'
+    if (Schema::hasColumn($table, 'position')) {
+    $id2 = "position";
+    }
+    else{
+        $id2 = "id";
+    }
 
     // Abfrage vorbereiten, abhängig von der Spalte 'pub'
     if (Schema::hasColumn($table, 'pub')) {
@@ -126,16 +132,28 @@ class FormController extends Controller
     }
 
     // Hole nur die 'id' und 'name' Felder
-    $tabs = $query->select($id, "name")->get();
+    $tabs = $query->select("id", "name")->get();
+    $tabs = $tabs->sortBy('name');
+
+
     \Log::info($tabs);
+    $id2 = 'id';
+    foreach($tabs as $key=>$val)
+    {
+      $tabs2 = [$key => $val];
+    }
     // Erstelle das Ergebnis-Array
     $result = [];
     foreach ($tabs as $item) {
-        $result[$item->$id] = $item->name; // ID als Schlüssel, Name als Wert
+        $result[$item->$id2] = $item->name; // ID als Schlüssel, Name als Wert
     }
-
+    // $result = $tabs;
+    // usort($result, function($a, $b) {
+    //     return strcmp($a->name, $b->name);
+    // });
+    \Log::info("frt:". json_encode($result));
     // Das Array ist bereits nach 'name' sortiert, daher ist keine zusätzliche Sortierung notwendig.
-    return $result;
+    return $tabs;
 }
 
 

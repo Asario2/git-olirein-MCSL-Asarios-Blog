@@ -26,15 +26,14 @@
                 <input-subtitle>Daten</input-subtitle>
                 <template style="display: inline-block">
                     <div>
+
                         <!-- <pre>{{ formData }}</pre> -->
-                        <!-- <pre>{{ quotebrace(this.sortedOptions) }}</pre> -->
+                        <!-- <pre>{{this.xsor_alt['admin_table_id'] }}</pre> -->
 
                         <input-group>
     <form @submit.prevent="submitForm" enctype="multipart/form-data">
         <div class="maxx grid grid-cols-1 lg:grid-cols-2 mb-2 gap-2 lg:gap-x-6 mt-2">
             <template v-for="(field, key) in ffo" :key="key">
-
-
                 <input-container v-if="field.name === 'reading_time'">
                     <InputFormText
                         :id="field.name + '_' + field.id"
@@ -151,6 +150,7 @@
                                         <InputLabel
                                         :name="field.name"
                                         :label="field.label">
+
                                     </InputLabel>
                                     <InputSelect
 
@@ -160,10 +160,8 @@
                                         :id="field.name + '_' + field.id"
                                         :model-value="field.value"
 
-                                        :options="'options:' + (this.sortedOptions.length > 0)
-                                            ? this.sortedOptions.find(obj => obj[field.name])?.[field.name] || []
-                                            : []"
-                                        ref="field.name"
+                                        :options="`options: ${this.xsor_alt[field.name]?.length > 0 ? this.xsor_alt[field.name] : []}`"
+                                        :ref="field.name"
                                         :name="field.name"
                                         :xval="field.value"
                                         :xname="field.name"
@@ -403,6 +401,9 @@ export default defineComponent({
         modelValue: {
         type: [String, Number],
     },
+    input2:{
+        type: [Object,Array],
+    },
     xval: {
         type: [String, Number],
         default: 1,
@@ -466,8 +467,9 @@ export default defineComponent({
         formDatas: {},
         uploadedIid: null,
         ItemName: "Beitrag",
-
-
+            so: [],
+            xsor_alt: {},
+        sortedOptions: {},
         isModalOpen: false,
         uploadedImageUrl: null,
         csrfToken: document.getElementById('token').value,
@@ -518,33 +520,46 @@ export default defineComponent({
     computed: {
 
 
-sortedOptions() {
-    if (!this.options || !Array.isArray(this.options)) return [];
 
-    console.log("Vor der Sortierung:", JSON.stringify(this.options, null, 2));
+                sortedOptions() {
 
-    const sorted = this.options.map(obj => {
-        return Object.fromEntries(
-            Object.entries((obj)).map(([outerKey, innerObj]) => {
-                const rawInnerObj = (innerObj);
 
-                const sortedInner = Object.fromEntries(
-                    Object.entries(rawInnerObj)
-                        .sort(([, a], [, b]) => a.localeCompare(b))
-                );
+                }
+        // if (!this.options || !Array.isArray(this.options)) return [];
 
-                return [outerKey, sortedInner];
-            })
-        );
-    });
 
-    // Warten, bis Vue den neuen Status rendern kann
-    nextTick(() => {
-        console.log("Nach der Sortierung:", JSON.stringify(sorted, null, 2));
-    });
 
-    return sorted;
-}
+        // const sorted = this.options.map(obj => {
+        //     return Object.fromEntries(
+        //         Object.entries(obj).map(([outerKey, innerObj]) => {
+        //             const rawInnerObj = innerObj;
+
+
+        //             const sortedInner = Object.fromEntries(
+        //                 Object.entries(rawInnerObj)
+        //                     .sort(([, a], [, b]) => {
+
+        //                         if (typeof a === 'string' && typeof b === 'string') {
+        //                             return a.localeCompare(b);
+        //                         } else if (typeof a === 'number' && typeof b === 'number') {
+        //                             return a - b;
+        //                         }
+        //                         return 0;
+        //                     })
+        //             );
+
+        //             return [outerKey, sortedInner];
+        //         })
+        //     );
+        // });
+
+        // nextTick(() => {
+        //     console.log("Nach der Sortierung:", JSON.stringify(sorted, null, 2));
+        // });
+
+        // return sorted;
+
+
 ,
 
 
@@ -975,6 +990,25 @@ return { ffo };
             }
             // console.log("aaaaaaaa" + JSON.stringify(this.formDatas,null,2));
         },
+        stripslashes(input) {
+  if (typeof input === 'string') {
+    // Entfernt Backslashes aus dem String
+    return input.replace(/\\(.)/g, '$1');
+  } else if (Array.isArray(input)) {
+    // Falls es ein Array ist, wende die Funktion auf jedes Element an
+    return input.map(item => stripslashes(item));
+  } else if (typeof input === 'object' && input !== null) {
+    // Falls es ein Objekt ist, wende die Funktion rekursiv auf alle Werte an
+    let result = {};
+    for (let key in input) {
+      if (input.hasOwnProperty(key)) {
+        result[key] = stripslashes(input[key]);
+      }
+    }
+    return result;
+  }
+  return input; // Falls es weder ein String noch ein Array noch ein Objekt ist, gebe den Wert unverändert zurück
+},
         setFormField(field,name) {
 
             // Directly setting the value in formData
@@ -1030,78 +1064,118 @@ return { ffo };
                     typeof value === "number",
             );
         },
-        getsel(name)
-        {
-            var sortedOptions = this.sortedOptions ?? [];
-            let sdata = this.sdata ?? {};
-            axios
-                .get(routes.getselroute(name))
-                .then((response) => {
+        getsel(name) {
+    var sortedOptions = this.sortedOptions ?? [];
+    let sdata = this.sdata ?? {};
+    axios
+        .get(routes.getselroute(name))
+        .then((response) => {
+            if (!Array.isArray(this.sortedOptions)) {
+                this.sortedOptions = []; // Leeres Array initialisieren
+            }
 
-                    sdata = JSON.stringify(response.data);
+            let input = response.data;
 
-                    //sdata = sdata.replace(new RegExp(name, "g"), '');
-                    sdata = JSON.parse(sdata);
-                    // 1. JSON-String in Objekt umwandeln
-                    // const parsedData = JSON.parse(jsonString);
 
-                    // 2. Nur das ".sortedOptions" Objekt extrahieren
-                    // const sortedOptionsData = parsedData[".sortedOptions"];
+            const output = [];
+            if (typeof input === 'object' && !Array.isArray(input)) {
+                input = Object.entries(input).map(([key, value]) => value);
+                }
+            input.sort((a, b) => a.position - b.position);
+            this.options2 =  this.options2 ?? [];
+            this.options2 = input;
 
-                    // 3. In `sortedOptions` speichern
-                    if (!Array.isArray(this.sortedOptions)) {
-                        this.sortedOptions = []; // Leeres Array initialisieren
+            // Zuerst das Objekt in ein Array umwandeln und die ID/Name-Paare speichern
+            Object.entries(input).forEach(([key, value]) => {
+                // Entfernen von "sortedOptions" aus dem Key, falls vorhanden
+                const cleanedKey = key.replace('.sortedOptions', '');
+
+                // Überprüfen, ob der Key ein String ist und ob er einen Punkt enthält
+                if (typeof cleanedKey === 'string' && cleanedKey.includes('.')) {
+                    const parts = cleanedKey.split('.'); // Key in zwei Teile aufteilen
+
+                    if (parts.length === 2) {
+                        const [prefix, suffix] = parts;
+                        const newKey = `${suffix}.${prefix}`; // Reihenfolge umdrehen
+                        output.push({ id: newKey, name: value });
+                    } else {
+                        output.push({ id: cleanedKey, name: value });
                     }
-                    // this.sortedOptions[name] = sortedOptionsData;
+                } else {
+                    // Falls der Key keinen Punkt enthält, oder nicht als String vorliegt, Key unverändert lassen
+                    output.push({ id: cleanedKey, name: value });
+                }
+            });
 
-                                       // sortedOptions[name] = sortedOptionsData;
+            // Sortiere die Optionen nach 'name'
+            output.sort((a, b) => a.name.localeCompare(b.name)); // Sortieren nach Namen
+
+            // Nun haben wir die ID/Name-Paare nach Name sortiert
+            const sortedObj = output.map(item => ({
+                [item.id]: item.name
+            }));
+
+            let obj = JSON.stringify(input,null,2)
+
+obj = obj.replace(/"formFields": \[.*\]/, "")
+    .replace(/^\{|\}$/g, "")
+    .replace(/}\s*,\s*\n\s*}/g, "},")
+    .replace(/[[\]]/g, "")
+    .replace(/\[|\]$/, "")
+    .replace(/,\s*\n\s*{/g, ",")
+    .replace(/\s*\}(?!,)\s*/g, "}")
+    .replace(/}},/g, "\n   },")
+    .replace(/}}/g, "\n   }\n  }")
+    .replace(/"\d+"\s*:\s*{/g, '{')
+    .replace(/},\s*{/g, '},')
+    .replace(/},/g,"},{");
+    // obj = '{\n\"' + name + '": [\n' + obj + '\n]   \n}';
+    console.log("ob: " + obj);
+            obj  = "["+obj+"]";
+
+    obj = JSON.parse(obj);
+    // obj = JSON.parse(obj);
+//     const transformed = obj.reduce((acc, item) => {
+//   acc[item.id] = item.name;
+//   return acc;
+// }, {});
+
+// obj = transformed;
+            input = obj;
+            // let input2 = [];
+            // input = JSON.stringify(input);
+            // input = input.replace('.sortedOptions', '');
+            // input  = JSON.parse(input);
+            // this.sortedOptions = obj;
+            console.log("obj vor der Zuweisung:", obj);
+            this.xsor_alt[name] = this.stripslashes(JSON.stringify(Object.entries(obj)));
+            console.log("sortedOptions:", sortedOptions);
+            // const newArray = Object.entries(sortedOptions).map(([key, value]) => ({
+            //     id: key,
+            //     ...value
+            // }));
+            // this.sortedOptions[name] = newArray;
+            console.log("this.sortedOptions nach der Zuweisung:", this.sortedOptions[name]);
 
 
-                    // Die Struktur umkehren
-                    // Object.entries(this.sortedOptions).forEach(([key, value]) => {
-                    //     if (value.sortedOptions) {
-                    //         sortedOptions[key] = value.sortedOptions;
-                    //     }
-                    // });
+            // console.log("SO:" + JSON.stringify([this.sortedOptions,input]))
+            // this.sortedOptions = Array.isArray(input[0][1]) ? input[0][1] : input;
+            // console.log("SO:", JSON.stringify(this.sortedOptions));
+            // console.log("input: " + JSON.stringify(input));
+            console.log("Type of input:", typeof input);
+            console.log("Check input:", Array.isArray(input) ? "Array" : "Not an Array");
+            console.log("Content of input:", JSON.stringify(this.sortedOptions[name], null, 2));
+            // this.sortedOptions  = JSON.stringify(input, null, 2);
+            // this.sortedOptions = JSON.parse(this.sortedOptions);
+            this.options2 = this.sortedOptions;
+            this.options = this.sortedOptions;
+        })
+        .catch((error) => {
+            console.error("Fehler beim Abrufen der Formulardaten:", error);
+        });
+}
 
-                    const input = (sdata);
-                    const output = {};
-
-                    // Durch alle Einträge iterieren und die Keys umwandeln
-                    Object.entries(input).forEach(([key, value]) => {
-                        // Entfernen von "sortedOptions" aus dem Key, falls vorhanden
-                        const cleanedKey = key.replace('.sortedOptions', '');
-
-                        // Überprüfen, ob der Key ein String ist und ob er einen Punkt enthält
-                        if (typeof cleanedKey === 'string' && cleanedKey.includes('.')) {
-                            const parts = cleanedKey.split('.'); // Key in zwei Teile aufteilen
-
-                            if (parts.length === 2) {
-                                const [prefix, suffix] = parts;
-                                const newKey = `${suffix}.${prefix}`; // Reihenfolge umdrehen
-                                output[newKey] = value;
-                            } else {
-                                output[cleanedKey] = value;
-                            }
-                        } else {
-                            // Falls der Key keinen Punkt enthält, oder nicht als String vorliegt, Key unverändert lassen
-                            output[cleanedKey] = value;
-                        }
-                    });
-                    // output = (JSON.stringify(output));
-
-                    this.sortedOptions.push(output);
-                    this.options = this.sortedOptions;
-
-                })
-                .catch((error) => {
-                    console.error(
-                        "Fehler beim Abrufen der Formulardaten:",
-                        error,
-                    );
-                });
-
-        },
+,
         getsel_enum(name,table)
         {
             var sortedOptions_sel = this.sortedOptions_sel ?? [];
@@ -1200,6 +1274,7 @@ return { ffo };
             this.obj2 = obj;
             // console.log(obj);
             this.ffo = obj
+            console.log("ffo: "+JSON.stringify(obj));
             const ffo = this.ffo;
             // 💡 Konvertiere das Objekt in ein Array
             const formFieldsArray = Object.values(formFields_old);

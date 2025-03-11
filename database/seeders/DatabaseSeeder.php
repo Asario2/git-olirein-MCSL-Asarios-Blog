@@ -145,7 +145,7 @@ class AdminSeeder extends Seeder
          // Anwender
          User::create([
             'first_name' => 'Oliver',
-            'nick_name' => 'Reinking',
+            'name' => 'Reinking',
             'email' => 'info@starter-eleven.de',
             'email_verified_at' => Carbon::now(),
             'password' => Hash::make('12345678'),

@@ -48,7 +48,7 @@
                 linkName="Inhalte Verwalten"
                 target="_self"
                 :withIcon="true"
-                icon="IconBook"
+                icon="IconDB"
             >
                 <template #description>
                     Hier kannst du alle Datenbankinhalte bearbeiten

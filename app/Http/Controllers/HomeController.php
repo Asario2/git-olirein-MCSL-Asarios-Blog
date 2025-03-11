@@ -42,17 +42,16 @@ class HomeController extends Controller
             'blogs.id as id',
             'blogs.blog_date as blog_date',
             'blogs.title as title',
+            'blogs.title as name',
             'blogs.slug as slug',
             'blogs.summary as summary',
             'blogs.reading_time as reading_time',
             'blog_authors.name as author_name',
-            'blog_images.url as url',
-            'blog_images.name as name',
+            'blogs.image_path as url',
             'blog_categories.name as category_name',
             "blogs.xis_aiImage as madewithai",
             )
             ->join('blog_authors', 'blog_authors.id', '=', 'blogs.blog_authors_id')
-            ->join('blog_images', 'blog_images.id', '=', 'blogs.blog_images_iid')
             ->join('blog_categories', 'blog_categories.id', '=', 'blogs.blog_categories_id')
             //
             ->whereDate('blog_date', '<=', $zeitpunkt)
@@ -95,7 +94,7 @@ class HomeController extends Controller
         $blog = Blog::where('slug', $slug)->first();
         //
         $blog->blog_author;
-        $blog->blog_images;
+        // $blog->blog_images;
         $blog->blog_category;
         $blogarticle = null;
         //

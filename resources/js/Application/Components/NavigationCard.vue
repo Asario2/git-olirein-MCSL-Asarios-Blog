@@ -50,6 +50,7 @@
 <script>
 import IconArrowLongRight from "@/Application/Components/Icons/ArrowLongRight.vue";
 import IconBook from "@/Application/Components/Icons/Book.vue";
+import IconDB from "@/Application/Components/Icons/db.vue";
 
 export default {
     name: "Components_NavigationCard",
@@ -57,6 +58,7 @@ export default {
     components: {
         IconArrowLongRight,
         IconBook,
+        IconDB,
     },
 
     props: {
@@ -98,6 +100,7 @@ export default {
         dynamicIcon() {
             const icons = {
                 IconBook,
+                IconDB,
             };
             //
             return icons[this.icon];

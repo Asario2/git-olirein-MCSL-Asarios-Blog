@@ -4,7 +4,7 @@
     >
         <div class="flex flex-col max-w-6xl mx-auto overflow-hidden rounded">
             <img
-                :src="blog?.blog_images?.url.replace(/\/blogs\//, '/blogs/big/') || '/images/blogs/big/008.jpg'"
+                :src="`/images/blogs/big/${blog.url}` || '/images/blogs/big/008.jpg'"
                 :alt="blog.title"
                 loading="lazy"
                 width="480"

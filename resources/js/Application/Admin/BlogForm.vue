@@ -452,7 +452,7 @@ export default defineComponent({
         },
 
         selectBlogImage(id) {
-            console.log("selectBlogImage id:", id);
+            //console.log("selectBlogImage id:", id);
             this.form.blog_image_id = id;
         },
     },

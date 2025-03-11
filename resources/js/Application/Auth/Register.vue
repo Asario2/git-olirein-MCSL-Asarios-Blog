@@ -21,17 +21,17 @@
                 <input-group>
                 <input-container :full-width="true">
                         <input-label
-                            name="nick_name"
+                            name="name"
                             label="Nickname"
                         ></input-label>
                         <input-element
                             type="text"
-                            name="nick_name"
-                            v-model="form.nick_name"
+                            name="name"
+                            v-model="form.name"
                             placeholder="Nickname"
-                            ref="nick_name"
+                            ref="name"
                         ></input-element>
-                        <input-error :message="errors.nick_name" />
+                        <input-error :message="errors.name" />
                     </input-container>
                 <input-container :full-width="true">
                         <input-label
@@ -186,7 +186,7 @@ export default defineComponent({
             //
             form: {
                 first_name: "",
-                nick_name: "",
+                name: "",
                 email: "",
                 password: "",
                 password_confirmation: "",

@@ -134,7 +134,7 @@ methods: {
     getOptions() {
     axios.get('/tables/sort-data/' + this.name)
     .then(response => {
-        console.log("Daten von der API:", response.data);
+        //console.log("Daten von der API:", response.data);
 
         // Setze xsor
         this.xsor = { ...this.xsor, [this.name]: response.data };
@@ -142,10 +142,10 @@ methods: {
         // Setze arr basierend auf xsor
         this.arr = this.xsor[this.name]?.[this.name + ".sortedOptions"] || [];
 
-        console.log("XSOR nach API-Call:", JSON.stringify(this.xsor, null, 2));
-        console.log("ARR nach API-Call:", JSON.stringify(this.arr, null, 2));
+        //console.log("XSOR nach API-Call:", JSON.stringify(this.xsor, null, 2));
+        //console.log("ARR nach API-Call:", JSON.stringify(this.arr, null, 2));
         this.$nextTick(() => {
-            console.log("ARR nach nextTick:", JSON.stringify(this.arr, null, 2));
+            //console.log("ARR nach nextTick:", JSON.stringify(this.arr, null, 2));
         });
 
     })
@@ -209,7 +209,7 @@ computed: {
         this.ot[this.name] = this.options;
         this.options = ot;
         this.sortedOptions = this.ot
-        console.log("asdddd" + this.options);
+       // console.log("asdddd" + this.options);
        return this.ot;
     }
 },
@@ -219,7 +219,7 @@ arr() {
 mounted() {
     this.actsel(); // Methode wird nach dem Mounten ausgeführt
     this.getOptions();
-    console.log("ss: " + (JSON.stringify(this.arr)));
+    //console.log("ss: " + (JSON.stringify(this.arr)));
 
     //     if (Array.isArray(this.options[0])) {
 //     this.options = this.options[0]; // Array innerhalb des Arrays entfernen

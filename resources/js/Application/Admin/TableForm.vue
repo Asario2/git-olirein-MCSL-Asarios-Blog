@@ -29,7 +29,7 @@
 
                         <!-- <pre>{{ formData }}</pre> -->
                         <!-- <pre>{{this.xsor_alt['admin_table_id'] }}</pre> -->
-
+                        <a :href="'/admin/tables/create/' + tablex" target="" class="inline-flex items-center px-1 py-1.5 md:px-2 md:py-2 h-6 md:h-8 rounded-md font-medium text-xs tracking-widest disabled:opacity-25 transition cursor-pointer focus:ring focus:outline-none button_bg button_text_case_bg"><div class="flex items-center whitespace-nowrap"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="button_icon"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"></path></svg> Erstelle </div></a>
                         <input-group>
     <form @submit.prevent="submitForm" enctype="multipart/form-data">
         <div class="maxx grid grid-cols-1 lg:grid-cols-2 mb-2 gap-2 lg:gap-x-6 mt-2">
@@ -100,16 +100,19 @@
                     :value="imageId"
                     :image="field.value"
                     :namee="field.value"
+                    :namee2="field.name"
                     @close="closeModal"
+                    @update:fileName="handleFileNameUpdate"
                     @imageUploaded="handleImageUpload"
                 />
                 <button type="button" @click="openModal">
 
-                    <p v-if="this.uploadedImageUrl">Hochgeladenes Bild: <img :src="'/images/blogs/thumbs/' + this.uploadedImageUrl" width="100" alt="Vorschau" title="Vorschau"/></p>
-                    <img v-else-if="this.imageUrle && this.imageUrle !='/images/blogs/008.jpg'" :src="this.imageUrle" alt="Bild" width="100">
+                    <p v-if="this.nf && typeof this.nf !== 'object' && this.nf != '[]' && this.nf != '008.jpg'">Hochgeladenes Bild: <img :src="'/images/blogs/thumbs/' + this.nf" width="100" alt="Vorschau" title="Vorschau"/></p>
+
                     <span v-else><img src="/images/blogs/thumbs/009.jpg" alt="Jetzt Bild Hochladen" width="100"  title="Jetzt Bild Hochladen" ></span>
-                    <input type="hidden" :name="field.name" :id="field.name" :ref="field.name" :value="this.imageId">
+
                 </button>
+                <input type="hidden" :name="field.name" :value="this.nf" :id="field.name" re="asd">
                 </input-container>
                 <input-container v-else-if="field.type === 'datetime'">
                     <InputFormDateTime
@@ -181,7 +184,7 @@
                                         :name="field.name"
                                         :label="field.label">
                                     </InputLabel>
-                                    <InputSelect
+                                    <InputSelectEnum
 
 
                                     @input-change="updateFormData"
@@ -189,17 +192,16 @@
                                         :id="field.name + '_' + field.id"
                                         :model-value="field.value"
 
-                                        :options="'options:' + (this.sortedOptions_sel.length > 0)
-                                            ? this.sortedOptions_sel.find(obj => obj[field.name])?.[field.name] || []
-                                            : []"
+                                        :options="`options: ${this.xsor_alt[field.name]?.length > 0 ? this.xsor_alt[field.name] : []}`"
                                         ref="field.name"
                                         :name="field.name"
                                         :xval="field.value"
                                         :xname="field.name"
+                                        :tablex="tablex"
                                         :required="isRequired(field.required)"
                                     >
 
-                                </InputSelect>
+                                </InputSelectEnum>
 
                                 </input-container>
                                 </template>
@@ -297,9 +299,9 @@ const routes = {
     getselroute: (name) => `/tables/sort-data/${name}`,
     getselenumroute: (table,name) => `/tables/sort-enum/${table}/${name}`,
 
-    putdata: (table,id) => `admin/tables/update/${tablex}/${id}`,
+    putdata: (tablex,id) => `admin/tables/update/${tablex}/${id}`,
 };
-console.log("RTE " + routes.getselenumroute("images", "status"));
+//console.log("RTE " + routes.getselenumroute("images", "status"));
 
 // this.sortOptions = this.sortOptions ?? {}
 let sortOptions;
@@ -348,6 +350,7 @@ import InputLabel from "@/Application/Components/Form/InputLabel.vue";
 import InputElement from "@/Application/Components/Form/InputElement.vue";
 import InputCheckbox from "@/Application/Components/Form/InputCheckbox.vue";
 import InputSelect from "@/Application/Components/Form/InputSelect.vue";
+import InputSelectEnum from "@/Application/Components/Form/InputSelectEnum.vue";
 import InputFormPrice from "@/Application/Components/Form/InputFormPrice.vue";
 import InputFormSelect from "@/Application/Components/Form/InputFormSelect.vue";
 import InputTextarea from "@/Application/Components/Form/InputTextarea.vue";
@@ -386,6 +389,7 @@ export default defineComponent({
          InputElement,
         InputCheckbox,
          InputSelect,
+         InputSelectEnum,
          InputTextarea,
          InputHtml,
         InputFormTextArea,
@@ -460,31 +464,36 @@ export default defineComponent({
         field: Object,
 
     },
-
+// DZ
     data() {
         return {
             table: reactive({ id: "1" }),// Standardwert setzen, falls leer
         formDatas: {},
         uploadedIid: null,
         ItemName: "Beitrag",
+        table_x: '',
+        // nf: this.getOF(),
+        readingTime: "",
+        fileName: '' ,
+        sortedOptions: "",
             so: [],
             xsor_alt: {},
-        sortedOptions: {},
+
         isModalOpen: false,
         uploadedImageUrl: null,
         csrfToken: document.getElementById('token').value,
         preview_image: {},
             ffo: [],
             ulimage: null,
-            readingTime: 0,
-            readingTime: this.reading_time || 1,
+
+
             //         name: "testname",
             //         type: "text",
             //         value: "valuei"
             // }],
             // formFields:  {},
             ///formFields:[],
-            options: {},
+            options:    {},
             options_sel: {},
             //   formData: {},
             // field: [{ name: '', label: '', type:'' } ],
@@ -585,7 +594,7 @@ export default defineComponent({
         } else {
             options_sel = [];
         }
-        console.log('sortedOptions_sel:',options_sel); // Überprüfe den Inhalt von sortedOptions
+        //console.log('sortedOptions_sel:',options_sel); // Überprüfe den Inhalt von sortedOptions
         return options_sel;
     },
     fieldValue() {
@@ -623,7 +632,7 @@ export default defineComponent({
             }, {});
         },
         readingTime() {
-            return this.field.value || 1; // Falls field.value leer ist, dann 0 setzen
+            return this.field?.value || 1; // Falls field.value leer ist, dann 0 setzen
         },
     },
     watch:{
@@ -633,11 +642,12 @@ export default defineComponent({
                 const textareaField = Object.values(newFields).find(field =>
                     ["textarea"].includes(field.type)
                 );
+                this.textareaField = textareaField;
                 if (textareaField) {
 
                     this.readingTime = this.calculateReadingTime(textareaField.value);
                     this.readingTime = this.readingTime  < 1 ? "1" : this.readingTime;
-                    //console.log("RT:"+this.readingTime);
+                   // console.log("RT:"+this.readingTime);
                 }
                 let fod = {};
 
@@ -671,7 +681,7 @@ export default defineComponent({
 
 
         fieldValue(newValue) {
-      this.readingTime = Math.ceil(newValue.trim().split(/\s+/).length / 200);
+      this.readingTime = Math.ceil(newValue.trim().split(/\s+/).length / 190);
 
       if(this.readingTime == "0")
       {
@@ -911,13 +921,37 @@ return { ffo };
         };
     },
     methods: {
+        handleFileNameUpdate(fileName) {
+      this.fileName = fileName;  // Setze den Wert von fileName
+    },
+    async getOF() {
+        const path = window.location.pathname; // Gibt "/admin/tables/show/Example" zurück
+            const segments = path.split("/"); // Teilt den Pfad in Segmente auf
+                this.xid = segments[segments.length - 2];
+
+            this.xtable = segments[segments.length - 1];
+      try {
+        const response = await axios.get(`/api/images/${this.xtable}/${this.xid}`);
+        // alert(this.xid);
+
+        this.nf = response.data;
+        console.log(`/api/images/${this.xtable}/${this.xid}`);
+        if(this.nf === "[]")
+        {
+            this.nf = "008.jpg";
+        }
+        return this.nf;
+      } catch (error){
+        console.error("Not fetchable");
+      }
+    },
         async fetchImage(id,table) {
       try {
         if(!id){
-            id = this.imageId;
+           id = this.imageId;
         }
-        const response = await axios.get(`/api/images/${table}/${id}`); // Laravel API-Route
-        console.log(response);
+        const response = await axios.get(`/api/images/${table}/${this.xid}`); // Laravel API-Route
+        //console.log(response);
         if (response.data.url) {
 
           this.ulimage = response.data.url;
@@ -933,7 +967,7 @@ return { ffo };
       this.isModalOpen = true;  // Öffne das Modal
     },
     getValue() {
-      console.log("Input Value:", this.$refs.blog_images_iid?.value || "Ref nicht gefunden");
+      //console.log("Input Value:", this.$refs.image_path?.value || "Ref nicht gefunden");
     },
     closeModal() {
       this.isModalOpen = false;  // Schließe das Modal
@@ -942,10 +976,11 @@ return { ffo };
     this.readingTime = event.target.value;
     this.updateFormData();
   },
-    handleImageUpload([iid, imageUrl]) {
-      console.log("Bild-URL:", imageUrl, "Bild-ID:", iid);
+    handleImageUpload(imageUrl) {
+     console.log("Bild-URL:", imageUrl);
       this.uploadedImageUrl = imageUrl;
-       this.imageId = iid;
+      this.nf = imageUrl;
+    //    this.imageId = iid;
     },
 
         updateReadingTime() {
@@ -1032,7 +1067,7 @@ return { ffo };
             if(field.type === "select")
             {
                 this.getsel_enum(field.name,this.tablex);
-                console.log("sso:" + JSON.stringify(this.options));
+               // console.log("sso:" + JSON.stringify(this.options));
             }
             if (field.name.includes("_id")) {
                 this.formData[field.name] = this.formDatas[field.name];
@@ -1130,10 +1165,10 @@ obj = obj.replace(/"formFields": \[.*\]/, "")
     .replace(/},\s*{/g, '},')
     .replace(/},/g,"},{");
     // obj = '{\n\"' + name + '": [\n' + obj + '\n]   \n}';
-    console.log("ob: " + obj);
+    //console.log("ob: " + obj);
             obj  = "["+obj+"]";
 
-    obj = JSON.parse(obj);
+    // obj = JSON.parse(obj);
     // obj = JSON.parse(obj);
 //     const transformed = obj.reduce((acc, item) => {
 //   acc[item.id] = item.name;
@@ -1147,28 +1182,28 @@ obj = obj.replace(/"formFields": \[.*\]/, "")
             // input = input.replace('.sortedOptions', '');
             // input  = JSON.parse(input);
             // this.sortedOptions = obj;
-            console.log("obj vor der Zuweisung:", obj);
+           // console.log("obj vor der Zuweisung:", obj);
             this.xsor_alt[name] = this.stripslashes(JSON.stringify(Object.entries(obj)));
-            console.log("sortedOptions:", sortedOptions);
+            //console.log("sortedOptions:", sortedOptions);
             // const newArray = Object.entries(sortedOptions).map(([key, value]) => ({
             //     id: key,
             //     ...value
             // }));
             // this.sortedOptions[name] = newArray;
-            console.log("this.sortedOptions nach der Zuweisung:", this.sortedOptions[name]);
+            // console.log("this.sortedOptions nach der Zuweisung:", this.sortedOptions[name]);
 
 
             // console.log("SO:" + JSON.stringify([this.sortedOptions,input]))
             // this.sortedOptions = Array.isArray(input[0][1]) ? input[0][1] : input;
             // console.log("SO:", JSON.stringify(this.sortedOptions));
             // console.log("input: " + JSON.stringify(input));
-            console.log("Type of input:", typeof input);
-            console.log("Check input:", Array.isArray(input) ? "Array" : "Not an Array");
-            console.log("Content of input:", JSON.stringify(this.sortedOptions[name], null, 2));
+           // console.log("Type of input:", typeof input);
+           // console.log("Check input:", Array.isArray(input) ? "Array" : "Not an Array");
+            // console.log("Content of input:", JSON.stringify(this.xsor[name], null, 2));
             // this.sortedOptions  = JSON.stringify(input, null, 2);
             // this.sortedOptions = JSON.parse(this.sortedOptions);
-            this.options2 = this.sortedOptions;
-            this.options = this.sortedOptions;
+            // this.options2 = this.sortedOptions;
+            // this.options = this.sortedOptions;
         })
         .catch((error) => {
             console.error("Fehler beim Abrufen der Formulardaten:", error);
@@ -1269,12 +1304,13 @@ obj = obj.replace(/"formFields": \[.*\]/, "")
                 .replace(/}}/g, "\n   }\n  }")
                 .replace(/"\d+"\s*:\s*{/g, '{')
                 .replace(/},\s*{/g, '},');
-
+            // obj = "[" + obj + "]";
+            //console.log("OBJ: " + (obj));
             obj = JSON.parse(obj);
             this.obj2 = obj;
             // console.log(obj);
             this.ffo = obj
-            console.log("ffo: "+JSON.stringify(obj));
+            //console.log("ffo: "+JSON.stringify(obj));
             const ffo = this.ffo;
             // 💡 Konvertiere das Objekt in ein Array
             const formFieldsArray = Object.values(formFields_old);
@@ -1359,33 +1395,39 @@ async submitForm() {
 
         try {
 
-            var inputRef = this.$refs.blog_images_iid;
-            if (Array.isArray(inputRef) && inputRef.length > 0) {
-                this.ref2 = inputRef[1]._value;
 
-                this.formData['blog_images_iid']  = this.ref2;
-
-            }
 
 
 
 
             // console.log("ref: " + this.$refs.blog_images_iid.value);
                        this.formData2 = JSON.stringify(this.remom(this.ffo));
-            console.log("Daten, die gesendet werden:",this.formData);
+
             const path = window.location.pathname; // Gibt "/admin/tables/show/Example" zurück
             const segments = path.split("/"); // Teilt den Pfad in Segmente auf
             this.xid = segments[segments.length - 2];
+            xid = this.xid;
             tablex = segments[segments.length - 1];
             let response;
-            if(typeof this.ref2 !== "undefined")
-            {
-                this.formData['blog_images_iid'] = this.ref2;
+            var inputRef = this.$refs.image_path;
+            //console.log("XZAY" + JSON.stringify(inputRef,null,2));
+            if (inputRef.length > 0) {
+               this.nf = inputRef[0].newFname;
+               if(!this.nf || this.nf == "[]"){
+                this.nf = this.getOF();
+               }
 
+                this.formData['image_path'] = this.nf;
+                console.log(JSON.stringify(this.nf,null,2));
             }
+            else{
+                this.nf = this.getOF(id,tablex);
+            }
+            // console.log("Daten, die gesendet werden:",this.formData);
             if(this.textareaField)
             {
                 this.formData['reading_time'] = this.readingTime;
+                console.log("Daten, die gesendet werden:",this.formData);
             }
             if(segments[segments.length - 2] == "create")
             {
@@ -1399,18 +1441,8 @@ async submitForm() {
                 response = await axios.patch(`/admin/tables/update/${this.tablex}/${this.xid}`, {
                 formData : this.formData,
             });
-            }
 
-
-        //     await axios.post('/admin/table/update', {
-        //     table: this.tablex,  // Dynamische Tabelle
-        //     id: this.id,         // Die ID des Datensatzes
-        //     ...this.formData     // Formulardaten direkt mit spread-Operator einfügen
-        // });
-
-            // console.log("tf:"+this.formData);
-            // console.log("Formular erfolgreich gesendet:", response.data);
-
+        }
         } catch (error) {
             console.error("Fehler beim Absenden:", error);
         }
@@ -1524,7 +1556,8 @@ async submitForm() {
             const segments = path.split("/"); // Teilt den Pfad in Segmente auf
             const id = segments[segments.length - 2];
             let table = segments[segments.length - 1]
-console.log(`/api/get-image-id/${table}/${id}`);
+            this.ttable = table
+//console.log(`/api/get-image-id/${table}/${id}`);
         // Axios Anfrage
         axios.get(`/api/get-image-id/${table}/${id}`)
              .then(response => {
@@ -1533,7 +1566,7 @@ console.log(`/api/get-image-id/${table}/${id}`);
                 this.imageId = imageId;
                 const imageUrle = response.data.url;
                 this.imageUrle = imageUrle;
-                console.log(this.imageUrle);
+                //console.log(this.imageUrle);
                 return imageUrle;
             })
             .catch(error => {
@@ -1550,7 +1583,7 @@ console.log(`/api/get-image-id/${table}/${id}`);
         this.updateData();
         this.emptyChecker();
         this.updateReadingTime();
-        this.table_image = "blog_images";
+        this.table_image = "blogs";
         // const inputRef = this.$refs.blog_images_iid?.value;
         // console.log("iR:" + inputRef);
         //     if (Array.isArray(inputRef) && inputRef.length > 0) {

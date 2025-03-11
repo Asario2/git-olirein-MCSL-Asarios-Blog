@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('blogs', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('blog_authors_id')->default(1);
-            $table->unsignedBigInteger('blog_images_iid')->default(1);
+            //$table->unsignedBigInteger('blog_images_iid')->default(1);
             $table->unsignedBigInteger('blog_categories_id')->default(1);
             //
             $table->dateTime('blog_date')->nullable();

@@ -20,7 +20,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     protected $fillable = [
         'first_name',
-        'nick_name',
+        'name',
         'birthday',
         'music',
         'interests',
@@ -65,13 +65,13 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         $name = $this->first_name;
 
-        if (!empty($this->nick_name)) {
+        if (!empty($this->name)) {
             if (!empty($name)) {
-                $name .= ' ' . $this->nick_name;
+                $name .= ' ' . $this->name;
             }
             //
             if (empty($name)) {
-                $name = $this->nick_name;
+                $name = $this->name;
             }
         }
         return $name;

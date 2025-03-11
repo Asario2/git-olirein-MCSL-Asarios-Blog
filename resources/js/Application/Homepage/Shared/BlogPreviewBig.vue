@@ -6,7 +6,7 @@
         <!-- Das Bild des Blog-Posts -->
         <div class="relative lg:col-span-7">
         <img
-            :src="blog.url"
+            :src="`/images/blogs/${blog.url}`"
             :alt="blog.name"
             loading="lazy"
             width="480"
@@ -57,7 +57,7 @@
             <!-- Lesezeit anzeigen -->
             <div>
                 <display-number
-                    :value="blog.reading_time"
+                :value="blog.reading_time"
                     :after-digits="0"
                     value-unit="Minuten Lesezeit"
                     value-single-unit="Minute Lesezeit"

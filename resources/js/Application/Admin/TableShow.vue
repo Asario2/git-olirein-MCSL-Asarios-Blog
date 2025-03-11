@@ -197,7 +197,7 @@ let table = table_z.toLowerCase();
   });
   var tb_alt = "admin_table";
   const url = route('admin.tables.show', { table: tb_alt });
-console.log(url); // Prüfe, ob die URL korrekt ist
+//console.log(url); // Prüfe, ob die URL korrekt ist
 // table_q = ucf(table_z);
 table = String(table_z).toLowerCase();
 

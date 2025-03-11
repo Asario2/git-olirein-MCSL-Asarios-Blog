@@ -37,7 +37,7 @@ class TablesController extends Controller
 
         }
         // Daten aus der 'admin_table' Tabelle abrufen (welche z.B. Tabellennamen und Beschreibungen enthält)
-        $tables = DB::table('admin_table')->select('table_name', 'description')->orderby("created_at","DESC")->get();
+        $tables = DB::table('admin_table')->select('name', 'description')->orderby("created_at","DESC")->get();
 
         // Gebe die Tabellen mit der Beschreibung an die View zurück
         return view('tables.index2', compact('tables'));
@@ -52,7 +52,7 @@ class TablesController extends Controller
         $offset = $request->input('offset', 0);
         $limit = 10;
         // Daten aus der 'admin_table' Tabelle abrufen (welche z.B. Tabellennamen und Beschreibungen enthält)
-        $tables = DB::table('admin_table')->select('table_name', 'description')->orderby("created_at","DESC")->get();
+        $tables = DB::table('admin_table')->select('name', 'description')->orderby("created_at","DESC")->get();
         $table = "comments";
         $columns = Schema::getColumnListing($table);
         $excl_cols = Settings::excl_cols;
@@ -103,7 +103,7 @@ class TablesController extends Controller
         $posts = DB::table($table)->orderBy($ord[0], $ord[1])->skip($offset)->take($limit)->get();
         //  $data = DB::table($table)->select($columns)->orderby($ord[0], $ord[1])->paginate($perPage);
         //$posts = DB::table($table)->where('pub',"1")->orderBy($ord[0], $ord[1])->take(10)->get();
-        $tables = DB::table('admin_table')->select('table_name', 'description')->orderby("position","ASC")->get();
+        $tables = DB::table('admin_table')->select('name', 'description')->orderby("position","ASC")->get();
         // Wenn die Anfrage AJAX ist (für das Scrollen), gib JSON zurück
         // if ($request->ajax()) {
         //     return view('tables.partial_table_rows', compact('data', 'columns', 'table','tables'))->render();
@@ -143,7 +143,7 @@ class TablesController extends Controller
         $posts = DB::table($table)->orderBy($ord[0], $ord[1])->skip($offset)->take($limit)->get();
         //  $data = DB::table($table)->select($columns)->orderby($ord[0], $ord[1])->paginate($perPage);
         //$posts = DB::table($table)->where('pub',"1")->orderBy($ord[0], $ord[1])->take(10)->get();
-        $tables = DB::table('admin_table')->select('table_name', 'description')->orderby("position","ASC")->get();
+        $tables = DB::table('admin_table')->select('name', 'description')->orderby("position","ASC")->get();
         // Wenn die Anfrage AJAX ist (für das Scrollen), gib JSON zurück
         // if ($request->ajax()) {
         //     return view('tables.partial_table_rows', compact('data', 'columns', 'table','tables'))->render();
@@ -192,7 +192,7 @@ class TablesController extends Controller
         $posts = DB::table($table)->orderBy($ord[0], $ord[1])->skip($offset)->take($limit)->get();
         //  $data = DB::table($table)->select($columns)->orderby($ord[0], $ord[1])->paginate($perPage);
         //$posts = DB::table($table)->where('pub',"1")->orderBy($ord[0], $ord[1])->take(10)->get();
-        $tables = DB::table('admin_table')->select('table_name', 'description')->orderby("position","ASC")->get();
+        $tables = DB::table('admin_table')->select('name', 'description')->orderby("position","ASC")->get();
         // Wenn die Anfrage AJAX ist (für das Scrollen), gib JSON zurück
         // if ($request->ajax()) {
         //     return view('tables.partial_table_rows', compact('data', 'columns', 'table','tables'))->render();
@@ -238,7 +238,7 @@ class TablesController extends Controller
         if (!$entry) {
             return redirect()->back()->withErrors(['error' => 'Entry not found.']);
         }
-        $tables = DB::table('admin_table')->select('table_name', 'description')->orderby("position","ASC")->get();
+        $tables = DB::table('admin_table')->select('name', 'description')->orderby("position","ASC")->get();
         // Return the edit view with the entry data
         $edit = @$_GET['edit'];
         $pic = @$_GET['pic'];
@@ -285,7 +285,7 @@ class TablesController extends Controller
             'breadcrumbs' => $breadcrumbs,
         ])->withViewData(['debug' => true]);
     }
-    public function getOptionz($column)
+    public function GetOptionz($column)
     {
         $sortop = FormController::getOptions($column);
         return response()->json([$column.".sortedOptions" => $sortop]);
@@ -304,7 +304,7 @@ class TablesController extends Controller
         }
         elseif($table == "admin_table")
         {
-            $ord[0] = "table_name";
+            $ord[0] = "name";
             $ord[1] = "ASC";
         }
         elseif($table == "images")
@@ -339,7 +339,7 @@ class TablesController extends Controller
             $ffoo = ["formFields" => ["defekt" => "true"]];
             if (!$exists) {
                 //\Log::info("exists:".json_encode($ffoo));
-               return response()->json($ffoo);
+               return response()->json(($ffoo));
             }
 
         }
@@ -395,7 +395,7 @@ class TablesController extends Controller
         }
         elseif($table == "admin_table")
         {
-            $ord[0] = "table_name";
+            $ord[0] = "name";
             $ord[1] = "ASC";
         }
         elseif($table == "images")
@@ -431,7 +431,12 @@ class TablesController extends Controller
             $table_alt = $col;
             $of = Settings::underCals[$table];
            // $qryadd  = join($name ON $table.$table."_id" = $name."id");
-           \Log::info($otherField);
+           //\Log::info($otherField);
+        }
+        else{
+            $oa = false;
+            $name = '';
+            $col = '';
         }
 
 
@@ -519,7 +524,7 @@ class TablesController extends Controller
             ->withQueryString();
 
             $tables->getCollection()->transform(function ($table) {
-                $table->table_name = ucf($table->table_name);
+                $table->name = ucf($table->name);
                 return $table;
             });
         // \Log::info('tab:'.json_encode($tables, JSON_PRETTY_PRINT));
@@ -545,7 +550,7 @@ class TablesController extends Controller
                 // Ausgabe als JSON ohne Indizes
                 // echo json_encode($result, JSON_PRETTY_PRINT);
                 $qq = json_encode(["datarows" => $result]);
-                \Log::info("prop:".json_encode($dd));
+               // \Log::info("prop:".json_encode($dd));
         return Inertia::render('Admin/TableList', [
 
             $qq
@@ -570,7 +575,7 @@ class TablesController extends Controller
         if(!CheckRights(Auth::id(),$table,"view"))
         {
             return redirect()->route('tables.noview');
-            \Log::info("t:".$table);
+            //\Log::info("t:".$table);
 
         }
         if (!Schema::hasTable($table)) {
@@ -604,7 +609,7 @@ class TablesController extends Controller
         $perPage = 10; // Anzahl der Einträge pro Seite
         //  $data = DB::table($table)->select($columns)->orderby($ord[0], $ord[1])->paginate($perPage);
         $posts = DB::table($table)->orderBy($ord[0], $ord[1])->take($take)->get();
-        $tables = DB::table('admin_table')->select('table_name', 'description')->orderby("position","ASC")->get();
+        $tables = DB::table('admin_table')->select('name', 'description')->orderby("position","ASC")->get();
         // Wenn die Anfrage AJAX ist (für das Scrollen), gib JSON zurück
         // if ($request->ajax()) {
         //     return view('tables.partial_table_rows', compact('data', 'columns', 'table','tables'))->render();
@@ -654,7 +659,7 @@ class TablesController extends Controller
             $perPage = $_GET['page']*$perPage;
         }
         $data = DB::table($table)->select($columns)->orderBy($ord[0], $ord[1])->paginate($perPage);
-        $tables = DB::table('admin_table')->select('table_name', 'description')->orderby("position","ASC")->get();
+        $tables = DB::table('admin_table')->select('name', 'description')->orderby("position","ASC")->get();
 
 
 
@@ -721,7 +726,7 @@ class TablesController extends Controller
                 return !in_array($column, $excludedColumns);
             });
             $edit = @$_GET['edit'];
-            $tables = DB::table('admin_table')->select('table_name', 'description')->orderby("position","ASC")->get();
+            $tables = DB::table('admin_table')->select('name', 'description')->orderby("position","ASC")->get();
             // Zeige das Formular an
             return view('tables.create-entry', compact('edit','table', 'columns','req','ext_disabled','ext_date','exl','tables'));
         }
@@ -817,9 +822,9 @@ class TablesController extends Controller
             {
                 $hcode = 'name';
             }
-            elseif(in_array('table_name',$columns))
+            elseif(in_array('name',$columns))
             {
-                $hcode = 'table_name';
+                $hcode = 'name';
             }
             elseif(in_array('queue',$columns))
             {
@@ -992,7 +997,7 @@ class TablesController extends Controller
             $_SESSION['Oko'] = $_SESSION['Oko'] ?? [];
             $_SESSION['adump'] = $_SESSION['adump'] ?? false;
 
-            \Log::info("uuni:" . json_encode($hcode . $request->input($hcode)));
+           // \Log::info("uuni:" . json_encode($hcode . $request->input($hcode)));
             $exists = DB::table($table)
                 ->where($hcode, $request->input($hcode))
                 ->where("created_at", ">", Carbon::now()->subSeconds(2))
@@ -1050,7 +1055,7 @@ class TablesController extends Controller
             $_SESSION['Oko'] = $_SESSION['Oko'] ?? [];
             $_SESSION['adump'] = $_SESSION['adump'] ?? false;
 
-                \Log::info("uuni:".json_encode($hcode.$request->input($hcode)));
+                //\Log::info("uuni:".json_encode($hcode.$request->input($hcode)));
                 $exists = DB::table($table)
                     ->where($hcode, $request->input($hcode))
                     ->where("created_at",">",Carbon::now()->subSeconds(2))
@@ -1349,7 +1354,7 @@ class TablesController extends Controller
         $imul = new IMULController();
         $imagePath = null;
         $count = false;
-        \Log::info("asd:".json_encode($request->input));
+       // \Log::info("asd:".json_encode($request->input));
         if(is_dir(public_path("/images/$table/big/")))
         {
             $count = true;
@@ -1426,7 +1431,7 @@ class TablesController extends Controller
     public function no_view()
     {
         $table = "admin_table";
-        $tables = DB::table('admin_table')->select('table_name', 'description')->orderby("position","ASC")->get();
+        $tables = DB::table('admin_table')->select('name', 'description')->orderby("position","ASC")->get();
         return view("tables.noview",compact('table','tables'));
     }
     public function GetTitle($table,$title,$id)
@@ -1457,9 +1462,16 @@ class TablesController extends Controller
     }
     public function StoreTable(Request $request,$table)
     {
+        \Log::info("t".$table);
+
+        $formData = ($request->input('formData'));
+
+        if (isset($formData['image_path']) && empty($formData['image_path'])) {
+            $formData['image_path'] = "008.jpg";
+        }
         // Erstelle einen neuen Datensatz mit den validierten Eingabedaten
         $table_res = DB::table($table)->insert(
-        $request->input("formData")
+        $formData
         );
 
         // Rückgabe der Antwort, z.B. Weiterleitung oder JSON-Antwort
@@ -1468,8 +1480,13 @@ class TablesController extends Controller
     public function UpdateTable(Request $request,$table, $id)
     {
             // Zugriff auf die übergebenen Daten
-        $formData = $request->input('formData');  // Formulardaten
-        // $formData = $formData;
+            $formData = ($request->input('formData')    );
+
+        if(isset($formData['image_path']) && empty($formData['image_path']))
+        {
+            $formData['image_path'] = "008.jpg";
+        }
+
         if (!Schema::hasTable($table)) {
             return response()->json(['error' => 'Tabelle nicht gefunden'], 404);
         }
@@ -1493,7 +1510,7 @@ class TablesController extends Controller
             // \Log::info('FormData:', $formData);
             // \Log::info($updated);
             $queries = DB::getQueryLog();
-            \Log::info($queries);
+                 \Log::info($queries);
             if ($updated) {
                 return response()->json(['message' => 'Daten erfolgreich aktualisiert!']);
             } else {
@@ -1503,20 +1520,31 @@ class TablesController extends Controller
     }
 
 
-    function GetImageUrl($table,$id)
+    function GetImageUrl(Request $request,$table,$id)
     {
-        $res = DB::table($table)->where("id", $id)->value("url");
+        \Log::info("T:".$table."|".$id);
+        if($id == "create")
+        {
+            return response()->json(["image_url"=>"009.jpg"]);
+        }
+        DB::enableQueryLog(); // Aktiviert das Query Logging
 
-        //\Log::info("res: ".json_encode($res));
+        $res = DB::table($table)
+    ->where("id", $id)
+    ->value("image_path");
+    $queries = DB::getQueryLog();
+    // \Log::info($queries);
+
+        \Log::info("res: ".json_encode($res));
         return response()->json($res);
     }
     function GetImageId($table,$id)
     {
         // DB::enableQueryLog();
         $res = DB::table('blogs')
-            ->leftJoin('blog_images', 'blogs.blog_images_iid', '=', 'blog_images.id') // LEFT JOIN
+            // ->leftJoin('blog_images', 'blogs.blog_images_iid', '=', 'blog_images.id') // LEFT JOIN
             ->where('blogs.id', $id)  // Füge die Bedingung hinzu, um nach der ID zu filtern
-            ->select('blogs.blog_images_iid as iid', 'blog_images.url as url') // Wähle die benötigten Spalten aus
+            ->select('blogs.image_path') // Wähle die benötigten Spalten aus
             ->first();
         // $res2 = DB::getQueryLog();
 

@@ -1,5 +1,6 @@
 <template>
-    <div>Kunden-Dashboard</div>
+    <div>Kunden-Dashboard</div><br /><br />
+    <a href="logout">Logout</a>
 </template>
 
 <script>

@@ -29,7 +29,7 @@ Route::get('/db-check', function () {
     }
 });
 Route::get('/namebindings', [NameBindingsController::class, 'RefreshFields'])->name("ColumnFetcher");
-Route::post('/upload-image', [ImageUploadController::class, 'upload'])->name('upload.image');
+Route::post('/upload-image/{table}', [ImageUploadController::class, 'upload'])->name('upload.image');
 
 
 Route::get('/tables/form-data/{table}/{id}', [TablesController::class, 'ExportFields'])
@@ -176,13 +176,14 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         // Blogartikel Delete
         Route::delete('/admin/blogs/{blog}', [BlogController::class, 'admin_blog_delete'])
             ->name('admin.blog.delete');
-        Route::get("api/images/{table}/{id}",[TablesController::class,"GetImageUrl"])
-            ->name("api-get-image-url");
+
         Route::get("api/get-image-id/{table}/{id}",[TablesController::class,"GetImageId"])
             ->name("api-get-image-id");
         Route::get('/admin', function () {
             return Redirect::route('admin.dashboard');
         })->name('admin.redirect.route');
+
+
         // =======
         // Profile
         // =======
@@ -215,7 +216,14 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         // Dashboard
         Route::get('/customer/dashboard', [DashboardCustomerController::class, 'customer_index'])
             ->name('customer.dashboard');
-    });
+
+        });
+        Route::get("/customer/logout",function(){
+            Auth::logout();
+            session()->flush();
+            return redirect("/");
+        })->name("customer.logout")->withoutMiddleware(["auth"]);
+
 });
 // Darkmode Route
 Route::post('/toggle-dark-mode', [ApplicationController::class, 'toggleDarkMode'])->name('toggle-dark-mode');
@@ -239,3 +247,5 @@ Route::get('/tables/sort-enum/{table}/{name}', [TablesController::class, 'getOpt
 Route::fallback(function () {
     return Inertia::render('Homepage/NoPageFound');
 });
+Route::get("/api/images/{table}/{id}",[TablesController::class,"GetImageUrl"])
+            ->name("api-get-image-url");

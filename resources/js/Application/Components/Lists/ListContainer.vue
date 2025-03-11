@@ -321,7 +321,7 @@ export default {
                     .delete(this.routeDelete + id)
                     .then(() => {
                         this.$emit("deleted"); // Event nach erfolgreichem Löschen
-                        console.log(this.routeDelete + id);
+                       // console.log(this.routeDelete + id);
                         location.reload();
                     })
                     .catch((error) => {

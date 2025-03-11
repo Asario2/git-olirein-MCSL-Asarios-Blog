@@ -69,17 +69,17 @@
             <input-group class="mt-4">
             <input-container :full-width="true">
                     <input-label
-                        name="nick_name"
+                        name="name"
                         label="Nickname"
                     ></input-label>
                     <input-element
                         type="text"
-                        name="nick_name"
-                        v-model="form.nick_name"
+                        name="name"
+                        v-model="form.name"
                         placeholder="Nickname"
-                        ref="nick_name"
+                        ref="name"
                     ></input-element>
-                    <input-error :message="form.errors.nick_name" />
+                    <input-error :message="form.errors.name" />
                 </input-container>
             <input-container :full-width="true">
                     <input-label
@@ -267,7 +267,7 @@ export default {
             form: useForm({
                 _method: "PUT",
                 first_name: this.user.first_name,
-                nick_name: this.user.nick_name,
+                name: this.user.name,
                 music: this.user.music,
                 birthday: this.user.birthday,
                 interests: this.user.interests,

@@ -12,7 +12,7 @@ class Table extends Model
     public function scopeFilterBlog(Builder $query, $filters)
     {
         if (!empty($filters['search'])) {
-            $query->where('table_name', 'like', '%' . $filters['search'] . '%')
+            $query->where('name', 'like', '%' . $filters['search'] . '%')
             ->orWhere('description', 'like', '%' . $filters['search'] . '%');
         }
 

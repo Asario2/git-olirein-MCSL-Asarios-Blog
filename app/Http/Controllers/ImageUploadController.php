@@ -8,35 +8,35 @@ use Storage;
 
 class ImageUploadController extends Controller
 {
-    public function upload(Request $request)
+    public function upload(Request $request,$table)
     {
         // Validierung der Eingabedaten
-        $validated = $request->validate([
-            'image' => 'image|mimes:jpeg,png,jpg,gif',
-            'table' => 'string',
-            'column' => 'string',
-            'path' => 'string',
-            'name' => "string"
-        ]);
+        // $validated = $request->validate([
+        //     'image' => 'image|mimes:jpeg,png,jpg,gif',
+        //     'table' => 'string',
+        //     'column' => 'string',
+        //     'path' => 'string',
+        //     'name' => "string"
+        // ]);
 
         // Das hochgeladene Bild holen
         $image = $request->file('image');
 
         if (!$request->hasFile('image')) {
-            \Log::info('Keine Datei empfangen!');
+           // \Log::info('Keine Datei empfangen!');
             return response()->json(['error' => 'Keine Datei empfangen!'], 400);
         }
         else{
-             \Log::info("Table: ".json_encode($request->table));
+             //\Log::info("Table: ".json_encode($request->table));
         }
-        \Log::info('Datei-Info:', [
-            'original_name' => $image->getClientOriginalName(),
-            'mime_type' => $image->getMimeType(),
-            'size' => $image->getSize()
-        ]);
+        //\Log::info('Datei-Info:', [
+       //     'original_name' => $image->getClientOriginalName(),
+         //   'mime_type' => $image->getMimeType(),
+           // 'size' => $image->getSize()
+       // ]);
         $image = $request->file('image') ?? [];
         $path = $request->path;
-        $table_dir = Settings::image_paths[$request->table];
+//$table_dir = Settings::image_paths[$request->table];
         $table = $request->table;
         $column = $request->column;
         // $name = $request->name;
@@ -77,15 +77,17 @@ class ImageUploadController extends Controller
 
 
         }
-        $iid = DB::table($table_dir)->insertGetId([
-            'name' => $name,
-            'url' => $url,
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+        \Log::info($imageName);
+        // $iid = DB::table($table_dir)->insertGetId([
+        //     'name' => $name,
+        //     'url' => $url,
+        //     'created_at' => now(),
+        //     'updated_at' => now(),
+        // ]);
+        \Log::info(json_encode(['message' => 'Bild erfolgreich hochgeladen.',
+        'image_url' => $imageName ]));
         return response()->json([
             'message' => 'Bild erfolgreich hochgeladen.',
-            'iid' => $iid,          // Hier wird die ID des hochgeladenen Bildes zurückgegeben.
             'image_url' => $imageName  // Hier wird der Name des Bildes oder der Pfad zum Bild zurückgegeben.
         ]);
     }

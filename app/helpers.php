@@ -105,7 +105,7 @@ if (!Builder::hasMacro('filterdefault')) {
         return $this;
     });
 }
-        
+
     // use Illuminate\Database\Query\Builder;
     // use App\Models\Settings;
     // if (!Builder::hasMacro('filterdefault')) {
@@ -812,7 +812,7 @@ if(!function_exists("AutoInc"))
     function AutoInc($table)
     {
         $tableName = $table; // Beispiel
-        $nextAutoIncrement = DB::select("SELECT AUTO_INCREMENT FROM information_schema.TABLES WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = ?", [$tableName]);
+        $nextAutoIncrement = DB::select("SELECT AUTO_INCREMENT FROM information_schema.TABLES WHERE TABLE_SCHEMA = DATABASE() AND name = ?", [$tableName]);
 
         if (!empty($nextAutoIncrement)) {
             return $nextAutoIncrement[0]->AUTO_INCREMENT;
@@ -940,13 +940,13 @@ if(!function_exists("getPositionOfTable"))
 {
     function getPositionOfTable($tableName)
     {
-        // Hole alle Einträge aus der admin_table (mit table_name und id)
+        // Hole alle Einträge aus der admin_table (mit name und id)
         $tables = DB::table('admin_table')
-                    ->select('id', 'position', 'table_name')
+                    ->select('id', 'position', 'name')
                     ->get();
 
         // Konvertiere zu einem Array, damit die Suche durchgeführt werden kann
-        $tableNames = $tables->pluck('table_name');
+        $tableNames = $tables->pluck('name');
 
         // Suche nach der Position des Tabellennamens
         $position = $tableNames->search($tableName);
@@ -964,7 +964,7 @@ if(!function_exists("getPositionOfTable"))
         }
 
         // Wenn der Tabellenname nicht gefunden wurde, hole die ID des Tabelleneintrags
-        $tableEntry = $tables->firstWhere('table_name', $tableName);
+        $tableEntry = $tables->firstWhere('name', $tableName);
 
         if ($tableEntry) {
             // Gib die ID zurück, wenn kein position-Feld existiert oder die Suche nach der Position fehlschlägt
@@ -981,7 +981,7 @@ if(!function_exists("getPositionOfTable"))
     // {
     //     // Hole alle Einträge aus der admin_table
     //     $tables = DB::table('admin_table')
-    //         ->pluck('table_name'); // Angenommen, die Spalte mit dem Tabellennamen heißt 'name'
+    //         ->pluck('name'); // Angenommen, die Spalte mit dem Tabellennamen heißt 'name'
 
     //     // Finde die Position des gesuchten Tabellennamens
     //     $position = $tables->search($tableName);

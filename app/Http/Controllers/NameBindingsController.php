@@ -9,8 +9,8 @@ class NameBindingsController extends Controller
 {
     public function RefreshFields()
     {
-        // Schritt 1: Alle table_name aus der Tabelle `admin_table` extrahieren
-        $tableNames = DB::table('admin_table')->pluck('table_name')->toArray();
+        // Schritt 1: Alle name aus der Tabelle `admin_table` extrahieren
+        $tableNames = DB::table('admin_table')->pluck('name')->toArray();
 
         // Schritt 2: Überprüfen, ob jede Tabelle in der Datenbank existiert
         $existingTables = [];

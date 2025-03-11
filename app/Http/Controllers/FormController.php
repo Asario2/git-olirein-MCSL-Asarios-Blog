@@ -35,8 +35,8 @@ class FormController extends Controller
         if(!in_array($name,Settings::excl_cols))
         {
 
-            if($create && $name == "blog_images_iid"){
-                $value = "1";
+            if($create && $name == "image_path"){
+                $value = "008.jpg";
             }
             elseif($create && !substr_count($name,"_at") && $name != "blog_date")
             {
@@ -133,26 +133,14 @@ class FormController extends Controller
 
     // Hole nur die 'id' und 'name' Felder
     $tabs = $query->select("id", "name")->get();
+    if($table != "users"){
+        $tabs = $query->select("id", "name")->get()->map(function ($tab) {
+            $tab->name = ucf($tab->name);
+            return $tab;
+        });
+    }
+
     $tabs = $tabs->sortBy('name');
-
-
-    \Log::info($tabs);
-    $id2 = 'id';
-    foreach($tabs as $key=>$val)
-    {
-      $tabs2 = [$key => $val];
-    }
-    // Erstelle das Ergebnis-Array
-    $result = [];
-    foreach ($tabs as $item) {
-        $result[$item->$id2] = $item->name; // ID als Schlüssel, Name als Wert
-    }
-    // $result = $tabs;
-    // usort($result, function($a, $b) {
-    //     return strcmp($a->name, $b->name);
-    // });
-    \Log::info("frt:". json_encode($result));
-    // Das Array ist bereits nach 'name' sortiert, daher ist keine zusätzliche Sortierung notwendig.
     return $tabs;
 }
 
@@ -199,7 +187,7 @@ class FormController extends Controller
     ];
 
     // Direkt als assoziatives Array aufbauen
-    $result = array_column($statusvals, 'name', 'id');
+    $result = $statusvals;
 
     return $result;
 }
@@ -226,9 +214,6 @@ class FormController extends Controller
             case "blog_date":
                 return "datetime";
             break;
-            case "blog_images_iid":
-                return "IID";
-            break;
             case "camera_id":
                 return "select_id";
             break;
@@ -241,8 +226,20 @@ class FormController extends Controller
             case "created_at":
                 return "datetime";
             break;
+            case "description":
+                return "textarea";
+            break;
+            case "description_en":
+                return "textarea";
+            break;
             case "image_categories_id":
                 return "select_id";
+            break;
+            case "image_path":
+                return "IID";
+            break;
+            case "itemscope":
+                return "select";
             break;
             case "markdown_on":
                 if ($cl) {
@@ -1013,7 +1010,7 @@ var $j = jQuery.noConflict(); // Weist jQuery einer anderen Variable zu, um Konf
     public static function date_range($n,$v,$t,$w='',$id,$inf='',$inf2='',$v1='0')
     {
         $disp = empty($v) ? "block" : 'none';
-        \Log::info("v1:".$v1);
+        //\Log::info("v1:".$v1);
         $tt = empty($v) ? 0 : $v;
         $v1 = empty($v1) ? now() : $v1;
         $disp2 = empty($v) ? "none" : 'block';
@@ -1173,7 +1170,7 @@ var $j = jQuery.noConflict(); // Weist jQuery einer anderen Variable zu, um Konf
             ///\Log::info("ts:",   [strtotime($request->value)]);
 
             // Aktualisiere den Datensatz in der Datenbank
-            $updated = DB::table($table) // Ersetze 'your_table_name' mit dem Namen deiner Tabelle
+            $updated = DB::table($table) // Ersetze 'your_name' mit dem Namen deiner Tabelle
                 ->where('id', $request->id)
                 ->update([$request->column => strtotime($request->value)]);
     $arr = [$request->id,$request->column,strtotime($request->valuef)];
@@ -1224,7 +1221,7 @@ var $j = jQuery.noConflict(); // Weist jQuery einer anderen Variable zu, um Konf
                 return response()->json(['age' => "N/A"]);
             }
             // Aktualisiere den Datensatz in der Datenbank
-            $updated = DB::table($table) // Ersetze 'your_table_name' mit dem Namen deiner Tabelle
+            $updated = DB::table($table) // Ersetze 'your_name' mit dem Namen deiner Tabelle
                 ->where('id', $request->id)
                 ->update([$request->column => $timestamp]);
 

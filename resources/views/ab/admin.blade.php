@@ -80,9 +80,9 @@
                                                 // var_dump($tablez);
                                                 // exit();
                                             @endphp
-                                            @if (CheckRights(Auth::id(), $tablez->table_name, 'view'))
+                                            @if (CheckRights(Auth::id(), $tablez->name, 'view'))
                                                 <li><a class="dropdown-item"
-                                                        href="{{ route('tables.index', ['table' => $tablez->table_name]) }}">{{ ucf($tablez->table_name) }}</a>
+                                                        href="{{ route('tables.index', ['table' => $tablez->name]) }}">{{ ucf($tablez->name) }}</a>
                                                 </li>
                                             @endif
                                         @endforeach

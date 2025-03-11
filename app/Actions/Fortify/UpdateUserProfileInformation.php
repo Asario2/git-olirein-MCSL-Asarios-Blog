@@ -19,7 +19,7 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
     {
         Validator::make($input, [
             'first_name' => ['required', 'string', 'max:255'],
-            'nick_name' => ['required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:255'],
             'birthday' => ['date', 'before:today','max:52'],
             'music' => ['string','max:255'],
             'occupation' => ['string','max:255'],
@@ -40,7 +40,7 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
         } else {
             $user->forceFill([
                 'first_name' => $input['first_name'],
-                'nick_name' => $input['nick_name'],
+                'name' => $input['name'],
                 'music' => $input['music'],
                 'interests' => $input['interests'],
                 'occupation' => $input['occupation'],
@@ -59,7 +59,7 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
     {
         $user->forceFill([
             'first_name' => $input['first_name'],
-            'nick_name' => $input['nick_name'],
+            'name' => $input['name'],
             'birthday' => $input['birthday'],
             'interests' => $input['interests'],
             'occupation' => $input['occupation'],

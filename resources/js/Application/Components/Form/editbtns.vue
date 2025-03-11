@@ -34,7 +34,7 @@ export default {
     methods: {
     async deletePost() {
         try {
-            console.log(`aad: admin/tables/delete/${this.table}/${this.id}`);
+            //console.log(`aad: admin/tables/delete/${this.table}/${this.id}`);
             // DELETE-Anfrage mit Parametern in der URL
             await axios.delete(`admin/tables/delete/${this.table}/${this.id}`, {
                 params: {
@@ -42,7 +42,7 @@ export default {
                 }
             });
 
-           location.reload();   
+           location.reload();
             // Optional: Seite neu laden oder Liste aktualisieren
         } catch (error) {
             console.error("Fehler beim Löschen:", error);

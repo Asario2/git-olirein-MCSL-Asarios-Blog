@@ -88,6 +88,43 @@ class HomeController extends Controller
             'blogs' => $blogs,
         ]);
     }
+    public function home_images_index()
+    {
+        $table = "image_categories";
+        $data = DB::table($table)->orderBy("shortname","ASC")->get();
+        return Inertia::render('Homepage/PicturesCat', [
+           'data'=>$data,
+        ]);
+    }
+    public function home_images($cat_id)
+    {
+        if($cat_id != "3")
+        {
+            $ord[0] = "created_at";
+            $ord[1] = "DESC";
+        }
+        else{
+            $ord[0] = "position";
+            $ord[1] = "ASC";
+        }
+        $entries = DB::table("images")
+    ->where(function($query) {
+        $query->where("images.pub", 1)
+              ->orWhere("images.pub", "2");
+    })
+    ->where("image_categories_id", $cat_id)
+    ->leftJoin("camera", "images.camera_id", "=", "camera.id")
+    ->select("images.*", "camera.name as camera")
+    ->orderBy($ord[0], $ord[1])
+    ->get();
+
+        $ocont = DB::table("image_categories")->where("id",$cat_id)->first();
+        return Inertia::render('Homepage/Pictures', [
+            'entries' => $entries,
+            'ocont' => $ocont,
+            'filters' => Request::all('search'),
+        ]);
+    }
     //
     public function home_blog_show($slug)
     {
@@ -95,6 +132,7 @@ class HomeController extends Controller
         //
         $blog->blog_author;
         // $blog->blog_images;
+        $blog->url = $blog->image_path;
         $blog->blog_category;
         $blogarticle = null;
         //

@@ -2,9 +2,9 @@
 return [
     // Version
     'version' => [
-        'brandname' => 'Starter Eleven',
-        'copyrightname' => '© 2024 Starter Eleven von Diplom-Mathematiker Oliver Reinking',
-        'versionnr' => '1.0.0',
-        'versionsdatum' => '19.04.2024',
+        'brandname' => 'MCSL 2.0.1',
+        'copyrightname' => '© 2025 MCSL von Asario & Diplom-Mathematiker Oliver Reinking',
+        'versionnr' => '2.0.1',
+        'versionsdatum' => '13.03.2025',
     ],
 ];

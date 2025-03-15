@@ -460,6 +460,10 @@ if(!function_exists("smiliesboxx"))
 }
 if(!function_exists("StyleID"))
 {
+    if(!session_id())
+    {
+        session_start();
+    }
     function StyleID($zza='')
 {
     if(!empty($zza))

@@ -27,43 +27,40 @@ if(document.location.toString().indexOf('?') !== -1) {
        $_GET[aux[0]] = aux[1];
     }
 }
-const darkMode = "light"; // Default-Wert
-const aiButtonImage = '';
-
 async function loadDarkMode() {
-    document.addEventListener("DOMContentLoaded", async () => {
-       // console.log("Dark Mode wird geladen...");
+    // Standardwert für Dark Mode aus localStorage holen
+    let mode = localStorage.getItem("theme") || "light";
 
-        let mode = "light"; // Standardwert
-
-        if (window.darkMode) {
-            mode = window.darkMode;
-        } else {
-            try {
-                const response = await fetch("/api/dark-mode");
-                const data = await response.json();
-                mode = data.darkMode;
-            } catch (error) {
-                console.error("Fehler beim Laden des Dark Modes:", error);
-            }
+    // Falls in `window.darkMode` ein Wert gesetzt ist, diesen übernehmen
+    if (window.darkMode) {
+        mode = window.darkMode;
+    } else {
+        try {
+            const response = await fetch("/api/dark-mode");
+            const data = await response.json();
+            mode = data.darkMode;
+        } catch (error) {
+            console.error("Fehler beim Laden des Dark Modes:", error);
         }
+    }
 
-        // ✅ Dark Mode in localStorage speichern, nur wenn sich der Wert geändert hat
-        if (localStorage.getItem("theme") !== mode) {
-            localStorage.setItem("theme", mode);
-        }
-        let xy = 1;
-        document.cookie = "darkMode=" + localStorage.getItem("theme") + "; path=/";
-        // ✅ Alle AI-Buttons aktualisieren
-        document.querySelectorAll(".ai-button").forEach((aibut) => {
-            aibut.src = `/images/icons/ai-${mode}.png`;
-           // alert(xy);
-            xy++;
-        });
+    // Falls sich der Wert geändert hat, speichern
+    if (localStorage.getItem("theme") !== mode) {
+        localStorage.setItem("theme", mode);
+    }
+
+    // 🔥 Theme direkt auf <html> setzen
+    document.documentElement.setAttribute("data-theme", mode);
+    document.cookie = "darkMode=" + mode + "; path=/";
+
+    // Alle AI-Buttons aktualisieren
+    document.querySelectorAll(".ai-button").forEach((aibut) => {
+        aibut.src = `/images/icons/ai-${mode}.png`;
     });
 }
 
-loadDarkMode();
+// 🎯 Dark Mode direkt beim Laden der Seite setzen
+document.addEventListener("DOMContentLoaded", loadDarkMode);
 
 
 

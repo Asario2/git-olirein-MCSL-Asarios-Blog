@@ -1,11 +1,16 @@
 <template>
-    <div v-if="isOpen" class="modal">
-      <form @submit.prevent="uploadImage">
-        <div class="modal-content">
-          <h3>Bild hochladen</h3>
+    <div v-if="isOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+      <div class="bg-layout-sun-100 dark:bg-layout-night-100 rounded-lg shadow-lg w-full max-w-lg p-6">
+        <form @submit.prevent="uploadImage">
+          <h3 class="text-2xl font-semibold text-center mb-4">Bild hochladen</h3>
 
           <!-- Datei-Dropzone -->
-          <div class="dropzone" @dragover.prevent @drop.prevent="handleDrop" @click="triggerFileInput">
+          <div
+            class="border-2 border-dashed border-layout-sun-500 dark:border-layout-night-500 rounded-lg p-6 text-center cursor-pointer hover:bg-layout-sun-200 dark:hover:bg-layout-night-200"
+            @dragover.prevent
+            @drop.prevent="handleDrop"
+            @click="triggerFileInput"
+          >
             <input
               ref="fileInput"
               type="file"
@@ -13,25 +18,36 @@
               class="hidden"
               @change="handleFileChange"
             />
-            <p>Ziehe das Bild hierher oder klicke, um eine Datei auszuwählen.</p>
+            <p class="text-layout-sun-700 dark:text-layout-night-700">
+              Ziehe das Bild hierher oder klicke, um eine Datei auszuwählen.
+            </p>
           </div>
 
           <!-- Bildvorschau -->
-          <div v-if="previewImage" class="preview-container" align="center">
-            <img :src="previewImage" alt="Bildvorschau" class="preview" />
+          <div v-if="previewImage" class="mt-4 text-center">
+            <img :src="previewImage" alt="Bildvorschau" class="w-full h-auto rounded-lg shadow-md" />
           </div>
 
           <!-- Fortschrittsanzeige -->
-          <progress v-if="uploading" :value="progress" max="100"></progress>
-          <p v-if="uploading">{{ progress }}%</p>
+          <div v-if="uploading" class="mt-4">
+            <progress :value="progress" max="100" class="w-full"></progress>
+            <p class="text-center mt-2">{{ progress }}%</p>
+          </div>
 
           <!-- Buttons -->
-          <button @click="closeModal">Abbrechen</button>
-          <button type="submit" v-if="selectedImage">Hochladen</button>
-        </div>
-      </form>
+          <div class="mt-6 flex justify-between">
+            <button @click="closeModal" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600">
+              Abbrechen
+            </button>
+            <button type="submit" v-if="selectedImage" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+              Hochladen
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   </template>
+
 
   <script>
   export default {
@@ -52,6 +68,24 @@
       };
     },
     methods: {
+        triggerFileInput() {
+      this.$refs.fileInput.click(); // Klick auf das unsichtbare Datei-Input auslösen
+    },
+    handleFileChange(event) {
+      const file = event.target.files[0];
+      if (file) {
+        console.log("Ausgewähltes Bild:", file.name);
+        // Weitere Logik für die Bildvorschau oder den Upload hier hinzufügen
+      }
+    },
+        handleDrop(event) {
+  event.preventDefault(); // Standardverhalten verhindern
+
+  const files = event.dataTransfer.files;
+  if (files.length > 0) {
+    this.handleFileChange({ target: { files } });
+  }
+},
       triggerFileInput() {
         this.$refs.fileInput.click();
       },

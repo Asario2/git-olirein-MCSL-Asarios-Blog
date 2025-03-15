@@ -51,6 +51,10 @@ Route::get('/home/privacy', [HomeController::class, 'home_privacy'])->name('home
 Route::get('/home/terms', [HomeController::class, 'home_terms'])->name('home.terms');
 // Ai Content
 Route::get('/home/ai', [HomeController::class, 'home_AI'])->name('home.ai');
+// Picures show gallery
+Route::get('/home/show/images/{cat_id}', [HomeController::class, 'home_images'])->name('home.images.gallery');
+// Pictures Overview
+Route::get('/home/images', [HomeController::class, 'home_images_index'])->name('home.images.index');
 // Liste der Blogartikel
 Route::get('/blogs', [HomeController::class, 'home_blog_index'])->name('home.blog.index')->middleware('remember');
 // Display Blogartikel
@@ -86,7 +90,7 @@ Route::get('/devmod', function () {
 
 
     })->name('devmod');
-    Route::post('/toggle-darkmode', [App\Http\Controllers\DarkModeController::class, 'toggle'])->name('toggle.darkmode');
+    // Route::post('/toggle-darkmode', [App\Http\Controllers\DarkModeController::class, 'toggle'])->name('toggle.darkmode');
     Route::get('tables/{table}/create', [TablesController::class, 'createEntryForm'])->name('tables.create-table');
     Route::post('/comments/store/{table}', [CommentController::class, 'store_alt'])->name('comments.store_alt');
     Route::post('/comments/{table}/{id}', [CommentController::class, 'store'])->name('comments.store');
@@ -147,6 +151,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         // Update des Blogartikels
         Route::put('/admin/blogs/{blog}', [BlogController::class, 'admin_blog_update'])
             ->name('admin.blog.update');
+        // ====
+        // Tables
+        // ====
         // Store Table Entry
         Route::post('/admin/tables/store/{table}', [TablesController::class, 'StoreTable'])
             ->name('admin.tables.store');
@@ -154,6 +161,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         // Route::post('/admin/tables/{table}/delete', [TablesController::class, 'DeleteTable'])
         //     ->name('admin.tables.delete');
         // Tables Create
+        Route::get('/admin/tables/copy/{table}/{id}', [TablesController::class, 'CopyTable'])
+            ->name('admin.tables.copy');
         Route::get('/admin/tables/create/{table}', [TablesController::class, 'CreateTable'])
             ->name('admin.tables.create');
         // Tables Index
@@ -165,7 +174,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::get('/tables/sort-data/{name}', [TablesController::class, 'getOptionz'])
             ->name("GetTableOpt");
         // Tables Edit table
-        Route::get("admin/tables/edit/{id}/{table}",[TablesController::class,"EditTables"])
+        Route::get("/admin/tables/edit/{id}/{table}",[TablesController::class,"EditTables"])
             ->name("admin.tables.edit");
         // Tables Delete
         Route::delete("admin/tables/delete/{table}/{id}",[TablesController::class,"DeleteTables"])
@@ -226,18 +235,18 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
 });
 // Darkmode Route
-Route::post('/toggle-dark-mode', [ApplicationController::class, 'toggleDarkMode'])->name('toggle-dark-mode');
-Route::post('/get-dark-mode', [ApplicationController::class, 'session_dm'])->name('get-dark-mode');
-Route::get('/api/dark-mode-status', function (Request $request) {
-    return response()->json(['dark_mode' => Session::get('dark_mode', false)]);
-});
-Route::get('/api/dark-mode', function () {
-    if($_COOKIE['darkMode'])
-    {
-        return response()->json(['darkMode' => $_COOKIE['darkMode']]);
-    }
-    return response()->json(['darkMode' => session('dark_mode', 'dark')]);
-});
+// Route::post('/toggle-dark-mode', [ApplicationController::class, 'toggleDarkMode'])->name('toggle-dark-mode');
+// Route::post('/get-dark-mode', [ApplicationController::class, 'session_dm'])->name('get-dark-mode');
+// Route::get('/api/dark-mode-status', function (Request $request) {
+//     return response()->json(['dark_mode' => Session::get('dark_mode', false)]);
+// });
+//         Route::get('/api/dark-mode', function () {
+//     // if($_COOKIE['darkMode'])
+//     // {
+//     //     return response()->json(['darkMode' => $_COOKIE['darkMode']]);
+//     // }
+//     return response()->json(['darkMode' => session('dark_mode', 'dark')]);
+// });
 //
 // ==============
 // Fallback-Route

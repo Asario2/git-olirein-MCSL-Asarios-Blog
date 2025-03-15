@@ -259,6 +259,13 @@ class TablesController extends Controller
     }
     function EditTables(Request $request,$id = '',$table='blogs'){
         $tablez = [];
+        if(!empty($id))
+        {
+            if(!DB::table($table)->where("id",$id)->exists())
+            {
+                return redirect()->route("admin.tables.show",$table         )->with('error', 'Kein Eintrag mit dieser ID vorhanden');
+            }
+        }
 
 
         $edstate = !$id ? "Erstellen" : "Bearbeiten";
@@ -326,11 +333,11 @@ class TablesController extends Controller
         $id = $id == 0 ? null : $id;
         $columns = Schema::getColumnListing($table);
         $columns = array_diff($columns, ['id']);
-        if (Schema::hasColumn($table, 'pub')) {
-            $query = DB::table($table)->where("pub", "=", 1);
-        } else {
+        // if (Schema::hasColumn($table, 'pub')) {
+        //     $query = DB::table($table)->where("pub", "=", 1);
+        // } else {
             $query = DB::table($table);
-        }
+        // }
         if($id)
         {
             // dd($table);
@@ -338,12 +345,17 @@ class TablesController extends Controller
             $exists = $query->where('id', $id)->exists();
             $ffoo = ["formFields" => ["defekt" => "true"]];
             if (!$exists) {
-                //\Log::info("exists:".json_encode($ffoo));
-               return response()->json(($ffoo));
+                \Log::info("exists:".json_encode($ffoo));
+                 return response()->json(($ffoo));
             }
 
         }
         else{
+            if(is_int($table))
+            {
+                $table = $id;
+            }
+
             $tables  = DB::table($table)->orderBy($ord[0],$ord[1])->first();
             $create = true;
         }
@@ -1482,7 +1494,7 @@ class TablesController extends Controller
             // Zugriff auf die übergebenen Daten
             $formData = ($request->input('formData')    );
 
-        if(isset($formData['image_path']) && empty($formData['image_path']))
+        if(isset($formData['image_path']) && empty($formData['image_path']) && empty($_FILES))
         {
             $formData['image_path'] = "008.jpg";
         }

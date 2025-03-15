@@ -13,11 +13,15 @@
         :required="required"
         :options="options"
         :sortedOptions="options"
+        v-model="selectedId"
     >
 
-    <option v-for="option in this.arr" :key="option.id" :value="option.id">
-  {{ option.name }}
-</option>
+
+    <option v-for="option in arr" :key="option.id" :value="String(option.id)">
+
+    {{ option.name }}
+  </option>
+
         <!-- <template v-if="Array.isArray(sortedOptions)">
             <option
                 v-for="(option, key) in sortedOptions"
@@ -53,7 +57,7 @@ export default {
 
     data() {
         return {
-        selectedOption: null,
+           selectedId: this.selectedId ? this.selectedId : this.xval,
         sortedOptions: {},
         xsor_alt: {}, // Stelle sicher, dass dies ein Objekt ist!
         xsor: {}, // Stelle sicher, dass dies ein Objekt ist!
@@ -96,12 +100,22 @@ export default {
         tablex:{
             type: String,
         },
+        existingEntryId: String
 
     },
 
     emits: ["input-change"],
 
     watch: {
+        selectedId(newValue) {
+            console.log("Neue Auswahl:", newValue);
+            this.xval = newValue;
+            $('#status_undefined').val(newValue).trigger('change');
+
+            // $('#status_undefined').load('#status_undefined');
+
+        },
+
     xval: {
         immediate: true,
         handler(newValue) {
@@ -220,8 +234,14 @@ arr() {
         return this.xsor[this.name]?.[this.name + ".sortedOptions"] || [];
     },
 mounted() {
+    if( document.getElementById("status_undefined "))
+    {
+        this.formData['status'] = document.getElementById("status_undefined ").value;
+    }
+
     this.actsel(); // Methode wird nach dem Mounten ausgeführt
     this.getOptions();
+
     //console.log("ss: " + (JSON.stringify(this.arr)));
 
     //     if (Array.isArray(this.options[0])) {

@@ -108,8 +108,8 @@
                             ></link-header>
 
                             <link-header
-                                :route-name="route('home.get_started')"
-                                name="Get Started"
+                                :route-name="route('home.images.index')"
+                                name="Bilder"
                             ></link-header>
 
                             <link-header
@@ -342,7 +342,7 @@ function toggleDarkMode() {
   darkMode.value = !darkMode.value;
   localStorage.setItem("darkMode", darkMode.value);
   document.documentElement.classList.toggle("dark", darkMode.value);
-}   
+}
 export default {
     name: "Homepage_Shared_Layout",
 

@@ -98,7 +98,7 @@ export default defineComponent({
             default: () => ({}),
         },
         blogImage: {
-       
+
     },
     },
 

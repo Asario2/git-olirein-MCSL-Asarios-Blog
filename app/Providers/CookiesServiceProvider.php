@@ -18,15 +18,15 @@ class CookiesServiceProvider extends ServiceProvider
             ->session()
             ->csrf();
 
-        // Register all Analytics cookies at once using one single shorthand method:
-        // Cookies::analytics()
-        //     ->google(env('GOOGLE_ANALYTICS_ID'));
+    //     //Register all Analytics cookies at once using one single shorthand method:
+    //     Cookies::analytics()
+    //         ->google(env('GOOGLE_ANALYTICS_ID'));
 
-        // Register custom cookies under the pre-existing "optional" category:
-        // Cookies::optional()
-        //     ->name('darkmode_enabled')
-        //     ->description('This cookie helps us remember your preferences regarding the interface\'s brightness.')
-        //     ->duration(120)
-        //     ->accepted(fn(Consent $consent, MyDarkmode $darkmode) => $consent->cookie(value: $darkmode->getDefaultValue()));
+    //     //Register custom cookies under the pre-existing "optional" category:
+        Cookies::optional()
+            ->name('darkmode_enabled')
+            ->description('This cookie helps us remember your preferences regarding the interface\'s brightness.')
+            ->duration(120)
+            ->accepted(fn(Consent $consent, MyDarkmode $darkmode) => $consent->cookie(value: $darkmode->getDefaultValue()));
     }
 }

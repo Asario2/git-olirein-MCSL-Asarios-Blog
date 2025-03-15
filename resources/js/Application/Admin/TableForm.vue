@@ -107,12 +107,12 @@
                 />
                 <button type="button" @click="openModal">
 
-                    <p v-if="this.nf && typeof this.nf !== 'object' && this.nf != '[]' && this.nf != '008.jpg'">Hochgeladenes Bild: <img :src="'/images/blogs/thumbs/' + this.nf" width="100" alt="Vorschau" title="Vorschau"/></p>
-
+                    <p v-if="this.nf2 && typeof this.nf2 !== 'object' && this.nf2 != '[]' && this.nf2 != '008.jpg'">Hochgeladenes Bild: <img :src="'/images/'+ this.tablex +'/thumbs/' + this.nf2" width="100" alt="Vorschau1" title="Vorschau1"/></p>
+                    <p v-else-if="this.ffo['image_path']['value'] && this.ffo['image_path']['value'] != '008.jpg'">Hochgeladenes Bild: <img :src="'/images/'+ this.tablex +'/thumbs/' + this.ffo['image_path']['value']" width="100" alt="Vorschau2" title="Vorschau2"/></p>
                     <span v-else><img src="/images/blogs/thumbs/009.jpg" alt="Jetzt Bild Hochladen" width="100"  title="Jetzt Bild Hochladen" ></span>
 
                 </button>
-                <input type="hidden" :name="field.name" :value="this.nf" :id="field.name" re="asd">
+                <input type="hidden" :name="field.name" :value="this.ffo['image_path']['value'] ?? this.nf" :id="field.name" re="asd">
                 </input-container>
                 <input-container v-else-if="field.type === 'datetime'">
                     <InputFormDateTime
@@ -191,7 +191,7 @@
 
                                         :id="field.name + '_' + field.id"
                                         :model-value="field.value"
-
+                                        v-model="field.name"
                                         :options="`options: ${this.xsor_alt[field.name]?.length > 0 ? this.xsor_alt[field.name] : []}`"
                                         ref="field.name"
                                         :name="field.name"
@@ -292,7 +292,7 @@ const id = segments[segments.length - 2];
 let tablex = segments[segments.length - 1]; // Muss ein ref sein, wenn es reaktiv sein soll
 const table_z = tablex;
 let table = tablex;
-let xid = segments[segments.length - 2];
+let xid = segments[segments.length - 2 ];
 
 const routes = {
     getform: (tablex, id) => `/tables/form-data/${tablex}/${id}`,
@@ -469,6 +469,7 @@ export default defineComponent({
         return {
             table: reactive({ id: "1" }),// Standardwert setzen, falls leer
         formDatas: {},
+        oobj:{},
         uploadedIid: null,
         ItemName: "Beitrag",
         table_x: '',
@@ -643,7 +644,7 @@ export default defineComponent({
                     ["textarea"].includes(field.type)
                 );
                 this.textareaField = textareaField;
-                if (textareaField) {
+                if (textareaField &&  document.getElementById("reading_time_undefined ")) {
 
                     this.readingTime = this.calculateReadingTime(textareaField.value);
                     this.readingTime = this.readingTime  < 1 ? "1" : this.readingTime;
@@ -825,7 +826,7 @@ if(document.location.toString().indexOf('?') !== -1) {
     //             })
     //             .catch((error) => {
     //                 console.error(
-    //                     "Fehler beim Abrufen der Formulardaten:",
+    //                     "Fehler beim Abrufen der Formulardaten4:",
     //                     error,
     //                 );
     //             });
@@ -936,9 +937,17 @@ return { ffo };
 
         this.nf = response.data;
         console.log(`/api/images/${this.xtable}/${this.xid}`);
-        if(this.nf === "[]")
+        if(document.getElementById('image_path') && document.getElementById('image_path').value != "008.jpg"){
+
+            this.nf = document.getElementById('image_path').value;
+        }
+        else if(this.nf === "[]")
         {
-            this.nf = "008.jpg";
+            this.nf = this.ffo['image_path']['value'];
+        }
+        else
+        {
+
         }
         return this.nf;
       } catch (error){
@@ -979,7 +988,7 @@ return { ffo };
     handleImageUpload(imageUrl) {
      console.log("Bild-URL:", imageUrl);
       this.uploadedImageUrl = imageUrl;
-      this.nf = imageUrl;
+      this.nf2 = imageUrl;
     //    this.imageId = iid;
     },
 
@@ -1050,9 +1059,9 @@ return { ffo };
             // console.log(field);
             // console.log(field.name);
             // console.log(field.type);
-            if(field.name == "rading_time")
+            if(field.name == "reading_time")
             {
-                // this.formData['reading_time'] = this.readingTime;
+                 this.formData['reading_time'] = this.readingTime;
             }
             if(field.type == "IID")
             {
@@ -1183,7 +1192,7 @@ obj = obj.replace(/"formFields": \[.*\]/, "")
             // input  = JSON.parse(input);
             // this.sortedOptions = obj;
            // console.log("obj vor der Zuweisung:", obj);
-            this.xsor_alt[name] = this.stripslashes(JSON.stringify(Object.entries(obj)));
+            //this.xsor_alt[name] = this.stripslashes(JSON.stringify(Object.entries(obj)));
             //console.log("sortedOptions:", sortedOptions);
             // const newArray = Object.entries(sortedOptions).map(([key, value]) => ({
             //     id: key,
@@ -1206,7 +1215,7 @@ obj = obj.replace(/"formFields": \[.*\]/, "")
             // this.options = this.sortedOptions;
         })
         .catch((error) => {
-            console.error("Fehler beim Abrufen der Formulardaten:", error);
+            console.error("Fehler beim Abrufen der Formulardaten:3", error);
         });
 }
 
@@ -1277,10 +1286,20 @@ obj = obj.replace(/"formFields": \[.*\]/, "")
                 })
                 .catch((error) => {
                     console.error(
-                        "Fehler beim Abrufen der Formulardaten:",
+                        "Fehler beim Abrufen der Formulardaten2:",
                         error,
                     );
                 });
+
+        },
+        getdefnf(){
+
+            if(document.getElementById("image_path") && document.getElementById("image_path") != "008.jpg")
+            {
+                this.nf = document.getElementById("image_path").value;
+            }
+
+
 
         },
         fetchFormData() {
@@ -1304,9 +1323,11 @@ obj = obj.replace(/"formFields": \[.*\]/, "")
                 .replace(/}}/g, "\n   }\n  }")
                 .replace(/"\d+"\s*:\s*{/g, '{')
                 .replace(/},\s*{/g, '},');
-            // obj = "[" + obj + "]";
-            //console.log("OBJ: " + (obj));
+            //  obj = "[" + obj + "]";
+            console.log("OBJ: " + (obj));
+
             obj = JSON.parse(obj);
+            this.oobj = obj;
             this.obj2 = obj;
             // console.log(obj);
             this.ffo = obj
@@ -1328,7 +1349,7 @@ obj = obj.replace(/"formFields": \[.*\]/, "")
 
         })
         .catch((error) => {
-            console.error("Fehler beim Abrufen der Formulardaten:", error);
+            console.error("Fehler beim Abrufen der Formulardaten5:", error);
         });
 },
 quotebrace(obj){
@@ -1411,23 +1432,34 @@ async submitForm() {
             let response;
             var inputRef = this.$refs.image_path;
             //console.log("XZAY" + JSON.stringify(inputRef,null,2));
-            if (inputRef.length > 0) {
-               this.nf = inputRef[0].newFname;
-               if(!this.nf || this.nf == "[]"){
-                this.nf = this.getOF();
-               }
+            // if (inputRef.length > 0) {
+            //    this.nf = inputRef[0].newFname;
+            //    if(!this.nf || this.nf == "[]" && !document.getElementById("image_path")){
+            //     this.nf = this.getOF();
+            //    }
+            //    else if(document.getElementById("image_path").value != '008.jpg')
+            //    {
+            //     this.nf = document.getElementById("image_path").value;
+            //     console.log("NF: "+this.nf);
+            //    }
+            //    jsonObject = JSON.parse(this.nf);
+            //    console.log(jsonObject.message);
 
-                this.formData['image_path'] = this.nf;
+                this.formData['image_path'] = this.nf2;
                 console.log(JSON.stringify(this.nf,null,2));
-            }
-            else{
-                this.nf = this.getOF(id,tablex);
-            }
+            // }
+            // else{
+            //     this.nf = this.getOF(id,tablex);
+            // }
             // console.log("Daten, die gesendet werden:",this.formData);
-            if(this.textareaField)
+            if(this.textareaField &&  document.getElementById("reading_time_undefined "))
             {
                 this.formData['reading_time'] = this.readingTime;
-                console.log("Daten, die gesendet werden:",this.formData);
+
+            }
+            if(this.ffo['status'])
+            {
+                this.formData['status'] = document.getElementById("status_undefined").value;
             }
             if(segments[segments.length - 2] == "create")
             {
@@ -1443,9 +1475,12 @@ async submitForm() {
             });
 
         }
+
         } catch (error) {
             console.error("Fehler beim Absenden:", error);
         }
+        console.log("Daten, die gesendet werden:",this.formData);
+        // location.href='/admin/tables/show/'+this.tablex;
     },
 // async submitForm() {
 //         // Überprüfen, ob `this.ffo` ein Objekt ist
@@ -1583,7 +1618,11 @@ async submitForm() {
         this.updateData();
         this.emptyChecker();
         this.updateReadingTime();
-        this.table_image = "blogs";
+        if(!this.nf)
+        {
+            this.nf = this.getdefnf();
+        }
+        this.table_image = "images";
         // const inputRef = this.$refs.blog_images_iid?.value;
         // console.log("iR:" + inputRef);
         //     if (Array.isArray(inputRef) && inputRef.length > 0) {

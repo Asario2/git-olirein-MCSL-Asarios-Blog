@@ -15,8 +15,8 @@ class ResizeImages extends Command
 
     public function handle()
     {
-        $sourceDirs = [public_path("images/blogs/orig"), public_path('images/blogs/big'),public_path('images/blogs/')];
-        $thumbsDir = public_path('images/blogs/thumbs');
+        $sourceDirs = [public_path("images/images/orig"), public_path('images/images/big')];
+        $thumbsDir = public_path('images/images/thumbs');
 
         if (!File::exists($thumbsDir)) {
             File::makeDirectory($thumbsDir, 0777, true);
@@ -38,14 +38,14 @@ class ResizeImages extends Command
                 }
 
                 // Bild einlesen und skalieren
-                // $image =  $manager->read($file->getPathname())->resize(350, null, function ($constraint) {
-                //     $constraint->aspectRatio(); // Maintains aspect ratio
-                //     $constraint->upsize(); // Prevents upscaling the image if it's smaller than 350px
-                // });
+                 $image =  $manager->read($file->getPathname())->resize(400, null, function ($constraint) {
+                    $constraint->aspectRatio(); // Maintains aspect ratio
+                    $constraint->upsize(); // Prevents upscaling the image if it's smaller than 350px
+                 });
                 $image = $manager->read($file->getPathname());
                 $width = 400;
                 $height = (int) ($image->height() * ($width / $image->width()));
-
+                //  \Log::info($width."x".$height);
                 $image = $image->resize($width, $height);
                 $image->save($thumbPath);
                 $this->info("Resized: " . $file->getFilename());

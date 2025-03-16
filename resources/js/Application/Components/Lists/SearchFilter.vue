@@ -13,7 +13,7 @@
                 autocomplete="off"
                 name="search"
                 :placeholder="placeholder"
-                :value="modelValue"
+                :value="(modelValue)"
                 @input="$emit('update:modelValue', $event.target.value)"
             />
             <button
@@ -38,6 +38,7 @@
 
 <script>
 import IconSearch from "@/Application/Components/Icons/Search.vue";
+import he from 'he';
 //
 export default {
     name: "Components_Lists_SearchFilter",
@@ -61,5 +62,20 @@ export default {
             type: String,
         },
     },
+    methods: {
+        decodeEntities(text) {
+
+        if(text){
+            text = text?.replace(/<br\s*\/?>/g, '\n'); // Wandelt HTML-Entitäten in Zeichen um
+            return he.decode(text);
+        }
+        else{
+            return "";
+        }
+
+
+      },
+},
 };
+
 </script>

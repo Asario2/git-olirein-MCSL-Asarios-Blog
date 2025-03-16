@@ -13,7 +13,8 @@
               :key="ima.id"
               class="bg-white dark:bg-gray-800 p-2 rounded-lg shadow-md relative group"
             >
-            <a :href="route('home.images.gallery',ima.id)">
+            <a :href="route('home.images.gallery',[ima.slug])">
+
               <!-- Bild -->
 
               <div class="relative w-full overflow-hidden rounded-sm">
@@ -57,10 +58,11 @@
 
   <script>
   import Layout from "@/Application/Homepage/Shared/Layout.vue";
+
   import he from 'he';
 
   export default {
-    components: { Layout },
+    components: { Layout},
     props: {
       data: Array,
       ima: Object,
@@ -69,7 +71,7 @@
     decodeEntities(text) {
       return he.decode(text); // wandelt HTML-Entitäten in Zeichen um
     },
-    
+
   }
 
   };

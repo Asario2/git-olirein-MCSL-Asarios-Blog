@@ -11,6 +11,10 @@ use Illuminate\Support\Str;
 use Laravel\Jetstream\Jetstream;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Session;
+
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use League\CommonMark\CommonMarkConverter;
 if(!session_id())
 {
@@ -96,9 +100,9 @@ class HomeController extends Controller
            'data'=>$data,
         ]);
     }
-    public function home_images($cat_id)
+    public function home_images(Request $request,$slug)
     {
-        if($cat_id != "3")
+        if($slug != "Alphabet")
         {
             $ord[0] = "created_at";
             $ord[1] = "DESC";
@@ -108,21 +112,69 @@ class HomeController extends Controller
             $ord[1] = "ASC";
         }
         $entries = DB::table("images")
-    ->where(function($query) {
-        $query->where("images.pub", 1)
-              ->orWhere("images.pub", "2");
-    })
-    ->where("image_categories_id", $cat_id)
-    ->leftJoin("camera", "images.camera_id", "=", "camera.id")
-    ->select("images.*", "camera.name as camera")
-    ->orderBy($ord[0], $ord[1])
-    ->get();
+        ->leftJoin("camera", "images.camera_id", "=", "camera.id")
+        ->leftJoin("image_categories", "image_categories.id", "=", "images.image_categories_id")
+        ->where(function($query) {
+            $query->where("images.pub", 1)->orWhere("images.pub", 2);
+        })
+        ->where("image_categories.slug", $slug)
+        ->select("images.*", "camera.name as camera", "image_categories.slug as slug")
+        ->when(request("search"), function ($query) {
+            $query->filterdefault(['search' => request('search')]);
+        })
+        ->orderBy($ord[0], $ord[1])
+        ->get();
+        \Log::info([$entries->toSql(), $entries->getBindings()]);
 
-        $ocont = DB::table("image_categories")->where("id",$cat_id)->first();
+        $ocont = DB::table("image_categories")->where("slug",$slug)->first();
         return Inertia::render('Homepage/Pictures', [
             'entries' => $entries,
             'ocont' => $ocont,
-            'filters' => Request::all('search'),
+            'filters' => Request()->all('search')
+        ]);
+    }
+    //
+    public function home_images_search(Request $request,$slug)
+    {
+        if($slug != "Alphabet")
+        {
+            $ord[0] = "created_at";
+            $ord[1] = "DESC";
+        }
+        else{
+            $ord[0] = "position";
+            $ord[1] = "ASC";
+        }
+
+        DB::enableQueryLog();
+        $entries = DB::table("images")
+        ->leftJoin("camera", "images.camera_id", "=", "camera.id")
+        ->leftJoin("image_categories", "image_categories.id", "=", "images.image_categories_id")
+        ->select("images.*", "camera.name as camera", "image_categories.slug as category_slug")
+        ->where("image_categories.slug", $slug) // 🔹 Begrenzung auf die Kategorie
+        ->where(function ($query) {
+            $query->where("images.pub", 1)
+                  ->orWhere("images.pub", 2);
+        })
+
+        // ->when(request("search"), function ($query) {
+        //     dd("when wurde ausgeführt!", request("search"));
+        //     $query->filterdefault(['search' => request('search')]);
+        // })
+        ->when(request("search"), function ($query) use ($slug) {
+            $query->where(function ($subquery) {
+                $subquery->filterdefault(['search' => request('search')]);
+            });
+        })
+        ->orderBy($ord[0], $ord[1])
+        ->get();
+        $queries = DB::getQueryLog();
+        \Log::info  ("QQ:".json_encode($queries));
+        $ocont = DB::table("image_categories")->where("slug",$slug)->first();
+        return Inertia::render('Homepage/Pictures', [
+            'entries' => $entries,
+            'ocont' => $ocont,
+            'filters' => Request()->all('search')
         ]);
     }
     //

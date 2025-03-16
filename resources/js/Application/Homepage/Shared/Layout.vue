@@ -336,8 +336,8 @@ import { ref, provide } from "vue";
 
 const darkMode = ref(localStorage.getItem("darkMode") === "true");
 
-provide("darkMode", darkMode); // 👈 Hier stellen wir `darkMode` bereit
-
+// provide("darkMode", darkMode); // 👈 Hier stellen wir `darkMode` bereit
+    
 function toggleDarkMode() {
   darkMode.value = !darkMode.value;
   localStorage.setItem("darkMode", darkMode.value);

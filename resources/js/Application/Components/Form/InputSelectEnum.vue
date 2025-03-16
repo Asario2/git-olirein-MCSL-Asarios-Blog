@@ -100,8 +100,10 @@ export default {
         tablex:{
             type: String,
         },
-        existingEntryId: String
-
+        existingEntryId: String,
+        xval:{
+            type: String,
+        }
     },
 
     emits: ["input-change"],

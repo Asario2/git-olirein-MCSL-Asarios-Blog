@@ -64,74 +64,78 @@ if(!function_exists("renderText"))
         return html_entity_decode(html_entity_decode(smi(htmlentities(nl2br($txt)))));
     }
 }
-use Illuminate\Database\Query\Builder;
-use App\Models\Settings;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Schema;
+// if (!Builder::hasMacro('filterdefault')) {
+//     Builder::macro('filterdefault', function ($filters) {
+//         if (!empty($filters['search'])) {
+//             $table = request('table', session('table')); // Sichere Abfrage der Tabelle
 
-if (!Builder::hasMacro('filterdefault')) {
-    Builder::macro('filterdefault', function ($filters) {
-        // Überprüfen, ob der 'search' Filter gesetzt ist
-        if (!empty($filters['search'])) {
-            // Überprüfen, ob der 'table' Parameter in $_GET vorhanden ist
-            $table = $_GET['table'] ?? session('table');
+//             if (!$table) {
+//                 return $this; // Falls keine Tabelle definiert, beenden
+//             }
 
-            // Wenn der 'table' Parameter nicht gesetzt ist, breche die Funktion ab oder gebe eine Fehlermeldung aus
-            if (!$table) {
-                return $this; // oder eine Ausnahme werfen, falls notwendig
-            }
+//             session(['table' => $table]); // Tabelle in der Session speichern
 
-            // Speichere den 'table' Parameter in der Session für zukünftige Anfragen
-            session(['table' => $table]);
+//             $whvals = Settings::searchFields[$table] ?? []; // Hole Suchfelder
 
-            // Hole die Filterfelder aus den Einstellungen
-            $whvals = Settings::searchFields[$table] ?? [];
+//             return $this->where(function ($query) use ($table, $filters, $whvals) {
+//                 foreach ($whvals as $whn) {
+//                     $query->orWhereRaw("LOWER(`$table`.`$whn`) LIKE ?", ['%' . strtolower(htmlentities($filters['search'])) . '%']);
+//                 }
 
-            // Wenn Filterfelder existieren, durchlaufe sie und füge OR WHERE-Klauseln hinzu
-            foreach ($whvals as $whn) {
-                $this->orWhereRaw("LOWER(`$table`.`$whn`) LIKE ?", ['%' . strtolower($filters['search']) . '%']);
-            }
+//                 $columns = Schema::getColumnListing($table);
+//                 if (in_array("created_at", $columns)) {
+//                     $query->orWhere("$table.created_at", 'like', '%' . $filters['search'] . '%');
+//                 }
 
-            // Überprüfen, ob die Spalte 'created_at' in der Tabelle existiert
-            $columns = Schema::getColumnListing($table);
-            if (in_array("created_at", $columns)) {
-                $this->orWhere("$table.created_at", 'like', '%' . $filters['search'] . '%');
-            }
+//                 $query->orWhere("$table.id", 'like', '%' . $filters['search'] . '%');
+//             });
+//         }
 
-            // Weitere Filterung auf der 'id' Spalte
-            $this->orWhere("{$table}.id", "like", '%' . $filters['search'] . '%');
+//         return $this;
+//     });
+// }
+
+        use Illuminate\Database\Query\Builder;
+        use App\Models\Settings;
+        use Illuminate\Support\Facades\Session;
+        use Illuminate\Support\Facades\Schema;
+        if (!Builder::hasMacro('filterdefault')) {
+            Builder::macro('filterdefault', function ($filters) {
+                if (!empty($filters['search'])) {
+
+                    $path = request()->path(); // Gibt "home/show/images/search/Fasermaler"
+                    $parts = explode("/", $path);
+
+                    if (count($parts) >= 3) {
+                        $_GET['table'] = $parts[count($parts) - 3];
+
+                    }
+
+
+                    // $_GET['table'] = "images";
+                    $whvals = @Settings::searchFields[$_GET['table']] ?? []; // Rufe `whvals` korrekt auf
+
+                    session(['table' => @$_GET['table']]);
+
+                    // Abrufen des Wertes aus der Session
+                    $table = session('table');
+                    foreach ($whvals as $whn) {
+                                            $this->orWhereRaw("LOWER(`$table` . `$whn`) LIKE ?", ['%' . strtolower($filters['search']) . '%']);
+                    }
+
+
+                    $columns = Schema::getColumnListing($table);
+                    if(in_array("created_at",$columns)){
+                        $this->orWhere("$table.created_at", 'like', '%'.$filters['search']. '%');
+                    }
+
+                }
+                $this->orWhere("{$table}.id","like",'%'.$filters['search'].'%');
+                // dd($this->toSql(), $this->getBindings());
+
+                return $this;
+            });
         }
-
-        return $this;
-    });
-}
-
-    // use Illuminate\Database\Query\Builder;
-    // use App\Models\Settings;
-    // if (!Builder::hasMacro('filterdefault')) {
-    //     Builder::macro('filterdefault', function ($filters) {
-    //         if (!empty($filters['search'])) {
-    //             $whvals = @Settings::searchFields[$_GET['table']] ?? []; // Rufe `whvals` korrekt auf
-    //             session(['table' => $_GET['table']]);
-
-    //             // Abrufen des Wertes aus der Session
-    //             $table = session('table');
-    //             foreach ($whvals as $whn) {
-    //                                     $this->orWhereRaw("LOWER(`$table` . `$whn`) LIKE ?", ['%' . strtolower($filters['search']) . '%']);
-    //             }
-
-
-    //             $columns = Schema::getColumnListing($table);
-    //             if(in_array("created_at",$columns)){
-    //                 $this->orWhere("$table.created_at", 'like', '%'.$filters['search']. '%');
-    //             }
-
-    //         }
-    //         $this->orWhere("{$table}.id","like",'%'.$filters['search'].'%');
-
-    //         return $this;
-    //     });
-    // }
 
 
 if(!function_exists("renderMarkdown"))

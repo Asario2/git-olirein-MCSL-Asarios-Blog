@@ -130,8 +130,13 @@ class CommentController extends Controller
     public function fetchComments(Request $request,$post_id,$table='')
     {
         $table = $request->table;
-        $comments = Comment::where('post_id', $post_id)->where("tablename",$table)->with('user')->latest()->get();
+        // \Log::info("TT:".$table.$post_id);
+        $comments = Comment::where('post_id', $post_id)->where("admin_table_id",$this->GetTid($table))->with('user')->latest()->get();
         return response()->json(['comments' => $comments]);
+    }
+    public function GetTid($tab)
+    {
+        return DB::table("admin_table")->where("name",$tab)->pluck("id")->first();
     }
     public static function ComForm($table,$comments,$post)
     {

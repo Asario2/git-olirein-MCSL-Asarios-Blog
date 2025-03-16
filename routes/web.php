@@ -9,6 +9,7 @@ use App\Http\Controllers\HandbookController;
 use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\GlobalController;
 use App\Http\Controllers\DashboardAdminController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\DashboardCentralController;
 use App\Http\Controllers\DashboardCustomerController;
 use App\Http\Controllers\DashboardEmployeeController;
@@ -30,7 +31,7 @@ Route::get('/db-check', function () {
 });
 Route::get('/namebindings', [NameBindingsController::class, 'RefreshFields'])->name("ColumnFetcher");
 Route::post('/upload-image/{table}', [ImageUploadController::class, 'upload'])->name('upload.image');
-
+Route::get('/comments/{post_id}', [CommentController::class, 'fetchComments'])->name('comments.fetch');
 
 Route::get('/tables/form-data/{table}/{id}', [TablesController::class, 'ExportFields'])
 ->name("GetTableForm");
@@ -52,7 +53,8 @@ Route::get('/home/terms', [HomeController::class, 'home_terms'])->name('home.ter
 // Ai Content
 Route::get('/home/ai', [HomeController::class, 'home_AI'])->name('home.ai');
 // Picures show gallery
-Route::get('/home/show/images/{cat_id}', [HomeController::class, 'home_images'])->name('home.images.gallery');
+Route::get('/home/show/images/{slug}', [HomeController::class, 'home_images'])->name('home.images.gallery');
+Route::get('/home/show/images/search/{slug}', [HomeController::class, 'home_images_search'])->name('home.images.gallery.search');
 // Pictures Overview
 Route::get('/home/images', [HomeController::class, 'home_images_index'])->name('home.images.index');
 // Liste der Blogartikel
@@ -234,19 +236,30 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         })->name("customer.logout")->withoutMiddleware(["auth"]);
 
 });
+// Comments
+Route::get('/comments', function (Request $request) {
+    $postId = $request->query('post_id');
+
+    $comments = DB::table('comments')
+        ->join('users', 'comments.users_id', '=', 'users.id')
+        ->select('comments.*', 'users.profile_photo_path')
+        ->where('comments.post_id', $postId)
+        ->where('comments.pub', 1) // Nur veröffentlichte Kommentare
+        ->orderBy('comments.created_at', 'desc')
+        ->get();
+
+    return response()->json($comments);
+});
 // Darkmode Route
 // Route::post('/toggle-dark-mode', [ApplicationController::class, 'toggleDarkMode'])->name('toggle-dark-mode');
 // Route::post('/get-dark-mode', [ApplicationController::class, 'session_dm'])->name('get-dark-mode');
 // Route::get('/api/dark-mode-status', function (Request $request) {
 //     return response()->json(['dark_mode' => Session::get('dark_mode', false)]);
 // });
-//         Route::get('/api/dark-mode', function () {
-//     // if($_COOKIE['darkMode'])
-//     // {
-//     //     return response()->json(['darkMode' => $_COOKIE['darkMode']]);
-//     // }
-//     return response()->json(['darkMode' => session('dark_mode', 'dark')]);
-// });
+Route::get('/api/dark-mode', function () {
+
+    return response()->json(['darkMode' => session('dark_mode', 'dark')]);
+});
 //
 // ==============
 // Fallback-Route

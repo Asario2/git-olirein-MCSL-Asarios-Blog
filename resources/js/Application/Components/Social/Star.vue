@@ -1,57 +1,56 @@
 <template>
-    <span
-      :class="['star', { filled: isFilled }]"
-      @mouseenter="onMouseEnter"
-      @mouseleave="onMouseLeave"
-      @click="onClick"
-      :style="starStyle"
-    >
-      &#9733;
-    </span>
-  </template>
 
-  <script>
+
+    <span class="star" :class="{ filled: isFilled }">★</span>
+  </template>
+<script>
+
   export default {
     props: {
-      index: Number,  // Index des Sterns (1 bis 5)
-      rating: Number, // Aktuelle Bewertung des Benutzers
-      hoverRating: Number, // Hover-Rating während der Interaktion
-      onHover: Function, // Callback für Hover-Event
-      onRate: Function, // Callback für Klick-Event
+      isFilled: Boolean, // Gibt an, ob der Stern gelb sein soll oder nicht
     },
-    computed: {
-      isFilled() {
-        return this.index <= (this.hoverRating || this.rating);
-      },
-      starStyle() {
-        return {
-          cursor: 'pointer',
-          fontSize: '30px',
-          color: this.isFilled ? 'yellow' : '#d3d3d3',
-        };
-      },
+    data() {
+      return {
+        stars: [1, 2, 3, 4, 5],
+        rating: 0,  // Die Bewertung des Benutzers
+        hoverRating: 0  // Für Hover-Effekte
+      };
     },
     methods: {
-      onMouseEnter() {
-        this.onHover(this.index);
+      handleRate(star) {
+        this.rating = star;
+        this.$emit('update:rating', this.rating);  // Event für die Eltern-Komponente
+        this.saveRating(star);  // Rating speichern (optional)
       },
-      onMouseLeave() {
-        this.onHover(0); // Zurücksetzen des Hover-Ratings
+      handleHover(star) {
+        this.hoverRating = star;
       },
-      onClick() {
-        this.onRate(this.index); // Wert speichern
+      handleMouseLeave() {
+        this.hoverRating = 0;
       },
-    },
+      async saveRating(star) {
+        // Beispiel für das Speichern der Bewertung über AJAX
+        try {
+          const response = await axios.post('/save-rating', {
+            rating: star,
+            postId: this.postId, // Falls du die Post-ID hast
+          });
+          if (response.data.status === 'success') {
+            console.log('Bewertung gespeichert');
+          }
+        } catch (error) {
+          console.error('Fehler beim Speichern der Bewertung:', error);
+        }
+      }
+    }
   };
   </script>
-
-  <style scoped>
-  .star {
-    transition: color 0.3s ease;
-    user-select: none;
-  }
-  .star.filled {
-    color: yellow;
-  }
-  </style>
-    
+<style scoped>
+.star {
+  font-size: 30px;
+  color: gray; /* Standardmäßig graue Sterne */
+}
+.star.filled {
+  color: yellow; /* Gelb für gefüllte Sterne */
+}
+</style>

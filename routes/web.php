@@ -3,6 +3,7 @@
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\RatingController;
 use App\Http\Controllers\NameBindingsController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\HandbookController;
@@ -32,7 +33,9 @@ Route::get('/db-check', function () {
 Route::get('/namebindings', [NameBindingsController::class, 'RefreshFields'])->name("ColumnFetcher");
 Route::post('/upload-image/{table}', [ImageUploadController::class, 'upload'])->name('upload.image');
 Route::get('/comments/{table}/{postId}', [CommentController::class, 'fetchComments'])->name('comments.fetch');
-
+Route::post('/save-rating', [RatingController::class, 'saveRating']);
+Route::get('/get-rating/{table}/{postId}', [RatingController::class, 'getStars']);
+Route::get('/get-average-rating/{table}/{postId}', [RatingController::class, 'getAverageRating']);
 Route::get('/tables/form-data/{table}/{id}', [TablesController::class, 'ExportFields'])
 ->name("GetTableForm");
 // ========
@@ -238,6 +241,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 });
 // Comments
 Route::delete('/comments/delete/{comment_id}', [CommentController::class,'destroy_comments'])->name("destroy.comments");
+
+
 // Darkmode Route
 // Route::post('/toggle-dark-mode', [ApplicationController::class, 'toggleDarkMode'])->name('toggle-dark-mode');
 // Route::post('/get-dark-mode', [ApplicationController::class, 'session_dm'])->name('get-dark-mode');
@@ -259,3 +264,4 @@ Route::fallback(function () {
 });
 Route::get("/api/images/{table}/{id}",[TablesController::class,"GetImageUrl"])
             ->name("api-get-image-url");
+

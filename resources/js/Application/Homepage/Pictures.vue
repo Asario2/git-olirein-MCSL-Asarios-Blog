@@ -113,7 +113,7 @@
         ref="commentBox"
         :id="commentBox + entry.id"
         @click.stop
-        class="relative absolute left-0 top-full mt-2 w-[300] we300 border-gray-300 p-4 rounded-lg shadow-sm bg-white dark:bg-gray-800 z-50">
+        class="relative absolute left-0 top-full mt-2 w-[300] we300 border-gray-300 p-4 rounded-lg shadow-sm bg-white dark:bg-gray-800 z-40">
     <!-- Schließen Button -->
     <button @click="closeComments"
             class="absolute top-2 right-2 text-red-500 text-xl">
@@ -140,7 +140,7 @@
     <td colspan="3" v-if="showStarBox[entry.id]">
     <!-- Bewertung -->
     <div class="rate-button">
-        <AddRating postId="entry.id" />
+        <AddRating :postId="entry.id" :table="this.tablex"/>
     </div>
 </td>
 </tr>
@@ -156,7 +156,7 @@
         <h3>Kurzinfos</h3>
         </div>
 
-        <slot name="rating">rating</slot>
+        <averageRating :postId="entry.id"/>
         <span v-if="editOn || deleteOn" class="flex space-x-2">
         <!-- Edit Icon -->
         <span v-if="editOn"
@@ -194,6 +194,7 @@
 <script>
 import Layout from "@/Application/Homepage/Shared/Layout.vue";
 import IconPlusCircle from "@/Application/Components/Icons/PlusCircle.vue";
+import averageRating from "@/Application/Components/Social/averageratings.vue";
 import IconPencil from "@/Application/Components/Icons/Pencil.vue";
 import Comments from "@/Application/Components/Social/comments.vue";
 import Share from "@/Application/Components/Social/share.vue";
@@ -228,6 +229,7 @@ components: {
     IconComment,
     IconShare,
     IconStar,
+    averageRating,
 },
 data() {
     return {

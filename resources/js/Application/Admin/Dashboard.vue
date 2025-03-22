@@ -34,7 +34,7 @@
                 :routeName2="route('admin.tables.store', 'images')"
                 linkName2="Neues Bild"
                 :withIcon="true"
-                icon="IconBook"
+                icon="IconPictures"
             >
                 <template #description>
                     Hier findest du eine Liste aller Bilder.
@@ -62,10 +62,10 @@
                 linkName="Zum Laravel-Log"
                 target="_blank"
                 :withIcon="true"
-                icon="IconBook"
+                icon="IconLogs"
             >
                 <!-- DB updaten -->
-                <template #description> Tabellen Verwalten </template>
+                <template #description> Logs anzeigen    </template>
             </navigation-card>
         </div>
     </layout>

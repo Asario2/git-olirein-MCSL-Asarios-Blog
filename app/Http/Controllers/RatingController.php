@@ -55,8 +55,9 @@ class RatingController extends Controller
             {
                 DB::table("ratings")->insert(
                     [
-                        "table" => $request->table,
-                        "image_id" => $request->postId,
+                        "table" => $table,
+                        "rating" => $rating,
+                        "image_id" => $postId,
                         "users_id" => $userId,
                         "created_at" => now(),
                         "updated_at" => now(),

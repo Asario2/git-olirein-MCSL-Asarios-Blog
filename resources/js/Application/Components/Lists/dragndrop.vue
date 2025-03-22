@@ -14,7 +14,7 @@ export default {
     methods: {
         updateOrder(event) {
             // Beispiel-Handler, der ausgelöst wird, wenn ein Element verschoben wurde
-            console.log("Neue Reihenfolge:", this.datarows);
+            //console.log("Neue Reihenfolge:", this.datarows);
         },
     },
 };

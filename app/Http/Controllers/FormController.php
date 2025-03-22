@@ -239,7 +239,7 @@ class FormController extends Controller
                 return "IID";
             break;
             case "itemscope":
-                return "select";
+                return "select_itemscope";
             break;
             case "markdown_on":
                 if ($cl) {

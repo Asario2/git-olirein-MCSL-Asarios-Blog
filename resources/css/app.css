@@ -381,3 +381,6 @@ A
 					}
 
 		}
+		SPAN .fab .fa-twitter:before {
+ content: "\e61b" !important;	
+}

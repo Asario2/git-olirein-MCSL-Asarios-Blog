@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Settings;
 use App\Models\Comment;
 use App\Models\Post;
 use Auth;
@@ -77,19 +78,20 @@ class CommentController extends Controller
      public function store_alt(Request $request,$table='')
     {
         // Validierung des Eingabewerts
-        $request->validate([
-            'comment' => 'required|string|max:4000',
-            'comment2' => 'string|max:4000' // Maximale Länge kann angepasst werden
-        ]);
-        $user = DB::table("users")->where("id",Auth()->id())->select("email","nick")->first();
+        // $request->validate([
+        //     'comment' => 'required|string|max:4000',
+        //     'comment2' => 'string|max:4000' // Maximale Länge kann angepasst werden
+        // ]);
+        $user = DB::table("users")->where("id",Auth()->id())->select("email","nick_name")->first();
         // Kommentar erstellen und in der Datenbank speichern
+        \Log::info("USAH".json_encode($user));
         $comment = new Comment();
         $comment->content = $request->input('comment2') ?? $request->comment;
         $comment->users_id = auth()->id(); // Beispiel für Benutzer-ID
         $comment->created_at = now();
         $comment->updated_at = now();
-        $comment->email = $user->email;
-        $comment->tablename = $table;
+        $comment->email = @$user->email;
+        $comment->admin_table_id = $this->GetTid($table);
         $comment->post_id = $request->post_id;
         $comment->save();
 
@@ -98,7 +100,10 @@ class CommentController extends Controller
         //     ->with('success', 'Kommentar erfolgreich gepostet!');
         $url = url()->previous() . "#comment_{$request->post_id}";
 
-        return redirect($url)->with('success', 'Kommentar erfolgreich gepostet!');
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Kommentar erfolgreich gespeichert',
+        ]);
 
     }
      public function store(Request $request,$table='')
@@ -127,16 +132,47 @@ class CommentController extends Controller
         $MailHelper->SendMailer("parie@gmx.de","Neuer Kommentar auf www.asario.net","",'','','','newcomment',["name"=>$nick,"table"=>$table,"comment"=>$comment]);
         return redirect()->back()->with('success', 'Kommentar erfolgreich gepostet!');
     }
-    public function fetchComments(Request $request,$post_id,$table='')
+    public function fetchComments(Request $request,$table,$postId='')
     {
+
         $table = $request->table;
-        // \Log::info("TT:".$table.$post_id);
-        $comments = Comment::where('post_id', $post_id)->where("admin_table_id",$this->GetTid($table))->with('user')->latest()->get();
-        return response()->json(['comments' => $comments]);
+        $path = request()->path(); // Gibt "home/show/images/search/Fasermaler"
+                $parts = explode("/", $path);
+                $table_alt = $table;
+                // $sa = Settings::searchable;
+                // \Log::info($parts);
+                // foreach($sa as $ta)
+                // {
+                //     if(in_array($ta,$parts))
+                //     {
+                //         $table = $ta;
+                //         $table_alt  = $ta;
+                //         $_GET['table'] = $ta;
+                //         \Log::info("ssadddddddddddddd".$table);
+                //     }
+                //     else
+                //     {
+                //         continue;
+                //     }
+
+                // }
+
+        DB::enableQueryLog();
+            $comments = Comment::where('post_id', $postId)
+            ->leftJoin('users', 'comments.users_id', '=', 'users.id')
+            ->select("comments.*", "users.profile_photo_path", "users.name as author")
+            ->where("admin_table_id",$this->GetTid($table_alt))
+            ->orderBy("id","DESC")->latest()->get();
+            // \Log::info(DB::getQueryLog());
+            //  \Log::info("TABLE:".$table);
+             if(!$comments){
+                //return [];
+             }
+        return response($comments);
     }
     public function GetTid($tab)
     {
-        return DB::table("admin_table")->where("name",$tab)->pluck("id")->first();
+        return DB::table("admin_table")->where("name",strtolower($tab))->pluck("id")->first();
     }
     public static function ComForm($table,$comments,$post)
     {
@@ -391,6 +427,44 @@ public function com_loadMore(Request $request,$tid='')
             'pic' => $pic, // pic auch hier setzen
             'open_comments' => $postid
         ]) . "#cmtbtn-$postid");
+
+    }
+    public function destroy_comments($comments_id)
+    {
+        if(!CheckRights(Auth::id(),"comments","delete"))
+        {
+            return redirect()->route('tables.noview');
+        }
+
+        // $post = DB::table('comments')->where("id",$id)->first();
+        // $post->delete();
+        $post = Comment::find($comments_id);
+
+        if ($post) {
+            $post->delete();
+        }
+    //     $tab = $table ?? "images";
+    //     \Log::info("pic:".$pic);
+    //     $pic = "acryl";
+    //     $redir = $tab == "images" ? "pictures" : "blgoposts.index";
+    //     return redirect()->route($tab, ['open_comments' => $postid,'pic'=>$pic])
+    // ->with('success_'.$postid, 'Kommentar erfolgreich gelöscht!')
+    // ->header('Location', redirect()->route($redir, ['pic'=>$pic,'open_comments' => $postid])->getTargetUrl() . "#cmtbtn-$postid");
+    $tab = $table ?? "images";
+    // \Log::info("pic:". $pic. "tab:".$tab);
+
+    // $pic = "acryl"; // Sicherstellen, dass $pic definiert ist
+    $redir = $tab == "images" || $tab == 'pictures' ? "pictures" : "blogposts.index";
+
+    // return redirect()->route($tab, [
+    //         'open_comments' => $postid,
+    //         'pic' => $pic // pic hier explizit setzen
+    //     ])
+    //     ->with('success_' . $postid, 'Kommentar erfolgreich gelöscht!')
+    //     ->header('Location', route($redir, [
+    //         'pic' => $pic, // pic auch hier setzen
+    //         'open_comments' => $postid
+    //     ]) . "#cmtbtn-$postid");
 
     }
 public function loadComments(Request $request, $postId)

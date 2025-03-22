@@ -28,6 +28,7 @@
               <th class="np-dl-th-normal">ID</th>
               <th class="np-dl-th-normal">Name</th>
               <th class="np-dl-th-normal">Beschreibung</th>
+              <th class="np-dl-th-normal">Datum</th>
               <th class="np-dl-th-normal" colspan="2"></th>
             </tr>
           </template>

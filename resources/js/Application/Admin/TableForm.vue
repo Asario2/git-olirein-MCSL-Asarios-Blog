@@ -833,7 +833,7 @@ if(document.location.toString().indexOf('?') !== -1) {
     //     }
     if(!$_GET['rl'])
     {
-       location.href = location.href + "?rl=2";
+       //location.href = location.href + "?rl=2";
     }
     if($_GET['rl']  == "2")
     {
@@ -936,7 +936,7 @@ return { ffo };
         // alert(this.xid);
 
         this.nf = response.data;
-        console.log(`/api/images/${this.xtable}/${this.xid}`);
+      //  console.log(`/api/images/${this.xtable}/${this.xid}`);
         if(document.getElementById('image_path') && document.getElementById('image_path').value != "008.jpg"){
 
             this.nf = document.getElementById('image_path').value;
@@ -986,7 +986,7 @@ return { ffo };
     this.updateFormData();
   },
     handleImageUpload(imageUrl) {
-     console.log("Bild-URL:", imageUrl);
+     //console.log("Bild-URL:", imageUrl);
       this.uploadedImageUrl = imageUrl;
       this.nf2 = imageUrl;
     //    this.imageId = iid;
@@ -1324,7 +1324,7 @@ obj = obj.replace(/"formFields": \[.*\]/, "")
                 .replace(/"\d+"\s*:\s*{/g, '{')
                 .replace(/},\s*{/g, '},');
             //  obj = "[" + obj + "]";
-            console.log("OBJ: " + (obj));
+            // console.log("OBJ: " + (obj));
 
             obj = JSON.parse(obj);
             this.oobj = obj;
@@ -1446,7 +1446,7 @@ async submitForm() {
             //    console.log(jsonObject.message);
 
                 this.formData['image_path'] = this.nf2;
-                console.log(JSON.stringify(this.nf,null,2));
+                // console.log(JSON.stringify(this.nf,null,2));
             // }
             // else{
             //     this.nf = this.getOF(id,tablex);

@@ -124,7 +124,7 @@ class HomeController extends Controller
         })
         ->orderBy($ord[0], $ord[1])
         ->get();
-        \Log::info([$entries->toSql(), $entries->getBindings()]);
+        // \Log::info([$entries->toSql(), $entries->getBindings()]);
 
         $ocont = DB::table("image_categories")->where("slug",$slug)->first();
         return Inertia::render('Homepage/Pictures', [
@@ -151,7 +151,7 @@ class HomeController extends Controller
         ->leftJoin("camera", "images.camera_id", "=", "camera.id")
         ->leftJoin("image_categories", "image_categories.id", "=", "images.image_categories_id")
         ->select("images.*", "camera.name as camera", "image_categories.slug as category_slug")
-        ->where("image_categories.slug", $slug) // 🔹 Begrenzung auf die Kategorie
+        ->where("image_categories.slug", "$slug") // 🔹 Begrenzung auf die Kategorie
         ->where(function ($query) {
             $query->where("images.pub", 1)
                   ->orWhere("images.pub", 2);
@@ -169,7 +169,7 @@ class HomeController extends Controller
         ->orderBy($ord[0], $ord[1])
         ->get();
         $queries = DB::getQueryLog();
-        \Log::info  ("QQ:".json_encode($queries));
+        //\Log::info  ("QQ:".json_encode($queries));
         $ocont = DB::table("image_categories")->where("slug",$slug)->first();
         return Inertia::render('Homepage/Pictures', [
             'entries' => $entries,

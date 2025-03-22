@@ -101,15 +101,22 @@ if(!function_exists("renderText"))
         use Illuminate\Support\Facades\Schema;
         if (!Builder::hasMacro('filterdefault')) {
             Builder::macro('filterdefault', function ($filters) {
+                $path = request()->path(); // Gibt "home/show/images/search/Fasermaler"
+                $parts = explode("/", $path);
+
+                foreach(gettables() as $ta)
+                {
+                    if(in_array($ta,$parts))
+                    {
+                        $table = $ta;
+                        $_GET['table'] = $ta;
+                    }
+                }
+                // dd($parts,$_GET['table']);
+
                 if (!empty($filters['search'])) {
 
-                    $path = request()->path(); // Gibt "home/show/images/search/Fasermaler"
-                    $parts = explode("/", $path);
 
-                    if (count($parts) >= 3) {
-                        $_GET['table'] = $parts[count($parts) - 3];
-
-                    }
 
 
                     // $_GET['table'] = "images";
@@ -119,8 +126,9 @@ if(!function_exists("renderText"))
 
                     // Abrufen des Wertes aus der Session
                     $table = session('table');
+
                     foreach ($whvals as $whn) {
-                                            $this->orWhereRaw("LOWER(`$table` . `$whn`) LIKE ?", ['%' . strtolower($filters['search']) . '%']);
+                                            $this->orWhereRaw("LOWER(`$table` . `$whn`) LIKE ?", ['%' . htmlentities(strtolower($filters['search'])) . '%']);
                     }
 
 
@@ -130,6 +138,7 @@ if(!function_exists("renderText"))
                     }
 
                 }
+                // \Log::info("GT:".$table);
                 $this->orWhere("{$table}.id","like",'%'.$filters['search'].'%');
                 // dd($this->toSql(), $this->getBindings());
 
@@ -137,7 +146,15 @@ if(!function_exists("renderText"))
             });
         }
 
-
+if(!function_exists("gettables"))
+{
+    function gettables()
+    {
+        $tables = DB::table("admin_table")->pluck("name");
+        //\Log::info("asd:".json_encode($tables));
+        return $tables;
+    }
+}
 if(!function_exists("renderMarkdown"))
 {
     function renderMarkdown($markdown)

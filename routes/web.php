@@ -31,7 +31,7 @@ Route::get('/db-check', function () {
 });
 Route::get('/namebindings', [NameBindingsController::class, 'RefreshFields'])->name("ColumnFetcher");
 Route::post('/upload-image/{table}', [ImageUploadController::class, 'upload'])->name('upload.image');
-Route::get('/comments/{post_id}', [CommentController::class, 'fetchComments'])->name('comments.fetch');
+Route::get('/comments/{table}/{postId}', [CommentController::class, 'fetchComments'])->name('comments.fetch');
 
 Route::get('/tables/form-data/{table}/{id}', [TablesController::class, 'ExportFields'])
 ->name("GetTableForm");
@@ -94,7 +94,7 @@ Route::get('/devmod', function () {
     })->name('devmod');
     // Route::post('/toggle-darkmode', [App\Http\Controllers\DarkModeController::class, 'toggle'])->name('toggle.darkmode');
     Route::get('tables/{table}/create', [TablesController::class, 'createEntryForm'])->name('tables.create-table');
-    Route::post('/comments/store/{table}', [CommentController::class, 'store_alt'])->name('comments.store_alt');
+    Route::post('/comments/store/{table}/{postId}', [CommentController::class, 'store_alt'])->name('comments.store_alt');
     Route::post('/comments/{table}/{id}', [CommentController::class, 'store'])->name('comments.store');
     Route::get('/{table}/{cat?}#headline_{id}', [PostController::class, 'show'])->name('posts.show');
 
@@ -171,7 +171,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::get('/admin/tables/', [TablesController::class, 'ListTables'])
             ->name('admin.tables.index');
         // Tables Show
-        Route::get("admin/tables/show/{table}",[TablesController::class,"ShowTable"])
+        Route::get("admin/tables/{table}/show",[TablesController::class,"ShowTable"])
             ->name("admin.tables.show");
         Route::get('/tables/sort-data/{name}', [TablesController::class, 'getOptionz'])
             ->name("GetTableOpt");
@@ -237,19 +237,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
 });
 // Comments
-Route::get('/comments', function (Request $request) {
-    $postId = $request->query('post_id');
-
-    $comments = DB::table('comments')
-        ->join('users', 'comments.users_id', '=', 'users.id')
-        ->select('comments.*', 'users.profile_photo_path')
-        ->where('comments.post_id', $postId)
-        ->where('comments.pub', 1) // Nur veröffentlichte Kommentare
-        ->orderBy('comments.created_at', 'desc')
-        ->get();
-
-    return response()->json($comments);
-});
+Route::delete('/comments/delete/{comment_id}', [CommentController::class,'destroy_comments'])->name("destroy.comments");
 // Darkmode Route
 // Route::post('/toggle-dark-mode', [ApplicationController::class, 'toggleDarkMode'])->name('toggle-dark-mode');
 // Route::post('/get-dark-mode', [ApplicationController::class, 'session_dm'])->name('get-dark-mode');

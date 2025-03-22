@@ -54,6 +54,10 @@
                             class="np-dl-tr"
                         >
                             <slot name="datarow" :datarow="datarow"></slot>
+                            <td v-if="datarow.created_at"
+                            class="np-dl-td-normal">
+                            {{ new Date(datarow.created_at).toLocaleString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' }) }}
+                            </td>
                             <td
                                 v-if="editOn"
                                 class="np-dl-td-edit"
@@ -111,8 +115,9 @@ import throttle from "lodash/throttle";
 const path = window.location.pathname; // Gibt "/admin/tables/show/Example" zurück
 const segments = path.split("/"); // Teilt den Pfad in Segmente auf
 const table = segments[segments.length - 1];
-const id = segments[segments.length - 2];
 
+const id = segments[segments.length - 2];
+const table_alt  = id;
 export default {
     name: "Contents_Lists_ListContainer",
 
@@ -304,12 +309,7 @@ export default {
                 this.$emit("update-list", id); // Sendet die ID an die Parent-Komponente
             }
         },
-        editDataRow(id) {
-            const path = window.location.pathname; // Gibt "/admin/tables/show/Example" zurück
-            const segments = path.split("/"); // Teilt den Pfad in Segmente auf
-            const table = segments[segments.length - 1];
-            this.$inertia.get(this.route(this.routeEdit, [id, table]));
-        },
+
         //
         showDataRow(id) {
             this.$inertia.get(this.route(this.routeShow, id));
@@ -328,6 +328,11 @@ export default {
                         console.error("Fehler beim Löschen:", error);
                     });
             }
+
+        },
+        editDataRow(id){
+            console.log(table_alt);
+            location.href='/admin/tables/edit/'+ id + '/' + table_alt;
         },
         // async confirmDelete(id) {
         //     if (confirm("Wollen Sie diesen Beitrag wirklich löschen?")) {

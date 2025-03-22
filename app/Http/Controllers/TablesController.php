@@ -258,12 +258,23 @@ class TablesController extends Controller
         return $this->EditTables($request,0,$table);
     }
     function EditTables(Request $request,$id = '',$table='blogs'){
+        $path = request()->path(); // Gibt "home/show/images/search/Fasermaler"
+        $parts = explode("/", $path);
+
+        foreach(gettables() as $ta)
+        {
+            if(in_array($ta,$parts))
+            {
+                $table = $ta;
+                $_GET['table'] = $ta;
+            }
+        }
         $tablez = [];
         if(!empty($id))
         {
             if(!DB::table($table)->where("id",$id)->exists())
             {
-                return redirect()->route("admin.tables.show",$table         )->with('error', 'Kein Eintrag mit dieser ID vorhanden');
+                return redirect()->route("admin.tables.show",$table)->with('error', 'Kein Eintrag mit dieser ID vorhanden');
             }
         }
 
@@ -398,14 +409,34 @@ class TablesController extends Controller
             return response()->json($formFields);
     }
     public function ShowTable(Request $request,$table_alt=NULL)
-    {   $table = $table_alt;
+    {
+
+
+        $table = $table_alt ??  'images'; // Standardwert: "images"
+        $path = request()->path(); // Gibt "home/show/images/search/Fasermaler"
+        $parts = explode("/", $path);
+
+        foreach(gettables() as $ta)
+        {
+            if(in_array($ta,$parts))
+            {
+                $table = $ta;
+                $_GET['table'] = $ta;
+            }
+        }       
+        // **Falls keine Tabelle gefunden wurde, beende die Anfrage**
+        if (!$table || !Schema::hasTable($table)) {
+            abort(404, "Tabelle existiert nicht.");
+        }
+
+
         $tablez = [];
 
         if ($table == "blog_posts" || $table == "mindblog") {
             $ord[0] = "created_at";
             $ord[1] = "DESC";
         }
-        elseif($table == "admin_table")
+        elseif($table == "admin_table" || $table == "image_categories")
         {
             $ord[0] = "name";
             $ord[1] = "ASC";
@@ -424,7 +455,6 @@ class TablesController extends Controller
             $ord[0] = "id";
             $ord[1] = "DESC";
         }
-
         $headline = Settings::headline[$table] ?? '';
         $otherField = "".$table.".*";
         $otherField = $headline;
@@ -1534,7 +1564,7 @@ class TablesController extends Controller
 
     function GetImageUrl(Request $request,$table,$id)
     {
-        \Log::info("T:".$table."|".$id);
+
         if($id == "create")
         {
             return response()->json(["image_url"=>"009.jpg"]);
@@ -1547,7 +1577,7 @@ class TablesController extends Controller
     $queries = DB::getQueryLog();
     // \Log::info($queries);
 
-        \Log::info("res: ".json_encode($res));
+        // \Log::info("res: ".json_encode($res));
         return response()->json($res);
     }
     function GetImageId($table,$id)

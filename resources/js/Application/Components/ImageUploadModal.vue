@@ -74,7 +74,7 @@
     handleFileChange(event) {
       const file = event.target.files[0];
       if (file) {
-        console.log("Ausgewähltes Bild:", file.name);
+       // console.log("Ausgewähltes Bild:", file.name);
         // Weitere Logik für die Bildvorschau oder den Upload hier hinzufügen
       }
     },
@@ -138,7 +138,7 @@
               let response = JSON.parse(xhr.responseText);
 
               this.newFname = response.image_url;
-              console.log(response);
+            //   console.log(response);
               this.$emit('imageUploaded', response.image_url, this.newFname);
 
               // Status zurücksetzen & Modal schließen

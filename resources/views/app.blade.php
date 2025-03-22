@@ -10,8 +10,22 @@ error_reporting(E_ALL);
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title inertia>{{ config('app.name', 'Laravel') }}</title>
-
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link href="https://cdn.jsdelivr.net/npm/shariff@latest/dist/shariff.min.css" rel="stylesheet">
+    <link href="/css/shariff-complete.css" rel="stylesheet">
+    <link href="/css/shariff.css" rel="stylesheet">
+    <link href="/css/app.css" rel="stylesheet">
+    <!-- jQuery CDN -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Shariff JavaScript (über CDN) -->
+    <script src="https://cdn.jsdelivr.net/npm/shariff@latest/dist/shariff.min.js"></script>
+    <script>
+    if (typeof global === 'undefined') {
+  window.global = window;
+}
+
+    </script>
 
     @routes
     @vite(['resources/js/app.js', "resources/js/Application/{$page['component']}.vue"])
@@ -33,3 +47,5 @@ error_reporting(E_ALL);
 </body>
 
 </html>
+
+

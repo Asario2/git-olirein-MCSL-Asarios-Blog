@@ -110,7 +110,7 @@ export default {
 
     watch: {
         selectedId(newValue) {
-            console.log("Neue Auswahl:", newValue);
+            // console.log("Neue Auswahl:", newValue);
             this.xval = newValue;
             $('#status_undefined').val(newValue).trigger('change');
 

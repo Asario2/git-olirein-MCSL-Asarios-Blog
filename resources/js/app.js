@@ -1,6 +1,6 @@
 import "./bootstrap";
 import "../css/app.css";
-
+// my-app.js
 import { createApp, h } from "vue";
 import { createInertiaApp } from "@inertiajs/vue3";
 import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
@@ -26,6 +26,10 @@ import { Ziggy } from "./ziggy"; // Importiere Ziggy
 // import Ziggy from './ziggy-routes.json' assert { type: 'json' };
 import { route } from "ziggy-js";
 import App from "./app.vue";
+import Shariff from 'shariff'; // Stelle sicher, dass Shariff hier korrekt importiert wird
+
+// Mach Shariff im globalen Kontext verfügbar
+window.Shariff = Shariff;
 
 // use the plugin v-tippy (https://thecodewarrior.github.io/Tippy.vue/getting-started.html)
 import { TippyPlugin } from "tippy.vue";

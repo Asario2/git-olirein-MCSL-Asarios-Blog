@@ -92,6 +92,7 @@ class Settings extends Model
         "testfield"=>"title",
 
 ];
+const searchable = ["images","blogs","didyouknow","shortpoems"];
 const statusvals  = ["empty"=>" ","forsale"=>"Zu Verkaufen","givenaway"=>"Verschenkt","sold"=>"Verkauft","unsaleable"=>"Unverkäuflich","lost"=>"Verloren","inwork"=>"In Arbeit"];
 const searchFields =
     [
@@ -103,6 +104,7 @@ const searchFields =
         "images"=> ['headline',"message"],
         "comments" => ['content',"email","tablename"],
         "didyouknow" => ['headline'],
+        "image_categories"=>['heading_alt'],
         "users" => ['name'],
         "users_rights" => ['name'],
         "camera" => ['name'],
@@ -120,6 +122,7 @@ const otherField = [
 'blog_images'=> 'url',
 'blogs'=> 'summary',
 "blog_categories" => "summary",
+"image_categories"=>'heading_alt',
 "images"=> "message",
 "camera"=> "Longname",
 'testfield' => "content",

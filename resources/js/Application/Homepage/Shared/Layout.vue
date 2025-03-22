@@ -300,8 +300,8 @@
                                 class="w-full flex flex-col md:flex-row flex-1 items-center justify-between gap-4"
                             >
                                 <div class="text-xs leading-6">
-                                    {{ year }} Starter Eleven. Ein Template von
-                                    Oliver Reinking.
+                                    {{ year }} Starter Eleven/MCSL. Ein Template von
+                                    Oliver Reinking, mit Anpassungen von Asario.
                                 </div>
 
                                 <div class="text-xs leading-6">
@@ -337,7 +337,7 @@ import { ref, provide } from "vue";
 const darkMode = ref(localStorage.getItem("darkMode") === "true");
 
 // provide("darkMode", darkMode); // 👈 Hier stellen wir `darkMode` bereit
-    
+
 function toggleDarkMode() {
   darkMode.value = !darkMode.value;
   localStorage.setItem("darkMode", darkMode.value);
@@ -368,7 +368,7 @@ export default {
         },
         headerDescription: {
             type: String,
-            default: "Starter Eleven - Ein Template von Oliver Reinking.",
+            default: "Starter Eleven/MCSL - Ein Template von Oliver Reinking, mit Anpassungen von Asario.",
         },
         headerUrl: {
             type: String,

@@ -1,5 +1,5 @@
 <template>
-    <div class="rating-container">
+    <div class="rating-container w300 relative border border-gray-300 p-4 pt-1 rounded-lg shadow-sm bg-white dark:bg-gray-800">
       <div class="stars">
         <!-- Erstelle 5 Sterne, die je nach Bewertung entweder gelb oder grau sind -->
         <span
@@ -96,6 +96,10 @@
   }
   .star.hovered {
     color: orange; /* Hover-Farbe */
+  }
+  .rating-container{
+    z-index:10000;
+    margin-top:-16px;
   }
   </style>
 

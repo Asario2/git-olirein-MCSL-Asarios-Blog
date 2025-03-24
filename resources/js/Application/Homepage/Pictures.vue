@@ -76,79 +76,9 @@
             </p>
 
 
-            <div class="flex items-center gap-4 relative">
-    <!-- Kommentare -->
-    <div class="comment-button relative leftpad">
-        <div class="relative grid place-items-center">
-        <table cellspacing="7" cellpadding="4" width="250" align="center" class="border-collapse">
-            <tr>
-                <td>
-            <button @click.stop="openComments(entry.id)"
-                class="flex items-center gap-2 px-1 py-1 rounded-lg font-semibold bg-blue-500 text-white hover:bg-blue-600
-                    dark:bg-blue-600 dark:hover:bg-blue-700 dark:text-white text-center">
-                <icon-comment /> Kommentare
-            </button></td>
-        <td>
-
-            <button @click="toggleShareBox(entry.id)"
-                class="flex items-center gap-2 px-1 py-1 rounded-lg font-semibold bg-blue-500 text-white hover:bg-blue-600
-                    dark:bg-blue-600 dark:hover:bg-blue-700 dark:text-white text-center">
-                <icon-share /> Teilen
-            </button>
-        </td>
-        <td>
-            <button @click="toggleStarBox(entry.id)"
-                class="flex items-center gap-2 px-1 py-1 rounded-lg font-semibold bg-blue-500 text-white hover:bg-blue-600
-                    dark:bg-blue-600 dark:hover:bg-blue-700 dark:text-white text-center">
-                <icon-star /> Bewerten
-            </button>
-        </td>
-        </tr>
-
-        <tr>
-            <td colspan="3" v-if="showComments == entry.id">
-
-        <!-- Kommentarbox (Fix: Ist jetzt direkt mit dem Post verbunden) -->
-        <div
-        ref="commentBox"
-        :id="commentBox + entry.id"
-        @click.stop
-        class="relative absolute left-0 top-full mt-2 w-[300] we300 border-gray-300 p-4 rounded-lg shadow-sm bg-white dark:bg-gray-800 z-40">
-    <!-- Schließen Button -->
-    <button @click="closeComments"
-            class="absolute top-2 right-2 text-red-500 text-xl">
-       <b> &times;</b>
-    </button>
-
-    <Comments :postId="entry.id" :showComments="this.showComments"/>
-    </div>
-</td>
-</tr>
-<tr>
-    <td colspan="3">
-
-    <!-- Teilen -->
-    <div class="share-button w-full">
-        <div class="w-full mt-2">
-            <div v-if="showShareBox[entry.id]" :ref="'shariff_' + entry.id" id="shariff-container" class="shariff w-full" data-button-style="icon" ></div>
-        </div>
-    </div>
-</td>
-</tr>
-<tr>
-
-    <td colspan="3" v-if="showStarBox[entry.id]">
-    <!-- Bewertung -->
-    <div class="rate-button">
-        <AddRating :postId="entry.id" :table="this.tablex"/>
-    </div>
-</td>
-</tr>
-</table>
+            <SocialButtons :postId="entry.id" />
 </div>
-</div>
-</div>
-</div>
+
 
     <!-- Rechte Spalte: Kurzinfos, Bewertungs-Slot, Datum und optionale Kameraangabe -->
     <div class="p-6 space-y-2 lg:col-span-3">
@@ -183,8 +113,9 @@
         <IconCamera />&nbsp;&nbsp;{{ entry.camera }}
         </div>
     </div>
-    </div>
 </div>
+</div>
+
     </layout>
 </template>
 
@@ -196,7 +127,7 @@ import Layout from "@/Application/Homepage/Shared/Layout.vue";
 import IconPlusCircle from "@/Application/Components/Icons/PlusCircle.vue";
 import averageRating from "@/Application/Components/Social/averageratings.vue";
 import IconPencil from "@/Application/Components/Icons/Pencil.vue";
-import Comments from "@/Application/Components/Social/comments.vue";
+import SocialButtons from "@/Application/Components/Social/socialButtons.vue";
 import Share from "@/Application/Components/Social/share.vue";
 import AddRating from "@/Application/Components/Social/addrating.vue";
 import SearchFilter from "@/Application/Components/Lists/SearchFilter.vue";
@@ -223,13 +154,13 @@ components: {
     IconTrash,
     IconCamera,
     SearchFilter,
-    Comments,
     Share,
     AddRating,
     IconComment,
     IconShare,
     IconStar,
     averageRating,
+    SocialButtons,
 },
 data() {
     return {
@@ -313,10 +244,20 @@ methods: {
             }
         });
     },
-    openComments(id) {
-        this.showComments = this.showComments === id ? null : id;
-        console.log("showComments:", this.showComments);
-    },
+    // openComments(id) {
+    //     this.showComments = this.showComments === id ? null : id;
+    //     console.log("showComments:", this.showComments);
+    //     const ti = document.getElementById('teaser-img');
+    //     if(ti.style.overflow !== "hidden")
+    //     {
+
+    //         ti.style.overflow = "clip";
+    //     }
+    //     else
+    //     {
+    //         ti.style.overflow = "hidden";
+    //     }
+    // },
     closeComments() {
         this.showComments = null;
     },

@@ -19,7 +19,7 @@
                                 class="object-cover w-full h-64 sm:h-96 rounded"
                             />
                             <!-- AI-Button -->
-                            <AiButton class="ai-button-image" :overlayImage="'images/icons/ai-dark.png'"></AiButton>
+                            <AiButton  :overlayImage="'images/icons/ai-dark.png'"></AiButton>
                         </div>
 
                         <!-- Text-Bereich -->

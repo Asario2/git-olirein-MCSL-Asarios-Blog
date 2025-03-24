@@ -1,35 +1,36 @@
-            <template>
-
-            <div v-if="showComments" class="w-full" id="commentBox" :style="{ display: showComments ? 'block' : 'none' }">
+<template>
+            <div v-if="showComments" class="w-full" :style="{ display: showComments ? 'block' : 'none' }"
+            @click.stop.prevent="dummy">
             <div v-if="comments.length > 0" class="space-y-4">
                 <div v-for="comment in comments" :key="comment.id"
                 class="flex items-start p-2 pra mt-4 rounded-lg bg-layout-sun-200 dark:bg-layout-night-200 border border-layout-sun-300 dark:border-layout-night-300"  style="word-wrap: break-word;"
             >
-                <!-- Profilbild -->
-                <img
+            <div :id="'commentBox_' + comment.id" class="flex items-start space-x-4">
+            <!-- Profilbild -->
+            <img
                 :src="comment.profile_photo_path ? `/${comment.profile_photo_path}` : defaultAvatar"
                 alt="Profilbild"
-                class="w-[50px] h-[50px] object-cover rounded-full bg-gray-300 dark:bg-gray-600 mr-4"
-                />
+                class="w-[50px] h-[50px] object-cover rounded-full bg-gray-300 dark:bg-gray-600"
+            />
 
-                <!-- Kommentarinhalt -->
-                <div class="flex-1" style="padding-right:55px;margin-right:50px;">
-                    <p class="text-sm flex items-center gap-2">
-                        {{ comment.author }}
-                        <span @click="confirmDelete(comment.id)" class="text-red-500 cursor-pointer hover:text-red-700">
+            <!-- Kommentarinhalt -->
+            <div class="flex-1 pr-14">
+                <p class="text-sm flex items-center gap-2">
+                    {{ comment.author }}
+                    <span @click="confirmDelete(comment.id)" class="text-red-500 cursor-pointer hover:text-red-700">
                         <IconTrash class="w-4 h-4" />
-                        </span>
-                    </p>
-                <p class="text-layout-sun-700 dark:text-layout-night-600" style="width:360px;max-width:380px;padding-right: 130px;">
+                    </span>
+                </p>
+                <p class="text-layout-sun-700 dark:text-layout-night-600 w-[190px] max-w-[190px]">
                     {{ comment.content }}
                 </p>
                 <small class="text-xs text-layout-sun-600 dark:text-layout-night-500">
                     <display-date :value="comment.created_at" :time-on="false" />
                 </small>
-                </div>
-
             </div>
-            <div>
+        </div>
+
+
         <!-- Kommentar-Eingabefeld -->
 
     </div>
@@ -39,10 +40,10 @@
             Keine Kommentare vorhanden.
             </p> -->
         </div>
-        <div v-if="this.showComments" class="mb-4 p-4 border rounded-lg bg-gray-100 dark:bg-gray-800">
-        <textarea
+        <div v-if="this.showComments" class="mb-4 p-4  rounded-lg bg-gray-100 dark:bg-gray-800">
+        <textarea @click.stop
             v-model="newComment"
-            class="w-full p-2 border rounded-lg dark:bg-gray-900 dark:text-white"
+            class="w-full p-2 rounded-lg dark:bg-gray-900 dark:text-white"
             placeholder="Schreibe einen Kommentar..."
         ></textarea>
         <button
@@ -52,6 +53,7 @@
             Kommentar senden
         </button>
         </div>
+
         </template>
 
         <script>
@@ -69,7 +71,7 @@
 
 
             props: {
-                showComments: Boolean,
+                showComments: Number,
             postId: Number,
              // Die ID des Posts, zu dem Kommentare geladen werden
             },
@@ -82,6 +84,18 @@
             },
             async mounted() {
             await this.fetchComments();
+            document.querySelectorAll("textarea").forEach((textarea) => {
+            textarea.addEventListener("click", function(event) {
+                event.stopPropagation(); // Verhindert, dass der Link ausgelöst wird
+            });
+
+            textarea.addEventListener("keydown", function(event) {
+                event.stopPropagation();
+                if (event.key === "Enter") {
+                    event.preventDefault(); // Verhindert Absenden mit Enter
+                }
+            });
+            });
             },
             methods: {
                 async confirmDelete(commentId) {
@@ -133,6 +147,7 @@
                 },
     toggleCommentBox(){
         this.showComments = !this.showComments;
+        this.imageRemove(this.postId);
     },
 
     async submitComment() {

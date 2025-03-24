@@ -1,10 +1,11 @@
 <template>
-    <Link
-        :href="route('home.blog.show', blog.slug)"
-        class="block max-w-sm gap-3 mx-auto sm:max-w-full group hover:no-underline focus:no-underline lg:grid lg:grid-cols-12 bg-layout-sun-100 dark:bg-layout-night-100"
+
+     <div id="teaser-img2" class="block max-w-sm gap-3 mx-auto mh_65 sm:max-w-full group hover:no-underline focus:no-underline lg:grid lg:grid-cols-12 bg-layout-sun-100 dark:bg-layout-night-100" style="z-index:2;margin-bottom:-0px;max-height:385px;overflow:hidden;" :class="{ 'disable-link': isCommentActive }"
     >
         <!-- Das Bild des Blog-Posts -->
-        <div class="relative lg:col-span-7">
+        <div class="blog-container mh_65 lg:col-span-7" style="">
+            <Link
+        :href="route('home.blog.show', blog.slug)">
         <img
             :src="`/images/blogs/${blog.url}`"
             :alt="blog.name"
@@ -13,14 +14,17 @@
             height="360"
             class="object-cover w-full h-64 sm:h-96 rounded lg:col-span-7 bg-layout-sun-500 dark:bg-layout-night-500"
         />
-
+        </Link>
         <!-- Der AI-Button wird hier angezeigt -->
-        <div v-if="blog.madewithai">
-            <AiButton class="ai-button-image" :overlayImage="images/icons/blog.aiOverlayImage || 'images/icons/ai-dark.png'"></AiButton>
+        <div v-if="blog.madewithai" style="float: left;">
+            <AiButton big="big" style="position: relative; z-index: 10;"> :overlayImage="images/icons/blog.aiOverlayImage || 'images/icons/ai-dark.png'"></AiButton>
         </div>
 
         </div>
-        <div class="p-6 space-y-2 lg:col-span-5">
+
+        <div id="teaser-img" class="p-6 space-y-2 lg:col-span-5" style="max-height:385px;overflow:hidden;">
+            <Link
+        :href="route('home.blog.show', blog.slug)">
             <!-- Blog-Kategorie -->
             <div class="flex justify-end items-start">
                 <div
@@ -63,8 +67,10 @@
                     value-single-unit="Minute Lesezeit"
                 ></display-number>
             </div>
+        </Link>
+            <socialButtons :postId="blog.id"/>
         </div>
-    </Link>
+    </div>
 </template>
 
 <script>
@@ -74,6 +80,7 @@ import DisplayDate from "@/Application/Components/Content/DisplayDate.vue";
 import DisplayNumber from "@/Application/Components/Content/DisplayNumber.vue";
 import AiButton from "@/Application/Components/Content/AiButton.vue";
 import editbtns from "@/Application/Components/Form/editbtns.vue";
+import SocialButtons from "@/Application/Components/Social/socialButtons.vue";
 export default {
     name: "Homepage_Shared_BlogPreviewBig",
     components: {
@@ -82,6 +89,7 @@ export default {
         DisplayNumber,
         AiButton,
         editbtns,
+        SocialButtons,
     },
     props: {
         blog: {
@@ -108,6 +116,17 @@ export default {
     display:inline;
     margin-top:-5px;
 
+}
+.relative {
+  position: relative;
+}
+
+.ai-button-image {
+  position: fixed;  /* Fixiere das Bild auf dem Bildschirm */
+  bottom: 16px;     /* Abstand von der unteren Kante */
+  right: 16px;      /* Abstand von der rechten Kante */
+  z-index: 9999;
+  margin-bottom :236px;
 }
 /* Hier kannst du zusätzliche Anpassungen vornehmen, falls nötig */
 </style>

@@ -13,7 +13,7 @@
         :required="required"
         :options="options"
         :sortedOptions="options"
-        v-model="selectedId"
+        v-model="computedSelectedId"
     >
 
 
@@ -57,11 +57,11 @@ export default {
 
     data() {
         return {
-           selectedId: this.selectedId ? this.selectedId : this.xval,
+            selectedId: this.xval,
         sortedOptions: {},
         xsor_alt: {}, // Stelle sicher, dass dies ein Objekt ist!
         xsor: {}, // Stelle sicher, dass dies ein Objekt ist!
-        arr: {},
+        arr: [],
     };
     },
 
@@ -101,18 +101,19 @@ export default {
             type: String,
         },
         existingEntryId: String,
-        xval:{
-            type: String,
-        }
+
     },
 
     emits: ["input-change"],
 
     watch: {
         selectedId(newValue) {
-            // console.log("Neue Auswahl:", newValue);
-            this.xval = newValue;
+            // console.log("Neue Auswahl:", newValue)
+
+        this.$emit('update:xval', newValue);
+
             $('#status_undefined').val(newValue).trigger('change');
+            $('#itemscope_undefined').val(newValue).trigger('change');
 
             // $('#status_undefined').load('#status_undefined');
 
@@ -150,9 +151,11 @@ methods: {
     return input; // Falls es weder ein String noch ein Array noch ein Objekt ist, gebe den Wert unverändert zurück
     },
     getOptions() {
+
     axios.get('/tables/sort-enum/'+ this.tablex + '/'  + this.name)
     .then(response => {
       //  console.log('http:///tables/enum-data/'+ this.tablex + '/'  + this.name);
+
       //  console.log("Daten von der API:", response.data);
 
         this.xsor = { ...this.xsor, [this.name]: response.data };
@@ -230,6 +233,14 @@ computed: {
         this.sortedOptions = this.ot
        // console.log("asdddd" + this.options);
        return this.ot;
+    },
+    computedSelectedId: {
+        get() {
+            return this.xval; // Holt den Wert aus der Prop xval
+        },
+        set(value) {
+            this.$emit('update:xval', value); // Emit zum Parent
+        }
     }
 },
 arr() {
@@ -240,10 +251,14 @@ mounted() {
     {
         this.formData['status'] = document.getElementById("status_undefined ").value;
     }
+    if( document.getElementById("itemscope_undefined "))
+    {
+        this.formData['itemscope'] = document.getElementById("itemscope_undefined ").value;
+    }
 
     this.actsel(); // Methode wird nach dem Mounten ausgeführt
     this.getOptions();
-
+    console.log('/tables/sort-enum/' + this.tablex + '/'  + this.name);
     //console.log("ss: " + (JSON.stringify(this.arr)));
 
     //     if (Array.isArray(this.options[0])) {
@@ -253,3 +268,4 @@ mounted() {
 };
 
 </script>
+

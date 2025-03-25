@@ -175,22 +175,45 @@ class FormController extends Controller
     //     return $result;
     // }
     public static function getOptions_sel($table, $name)
-{
-    $statusvals = [
-        ["id" => "empty", "name" => " "],
-        ["id" => "forsale", "name" => "Zu Verkaufen"],
-        ["id" => "givenaway", "name" => "Verschenkt"],
-        ["id" => "sold", "name" => "Verkauft"],
-        ["id" => "unsaleable", "name" => "Unverkäuflich"],
-        ["id" => "lost", "name" => "Verloren"],
-        ["id" => "inwork", "name" => "In Arbeit"]
-    ];
+    {
+        if($name == "status"){
+            $statusvals = [
+                ["id" => "empty", "name" => " "],
+                ["id" => "forsale", "name" => "Zu Verkaufen"],
+                ["id" => "givenaway", "name" => "Verschenkt"],
+                ["id" => "sold", "name" => "Verkauft"],
+                ["id" => "unsaleable", "name" => "Unverkäuflich"],
+                ["id" => "lost", "name" => "Verloren"],
+                ["id" => "inwork", "name" => "In Arbeit"]
+            ];
+        }
+        if($name == "itemscope"){
+            $statusvals = [
 
-    // Direkt als assoziatives Array aufbauen
-    $result = $statusvals;
+                ["id" => "empty", "name" => " "],
+                ["id" => "Digital Art", "name" => "Digitale Kunst"],
+                ["id" => "Painting", "name" => "Gemalt"],
+                ["id" => "Photograph", "name" => "Fotos"],
+                ["id" => "Sculpture", "name" => "3D Objekte"],
 
-    return $result;
-}
+            ];
+
+        }
+
+
+        // Direkt als assoziatives Array aufbauen
+        $result = $statusvals;
+
+        return $result;
+    }
+    public static function getOptions_itemscope($table, $name)
+    {
+
+        // Direkt als assoziatives Array aufbauen
+        $result = $statusvals;
+
+        return $result;
+    }
     public static function getClass($name,$cl='')
     {
         switch($name)
@@ -239,7 +262,7 @@ class FormController extends Controller
                 return "IID";
             break;
             case "itemscope":
-                return "select_itemscope";
+                return "select";
             break;
             case "markdown_on":
                 if ($cl) {

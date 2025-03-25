@@ -313,6 +313,12 @@ class TablesController extends Controller
         $sortop = FormController::getOptions_sel($table,$name);
         return response()->json([$name.".sortedOptions_sel" => $sortop]);
     }
+    public function getOptionz_itemscope($table,$name2)
+    {
+        $name = "status";
+        $sortop = FormController::getOptions_itemscope($table,$name);
+        return response()->json([$name.".sortedOptions_sel" => $sortop]);
+    }
     public function ExportFields($table,$id)
     {
         $create = '';
@@ -423,7 +429,7 @@ class TablesController extends Controller
                 $table = $ta;
                 $_GET['table'] = $ta;
             }
-        }       
+        }
         // **Falls keine Tabelle gefunden wurde, beende die Anfrage**
         if (!$table || !Schema::hasTable($table)) {
             abort(404, "Tabelle existiert nicht.");

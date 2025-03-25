@@ -259,6 +259,8 @@ Route::get('/api/dark-mode', function () {
 // ==============
 Route::get('/tables/sort-enum/{table}/{name}', [TablesController::class, 'getOptionz_sel'])
         ->name("GetTableEnum");
+Route::get('/tables/sort-enumis/{table}/{name}', [TablesController::class, 'getOptionz_itemscope'])
+        ->name("GetTableItemScope");
 Route::fallback(function () {
     return Inertia::render('Homepage/NoPageFound');
 });

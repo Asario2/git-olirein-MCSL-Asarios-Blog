@@ -175,6 +175,36 @@
 
                                 </input-container>
                                 <input-container
+                                        v-else-if="field.type === 'select_itemscope'"
+
+                                    >
+
+
+                                        <InputLabel
+                                        :name="field.name"
+                                        :label="field.label">
+                                    </InputLabel>
+                                    <InputSelectEnum
+
+
+                                    @input-change="updateFormData"
+
+                                        :id="field.name + '_' + field.id"
+                                        :model-value="field.value"
+                                        v-model="field.name"
+                                        :options="`options: ${this.xsor_alt[field.name]?.length > 0 ? this.xsor_alt[field.name] : []}`"
+                                        ref="field.name"
+                                        :name="field.name"
+                                        :xval="field.value"
+                                        :xname="field.name"
+                                        :tablex="tablex"
+                                        :required="isRequired(field.required)"
+                                    >
+
+                                </InputSelectEnum>
+
+                                </input-container>
+                                <input-container
                                         v-else-if="field.type === 'select'"
 
                                     >
@@ -298,6 +328,8 @@ const routes = {
     getform: (tablex, id) => `/tables/form-data/${tablex}/${id}`,
     getselroute: (name) => `/tables/sort-data/${name}`,
     getselenumroute: (table,name) => `/tables/sort-enum/${table}/${name}`,
+    getselenumisroute: (table,name) => `/tables/sort-enumis/${table}/${name}`,
+
 
     putdata: (tablex,id) => `admin/tables/update/${tablex}/${id}`,
 };
@@ -1025,7 +1057,7 @@ return { ffo };
     },
         updateFormData(value, fieldName) {
             let formDatas = {};
-            if (fieldName.includes("_id") || fieldName == "status"){
+            if (fieldName.includes("_id") || fieldName == "status" || fieldName == "itemscope"){
             this.formDatas[fieldName] = value;
             }
             if(fieldName.includes("_iid"))
@@ -1078,6 +1110,7 @@ return { ffo };
                 this.getsel_enum(field.name,this.tablex);
                // console.log("sso:" + JSON.stringify(this.options));
             }
+
             if (field.name.includes("_id")) {
                 this.formData[field.name] = this.formDatas[field.name];
             }
@@ -1220,16 +1253,16 @@ obj = obj.replace(/"formFields": \[.*\]/, "")
 }
 
 ,
-        getsel_enum(name,table)
+        getsel_enum(name,table,iscope='getselenumroute')
         {
             var sortedOptions_sel = this.sortedOptions_sel ?? [];
             let sdata_sel = this.sdata_sel ?? {};
             axios
-                .get(routes.getselenumroute(table,name))
+                .get(routes[iscope](table, name))
                 .then((response) => {
 
                     sdata_sel = JSON.stringify(response.data);
-
+                    console.log(sdata_sel);
                     //sdata = sdata.replace(new RegExp(name, "g"), '');
                     sdata_sel = JSON.parse(sdata_sel);
                     // 1. JSON-String in Objekt umwandeln
@@ -1289,6 +1322,7 @@ obj = obj.replace(/"formFields": \[.*\]/, "")
                         "Fehler beim Abrufen der Formulardaten2:",
                         error,
                     );
+
                 });
 
         },
@@ -1460,6 +1494,10 @@ async submitForm() {
             if(this.ffo['status'])
             {
                 this.formData['status'] = document.getElementById("status_undefined").value;
+            }
+            if(this.ffo['itemscope'])
+            {
+                this.formData['itemscope'] = document.getElementById("itemscope_undefined").value;
             }
             if(segments[segments.length - 2] == "create")
             {

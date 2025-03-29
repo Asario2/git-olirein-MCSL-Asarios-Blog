@@ -1,9 +1,9 @@
--- phpM-- phpMyAdmin SQL Dump
+-- phpMyAdmin SQL Dump
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 29. Mrz 2025 um 18:36
+-- Erstellungszeit: 29. Mrz 2025 um 18:42
 -- Server-Version: 10.4.32-MariaDB
 -- PHP-Version: 8.2.12
 
@@ -741,6 +741,29 @@ INSERT INTO `categories` (`id`, `name`, `name_en`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Tabellenstruktur für Tabelle `categories_workin`
+--
+
+CREATE TABLE `categories_workin` (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Daten für Tabelle `categories_workin`
+--
+
+INSERT INTO `categories_workin` (`id`, `name`) VALUES
+(1, 'Digital & AI-Generated Art (Digitale & KI-generierte Kunstmedien)'),
+(2, 'Drawing (Zeichnung)'),
+(3, 'Painting (Malerei)'),
+(4, 'Printmaking (Druckgrafik)'),
+(5, 'Sculpture (Skulptur/Bildhauerei)'),
+(6, 'Textile Art (Textilkunst)');
+
+-- --------------------------------------------------------
+
+--
 -- Tabellenstruktur für Tabelle `comments`
 --
 
@@ -775,6 +798,33 @@ INSERT INTO `comments` (`id`, `pub`, `users_id`, `post_id`, `admin_table_id`, `c
 (39, 1, 1, 180, 3, 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'parie@gmx.de', '2025-03-24 19:55:33', '2025-03-24 19:55:33', 0),
 (40, 1, 1, 165, 3, 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'parie@gmx.de', '2025-03-24 19:58:03', '2025-03-24 19:58:03', 0),
 (41, 1, 1, 430, NULL, 'hallo welt !', 'parie@gmx.de', '2025-03-29 11:06:23', '2025-03-29 11:06:23', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `comments_filled`
+--
+
+CREATE TABLE `comments_filled` (
+  `id` bigint(11) NOT NULL,
+  `pub` tinyint(2) NOT NULL DEFAULT 1,
+  `users_id` bigint(11) NOT NULL,
+  `post_id` bigint(11) NOT NULL,
+  `admin_table_id` bigint(11) DEFAULT NULL,
+  `content` text NOT NULL,
+  `email` varchar(80) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `xis_checked` tinyint(2) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Daten für Tabelle `comments_filled`
+--
+
+INSERT INTO `comments_filled` (`id`, `pub`, `users_id`, `post_id`, `admin_table_id`, `content`, `email`, `created_at`, `updated_at`, `xis_checked`) VALUES
+(3, 1, 1, 359, 8, 'sdas d\r\na da\r\nd \r\naw ewaeawda d\r\nawdd\r\n ddddd', 'asd@example.com', '2025-01-27 00:00:00', '2025-01-27 00:00:00', 0),
+(4, 1, 1, 359, 8, 'asssssssssssssssdddddddddddddd', 'asd@example.com', NULL, NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -1516,7 +1566,7 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('99cjOZDZCcc0CR1qEEmnYJzHEt2HXpJURe5Cpotf', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36', 'YTo4OntzOjY6Il90b2tlbiI7czo0MDoieVpoaEU0MkJIWjdSUG9zbno2Q0tYRkZHVUFhcVdEYVlTRVVNclM1SSI7czozOiJ1cmwiO2E6MDp7fXM6OToiX3ByZXZpb3VzIjthOjE6e3M6MzoidXJsIjtzOjM1OiJodHRwOi8vbG9jYWxob3N0OjgwODEvYXBpL2RhcmstbW9kZSI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjE7czo1OiJ0b2FzdCI7YTowOnt9czo1OiJ0YWJsZSI7czo2OiJpbWFnZXMiO3M6MjI6InJlbWVtYmVyX3F1ZXJ5X3N0cmluZ3MiO2E6MTp7czo0OiJob21lIjthOjE6e3M6NDoiYmxvZyI7YTowOnt9fX19', 1743268604);
+('99cjOZDZCcc0CR1qEEmnYJzHEt2HXpJURe5Cpotf', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36', 'YTo4OntzOjY6Il90b2tlbiI7czo0MDoieVpoaEU0MkJIWjdSUG9zbno2Q0tYRkZHVUFhcVdEYVlTRVVNclM1SSI7czozOiJ1cmwiO2E6MDp7fXM6OToiX3ByZXZpb3VzIjthOjE6e3M6MzoidXJsIjtzOjM1OiJodHRwOi8vbG9jYWxob3N0OjgwODEvYXBpL2RhcmstbW9kZSI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjE7czo1OiJ0b2FzdCI7YTowOnt9czo1OiJ0YWJsZSI7czo2OiJpbWFnZXMiO3M6MjI6InJlbWVtYmVyX3F1ZXJ5X3N0cmluZ3MiO2E6MTp7czo0OiJob21lIjthOjE6e3M6NDoiYmxvZyI7YTowOnt9fX19', 1743270093);
 
 -- --------------------------------------------------------
 
@@ -1886,6 +1936,17 @@ CREATE TABLE `users` (
   `updated_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Daten für Tabelle `users`
+--
+
+INSERT INTO `users` (`id`, `first_name`, `nick_name`, `email`, `name`, `birthday`, `music`, `interests`, `occupation`, `email_verified_at`, `password`, `users_rights_id`, `profile_photo_path`, `is_admin`, `is_employee`, `is_customer`, `admin_id`, `company_id`, `customer_id`, `image_path`, `last_login_at`, `two_factor_secret`, `two_factor_recovery_codes`, `two_factor_confirmed_at`, `remember_token`, `created_at`, `updated_at`) VALUES
+(1, 'Paul', 'Asario', 'parie@gmx.de', 'Asario', '1983-06-18', 'KoRn', 'Programmieren, digitale Fotografie, Musik, Malen', 'Freiwilliger Webdesigner :)', '2025-02-17 08:20:37', '$2y$12$WCmmusblDNEegO0AB6q5qeioswYM.D9/OR.eKFQc1gO0TPim7wEzq', 1, 'profile-photos/7QEMKCI7GzwnXbzr4d4uPk8He8OT46CgsA1ddkAv.jpg', 1, 0, 0, 1, NULL, NULL, NULL, '2025-03-28 15:29:31', NULL, NULL, NULL, NULL, '2025-01-10 15:58:58', '2025-03-28 16:29:31'),
+(2, 'Kiss', 'kissu', 'kissyou@example.com', 'KissU', '2000-01-12', NULL, NULL, NULL, '2025-03-11 15:12:36', '$2y$12$xmseqPoBKtL.VWc4w0yZAePcMwNY4ocIjIFgLYFYbYUrufAxuhXvG', 1, 'profile-photos/DMabWRIyIpXUlECghVGdWIdD6hiIojcCEGR0XzMJ.jpg', 1, 1, 0, 2, NULL, NULL, NULL, '2025-03-17 14:44:50', NULL, NULL, '2025-01-20 17:38:47', NULL, '2025-01-10 15:58:58', '2025-03-17 16:16:22'),
+(7, 'Markus', 'aaAsa', 'asa@example.com', 'aaAAsa', '1985-01-02', NULL, NULL, NULL, '2025-03-04 09:48:01', 'asdddddddddddddddd', 3, NULL, 1, 0, 1, 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-03-08 10:48:01', NULL),
+(8, 'Mark', NULL, 'test0r@example.com', 'TestUser', NULL, NULL, NULL, NULL, '2025-03-03 09:55:24', '$2y$12$kog0e6vcwkJ4BR1CdURMxupYHyERbMY8zzrGBzoA8T.csFp6ecqYK', 3, NULL, 0, 0, 1, NULL, NULL, NULL, NULL, '2025-03-09 10:02:03', NULL, NULL, NULL, NULL, '2025-03-09 10:26:52', '2025-03-09 11:02:03'),
+(9, 'Mark', NULL, 'test0r2@example.com', 'twéstusEr', NULL, NULL, NULL, NULL, '2025-03-03 09:28:57', '$2y$12$0n9j.nBrkA064jm0f6BAvemWX9sLb3UCNOavNWXZYpp0wcWBObh5W', 3, NULL, 0, 0, 1, NULL, NULL, NULL, NULL, '2025-03-09 09:48:59', NULL, NULL, NULL, NULL, '2025-03-09 10:28:31', '2025-03-09 10:48:59');
+
 -- --------------------------------------------------------
 
 --
@@ -1981,9 +2042,21 @@ ALTER TABLE `categories`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indizes für die Tabelle `categories_workin`
+--
+ALTER TABLE `categories_workin`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indizes für die Tabelle `comments`
 --
 ALTER TABLE `comments`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indizes für die Tabelle `comments_filled`
+--
+ALTER TABLE `comments_filled`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -2130,10 +2203,22 @@ ALTER TABLE `categories`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
+-- AUTO_INCREMENT für Tabelle `categories_workin`
+--
+ALTER TABLE `categories_workin`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
 -- AUTO_INCREMENT für Tabelle `comments`
 --
 ALTER TABLE `comments`
   MODIFY `id` bigint(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
+
+--
+-- AUTO_INCREMENT für Tabelle `comments_filled`
+--
+ALTER TABLE `comments_filled`
+  MODIFY `id` bigint(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT für Tabelle `didyouknow`
@@ -2205,7 +2290,7 @@ ALTER TABLE `types`
 -- AUTO_INCREMENT für Tabelle `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT für Tabelle `users_rights`
@@ -2223,6 +2308,7 @@ ALTER TABLE `users_rights`
 ALTER TABLE `types`
   ADD CONSTRAINT `types_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`);
 COMMIT;
+
 
 
 

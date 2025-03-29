@@ -301,7 +301,7 @@
                             >
                                 <div class="text-xs leading-6">
                                     {{ year }} Starter Eleven/MCSL. Ein Template von
-                                    Oliver Reinking, mit Anpassungen von Asario.
+                                    Oliver Reinking / Asario.
                                 </div>
 
                                 <div class="text-xs leading-6">

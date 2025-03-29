@@ -44,8 +44,12 @@ if(!function_exists("shorter"))
 {
     function shorter($str,$count)
     {
-        $string = iconv('UTF-8', 'ISO-8859-1//TRANSLIT', $str);
-        $string = iconv('ISO-8859-1','UTF-8', $string);
+        $encoding = mb_detect_encoding($str, ["UTF-8", "ISO-8859-1", "Windows-1252"], true);
+
+    if ($encoding !== "UTF-8") {
+        $str = iconv($encoding, "UTF-8//IGNORE", $str);
+    }
+    $string = $str;
         $string = RUMLAUT($string);
         $str2 = wordwrap($string,$count,"<br />");
         $str3 = explode("<br />",$str2);
@@ -112,6 +116,11 @@ if(!function_exists("renderText"))
                         $_GET['table'] = $ta;
                     }
                 }
+                if($table == "pictures")
+                    {
+                        $table = "images";
+                        $_GET['table'] = $table;
+                    }
                 // dd($parts,$_GET['table']);
 
                 if (!empty($filters['search'])) {
@@ -138,7 +147,7 @@ if(!function_exists("renderText"))
                     }
 
                 }
-                // \Log::info("GT:".$table);
+                \Log::info("GT:".$table);
                 $this->orWhere("{$table}.id","like",'%'.$filters['search'].'%');
                 // dd($this->toSql(), $this->getBindings());
 
@@ -151,6 +160,7 @@ if(!function_exists("gettables"))
     function gettables()
     {
         $tables = DB::table("admin_table")->pluck("name");
+        $tables[] = "pictures";
         //\Log::info("asd:".json_encode($tables));
         return $tables;
     }

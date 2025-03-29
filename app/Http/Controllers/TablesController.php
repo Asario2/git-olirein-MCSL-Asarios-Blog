@@ -13,6 +13,7 @@ use App\Http\Controllers\IMULController;
 use App\Http\Controllers\GlobalController;
 use App\Models\Settings;
 use App\Models\Table;
+
 use App\Services\Inkrementierer;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
@@ -267,7 +268,9 @@ class TablesController extends Controller
             {
                 $table = $ta;
                 $_GET['table'] = $ta;
+
             }
+            continue;
         }
         $tablez = [];
         if(!empty($id))
@@ -432,7 +435,7 @@ class TablesController extends Controller
         }
         // **Falls keine Tabelle gefunden wurde, beende die Anfrage**
         if (!$table || !Schema::hasTable($table)) {
-            abort(404, "Tabelle existiert nicht.");
+            abort(404, "Tabelle existiert nicht.1");
         }
 
 
@@ -623,11 +626,13 @@ class TablesController extends Controller
         if(!CheckRights(Auth::id(),$table,"view"))
         {
             return redirect()->route('tables.noview');
-            //\Log::info("t:".$table);
+
 
         }
+        \Log::info("t:".$table);
         if (!Schema::hasTable($table)) {
-            return redirect()->back()->withErrors(['error' => 'Tabelle existiert nicht']);
+
+            return redirect()->back()->withErrors(['error' => 'Tabelle existiert nicht2']);
         }
 
         // Hole alle Spalten der Tabelle, außer `created_at`, `updated_at`, `published_at`
@@ -673,7 +678,7 @@ class TablesController extends Controller
     {
         // Prüfen, ob die Tabelle existiert
         if (!Schema::hasTable($table)) {
-            return redirect()->back()->withErrors(['error' => 'Tabelle existiert nicht']);
+            return redirect()->back()->withErrors(['error' => 'Tabelle existiert nicht3']);
         }
 
         // Hole alle Spalten der Tabelle, außer `created_at`, `updated_at`, `published_at`
@@ -1390,7 +1395,7 @@ class TablesController extends Controller
     public function update(Request $request, $table, $id,$edit='')
     {
         if (!Schema::hasTable($table)) {
-            return redirect()->back()->withErrors(['error' => 'Tabelle existiert nicht']);
+            return redirect()->back()->withErrors(['error' => 'Tabelle existiert nicht4']);
         }
         // if(Schema::hasColumn($table, 'title',$id) && $this->GetTitle($table,$request->title,$id))
         // {
@@ -1510,14 +1515,25 @@ class TablesController extends Controller
     }
     public function StoreTable(Request $request,$table)
     {
-        \Log::info("t".$table);
+
 
         $formData = ($request->input('formData'));
-
+        \Log::info("path: ".public_path()."/images/".$table."/big/".$formData['image_path']);
+        if((isset($formData['pub']) && empty($formData['pub'])) || is_null($formData['pub'])){
+            $formData['pub'] = "1";
+        }
         if (isset($formData['image_path']) && empty($formData['image_path'])) {
             $formData['image_path'] = "008.jpg";
         }
+        \Log::info(public_path()."/images/".$table."/big/".$formData['image_path']);
+        if(Schema::hasColumn($table, 'img_x'))
+        {
+        list($width,$height) = getimagesize(public_path()."/images/".$table."/big/".$formData['image_path']);
+
+        $formData['img_x'] = $width;
+        $formData['img_y'] = $height;
         // Erstelle einen neuen Datensatz mit den validierten Eingabedaten
+        }
         $table_res = DB::table($table)->insert(
         $formData
         );
@@ -1534,6 +1550,15 @@ class TablesController extends Controller
         {
             $formData['image_path'] = "008.jpg";
         }
+        if(Schema::hasColumn($table, 'img_x'))
+        {
+        list($width,$height) = getimagesize(public_path()."/images/".$table."/big/".$formData['image_path']);
+
+        $formData['img_x'] = $width;
+        $formData['img_y'] = $height;
+        }
+        \Log::info($formData);
+        $formData = array_filter($formData);
 
         if (!Schema::hasTable($table)) {
             return response()->json(['error' => 'Tabelle nicht gefunden'], 404);
@@ -1573,7 +1598,7 @@ class TablesController extends Controller
 
         if($id == "create")
         {
-            return response()->json(["image_url"=>"009.jpg"]);
+            return response()->json([" "=>"009.jpg"]);
         }
         DB::enableQueryLog(); // Aktiviert das Query Logging
 
@@ -1601,8 +1626,9 @@ class TablesController extends Controller
     }
     public function DeleteTables(Request $request,$table,$id)
     {
+        $table = "images";
         if (!Schema::hasTable($table)) {
-            return redirect()->back()->withErrors(['error' => 'Tabelle existiert nicht']);
+            return redirect()->back()->withErrors(['error' => 'Tabelle existiert nich5t']);
         }
         if(!CheckRights(Auth::id(),$table,"delete"))
         {
@@ -1617,7 +1643,7 @@ class TablesController extends Controller
     public function destroy($table, $id)
     {
         if (!Schema::hasTable($table)) {
-            return redirect()->back()->withErrors(['error' => 'Tabelle existiert nicht']);
+            return redirect()->back()->withErrors(['error' => 'Tabelle existiert nicht6']);
         }
         if($table == "admin_table")
         {

@@ -60,6 +60,7 @@
 <script>
 import { Link } from "@inertiajs/vue3";
 import IconPlusCircle from "@/Application/Components/Icons/PlusCircle.vue";
+import { CleanTable, CleanId } from '@/helpers';
 import averageRating from "@/Application/Components/Social/averageratings.vue";
 import IconPencil from "@/Application/Components/Icons/Pencil.vue";
 import Comments from "@/Application/Components/Social/comments.vue";
@@ -230,9 +231,7 @@ methods:{
     },
 
     editDataRow(id) {
-        const path = window.location.pathname;
-        const segments = path.split("/");
-        const table = segments[segments.length - 1];
+        const table = CleanTable();
 
         var rt = `/admin/tables/edit/${id}/images`;
 

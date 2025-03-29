@@ -32,7 +32,7 @@
                         <a :href="'/admin/tables/create/' + tablex" target="" class="inline-flex items-center px-1 py-1.5 md:px-2 md:py-2 h-6 md:h-8 rounded-md font-medium text-xs tracking-widest disabled:opacity-25 transition cursor-pointer focus:ring focus:outline-none button_bg button_text_case_bg"><div class="flex items-center whitespace-nowrap"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="button_icon"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"></path></svg> Erstelle </div></a>
                         <input-group>
     <form @submit.prevent="submitForm" enctype="multipart/form-data">
-        <div class="maxx grid grid-cols-1 lg:grid-cols-2 mb-2 gap-2 lg:gap-x-6 mt-2">
+        <div class="textar maxx grid grid-cols-1 lg:grid-cols-2 mb-2 gap-2 lg:gap-x-4 mt-2">
             <template v-for="(field, key) in ffo" :key="key">
                 <input-container v-if="field.name === 'reading_time'">
                     <InputFormText
@@ -205,6 +205,12 @@
 
                                 </input-container>
                                 <input-container
+                                        v-else-if="field.type === 'artselect'"
+
+                                    >
+                                <ArtSelect :id="field.id" :table="this.tablex"/>
+                                </input-container>
+                                <input-container
                                         v-else-if="field.type === 'select'"
 
                                     >
@@ -316,16 +322,15 @@
 </template>
 
 <script>
-const path = window.location.pathname; // Gibt "/admin/tables/show/Example" zurück
-const segments = path.split("/"); // Teilt den Pfad in Segmente auf
-const id = segments[segments.length - 2];
-let tablex = segments[segments.length - 1]; // Muss ein ref sein, wenn es reaktiv sein soll
+const id = CleanId();
+let tablex = CleanTable(); // Muss ein ref sein, wenn es reaktiv sein soll
 const table_z = tablex;
+const tablex3 = tablex;
 let table = tablex;
-let xid = segments[segments.length - 2 ];
-
+let xid3 = CleanId();
+console.log("xid:" + xid3);
 const routes = {
-    getform: (tablex, id) => `/tables/form-data/${tablex}/${id}`,
+    getform: (tablex, id) => `/tables/form-data/${tablex3}/${xid3}`,
     getselroute: (name) => `/tables/sort-data/${name}`,
     getselenumroute: (table,name) => `/tables/sort-enum/${table}/${name}`,
     getselenumisroute: (table,name) => `/tables/sort-enumis/${table}/${name}`,
@@ -349,6 +354,7 @@ import { computed } from "vue";
 // import { usePage } from '@inertiajs/vue3';
 import { ref, watch } from "vue";
 // const page2 = usePage();
+import { CleanTable, CleanId } from '@/helpers';
 import ImageUploadModal from '@/Application/Components/ImageUploadModal.vue';
 // import { Ziggy } from 'ziggy-js';
 // import route from 'ziggy';
@@ -366,6 +372,7 @@ import SectionBorder from "@/Application/Components/Content/SectionBorder.vue";
 
 import ButtonGroup from "@/Application/Components/Form/ButtonGroup.vue";
 import InputButton from "@/Application/Components/Form/InputButton.vue";
+import ArtSelect from "@/Application/Components/Form/ArtSelect.vue";
 import InputFormText from "@/Application/Components/Form/InputFormText.vue";
 import InputFormDateTime from "@/Application/Components/Form/InputFormDateTime.vue";
 import InputFormTextArea from "@/Application/Components/Form/InputFormTextArea.vue";
@@ -430,6 +437,7 @@ export default defineComponent({
         InputError,
         DialogModal,
          Alert,
+         ArtSelect,
          ImageUploadModal,
     },
 
@@ -505,6 +513,10 @@ export default defineComponent({
         uploadedIid: null,
         ItemName: "Beitrag",
         table_x: '',
+        nf2:'',
+
+        fieldtype: "", // Oder ein sinnvoller Standardwert
+
         // nf: this.getOF(),
         readingTime: "",
         fileName: '' ,
@@ -745,9 +757,10 @@ export default defineComponent({
             handler: throttle(function () {
                 let query = pickBy(this.form);
                 let paramName = "table";
-                const path = window.location.pathname; // Gibt "/admin/tables/show/Example" zurück
-                const segments = path.split("/"); // Teilt den Pfad in Segmente auf
-                const lastSegment = segments[segments.length - 1];
+                // const path = window.location.pathname; // Gibt "/admin/tables/show/Example" zurück
+                // const segments = path.split("/"); // Teilt den Pfad in Segmente auf
+                // let lastSegment = segments[segments.length - 1];
+                lastSegment = CleanTable();
                 let paramValue = lastSegment;
 
 
@@ -959,10 +972,8 @@ return { ffo };
     },
     async getOF() {
         const path = window.location.pathname; // Gibt "/admin/tables/show/Example" zurück
-            const segments = path.split("/"); // Teilt den Pfad in Segmente auf
-                this.xid = segments[segments.length - 2];
-
-            this.xtable = segments[segments.length - 1];
+              this.xid = CleanId();
+              this.xtable = CleanTable();
       try {
         const response = await axios.get(`/api/images/${this.xtable}/${this.xid}`);
         // alert(this.xid);
@@ -979,7 +990,7 @@ return { ffo };
         }
         else
         {
-
+            this.nf = this.ffo['image_path']['value'];
         }
         return this.nf;
       } catch (error){
@@ -1018,7 +1029,7 @@ return { ffo };
     this.updateFormData();
   },
     handleImageUpload(imageUrl) {
-     //console.log("Bild-URL:", imageUrl);
+     console.log("Bild-URL:", imageUrl);
       this.uploadedImageUrl = imageUrl;
       this.nf2 = imageUrl;
     //    this.imageId = iid;
@@ -1057,12 +1068,16 @@ return { ffo };
     },
         updateFormData(value, fieldName) {
             let formDatas = {};
-            if (fieldName.includes("_id") || fieldName == "status" || fieldName == "itemscope"){
+            if (fieldName.includes("_id") || this.fieldtype == "select"){
             this.formDatas[fieldName] = value;
             }
             if(fieldName.includes("_iid"))
             {
                 this.formData[fieldName] = value;
+            }
+            if(fieldName == "img_x" || fieldName == "img_y")
+            {
+                this.formData[fieldname] = this.value;
             }
             // console.log("aaaaaaaa" + JSON.stringify(this.formDatas,null,2));
         },
@@ -1122,6 +1137,10 @@ return { ffo };
             {
                 this.formData[field.name] = this.formDatas[field.name];
             }
+            else if (field.name == "img_x" || field.name == "img_y") {
+                this.formData[field.name] = field.value;
+            }
+
             else{
                 this.formData[field.name] = field.value || "";
             }
@@ -1338,15 +1357,15 @@ obj = obj.replace(/"formFields": \[.*\]/, "")
         },
         fetchFormData() {
     axios
-        .get(routes.getform(tablex, id))
+        .get(routes.getform(CleanTable(),CleanId()))
         .then((response) => {
             this.formFields = response.data;
             let formFields_old = response.data;
-
+            console.log(routes.getform(tablex, id));
             // JSON bereinigen
             let obj = JSON.stringify(this.formFields,null,2)
 
-            obj = obj.replace(/"formFields": \[.*\]/, "")
+             obj = obj.replace(/"formFields": \[.*\]/, "")
                 .replace(/^\{|\}$/g, "")
                 .replace(/}\s*,\s*\n\s*}/g, "},")
                 .replace(/[[\]]/g, "")
@@ -1359,8 +1378,14 @@ obj = obj.replace(/"formFields": \[.*\]/, "")
                 .replace(/},\s*{/g, '},');
             //  obj = "[" + obj + "]";
             // console.log("OBJ: " + (obj));
-
-            obj = JSON.parse(obj);
+            //obj = obj.replace(/[\u0000-\u001F\u007F]/g, '');
+            try {
+                obj = JSON.parse(obj);
+                console.log("✅ Geparstes Objekt:", obj);
+            } catch (error) {
+                console.error("❌ JSON-Fehler:", error.message);
+            }
+            // obj = JSON.parse(obj);
             this.oobj = obj;
             this.obj2 = obj;
             // console.log(obj);
@@ -1458,11 +1483,11 @@ async submitForm() {
             // console.log("ref: " + this.$refs.blog_images_iid.value);
                        this.formData2 = JSON.stringify(this.remom(this.ffo));
 
-            const path = window.location.pathname; // Gibt "/admin/tables/show/Example" zurück
-            const segments = path.split("/"); // Teilt den Pfad in Segmente auf
-            this.xid = segments[segments.length - 2];
-            xid = this.xid;
-            tablex = segments[segments.length - 1];
+            // const path = window.location.pathname; // Gibt "/admin/tables/show/Example" zurück
+            // const segments = path.split("/"); // Teilt den Pfad in Segmente auf
+            this.xid = CleanId();
+            xid = CleanId();
+            tablex = CleanTable();
             let response;
             var inputRef = this.$refs.image_path;
             //console.log("XZAY" + JSON.stringify(inputRef,null,2));
@@ -1499,6 +1524,16 @@ async submitForm() {
             {
                 this.formData['itemscope'] = document.getElementById("itemscope_undefined").value;
             }
+            if(this.ffo['category_id'])
+            {
+                this.formData['category_id'] = document.getElementById("category_id").value;
+            }
+            if(this.ffo['type_id'])
+            {
+                this.formData['type_id'] = document.getElementById("type_id").value;
+            }
+            const path = window.location.pathname; // Gibt "/admin/tables/show/Example" zurück
+            const segments = path.split("/"); // Teilt den Pfad in Segmente auf
             if(segments[segments.length - 2] == "create")
             {
                 response = await axios.post(`/admin/tables/store/${this.tablex}`, {
@@ -1507,8 +1542,10 @@ async submitForm() {
             }
 
             else{
+                var xid = CleanId();
+                var tablex = CleanTable();
                 // const formData = {...this.formData };
-                response = await axios.patch(`/admin/tables/update/${this.tablex}/${this.xid}`, {
+                response = await axios.post(`/admin/tables/update/${tablex}/${xid}`, {
                 formData : this.formData,
             });
 
@@ -1584,8 +1621,9 @@ async submitForm() {
     try {
         this.loading = true;
         this.loadingText = `Die geänderten Daten des ${this.ItemName} werden jetzt gespeichert!`;
-
-        const response = await axios.put(`/admin/tables/update/${this.tablex}/${this.id}`,{formData: this.formData});
+        var tablex = CleanTable();
+        var id = CleanId();
+        const response = await axios.put(`/admin/tables/update/${tablex}/${id}`,{formData: this.formData});
 
         if (response.data) {
             this.loading = false;
@@ -1625,10 +1663,8 @@ async submitForm() {
         },
         getImageUrl()
         {
-            const path = window.location.pathname; // Gibt "/admin/tables/show/Example" zurück
-            const segments = path.split("/"); // Teilt den Pfad in Segmente auf
-            const id = segments[segments.length - 2];
-            let table = segments[segments.length - 1]
+            const id = CleanId();
+            let table = CleanTable();
             this.ttable = table
 //console.log(`/api/get-image-id/${table}/${id}`);
         // Axios Anfrage

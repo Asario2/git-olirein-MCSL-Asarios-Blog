@@ -23,5 +23,5 @@
             fill="#0EA5E9"
         />
     </svg> -->
-    <img src="/images/web/alogo.png" height="150">
+    <img src="/images/web/alogo.png" style="height:40px;min-width:40px !important;max-width:40px;">
 </template>

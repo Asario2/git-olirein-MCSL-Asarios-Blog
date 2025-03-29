@@ -50,6 +50,7 @@
 
 
   <script>
+  import { CleanTable, CleanId } from '@/helpers';
   export default {
     props: {
       isOpen: Boolean,
@@ -107,9 +108,7 @@
         this.progress = 0;
 
         // Dynamische Tabellen- und ID-Extraktion aus der URL
-        const path = window.location.pathname;
-        const segments = path.split("/");
-        this.tablex = segments[segments.length - 1];
+        this.tablex = CleanTable();
 
         // FormData für den Upload
         const formData = new FormData();
@@ -162,7 +161,7 @@
         };
 
         xhr.send(formData);
-      },
+        },
       closeModal() {
         this.$emit("close");
       },

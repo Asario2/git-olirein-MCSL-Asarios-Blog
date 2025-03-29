@@ -54,11 +54,8 @@ import { defineComponent } from "vue";
 import Layout from "@/Application/Admin/Shared/Layout.vue";
 import Breadcrumb from "@/Application/Components/Content/Breadcrumb.vue";
 import ListContainer from "@/Application/Components/Lists/ListContainer.vue";
-
-const path = window.location.pathname; // Gibt "/admin/tables/show/Example" zurück
-const segments = path.split("/"); // Teilt den Pfad in Segmente auf
-const table = segments[segments.length - 1];
-
+import { CleanTable, CleanId } from '@/helpers';
+const table = CleanTable();
 export default defineComponent({
     name: "Admin_TableList",
 

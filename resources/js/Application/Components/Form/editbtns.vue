@@ -1,10 +1,10 @@
 <template>
 <span v-if="Redit == '1'">
-<a :href="'admin/tables/edit/'+ id+ '/' + table + ''" @click.stop><IconPencil class="sm-pencil"></IconPencil></a>
+<a :href="'admin/tables/edit/'+ id+ '/' + table + ''" @click.stop><IconPencil class="sm-pencil cursor-pointer"></IconPencil></a>
 </span>&nbsp;&nbsp;
 <span v-if="Rdelete == '1'">
 <form @submit.prevent="deletePost" style="display:inline">
-    <button @click.stop type="submit" onclick="return confirm('Sind Sie sicher, dass Sie diesen Blogbeitrag löschen möchten?');"><IconTrash class="sm-pencil"></IconTrash></button>
+    <button @click.stop type="submit" onclick="return confirm('Sind Sie sicher, dass Sie diesen Blogbeitrag löschen möchten?');"><IconTrash class="sm-pencil cursor-pointer"></IconTrash></button>
 </form>
 </span>
 
@@ -34,7 +34,7 @@ export default {
     methods: {
     async deletePost() {
         try {
-            //console.log(`aad: admin/tables/delete/${this.table}/${this.id}`);
+            console.log(`aad: admin/tables/delete/${this.table}/${this.id}`);
             // DELETE-Anfrage mit Parametern in der URL
             await axios.delete(`admin/tables/delete/${this.table}/${this.id}`, {
                 params: {

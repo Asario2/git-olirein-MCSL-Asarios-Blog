@@ -24,7 +24,7 @@ class Settings extends Model
 "Status","message" => "Text","message_en" => "Text","camera_id" => "Kamera","link" => "Link","Format" => "Format","Format_en" => "Format Englisch","preis" => "Preis","tablename" => "Tabelle","xis_checked" => "checked","ordering" => "Position","Longname" => "Langer Name","Mpixel" =>
 "Megapixel","short_tag" => "Tag","exif_copyright" => "Exif copy","admin_table_id"=>"Tabelle","exif_comp" => "exif Comp","exif_model" => "Exif Model"];
 
-    const no_req = ['modul0','message','message_en','camera_id','position','image_path','link','format','preis','format_en','music','interests','occupation','birthday','prename','xis_ai','id_new','exif_comp','exif_model'];
+    const no_req = ['modul',"category_id","type_id",'message','message_en','camera_id','position','image_path','link','format','preis','format_en','music','interests','occupation','birthday','prename','xis_ai','id_new','exif_comp','exif_model'];
     const big_thumb = ["users","blog_posts","images"];
     const int_date_tables = ["didyouknow"];
     const textfield = "Mdown"; // Mdown / HTML

@@ -269,3 +269,10 @@ mounted() {
 
 </script>
 
+<style scoped>
+
+.w50
+{
+    color:aquamarine;
+}
+</style>

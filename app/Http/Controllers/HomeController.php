@@ -155,19 +155,14 @@ class HomeController extends Controller
         ->where(function ($query) {
             $query->where("images.pub", 1)
                   ->orWhere("images.pub", 2);
-        })
-
-        // ->when(request("search"), function ($query) {
-        //     dd("when wurde ausgeführt!", request("search"));
-        //     $query->filterdefault(['search' => request('search')]);
-        // })
-        ->when(request("search"), function ($query) use ($slug) {
+        })->when(request("search"), function ($query) use ($slug) {
             $query->where(function ($subquery) {
                 $subquery->filterdefault(['search' => request('search')]);
             });
         })
         ->orderBy($ord[0], $ord[1])
         ->get();
+
         $queries = DB::getQueryLog();
         //\Log::info  ("QQ:".json_encode($queries));
         $ocont = DB::table("image_categories")->where("slug",$slug)->first();

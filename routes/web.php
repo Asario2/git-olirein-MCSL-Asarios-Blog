@@ -18,7 +18,7 @@ use App\Http\Controllers\ImageUploadController;
 use League\CommonMark\CommonMarkConverter;
 use App\Http\Controllers\TablesController;
 use Laravel\Fortify\TwoFactorAuthenticatable;
-
+use App\Http\Controllers\CategoryController;
 
 GlobalController::SetDomain();
 // include __DIR__."/extraroutes.php";
@@ -32,6 +32,7 @@ Route::get('/db-check', function () {
 });
 Route::get('/namebindings', [NameBindingsController::class, 'RefreshFields'])->name("ColumnFetcher");
 Route::post('/upload-image/{table}', [ImageUploadController::class, 'upload'])->name('upload.image');
+Route::post('/save-image/{table}', [ImageUploadController::class, 'save'])->name('save.image');
 Route::get('/comments/{table}/{postId}', [CommentController::class, 'fetchComments'])->name('comments.fetch');
 Route::post('/save-rating', [RatingController::class, 'saveRating']);
 Route::get('/get-rating/{table}/{postId}', [RatingController::class, 'getStars']);
@@ -56,10 +57,10 @@ Route::get('/home/terms', [HomeController::class, 'home_terms'])->name('home.ter
 // Ai Content
 Route::get('/home/ai', [HomeController::class, 'home_AI'])->name('home.ai');
 // Picures show gallery
-Route::get('/home/show/images/{slug}', [HomeController::class, 'home_images'])->name('home.images.gallery');
-Route::get('/home/show/images/search/{slug}', [HomeController::class, 'home_images_search'])->name('home.images.gallery.search');
+Route::get('/home/show/pictures/{slug}', [HomeController::class, 'home_images'])->name('home.images.gallery');
+Route::get('/home/show/pictures/search/{slug}', [HomeController::class, 'home_images_search'])->name('home.images.gallery.search');
 // Pictures Overview
-Route::get('/home/images', [HomeController::class, 'home_images_index'])->name('home.images.index');
+Route::get('/home/pictures', [HomeController::class, 'home_images_index'])->name('home.images.index');
 // Liste der Blogartikel
 Route::get('/blogs', [HomeController::class, 'home_blog_index'])->name('home.blog.index')->middleware('remember');
 // Display Blogartikel
@@ -185,7 +186,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::delete("admin/tables/delete/{table}/{id}",[TablesController::class,"DeleteTables"])
             ->name("admin.tables.delete");
         // Tables UPDATE
-        Route::patch("admin/tables/update/{table}/{id}",[TablesController::class,"UpdateTable"])
+        Route::post("admin/tables/update/{table}/{id?}",[TablesController::class,"UpdateTable"])
             ->name("admin.table.update");
         // Blogartikel Delete
         Route::delete('/admin/blogs/{blog}', [BlogController::class, 'admin_blog_delete'])
@@ -259,6 +260,8 @@ Route::get('/api/dark-mode', function () {
 // ==============
 Route::get('/tables/sort-enum/{table}/{name}', [TablesController::class, 'getOptionz_sel'])
         ->name("GetTableEnum");
+Route::get('/act-category/{table}/{id?}', [CategoryController::class, 'index'])
+    ->name("ArtAct");
 Route::get('/tables/sort-enumis/{table}/{name}', [TablesController::class, 'getOptionz_itemscope'])
         ->name("GetTableItemScope");
 Route::fallback(function () {

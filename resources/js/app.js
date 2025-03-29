@@ -79,3 +79,4 @@ library.add(faPencilAlt, faTrashCan); // F�ge alle Icons zur Bibliothek hinzu
 app.component("font-awesome-icon", FontAwesomeIcon); // Registriere die Komponente global
 
 app.mount("#app");
+

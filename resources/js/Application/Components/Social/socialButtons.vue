@@ -157,6 +157,7 @@ import IconCamera from "@/Application/Components/Icons/Camera.vue";
 import editbtns from "@/Application/Components/Form/editbtns.vue";
 import IconComment from "@/Application/Components/Icons/IconComment.vue";
 import { throttle } from "lodash";
+import { CleanTable, CleanId } from '@/helpers';
 import mapValues from "lodash/mapValues";
 import pickBy from "lodash/pickBy";
 import IconEye from "@/Application/Components/Icons/Eye.vue";
@@ -373,9 +374,7 @@ methods:{
     },
 
     editDataRow(id) {
-        const path = window.location.pathname;
-        const segments = path.split("/");
-        const table = segments[segments.length - 1];
+        const table = CleanTable();
 
         var rt = `/admin/tables/edit/${id}/images`;
 

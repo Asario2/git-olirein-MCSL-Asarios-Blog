@@ -111,8 +111,8 @@ textarea.txt {
 
 @media (min-width: 1025px) {
     .maxx {
-        min-width: 267%;
-        max-width: 267%;
+        min-width: 209%;
+        max-width: 209%;
     }
     .txt {
         max-width: 560px !important;
@@ -382,5 +382,5 @@ A
 
 		}
 		SPAN .fab .fa-twitter:before {
- content: "\e61b" !important;	
+ content: "\e61b" !important;
 }

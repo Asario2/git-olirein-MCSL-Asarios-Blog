@@ -4,9 +4,8 @@
     </div>
 </template>
 <script>
-const path = window.location.pathname; // Gibt "/admin/tables/show/Example" zurück
-const segments = path.split("/"); // Teilt den Pfad in Segmente auf
-const table = segments[segments.length - 1];
+import { CleanTable, CleanId } from '@/helpers';
+const table = CleanTable();
 export default {
     name: "Contents_Form_ButtonGroup",
 

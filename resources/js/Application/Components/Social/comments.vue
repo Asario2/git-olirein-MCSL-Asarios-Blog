@@ -61,6 +61,7 @@
         import IconComment from "@/Application/Components/Icons/IconComment.vue";
         import DisplayDate from "@/Application/Components/Content/DisplayDate.vue";
         import IconTrash from "@/Application/Components/Icons/Trash.vue";
+        import { CleanTable, CleanId } from '@/helpers';
         export default {
 
             components: {
@@ -138,7 +139,7 @@
 
                 async fetchComments() {
                     try {
-                        var table = this.cleanPath();
+                        var table = CleanTable();
                         const response = await axios.get(`/comments/${table}/${this.postId}`);
                         this.comments = Array.isArray(response.data) ? response.data : []; // Sicherstellen, dass es ein Array ist
                     } catch (error) {
@@ -154,7 +155,7 @@
         if (!this.newComment.trim()) return; // Leere Kommentare verhindern
 
         try {
-            var table = this.cleanPath();
+            var table = CleanTable();
             const response = await axios.post(`/comments/store/${table}/${this.postId}`, {
             post_id: this.postId,
             comment: this.newComment,

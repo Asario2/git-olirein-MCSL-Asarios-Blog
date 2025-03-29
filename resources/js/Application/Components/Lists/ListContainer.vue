@@ -105,19 +105,17 @@ import IconPencil from "@/Application/Components/Icons/Pencil.vue";
 import IconEye from "@/Application/Components/Icons/Eye.vue";
 import IconTrash from "@/Application/Components/Icons/Trash.vue";
 
-
+import { CleanTable, CleanId } from '@/helpers';
 import Alert from "@/Application/Components/Content/Alert.vue";
 
 import mapValues from "lodash/mapValues";
 import pickBy from "lodash/pickBy";
 import throttle from "lodash/throttle";
 
-const path = window.location.pathname; // Gibt "/admin/tables/show/Example" zurück
-const segments = path.split("/"); // Teilt den Pfad in Segmente auf
-const table = segments[segments.length - 1];
+const table = CleanTable();
 
-const id = segments[segments.length - 2];
-const table_alt  = id;
+const id = CleanId();
+
 export default {
     name: "Contents_Lists_ListContainer",
 
@@ -226,6 +224,9 @@ export default {
             type: Object,
             default: () => ({}),
         },
+        tableq:{
+            type: String
+        },
     },
     //
     data() {
@@ -233,8 +234,9 @@ export default {
             form: {
                 search: this.filters.search,
             },
-        routeCreate: "/admin/tables/create/" + table,
-        routeDelete: "/admin/tables/delete/" + table + "/",
+
+        routeCreate: "/admin/tables/create/" + this.tableq,
+        routeDelete: "/admin/tables/delete/" + this.tableq + "/",
         };
     },
     //
@@ -309,19 +311,23 @@ export default {
                 this.$emit("update-list", id); // Sendet die ID an die Parent-Komponente
             }
         },
-
+        cleanPath() {
+                const searchableTables = ["images", "blogs", "didyouknow", "shortpoems"];
+                const parts = window.location.pathname.split("/");
+                return searchableTables.find((ta) => parts.includes(ta)) || null;
+            },
         //
         showDataRow(id) {
             this.$inertia.get(this.route(this.routeShow, id));
         },
         deleteDataRow(id) {
-
+            console.log(this.routeDelete + id);
             if (confirm("Wollen Sie diesen Beitrag wirklich löschen?")) {
                 axios
                     .delete(this.routeDelete + id)
                     .then(() => {
                         this.$emit("deleted"); // Event nach erfolgreichem Löschen
-                       // console.log(this.routeDelete + id);
+
                         location.reload();
                     })
                     .catch((error) => {
@@ -331,8 +337,8 @@ export default {
 
         },
         editDataRow(id){
-            console.log(table_alt);
-            location.href='/admin/tables/edit/'+ id + '/' + table_alt;
+            console.log(this.tableq);
+            location.href='/admin/tables/edit/'+ id + '/' + this.tableq;
         },
         // async confirmDelete(id) {
         //     if (confirm("Wollen Sie diesen Beitrag wirklich löschen?")) {

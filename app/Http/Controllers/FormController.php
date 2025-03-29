@@ -228,6 +228,12 @@ class FormController extends Controller
             case "admin_table_id":
                 return "select_id";
             break;
+            case "category_id":
+                return "artselect";
+            break;
+            case "type_id":
+                return "hidden";
+            break;
             case "blog_authors_id":
                 return "select_id";
             break;
@@ -260,6 +266,12 @@ class FormController extends Controller
             break;
             case "image_path":
                 return "IID";
+            break;
+            case "img_x":
+                return "hidden";
+            break;
+            case "img_y":
+                return "hidden";
             break;
             case "itemscope":
                 return "select";

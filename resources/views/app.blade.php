@@ -15,7 +15,6 @@ error_reporting(E_ALL);
     <link href="/css/shariff-complete.css" rel="stylesheet">
     <link href="/css/shariff.css" rel="stylesheet">
     <link href="/css/app.css" rel="stylesheet">
-    <!-- jQuery CDN -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <!-- Shariff JavaScript (über CDN) -->

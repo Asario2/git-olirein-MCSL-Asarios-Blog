@@ -21,7 +21,7 @@
 
  <script>
   import axios from "axios";
-
+  import { CleanTable, CleanId } from '@/helpers';
   export default {
     props: {
       postId: Number, // Post ID wird als Prop übergeben
@@ -43,7 +43,7 @@
       // Bewertung in die Datenbank speichern
       async saveRating(star) {
         try {
-            const table = this.cleanPath();
+            const table = CleanTable();
           await axios.post("/save-rating", {
             rating: star,
             postId: this.postId,
@@ -59,7 +59,7 @@
       // Bewertung aus der DB abrufen
       async fetchRating() {
         try {
-            const table = this.cleanPath();
+            const table = CleanTable();
           const response = await axios.get(`/get-rating/${table}/${this.postId}`);
           this.rating = Math.round(response.data.rating); // Rundet auf die nächste ganze Zahl
         } catch (error) {

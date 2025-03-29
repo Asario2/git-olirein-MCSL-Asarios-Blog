@@ -15,7 +15,7 @@
                         method="POST">
                         @csrf
                         @method('DELETE')
-                        <button class="btn btn-danger inl" type="submit"
+                        <button class="cursor-pointer btn btn-danger inl" type="submit"
                             onclick="return confirm('Möchten Sie diesen Eintrag wirklich löschen?');">Löschen</button>
                     </form>
                 @endif

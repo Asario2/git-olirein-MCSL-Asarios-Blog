@@ -69,7 +69,7 @@ class HandleInertiaRequests extends Middleware
                     'app_admin_name' => 'Administrator-Anwendung',
                     'app_employee_name' => 'Mitarbeiter-Anwendung',
                     'app_customer_name' => 'Kunden-Anwendung',
-                    'app_name' => 'Ein Template von Oliver Reinking, mit Anpassungen von Asario.',
+                    'app_name' => 'Ein Template von Oliver Reinking / Asario',
                     'brand_name_1' => 'Asarios',
                     'brand_name_2' => 'Blog',
                     'brand_name_subtitle_app_admin' => 'für Administratoren',

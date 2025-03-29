@@ -8,6 +8,17 @@
 
 
         </hgroup>
+        <input-icon-hyperlink
+    v-if="createOn"
+    :href="routeCreate"
+    display_type="table"
+>
+    <template #icon>
+        <icon-plus-circle class="button_icon"></icon-plus-circle>
+        Erstelle
+    </template>
+</input-icon-hyperlink>
+
     </div>
     <div>
         <div
@@ -49,7 +60,7 @@
                         Blogartikel gefunden.
                     </alert>
                 </div>
-                        <div v-for="entry in entries" :key="entry.id"
+                        <div id="gallery" v-for="entry in entries" :key="entry.id"
     class="block max-w-sm gap-3 mx-auto sm:max-w-full group mb-4
         lg:grid lg:grid-cols-12 bg-layout-sun-100 dark:bg-layout-night-100
         border-2 border-layout-sun-300 dark:border-layout-night-300 p-4"
@@ -57,12 +68,15 @@
 >
     <!-- Linke Spalte: Thumbnail -->
     <div class="relative lg:col-span-3">
+        <a :href="'/images/images/big/'+ entry.image_path" :data-pswp-width="entry.img_x" :data-pswp-height="entry.img_y">
         <img
         :src="'/images/images/thumbs/' + entry.image_path"  loading="lazy"
         :alt="entry.title"
         :title="entry.title"
+        @click="onClick"
         class="w-full  rounded bg-layout-sun-500 dark:bg-layout-night-500 imgprev"
         />
+    </a>
     </div>
 
     <!-- Mittlere Spalte: Überschrift, Beschreibung und Kommentar-Slot -->
@@ -92,7 +106,7 @@
         <span v-if="editOn"
                 class="inl"
                 @click.prevent="editDataRow(entry.id)">
-            <icon-pencil class="w-6 h-6" v-tippy />
+            <icon-pencil class="w-6 h-6 cursor-pointer" v-tippy />
             <tippy>{{ editDescription }}</tippy>
         </span>
 
@@ -100,7 +114,7 @@
         <span v-if="deleteOn"
                 class="inl"
                 @click="deleteDataRow(entry.id)">
-            <icon-trash class="w-6 h-6" v-tippy />
+            <icon-trash class="w-6 h-6 cursor-pointer" v-tippy />
             <tippy>{{ deleteDescription }}</tippy>
         </span>
         </span>
@@ -127,8 +141,10 @@ import Layout from "@/Application/Homepage/Shared/Layout.vue";
 import IconPlusCircle from "@/Application/Components/Icons/PlusCircle.vue";
 import averageRating from "@/Application/Components/Social/averageratings.vue";
 import IconPencil from "@/Application/Components/Icons/Pencil.vue";
+import InputIconHyperlink from "@/Application/Components/Form/InputIconHyperlink.vue";
 import SocialButtons from "@/Application/Components/Social/socialButtons.vue";
 import Share from "@/Application/Components/Social/share.vue";
+//import PswpTemplate from "@/Application/Components/Content/pswptemplate.vue";
 import AddRating from "@/Application/Components/Social/addrating.vue";
 import SearchFilter from "@/Application/Components/Lists/SearchFilter.vue";
 import IconCamera from "@/Application/Components/Icons/Camera.vue";
@@ -139,6 +155,12 @@ import pickBy from "lodash/pickBy";
 import IconEye from "@/Application/Components/Icons/Eye.vue";
 import IconTrash from "@/Application/Components/Icons/Trash.vue";
 import DisplayDate from "@/Application/Components/Content/DisplayDate.vue";
+//import PhotoSwipeLightbox from "photoswipe/dist/photoswipe-lightbox.esm.js";
+// import PhotoSwipeLightbox from "photoswipe/dist/photoswipe-lightbox.esm.js";
+import PhotoSwipeLightbox from 'photoswipe/lightbox';
+import 'photoswipe/style.css';
+import { CleanTable, CleanId } from '@/helpers';
+// import 'photoswipe/src/photoswipe.css';
 import he from "he";
 import { nextTick } from "vue";
 import { route } from "ziggy-js";
@@ -155,10 +177,12 @@ components: {
     IconCamera,
     SearchFilter,
     Share,
+    // PhotoSwipeLightbox,
     AddRating,
     IconComment,
     IconShare,
     IconStar,
+    InputIconHyperlink,
     averageRating,
     SocialButtons,
 },
@@ -174,15 +198,14 @@ data() {
         showStarBox: {},
         showComments: {}, // Zustand für die Anzeige der Kommentarfunktion
         entry: { id: null },
+        lightbox: null,
     };
 },
 watch: {
     form: {
         handler: throttle(function () {
             let query = pickBy(this.form);
-            const path = window.location.pathname;
-            const segments = path.split("/");
-            var tablezz = segments[segments.length - 1];
+            var tablezz = CleanTable();
             this.$inertia.get(
                 this.route("home.images.gallery.search", { slug: tablezz }),
                 Object.keys(query).length ? query : { remember: "forget" },
@@ -356,19 +379,46 @@ methods: {
     },
 
     editDataRow(id) {
-        const path = window.location.pathname;
-        const segments = path.split("/");
-        const table = segments[segments.length - 1];
+       const table = CleanTable();
 
         var rt = `/admin/tables/edit/${id}/images`;
 
         location.href = rt;
     },
-},
 
+onClick() {
+      if (this.lightbox) {
+        this.lightbox.open(0); // 0 = Erstes Bild
+      } else {
+        console.error('PhotoSwipeLightbox wurde nicht initialisiert!');
+      }
+    }
+},
 mounted() {
     document.body.addEventListener("click", this.handleBodyClick);
+    this.lightbox = new PhotoSwipeLightbox({
+        gallery: '#gallery',
+        children: 'a',
+        zoom: true, // Zoom aktivieren
+        secondaryZoomLevel: 2, // Maximale Zoom-Stufe
+        maxZoomLevel: 4, // Manuell festlegen
+        initialZoomLevel: "fit", // Standard-Zoom-Ansicht
+        wheelToZoom: true, // Zoomen per Mausrad aktivieren
+        barsSize: { top: 50, bottom: 50 },
+        padding: { top: 20, bottom: 20, left: 20, right: 20 },
+        zoomButton: true, // Zoom-Button aktivieren
+        shareButton: true, // Share-Button aktivieren
+        fullscreenButton: true, // Fullscreen aktivieren
+        bgOpacity: 0.8, // Hintergrundtransparenz
+      pswpModule: () => import('photoswipe')
+    });
+    this.lightbox.init();
 },
+beforeUnmount() {
+    if (this.lightbox) {
+      this.lightbox.destroy();
+    }
+  },
 beforeDestroy() {
     document.body.removeEventListener("click", this.handleBodyClick);
 },

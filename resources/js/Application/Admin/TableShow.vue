@@ -22,6 +22,7 @@
           :route-create="routeCreate"
           :delete-on="true"
           route-delete="admin.tables.destroy"
+          :tableq="this.tableq"
           >
           <template #header>
             <tr>
@@ -38,20 +39,19 @@
               <td class="np-dl-td-normal">{{ data.datarow.description }}</td>
           </template>
         </list-container>
+        {{ this.tableq }}
       </section>
     </layout>
   </template>
   <input type="hidden" id="tb_alt" value="{ table_alt }" />
   <script>
-  const path = window.location.pathname; // Gibt "/admin/tables/show/Example" zurück
-const segments = path.split('/'); // Teilt den Pfad in Segmente auf
-const lastSegment = segments[segments.length - 1];
-let table_z = lastSegment;
+let table_z = CleanTable();
 let table_alt = table_z;
 let table = table_z.toLowerCase();
 
   import { defineComponent } from "vue";
   import Layout from "@/Application/Admin/Shared/Layout.vue";
+  import { CleanTable, CleanId } from '@/helpers';
   import Breadcrumb from "@/Application/Components/Content/Breadcrumb.vue";
   import ListContainer from "@/Application/Components/Lists/ListContainer.vue";
 
@@ -97,6 +97,9 @@ let table = table_z.toLowerCase();
   additionalEntries: {
     type: Array,
     default: () => [],
+  },
+  tableq:{
+  type: String,
   },
   current: {
     type: String,
@@ -149,6 +152,7 @@ let table = table_z.toLowerCase();
     //    routeCreate:,
       tablez: this.ucf(table_z), // Hier kannst du den Wert von tablez setzen
         table: table.toLowerCase()  ,
+         tableq: CleanTable(),
         // showRoute : route("admin.tables.show",table),
 
     };
@@ -156,7 +160,7 @@ let table = table_z.toLowerCase();
   computed: {
 
     routeCreate() {
-    return route( 'admin.tables.create', table);
+    return route( 'admin.tables.create', this.tableq);
   },
   showRoute() {
     return route('admin.tables.show', table);
@@ -195,6 +199,9 @@ let table = table_z.toLowerCase();
     },
 
     },
+    created() {
+        let tableq = CleanTable();
+    }
   });
   var tb_alt = "admin_table";
   const url = route('admin.tables.show', { table: tb_alt });

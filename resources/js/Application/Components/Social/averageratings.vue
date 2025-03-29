@@ -21,7 +21,7 @@
         <script>
         import axios from "axios";
         import Star from "@/Application/Components/Social/Star.vue";
-
+        import { CleanTable, CleanId } from '@/helpers';
         export default {
             components: { Star },
 
@@ -43,7 +43,7 @@
             methods: {
             async fetchAverageRating() {
                 try {
-                const table = this.cleanPath();
+                const table = CleanTable();
                 const response = await axios.get(`/get-average-rating/${table}/${this.postId}`);
 
                 if (response.data && response.data.average) {

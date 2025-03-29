@@ -68,6 +68,10 @@ class ImageUploadController extends Controller
 
             // Bild speichern
             $imagick->writeImage($resizedPath);
+            if($size == 1400)
+            {
+                list($width,$height) = getimagesize($resizedPath);
+            }
 
             // Speicher freigeben
             $imagick->clear();
@@ -88,7 +92,14 @@ class ImageUploadController extends Controller
         'image_url' => $imageName ]));
         return response()->json([
             'message' => 'Bild erfolgreich hochgeladen.',
-            'image_url' => $imageName  // Hier wird der Name des Bildes oder der Pfad zum Bild zurückgegeben.
+            'image_url' => $imageName,
+            "img_x" => $width,
+            "img_y" => $height,
         ]);
+    }
+    public function save(Request $request,$table)
+    {
+        \Log::info("resa:".$table);
+
     }
 }

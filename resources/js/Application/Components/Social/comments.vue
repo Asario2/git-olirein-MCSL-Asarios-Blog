@@ -80,7 +80,7 @@
             return {
                 comments: [],
                 newComment: "", // Eingabefeld für neuen Kommentar
-                defaultAvatar: "/images/default-avatar.png", // Fallback-Profilbild
+                defaultAvatar: "/images/default_avatar.png", // Fallback-Profilbild
             };
             },
             async mounted() {
@@ -141,6 +141,7 @@
                     try {
                         var table = CleanTable();
                         const response = await axios.get(`/comments/${table}/${this.postId}`);
+
                         this.comments = Array.isArray(response.data) ? response.data : []; // Sicherstellen, dass es ein Array ist
                     } catch (error) {
                         console.error("Fehler beim Laden der Kommentare:", error);
@@ -161,9 +162,13 @@
             comment: this.newComment,
             _token: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
             });
+            if (response.data.redirect) {
+                    window.location.href = response.data.redirect;
+            }
             // console.log(response.data['status'] == 'success');
             if (response.data['status'] == 'success') {
-            this.comments.unshift(response.data.comment); // Direkt ins Array einfügen
+
+                this.comments.unshift(response.data.comment); // Direkt ins Array einfügen
             this.fetchComments();
             this.newComment = ""; // Eingabefeld leeren
             }

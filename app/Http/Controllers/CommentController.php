@@ -85,6 +85,9 @@ class CommentController extends Controller
         $user = DB::table("users")->where("id",Auth()->id())->select("email","nick_name")->first();
         // Kommentar erstellen und in der Datenbank speichern
         \Log::info("USAH".json_encode($user));
+        if (!auth()->check()) {
+            return response()->json(['redirect' => route('login')]);
+        }
         $comment = new Comment();
         $comment->content = $request->input('comment2') ?? $request->comment;
         $comment->users_id = auth()->id(); // Beispiel für Benutzer-ID

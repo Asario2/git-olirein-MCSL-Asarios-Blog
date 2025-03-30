@@ -33,3 +33,29 @@ export function CleanId() {
     return null; // Falls keine ID gefunden wird
 }
 
+export async function Authy(){
+    GetAuth().then(authenticated => {
+        if (authenticated === "false") {
+            alert("TO LOGIN");
+            location.href = "/login";
+            return false;
+        }
+        return true;
+    });
+}
+import {route} from 'ziggy-js';
+
+
+export async function checkAuthAndRedirect() {
+    try {
+        const response = await fetch('/GetAuth');
+        const data = await response.json();
+        console.log("?? Auth-Status:", data); // Debugging
+        return data === "true" ? "authenticated" : "login";
+    } catch (error) {
+        console.error("? Fehler beim Abrufen der Authentifizierung:", error);
+        return "login"; // Falls ein Fehler auftritt, leite lieber um
+    }
+}
+
+

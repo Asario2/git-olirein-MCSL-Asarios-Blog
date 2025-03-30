@@ -2,7 +2,7 @@
     <span class="star" :class="{ filled: isFilled, half: isHalf, empty: !isFilled && !isHalf }">
       <icon-star wi='24' he='24' v-if="isFilled"></icon-star>
       <icon-star-half v-if="isHalf && !isFilled"></icon-star-half>
-
+      <!-- <icon-star-empty class="empty" v-else></icon-star-empty> -->
     </span>
   </template>
 

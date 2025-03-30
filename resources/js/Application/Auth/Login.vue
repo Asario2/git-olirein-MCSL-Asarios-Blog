@@ -60,12 +60,20 @@
                         </input-checkbox>
                     </input-container>
 
-                    <input-container :full-width="true">
+                    <input-container :full-width="true"  style='display:inline;'>
                         <display-hyperlink
                             :href="route('password.request')"
                             display-type="display"
                         >
                             Kennwort vergessen?</display-hyperlink
+                        >
+                    </input-container>
+                    <input-container style='display:inline;'>
+                        <display-hyperlink
+                            :href="route('register')"
+                            display-type="display"
+                        >
+                            Noch kein Nutzer?</display-hyperlink
                         >
                     </input-container>
                 </input-group>

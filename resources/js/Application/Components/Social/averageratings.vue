@@ -12,10 +12,13 @@
     </div>
 
       <!-- Durchschnittliche Bewertung -->
-      <p class="rating-text">
+      <p class="rating-text" v-if="averageRating">
         Durchschnitt: {{ averageRating.toFixed(1).replace(".0", '') }} Sterne <br />
         ({{ totalVotes }} Bewertungen)
       </p>
+      <p v-else>
+        Noch keine Sterne vergeben
+    </p>
     </div>
   </template>
 
@@ -44,7 +47,7 @@
 
     computed: {
         starsArray() {
-    console.log("⭐ Durchschnittliche Bewertung:", this.averageRating);
+    // console.log("⭐ Durchschnittliche Bewertung:", this.averageRating);
 
     if (this.averageRating <= 0) {
       return Array(5).fill("empty");  // 5 leere Sterne, wenn der Wert 0 ist
@@ -60,7 +63,7 @@
       ...Array(emptyStars).fill("empty"),   // Die restlichen Sterne mit leer füllen
     ];
 
-    console.log("⭐ Sterne Array:", starArray);
+    // console.log("⭐ Sterne Array:", starArray);
 
     return starArray;
   },
@@ -73,7 +76,7 @@
           const response = await axios.get(`/get-average-rating/${table}/${this.postId}`);
 
           // Debugging
-          console.log("API-Antwort:", response.data);
+        //   console.log("API-Antwort:", response.data);
 
           if (response.data && response.data.average !== undefined) {
             this.averageRating = parseFloat(response.data.average);

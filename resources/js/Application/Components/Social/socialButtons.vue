@@ -7,7 +7,7 @@
                         <td class=" text-center">
                             <button  @click.stop.prevent="openComments(postId)"
                                 class="flex items-center gap-2 px-2 py-1 rounded-lg font-semibold bg-blue-500 text-white hover:bg-blue-600
-                                    dark:bg-blue-600 dark:hover:bg-blue-700 dark:text-white text-center tog-tab">
+                                    dark:bg-blue-600 dark:hover:bg-blue-700 dark:text-white text-center tog-tab" :data-post-id="postId">
                                 <icon-comment /> Kommentare
                             </button>
                         </td>
@@ -15,7 +15,7 @@
                         <td class="p-1.5 text-center">
                             <button @click.stop.prevent="toggleShareBox(postId)"
                                 class="flex items-center gap-2 px-2 py-1 rounded-lg font-semibold bg-blue-500 text-white hover:bg-blue-600
-                                    dark:bg-blue-600 dark:hover:bg-blue-700 dark:text-white text-center tog-tab">
+                                    dark:bg-blue-600 dark:hover:bg-blue-700 dark:text-white text-center tog-tab" :data-post-id="postId">
                                 <icon-share /> Teilen
                             </button>
                         </td>
@@ -23,7 +23,7 @@
                         <td class=" text-center">
                             <button  @click.stop.prevent="toggleStarBox(postId)"
                                 class="flex items-center gap-2 px-2 py-1 rounded-lg font-semibold bg-blue-500 text-white hover:bg-blue-600
-                                    dark:bg-blue-600 dark:hover:bg-blue-700 dark:text-white text-center tog-tab">
+                                    dark:bg-blue-600 dark:hover:bg-blue-700 dark:text-white text-center tog-tab"  :data-post-id="postId">
                                 <icon-star we="16" he="16" /> Bewerten
                             </button>
                         </td>
@@ -95,40 +95,40 @@
 //   }
 // });
 
-document.addEventListener('DOMContentLoaded', () => {
-  const buttons = document.getElementsByClassName('tog-tab');
-  if (buttons.length > 0) {
-    Array.from(buttons).forEach(button => {
-      button.addEventListener('click', function() {
-        const postId = this.postId; // Hole die ID aus data-post-id
-        const commentBox = document.getElementById(`commentBox_${postId}`);
-        const aiImage = document.querySelector('.ai-button-image');
+// document.addEventListener('DOMContentLoaded', () => {
+//      const buttons = document.getElementsByClassName('tog-tab');
+//   if (buttons.length > 0) {
+//     Array.from(buttons).forEach(button => {
+//       button.addEventListener('click', function() {
+//         const postxId = this.dataset.postId;     // Hole die ID aus data-post-id
+//         const commentBox = document.getElementById(`commentBox_${postxId}`);
+//         const aiImage = document.querySelector('.ai-button-image');
 
-        if (!commentBox) {
-          console.error(`commentBox_${postId} nicht gefunden!`);
-          return;
-        }
+//         if (!commentBox) {
+//           console.error(`commentBox_${postxId} nicht gefunden!`);
+//           return;
+//         }
 
-        // Sichtbarkeit der Comment-Box toggeln
-        if (commentBox.style.display === 'none' || commentBox.style.display === '') {
-        //   commentBox.style.display = 'block';
-        //   aiImage.style.marginBottom = '236px';
-        //   aiImage.style.right = '-16px';
-        } else {
-        //   commentBox.style.display = 'none';
-        //   aiImage.style.marginBottom = '0';
-        //   aiImage.style.right = '0';
-        }
+//         // Sichtbarkeit der Comment-Box toggeln
+//         if (commentBox.style.display === 'none' || commentBox.style.display === '') {
+//         //   commentBox.style.display = 'block';
+//         //   aiImage.style.marginBottom = '236px';
+//         //   aiImage.style.right = '-16px';
+//         } else {
+//         //   commentBox.style.display = 'none';
+//         //   aiImage.style.marginBottom = '0';
+//         //   aiImage.style.right = '0';
+//         }
 
-        // Optional: Ändere das AI-Bild basierend auf dem Theme
-        const theme = localStorage.getItem('theme') || 'dark';
-        aiImage.src = `images/icons/ai-${theme}.png`;
-      });
-    });
-  } else {
-    console.error('Buttons nicht gefunden!');
-  }
-});
+//         // Optional: Ändere das AI-Bild basierend auf dem Theme
+//         const theme = localStorage.getItem('theme') || 'dark';
+//         aiImage.src = `/images/icons/ai-${theme}.png`;
+//       });
+//     });
+//   } else {
+//     console.error('Buttons nicht gefunden!');
+//   }
+// });
 
 
 
@@ -209,14 +209,6 @@ export default {
     };
 },
 methods:{
-    handleBodyClick(event) {
-        this.$nextTick(() => {
-            const box = document.getElementById("commentBox_" + this.postId);
-            if (box && !box.contains(event.target)) {
-                this.showComments = null;
-            }
-        });
-    },
     openComments(id) {
         this.imageRemove(id);
         event.stopPropagation();

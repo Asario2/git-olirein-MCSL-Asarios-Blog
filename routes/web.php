@@ -30,6 +30,16 @@ Route::get('/db-check', function () {
         return 'Fehler: ' . $e->getMessage();
     }
 });
+Route::get('/GetAuth', function () {
+    if (Auth::check()) {
+        \Log::info("✅ Eingeloggt, User-ID: " . Auth::id());
+        return response()->json("true");
+    }
+
+    \Log::info("🚨 Nicht eingeloggt");
+    return response()->json("false");
+})->name("GetAuth");
+
 Route::get('/namebindings', [NameBindingsController::class, 'RefreshFields'])->name("ColumnFetcher");
 Route::post('/upload-image/{table}', [ImageUploadController::class, 'upload'])->name('upload.image');
 Route::post('/save-image/{table}', [ImageUploadController::class, 'save'])->name('save.image');

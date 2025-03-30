@@ -21,7 +21,8 @@
 
  <script>
   import axios from "axios";
-  import { CleanTable, CleanId } from '@/helpers';
+  import { CleanTable, checkAuthAndRedirect } from '@/helpers';
+  import {route} from 'ziggy-js';
   import IconStar from "@/Application/Components/Icons/IconStar.vue";
   export default {
     components: {
@@ -49,14 +50,27 @@
       // Bewertung in die Datenbank speichern
       async saveRating(star) {
         try {
-            const table = CleanTable();
-          await axios.post("/save-rating", {
-            rating: star,
-            postId: this.postId,
-            table: table,
-            _token: document.querySelector('meta[name="csrf-token"]')?.getAttribute('content'),
-          });
-          location.reload();
+            //  if(GetAuth() !== true)
+            //  {
+            //     alert(GetAuth());
+            //     // location.href=route("login");
+            //     return;
+            //  }
+            if (await checkAuthAndRedirect() === "login") {
+
+                location.href = route('login');
+                return;
+            } else {
+                const table = CleanTable();
+                await axios.post("/save-rating", {
+                    rating: star,
+                    postId: this.postId,
+                    table: table,
+                    _token: document.querySelector('meta[name="csrf-token"]')?.getAttribute('content'),
+                });
+                location.reload();
+            }
+
         } catch (error) {
           console.error("Fehler beim Speichern der Bewertung:", error.response?.data || error);
         }

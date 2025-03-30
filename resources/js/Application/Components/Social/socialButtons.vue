@@ -24,7 +24,7 @@
                             <button  @click.stop.prevent="toggleStarBox(postId)"
                                 class="flex items-center gap-2 px-2 py-1 rounded-lg font-semibold bg-blue-500 text-white hover:bg-blue-600
                                     dark:bg-blue-600 dark:hover:bg-blue-700 dark:text-white text-center tog-tab">
-                                <icon-star /> Bewerten
+                                <icon-star we="16" he="16" /> Bewerten
                             </button>
                         </td>
                     </tr>

@@ -181,6 +181,8 @@ class HomeController extends Controller
         // $blog->blog_images;
         $blog->url = $blog->image_path;
         $blog->blog_category;
+        $blog->editRights = CheckRights(Auth::id(),"blogs","edit");
+        $blog->deleteRights = CheckRights(Auth::id(),"blogs","delete");
         $blogarticle = null;
         //
         if ($blog->markdown_on) {

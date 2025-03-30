@@ -11,7 +11,7 @@
           @mouseleave="hoverRating = 0"
           @click="setRating(star)"
         >
-          ★
+          <icon-star style="display:inline" wi="24" he="24"></icon-star>&nbsp;
         </span>
       </div>
       <!-- Text anzeigen, dass die Bewertung gesetzt wurde -->
@@ -22,7 +22,13 @@
  <script>
   import axios from "axios";
   import { CleanTable, CleanId } from '@/helpers';
+  import IconStar from "@/Application/Components/Icons/IconStar.vue";
   export default {
+    components: {
+
+    IconStar,
+
+    },
     props: {
       postId: Number, // Post ID wird als Prop übergeben
       table: String,  // Table-Name wird als Prop übergeben
@@ -59,7 +65,8 @@
       // Bewertung aus der DB abrufen
       async fetchRating() {
         try {
-            const table = CleanTable();
+            const table = CleanTable
+            ();
           const response = await axios.get(`/get-rating/${table}/${this.postId}`);
           this.rating = Math.round(response.data.rating); // Rundet auf die nächste ganze Zahl
         } catch (error) {

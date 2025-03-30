@@ -27,7 +27,7 @@
                     </div>
 
                     <h1 class="pb-12 block font-title">
-                        {{ blog.title }}
+                        {{ blog.title }} &nbsp;&nbsp;<editbtns :Redit="blog.editRights" :id="blog.id" table="blogs" :Rdelete="blog.deleteRights"></editbtns>
                     </h1>
 
                     <div class="flex items-end justify-between">
@@ -118,7 +118,7 @@
                         <markdown :markdown="blog.content"></markdown>
                     </div>
 
-                    <div v-else v-html="blog.content    "></div>
+                    <div v-else v-html="blog.content"></div>
 
                     <h2 id="author_info">
                         Informationen zu {{ blog.blog_author.name }}
@@ -140,7 +140,7 @@ import IconStop from "@/Application/Components/Icons/Stop.vue";
 
 import DisplayDate from "@/Application/Components/Content/DisplayDate.vue";
 import DisplayNumber from "@/Application/Components/Content/DisplayNumber.vue";
-
+import editbtns from "@/Application/Components/Form/editbtns.vue";
 import Markdown from "@/Application/Components/Content/Markdown.vue";
 
 export default {
@@ -154,6 +154,7 @@ export default {
         DisplayDate,
         DisplayNumber,
         Markdown,
+        editbtns,
     },
 
     props: {

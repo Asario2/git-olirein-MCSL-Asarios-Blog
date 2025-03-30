@@ -1,56 +1,53 @@
 <template>
+    <span class="star" :class="{ filled: isFilled, half: isHalf, empty: !isFilled && !isHalf }">
+      <icon-star wi='24' he='24' v-if="isFilled"></icon-star>
+      <icon-star-half v-if="isHalf && !isFilled"></icon-star-half>
 
-
-    <span class="star" :class="{ filled: isFilled }">★</span>
+    </span>
   </template>
-<script>
+
+  <script>
+  import IconStarHalf from "@/Application/Components/Icons/IconStarHalf.vue";
+  import IconStar from "@/Application/Components/Icons/IconStar.vue";
+  import IconStarEmpty from "@/Application/Components/Icons/IconStarEmpty.vue";
 
   export default {
+    components: {
+      IconStar,
+      IconStarHalf,
+      IconStarEmpty,
+    },
     props: {
-      isFilled: Boolean, // Gibt an, ob der Stern gelb sein soll oder nicht
+    starValue: {
+      type: [Number,String],
+      required: true
     },
-    data() {
-      return {
-        stars: [1, 2, 3, 4, 5],
-        rating: 0,  // Die Bewertung des Benutzers
-        hoverRating: 0  // Für Hover-Effekte
-      };
+    isFilled: {
+      type: Boolean,
+      required: true
     },
-    methods: {
-      handleRate(star) {
-        this.rating = star;
-        this.$emit('update:rating', this.rating);  // Event für die Eltern-Komponente
-        this.saveRating(star);  // Rating speichern (optional)
-      },
-      handleHover(star) {
-        this.hoverRating = star;
-      },
-      handleMouseLeave() {
-        this.hoverRating = 0;
-      },
-      async saveRating(star) {
-        // Beispiel für das Speichern der Bewertung über AJAX
-        try {
-          const response = await axios.post('/save-rating', {
-            rating: star,
-            postId: this.postId, // Falls du die Post-ID hast
-          });
-          if (response.data.status === 'success') {
-            console.log('Bewertung gespeichert');
-          }
-        } catch (error) {
-          console.error('Fehler beim Speichern der Bewertung:', error);
-        }
-      }
+    isHalf: {
+      type: Boolean,
+      required: true
     }
-  };
+  }
+};
   </script>
+
 <style scoped>
 .star {
-  font-size: 30px;
-  color: gray; /* Standardmäßig graue Sterne */
+  display: inline-block;
 }
-.star.filled {
-  color: yellow; /* Gelb für gefüllte Sterne */
+
+.filled {
+  color: #facc15; /* Gelb für volle Sterne */
+}
+
+.half {
+  color: #facc15; /* Gelb für halbe Sterne */
+}
+
+.empty {
+  color: #d1d5db; /* Graue Farbe für leere Sterne */
 }
 </style>

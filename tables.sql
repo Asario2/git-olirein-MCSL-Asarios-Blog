@@ -1887,7 +1887,8 @@ COMMIT;
 
 
 INSERT INTO `users` (`id`, `first_name`, `nick_name`, `email`, `name`, `birthday`, `music`, `interests`, `occupation`, `email_verified_at`, `password`, `users_rights_id`, `profile_photo_path`, `is_admin`, `is_employee`, `is_customer`, `admin_id`, `company_id`, `customer_id`, `image_path`, `last_login_at`, `two_factor_secret`, `two_factor_recovery_codes`, `two_factor_confirmed_at`, `remember_token`, `created_at`, `updated_at`) VALUES
-(2, 'Kiss', 'kissu', 'KissYou@example.com', 'KissU', '0000-00-00', NULL, NULL, NULL, '2025-01-10 14:58:58', '$2y$12$xmseqPoBKtL.VWc4w0yZAePcMwNY4ocIjIFgLYFYbYUrufAxuhXvG', 1, 'profile-photos/008.jpg', 0, 1, 0, 2, NULL, NULL, NULL, '2025-02-06 15:25:22', NULL, NULL, '2025-01-20 17:38:47', NULL, '2025-01-10 14:58:58', '2025-02-06 15:25:22');
+(1, 'Admin', NULL, 'admin@example.com', 'Administrator', NULL, NULL, NULL, NULL, '2025-03-11 14:38:06', '$2y$12$tZaliTuKFNiFqhK/TTl7x.kKuAzj6dC.xVceEMWGJMa2TQRQ3uVnW', 3, NULL, 1, 0, 0, NULL, NULL, NULL, NULL, '2025-04-01 13:39:21', NULL, NULL, NULL, NULL, '2025-04-01 15:37:36', '2025-04-01 15:39:21');
+COMMIT;
 COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

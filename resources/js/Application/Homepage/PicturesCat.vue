@@ -1,5 +1,5 @@
 <template>
-    <layout>
+    <layout header-title="Bilder Übersicht">
       <div class="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
         <div class="container mx-auto py-8">
           <div class="flex justify-between items-center mb-4">

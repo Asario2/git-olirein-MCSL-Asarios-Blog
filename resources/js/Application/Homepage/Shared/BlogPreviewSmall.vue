@@ -1,7 +1,7 @@
 <template>
     <div class="blog-container w-full max-w-sm mx-auto group rounded hover:no-underline focus:no-underline bg-layout-sun-100 dark:bg-layout-night-100">
         <Link
-            :href="route('home.blog.show', blog.slug)"
+            :href="route('home.blog.show', blog.autoslug)"
             class="block"
         >
 
@@ -52,7 +52,7 @@
         </Link>
 
         <!-- **Tabelle direkt unterhalb des Blog-Containers (fixiert)** -->
-        <SocialButtons :postId="blog.id" />
+        <SocialButtons :postId="blog.id" sm="Sm"/>
 
     </div>
 </template>
@@ -240,3 +240,8 @@ methods:{
 }
 };
 </script>
+<style scoped>
+.SmMaTable{
+margin-left:-7px;
+}
+</style>

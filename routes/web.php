@@ -39,7 +39,7 @@ Route::get('/GetAuth', function () {
     \Log::info("🚨 Nicht eingeloggt");
     return response()->json("false");
 })->name("GetAuth");
-
+Route::get("api/getSlug/{table}/{id?}", [TablesController::class, "getSlug"])->name("getSlug");
 Route::get('/namebindings', [NameBindingsController::class, 'RefreshFields'])->name("ColumnFetcher");
 Route::post('/upload-image/{table}', [ImageUploadController::class, 'upload'])->name('upload.image');
 Route::post('/save-image/{table}', [ImageUploadController::class, 'save'])->name('save.image');
@@ -74,7 +74,7 @@ Route::get('/home/pictures', [HomeController::class, 'home_images_index'])->name
 // Liste der Blogartikel
 Route::get('/blogs', [HomeController::class, 'home_blog_index'])->name('home.blog.index')->middleware('remember');
 // Display Blogartikel
-Route::get('/blogs/show/{slug}', [HomeController::class, 'home_blog_show'])->name('home.blog.show');
+Route::get('/blogs/show/{autoslug}', [HomeController::class, 'home_blog_show'])->name('home.blog.show');
 
 // Anwendung konnte nicht gefunden werden
 Route::get('/home/no_application_found', [HomeController::class, 'home_no_application_found'])

@@ -1519,7 +1519,7 @@ class TablesController extends Controller
 
         $formData = ($request->input('formData'));
         \Log::info("path: ".public_path()."/images/".$table."/big/".$formData['image_path']);
-        if((isset($formData['pub']) && empty($formData['pub'])) || is_null($formData['pub'])){
+        if(isset($formData['pub']) && (empty($formData['pub'] || @is_null($formData['pub'])))){
             $formData['pub'] = "1";
         }
         if (isset($formData['image_path']) && empty($formData['image_path'])) {
@@ -1540,6 +1540,29 @@ class TablesController extends Controller
 
         // Rückgabe der Antwort, z.B. Weiterleitung oder JSON-Antwort
         return response()->json(['message' => 'Daten erfolgreich gespeichert!']);
+    }
+    public function getSlug($table,$id='')
+    {
+        $res = DB::table($table)->where("id",$id)->select('autoslug')->first();
+        if(!empty($res) && $id && $res->autoslug != NULL)
+        {
+            return response()->json(['autoslug' => $res->autoslug]);
+        }
+        else{
+            return response()->json(['autoslug' => TablesController::GenerateSlug($table)]);
+        }
+    }
+    public static function GenerateSlug($table)
+    {
+        do {
+            // Zufälligen vierstelligen String generieren, beginnend mit 'y'
+            $slug = 'y' . substr(str_shuffle('abcdefghijklmnopqrstuvwxyz0123456789'), 0, 3);
+
+            // Prüfen, ob der Slug bereits existiert
+            $exists = \DB::table($table)->where('autoslug', $slug)->exists();
+        } while ($exists); // Wiederholen, falls der Slug bereits existiert
+
+        return $slug;
     }
     public function UpdateTable(Request $request,$table, $id)
     {

@@ -1,3 +1,4 @@
+![MCSL Logo](public/MCSL.jpg)
 # Installation
 1. download the repository
 2. resolve all dependencies

@@ -1,5 +1,5 @@
 <template>
-    <layout>
+    <layout :header-title="'Bilder - ' + ocont.slug"><
         <div @click="handleBodyClick">
         <div v-if="ocont.id" class="p-4 bg-layout-sun-200 dark:bg-layout-night-200">
         <hgroup>

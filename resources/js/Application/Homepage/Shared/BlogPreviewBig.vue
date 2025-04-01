@@ -1,11 +1,11 @@
 <template>
 
-     <div id="teaser-img2" class="block max-w-sm gap-3 mx-auto mh_65 sm:max-w-full group hover:no-underline focus:no-underline lg:grid lg:grid-cols-12 bg-layout-sun-100 dark:bg-layout-night-100" style="z-index:2;margin-bottom:-0px;max-height:385px;overflow:hidden;" :class="{ 'disable-link': isCommentActive }"
+     <div id="teaser-img2" class="block max-w-sm gap-3 mx-auto mh_65 sm:max-w-full group hover:no-underline focus:no-underline lg:grid lg:grid-cols-12 bg-layout-sun-100 dark:bg-layout-night-100 overfl" style="z-index:2;margin-bottom:-0px;" :class="{ 'disable-link': isCommentActive }"
     >
         <!-- Das Bild des Blog-Posts -->
         <div class="blog-container mh_65 lg:col-span-7" style="">
             <Link
-        :href="route('home.blog.show', blog.slug)">
+        :href="route('home.blog.show', blog.autoslug)">
         <img
             :src="`/images/blogs/${blog.url}`"
             :alt="blog.name"
@@ -22,9 +22,9 @@
 
         </div>
 
-        <div id="teaser-img" class="p-6 space-y-2 lg:col-span-5" style="max-height:385px;overflow:hidden;">
+        <div id="teaser-img" class="p-6 space-y-2 lg:col-span-5 overfl" style="">
             <Link
-        :href="route('home.blog.show', blog.slug)">
+        :href="route('home.blog.show', blog.autoslug)">
             <!-- Blog-Kategorie -->
             <div class="flex justify-end items-start">
                 <div
@@ -121,12 +121,24 @@ export default {
   position: relative;
 }
 
+
+@media screen and (min-width: 1023px) {
+.overfl{
+    overflow:hidden;
+    max-height:385px;
+}
 .ai-button-image {
   position: fixed;  /* Fixiere das Bild auf dem Bildschirm */
   bottom: 16px;     /* Abstand von der unteren Kante */
   right: 16px;      /* Abstand von der rechten Kante */
   z-index: 9999;
   margin-bottom :236px;
+}
+}
+@media screen and (max-width: 1023px) {
+.overfl{
+    overflow:visible;
+}
 }
 /* Hier kannst du zusätzliche Anpassungen vornehmen, falls nötig */
 </style>

@@ -36,7 +36,7 @@
             <template v-for="(field, key) in ffo" :key="key">
                 <input-container v-if="field.name === 'reading_time'">
                     <InputFormText
-                        :id="field.name + '_' + field.id"
+                        :id="field.name"
                         :name="field.name"
                         v-model="readingTime"
                         :placeholder="field.placeholder || ''"
@@ -50,11 +50,28 @@
 
                     </InputFormText>
                 </input-container>
+                <input-container v-if="field.type === 'autoSlug'">
+                    <InputFormText
+                        :id="field.name"
+                        :name="field.name"
+                        v-model="aslug"
+                        :placeholder="field.placeholder || ''"
+                        readonly
+                        :disabled="true"
+                        :value="aslug"
+                        :required="isRequired(field.required)"
+
+                        @input="handleInput"
+                        >
+                        <template #label>{{ field.label }}</template>
+
+                    </InputFormText>
+                </input-container>
 
                 <!-- Textarea für den Inhalt -->
                 <input-container v-else-if="['textarea_short', 'textarea'].includes(field.type)" :full-width="true">
                     <InputFormTextArea
-                        :id="field.name + '_' + field.id"
+                        :id="field.name"
                         :name="field.name"
                         v-model="field.value"
                         :rows="field.rows"
@@ -70,7 +87,7 @@
 
                 <input-container v-else-if="field.type === 'text'">
                     <InputFormText
-                        :id="field.name + '_' + field.id"
+                        :id="field.name"
                         :name="field.name"
                         v-model="field.value"
                         :placeholder="field.placeholder || ''"
@@ -81,7 +98,7 @@
                 </input-container>
                 <input-container v-else-if="field.type === 'price'">
                     <InputFormPrice
-                        :id="field.name + '_' + field.id"
+                        :id="field.name"
                         :name="field.name"
                         v-model="field.value"
                         :placeholder="field.placeholder || ''"
@@ -116,7 +133,7 @@
                 </input-container>
                 <input-container v-else-if="field.type === 'datetime'">
                     <InputFormDateTime
-                        :id="field.name + '_' + field.id"
+                        :id="field.name"
                         :name="field.name"
                         :ref="field.name"
                         v-model="field.value"
@@ -160,7 +177,7 @@
 
                                     @input-change="updateFormData"
 
-                                        :id="field.name + '_' + field.id"
+                                        :id="field.name"
                                         :model-value="field.value"
 
                                         :options="`options: ${this.xsor_alt[field.name]?.length > 0 ? this.xsor_alt[field.name] : []}`"
@@ -189,7 +206,7 @@
 
                                     @input-change="updateFormData"
 
-                                        :id="field.name + '_' + field.id"
+                                        :id="field.name"
                                         :model-value="field.value"
                                         v-model="field.name"
                                         :options="`options: ${this.xsor_alt[field.name]?.length > 0 ? this.xsor_alt[field.name] : []}`"
@@ -225,7 +242,7 @@
 
                                     @input-change="updateFormData"
 
-                                        :id="field.name + '_' + field.id"
+                                        :id="field.name"
                                         :model-value="field.value"
                                         v-model="field.name"
                                         :options="`options: ${this.xsor_alt[field.name]?.length > 0 ? this.xsor_alt[field.name] : []}`"
@@ -513,6 +530,7 @@ export default defineComponent({
         uploadedIid: null,
         ItemName: "Beitrag",
         table_x: '',
+        aslug: '',
         nf2:'',
 
         fieldtype: "", // Oder ein sinnvoller Standardwert
@@ -688,7 +706,7 @@ export default defineComponent({
                     ["textarea"].includes(field.type)
                 );
                 this.textareaField = textareaField;
-                if (textareaField &&  document.getElementById("reading_time_undefined ")) {
+                if (textareaField &&  document.getElementById("reading_time")) {
 
                     this.readingTime = this.calculateReadingTime(textareaField.value);
                     this.readingTime = this.readingTime  < 1 ? "1" : this.readingTime;
@@ -970,6 +988,17 @@ return { ffo };
         handleFileNameUpdate(fileName) {
       this.fileName = fileName;  // Setze den Wert von fileName
     },
+    async getSlug() {
+        try {
+
+            const response = await axios.get(`/api/getSlug/${this.xtable}/${this.xid}`);
+
+            return response.data.autoslug || "";
+        } catch (error) {
+            console.error("No Slug Found");
+            return "";
+        }
+    },
     async getOF() {
         const path = window.location.pathname; // Gibt "/admin/tables/show/Example" zurück
               this.xid = CleanId();
@@ -1079,6 +1108,10 @@ return { ffo };
             {
                 this.formData[fieldname] = this.value;
             }
+            if(this.fieldtype == "autoslug")
+            {
+                this.formData[fieldname] = value;
+            }
             // console.log("aaaaaaaa" + JSON.stringify(this.formDatas,null,2));
         },
         stripslashes(input) {
@@ -1137,7 +1170,7 @@ return { ffo };
             {
                 this.formData[field.name] = this.formDatas[field.name];
             }
-            else if (field.name == "img_x" || field.name == "img_y") {
+            else if (field.name == "img_x" || field.name == "img_y" || field.type == "autoslug") {
                 this.formData[field.name] = field.value;
             }
 
@@ -1511,18 +1544,18 @@ async submitForm() {
             //     this.nf = this.getOF(id,tablex);
             // }
             // console.log("Daten, die gesendet werden:",this.formData);
-            if(this.textareaField &&  document.getElementById("reading_time_undefined "))
+            if(this.textareaField &&  document.getElementById("reading_time"))
             {
                 this.formData['reading_time'] = this.readingTime;
 
             }
             if(this.ffo['status'])
             {
-                this.formData['status'] = document.getElementById("status_undefined").value;
+                this.formData['status'] = document.getElementById("status").value;
             }
             if(this.ffo['itemscope'])
             {
-                this.formData['itemscope'] = document.getElementById("itemscope_undefined").value;
+                this.formData['itemscope'] = document.getElementById("itemscope").value;
             }
             if(this.ffo['category_id'])
             {
@@ -1531,6 +1564,11 @@ async submitForm() {
             if(this.ffo['type_id'])
             {
                 this.formData['type_id'] = document.getElementById("type_id").value;
+            }
+            if(this.ffo['autoslug'])
+            {
+                this.formData['autoslug'] = document.getElementById("autoslug").value;
+
             }
             const path = window.location.pathname; // Gibt "/admin/tables/show/Example" zurück
             const segments = path.split("/"); // Teilt den Pfad in Segmente auf
@@ -1685,13 +1723,16 @@ async submitForm() {
     },
 
     },
-    mounted() {
+    async mounted() {
          //this.fetchDataX();
          this.getImageUrl();
         this.fetchFormData();
         this.updateData();
         this.emptyChecker();
         this.updateReadingTime();
+        this.xid = CleanId();
+        this.xtable = CleanTable();
+        this.aslug = await this.getSlug();
         if(!this.nf)
         {
             this.nf = this.getdefnf();

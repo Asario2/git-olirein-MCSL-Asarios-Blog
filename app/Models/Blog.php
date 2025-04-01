@@ -83,7 +83,7 @@ class Blog extends Model
     {
         parent::boot();
         static::created(function ($blog) {
-            $blog->slug = $blog->initSlug($blog->title);
+            $blog->autoslug = TablesController::GenerateSlug("blogs");
             $blog->save();
         });
     }

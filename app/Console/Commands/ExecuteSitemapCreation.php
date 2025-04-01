@@ -44,7 +44,7 @@ class ExecuteSitemapCreation extends Command
         //
         Blog::whereDate('blog_date', '<=', Carbon::now())->get()->each(function (Blog $blog) use ($sitemap) {
             $sitemap->add(
-                Url::create("/blogs/show/{$blog->slug}")
+                Url::create("/blogs/show/{$blog->autoslug}")
                     ->setLastModificationDate(Carbon::yesterday())
                     ->setPriority(0.9)
                     ->setChangeFrequency(Url::CHANGE_FREQUENCY_MONTHLY)

@@ -20,6 +20,7 @@ class BlogController extends Controller
         $blogs = Blog::select(
             'blogs.id as id',
             'blogs.title as title',
+            'blogs.autoslug as autoslug',
             'blogs.blog_date as blog_date',
             'blogs.markdown_on as markdown_on',
             'blog_authors.name as author_name',

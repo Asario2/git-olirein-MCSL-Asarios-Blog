@@ -1,7 +1,7 @@
 <template>
         <!-- **Tabelle direkt unterhalb des Blog-Containers (fixiert)** -->
         <div class="w-full mt-2">
-            <table class="w-full border-collapse rounded-lg shadow-sm table-class" style="max-width:300px;" @click.stop>
+            <table :class="['w-full border-collapse rounded-lg shadow-sm table-class', sm ? 'SmMaTable' : 'MaTable']" style="max-width:300px;" @click.stop>
                 <tbody>
                     <tr>
                         <td class=" text-center">
@@ -199,6 +199,9 @@ export default {
         postId:{
             type: [Number,String]
         },
+        sm:{
+            type: String,
+        }
     },
     data() {
     return {
@@ -396,6 +399,14 @@ showComments(newVal, oldVal) {
 .shariff{
     margin-top:-11px;
     z-index:10000;
+}
+@media screen and (max-width: 1023px) {
+.MaTable{
+margin-left:-38px;
+}
+.SmMaTable{
+margin-left:-7px;
+}
 }
 .w300{
     max-width:300px;

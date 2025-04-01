@@ -47,7 +47,7 @@ class HomeController extends Controller
             'blogs.blog_date as blog_date',
             'blogs.title as title',
             'blogs.title as name',
-            'blogs.slug as slug',
+            'blogs.autoslug as autoslug',
             'blogs.summary as summary',
             'blogs.reading_time as reading_time',
             'blog_authors.name as author_name',
@@ -173,10 +173,11 @@ class HomeController extends Controller
         ]);
     }
     //
-    public function home_blog_show($slug)
+    public function home_blog_show($autoslug)
     {
-        $blog = Blog::where('slug', $slug)->first();
+        $blog = Blog::where('autoslug', $autoslug)->first();
         //
+        $blog->madewithai = $blog->xis_aiImage;
         $blog->blog_author;
         // $blog->blog_images;
         $blog->url = $blog->image_path;

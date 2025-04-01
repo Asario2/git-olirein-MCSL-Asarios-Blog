@@ -2,18 +2,22 @@
     <div
         class="p-5 mx-auto sm:p-2 md:p-10 bg-layout-sun-0 text-layout-sun-800 dark:bg-layout-night-0 dark:text-layout-night-800"
     >
-        <div class="flex flex-col max-w-6xl mx-auto overflow-hidden rounded">
+    <div class="relative w-full flex flex-col max-w-6xl mx-auto overflow-hidden rounded">
             <img
-                :src="`/images/blogs/big/${blog.url}` || '/images/blogs/big/008.jpg'"
+                :src="blog.url ? `/images/blogs/big/${blog.url}` : '/images/blogs/big/008.jpg'"
                 :alt="blog.title"
                 loading="lazy"
                 width="480"
                 height="360"
-                class="object-cover w-full rounded h-60 sm:h-96 bg-layout-sun-500 dark:bg-layout-night-500"
+                class="object-cover mx-auto rounded h-60 sm:h-96 bg-layout-sun-500 dark:bg-layout-night-500 fwa" style="max-width:950px;"
             />
+            <div v-if="blog.madewithai" style="float: left;">
+            <AiButton big="full" style="position: relative; z-index: 10;"> :overlayImage="images/icons/blog.aiOverlayImage || 'images/icons/ai-dark.png'"></AiButton>
+        </div>
             <div
                 class="p-2 pb-12 m-2 mx-auto -mt-16 space-y-6 lg:max-w-5xl sm:px-10 sm:mx-12 lg:rounded-md bg-layout-sun-100 dark:bg-layout-night-100 prose dark:prose-invert md:prose-lg lg:prose-xl"
             >
+
                 <div class="space-y-2">
                     <div
                         v-if="blog.blog_category.name"
@@ -137,7 +141,7 @@ import IconPause from "@/Application/Components/Icons/Pause.vue";
 import IconPlay from "@/Application/Components/Icons/Play.vue";
 import IconSpeakerWave from "@/Application/Components/Icons/SpeakerWave.vue";
 import IconStop from "@/Application/Components/Icons/Stop.vue";
-
+import AiButton from "@/Application/Components/Content/AiButton.vue";
 import DisplayDate from "@/Application/Components/Content/DisplayDate.vue";
 import DisplayNumber from "@/Application/Components/Content/DisplayNumber.vue";
 import editbtns from "@/Application/Components/Form/editbtns.vue";
@@ -147,6 +151,7 @@ export default {
     name: "Shared_BlogShow",
     //
     components: {
+        AiButton,
         IconPause,
         IconPlay,
         IconSpeakerWave,
@@ -202,3 +207,12 @@ export default {
     },
 };
 </script>
+<style scoped>
+.darkico
+{
+    right:-992px;
+}
+@media screen and (min-width: 1023px) {
+.fwa {min-width:950px;}
+}
+</style>

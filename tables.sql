@@ -3,22 +3,24 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 31. Mrz 2025 um 19:25
--- Server-Version: 10.4.32-MariaDB
--- PHP-Version: 8.2.12
+-- Generation Time: Apr 01, 2025 at 04:15 PM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
 
 --
--- Datenbank: `oliver_rein`
+-- Database: `oliver_rein`
 --
+CREATE DATABASE IF NOT EXISTS `oliver_rein` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+USE `oliver_rein`;
 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `admin_table`
+-- Table structure for table `admin_table`
 --
 
 CREATE TABLE `admin_table` (
@@ -34,7 +36,7 @@ CREATE TABLE `admin_table` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Daten für Tabelle `admin_table`
+-- Dumping data for table `admin_table`
 --
 
 INSERT INTO `admin_table` (`id`, `pub`, `position`, `name`, `description`, `modul`, `created_at`, `published_at`, `updated_at`) VALUES
@@ -56,7 +58,7 @@ INSERT INTO `admin_table` (`id`, `pub`, `position`, `name`, `description`, `modu
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `blogs`
+-- Table structure for table `blogs`
 --
 
 CREATE TABLE `blogs` (
@@ -77,7 +79,7 @@ CREATE TABLE `blogs` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Daten für Tabelle `blogs`
+-- Dumping data for table `blogs`
 --
 
 INSERT INTO `blogs` (`id`, `blog_date`, `title`, `blog_categories_id`, `blog_authors_id`, `content`, `summary`, `autoslug`, `reading_time`, `markdown_on`, `xis_aiImage`, `image_path`, `created_at`, `updated_at`) VALUES
@@ -267,7 +269,7 @@ INSERT INTO `blogs` (`id`, `blog_date`, `title`, `blog_categories_id`, `blog_aut
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `blog_authors`
+-- Table structure for table `blog_authors`
 --
 
 CREATE TABLE `blog_authors` (
@@ -280,7 +282,7 @@ CREATE TABLE `blog_authors` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Daten für Tabelle `blog_authors`
+-- Dumping data for table `blog_authors`
 --
 
 INSERT INTO `blog_authors` (`id`, `name`, `users_id`, `info`, `created_at`, `updated_at`) VALUES
@@ -289,7 +291,7 @@ INSERT INTO `blog_authors` (`id`, `name`, `users_id`, `info`, `created_at`, `upd
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `blog_categories`
+-- Table structure for table `blog_categories`
 --
 
 CREATE TABLE `blog_categories` (
@@ -301,7 +303,7 @@ CREATE TABLE `blog_categories` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Daten für Tabelle `blog_categories`
+-- Dumping data for table `blog_categories`
 --
 
 INSERT INTO `blog_categories` (`id`, `name`, `summary`, `created_at`, `updated_at`) VALUES
@@ -312,7 +314,7 @@ INSERT INTO `blog_categories` (`id`, `name`, `summary`, `created_at`, `updated_a
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `blog_images`
+-- Table structure for table `blog_images`
 --
 
 CREATE TABLE `blog_images` (
@@ -324,7 +326,7 @@ CREATE TABLE `blog_images` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Daten für Tabelle `blog_images`
+-- Dumping data for table `blog_images`
 --
 
 INSERT INTO `blog_images` (`id`, `name`, `url`, `created_at`, `updated_at`) VALUES
@@ -657,7 +659,7 @@ INSERT INTO `blog_images` (`id`, `name`, `url`, `created_at`, `updated_at`) VALU
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `cache`
+-- Table structure for table `cache`
 --
 
 CREATE TABLE `cache` (
@@ -666,10 +668,18 @@ CREATE TABLE `cache` (
   `expiration` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `cache`
+--
+
+INSERT INTO `cache` (`key`, `value`, `expiration`) VALUES
+('dc44958e29ffba8b810d21377ae366b5', 'i:1;', 1743514820),
+('dc44958e29ffba8b810d21377ae366b5:timer', 'i:1743514820;', 1743514820);
+
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `cache_locks`
+-- Table structure for table `cache_locks`
 --
 
 CREATE TABLE `cache_locks` (
@@ -681,7 +691,7 @@ CREATE TABLE `cache_locks` (
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `camera`
+-- Table structure for table `camera`
 --
 
 CREATE TABLE `camera` (
@@ -698,7 +708,7 @@ CREATE TABLE `camera` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
 --
--- Daten für Tabelle `camera`
+-- Dumping data for table `camera`
 --
 
 INSERT INTO `camera` (`id`, `pub`, `ordering`, `Longname`, `name`, `Mpixel`, `short_tag`, `exif_copyright`, `exif_comp`, `exif_model`) VALUES
@@ -717,7 +727,7 @@ INSERT INTO `camera` (`id`, `pub`, `ordering`, `Longname`, `name`, `Mpixel`, `sh
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `categories`
+-- Table structure for table `categories`
 --
 
 CREATE TABLE `categories` (
@@ -727,7 +737,7 @@ CREATE TABLE `categories` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
--- Daten für Tabelle `categories`
+-- Dumping data for table `categories`
 --
 
 INSERT INTO `categories` (`id`, `name`, `name_en`) VALUES
@@ -741,7 +751,7 @@ INSERT INTO `categories` (`id`, `name`, `name_en`) VALUES
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `comments`
+-- Table structure for table `comments`
 --
 
 CREATE TABLE `comments` (
@@ -758,7 +768,7 @@ CREATE TABLE `comments` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
--- Daten für Tabelle `comments`
+-- Dumping data for table `comments`
 --
 
 INSERT INTO `comments` (`id`, `pub`, `users_id`, `post_id`, `admin_table_id`, `content`, `email`, `created_at`, `updated_at`, `xis_checked`) VALUES
@@ -782,7 +792,7 @@ INSERT INTO `comments` (`id`, `pub`, `users_id`, `post_id`, `admin_table_id`, `c
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `didyouknow`
+-- Table structure for table `didyouknow`
 --
 
 CREATE TABLE `didyouknow` (
@@ -797,7 +807,7 @@ CREATE TABLE `didyouknow` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Daten für Tabelle `didyouknow`
+-- Dumping data for table `didyouknow`
 --
 
 INSERT INTO `didyouknow` (`id`, `pub`, `position`, `author_id`, `headline`, `answer`, `created_at`, `chg_date`) VALUES
@@ -914,7 +924,7 @@ INSERT INTO `didyouknow` (`id`, `pub`, `position`, `author_id`, `headline`, `ans
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `images`
+-- Table structure for table `images`
 --
 
 CREATE TABLE `images` (
@@ -944,7 +954,7 @@ CREATE TABLE `images` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Daten für Tabelle `images`
+-- Dumping data for table `images`
 --
 
 INSERT INTO `images` (`id`, `pub`, `position`, `image_categories_id`, `headline`, `headline_en`, `status`, `created_at`, `category_id`, `type_id`, `img_x`, `img_y`, `chg_date`, `message`, `message_en`, `camera_id`, `link`, `image_path`, `Format`, `preis`, `users_id`, `xis_IsSaleable`, `xkis_Ticker`) VALUES
@@ -1270,7 +1280,7 @@ INSERT INTO `images` (`id`, `pub`, `position`, `image_categories_id`, `headline`
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `image_categories`
+-- Table structure for table `image_categories`
 --
 
 CREATE TABLE `image_categories` (
@@ -1297,7 +1307,7 @@ CREATE TABLE `image_categories` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Daten für Tabelle `image_categories`
+-- Dumping data for table `image_categories`
 --
 
 INSERT INTO `image_categories` (`id`, `pub`, `position`, `name`, `name_en`, `shortname`, `heading_alt`, `heading_alt_en`, `category_id`, `type_id`, `slug`, `img_icon`, `AscName`, `AscName_en`, `description`, `description_en`, `itemscope`, `created_at`, `updated_at`, `xis_shopable`) VALUES
@@ -1318,7 +1328,7 @@ INSERT INTO `image_categories` (`id`, `pub`, `position`, `name`, `name_en`, `sho
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `migrations`
+-- Table structure for table `migrations`
 --
 
 CREATE TABLE `migrations` (
@@ -1328,7 +1338,7 @@ CREATE TABLE `migrations` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Daten für Tabelle `migrations`
+-- Dumping data for table `migrations`
 --
 
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
@@ -1346,7 +1356,7 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `password_reset_tokens`
+-- Table structure for table `password_reset_tokens`
 --
 
 CREATE TABLE `password_reset_tokens` (
@@ -1358,7 +1368,7 @@ CREATE TABLE `password_reset_tokens` (
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `personal_access_tokens`
+-- Table structure for table `personal_access_tokens`
 --
 
 CREATE TABLE `personal_access_tokens` (
@@ -1377,7 +1387,7 @@ CREATE TABLE `personal_access_tokens` (
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `posts`
+-- Table structure for table `posts`
 --
 
 CREATE TABLE `posts` (
@@ -1395,7 +1405,7 @@ CREATE TABLE `posts` (
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `ratings`
+-- Table structure for table `ratings`
 --
 
 CREATE TABLE `ratings` (
@@ -1410,7 +1420,7 @@ CREATE TABLE `ratings` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Daten für Tabelle `ratings`
+-- Dumping data for table `ratings`
 --
 
 INSERT INTO `ratings` (`id`, `users_id`, `image_id`, `table`, `rating`, `email`, `created_at`, `updated_at`) VALUES
@@ -1422,7 +1432,7 @@ INSERT INTO `ratings` (`id`, `users_id`, `image_id`, `table`, `rating`, `email`,
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `sessions`
+-- Table structure for table `sessions`
 --
 
 CREATE TABLE `sessions` (
@@ -1435,18 +1445,17 @@ CREATE TABLE `sessions` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Daten für Tabelle `sessions`
+-- Dumping data for table `sessions`
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('1RArSm6SIjdsuPr8aCYK8SC6I2dgRQoTCnB3sxbN', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Iron Safari/537.36', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoiZFVnOE9yQk5zWWJIcEhOREJBRjZvekdKaW1taXVNbWJ3SkZCZTFJdSI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzU6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MS9hcGkvZGFyay1tb2RlIjt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319fQ==', 1743440138),
-('B3kWw2bmoMjZ26UlHY5blLxSI1HNSMT4Y57c6EgA', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoib29jc2RMV3pGNUxkbmRibEFzT3RueHc2UHA2NFNacldjVzVuZExqViI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzU6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MS9hcGkvZGFyay1tb2RlIjt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo1MDoibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiO2k6MTtzOjIyOiJyZW1lbWJlcl9xdWVyeV9zdHJpbmdzIjthOjE6e3M6NDoiaG9tZSI7YToxOntzOjQ6ImJsb2ciO2E6MDp7fX19fQ==', 1743440211),
-('ldyjB2cMizkiKCdCSMURzVaaBWsaRD6idUs4Uy9D', NULL, '127.0.0.1', 'PostmanRuntime/7.43.3', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoidGE5djA2Q0c4MFkybFhabUJkTHFJdDlkNE9WMU1wd2xscGcwN3RSbyI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NDM6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MS9hcGkvZ2V0U2x1Zy9ibG9ncy8lMjAiO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX19', 1743431402);
+('1yGcGWxLEcrrPDD5ImRikWyfTsRT3vLqM7iLd4NT', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Iron Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiN1E0bEVRZFBieGFZeFJGWk9YbGQyMEE0TVFNcFpqU0RxQ3lhTzBuRSI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzU6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MS9hcGkvZGFyay1tb2RlIjt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo1OiJ0b2FzdCI7YTowOnt9fQ==', 1743512032),
+('otaoWM6JOZGc6zgT1dKmRYeputOEy7XBOgld1LMd', 11, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiazNiSjViUHdLVkNXS2dwZFd6Tmx0Z2VUZVhZVWpmMzhUdVFiOUtOdiI7czozOiJ1cmwiO2E6MDp7fXM6OToiX3ByZXZpb3VzIjthOjE6e3M6MzoidXJsIjtzOjM1OiJodHRwOi8vbG9jYWxob3N0OjgwODEvYXBpL2RhcmstbW9kZSI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjExO30=', 1743514761);
 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `texts`
+-- Table structure for table `texts`
 --
 
 CREATE TABLE `texts` (
@@ -1461,7 +1470,7 @@ CREATE TABLE `texts` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
--- Daten für Tabelle `texts`
+-- Dumping data for table `texts`
 --
 
 INSERT INTO `texts` (`id`, `pub`, `position`, `headline`, `text`, `type`, `author_id`, `created_at`) VALUES
@@ -1474,7 +1483,7 @@ INSERT INTO `texts` (`id`, `pub`, `position`, `headline`, `text`, `type`, `autho
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `types`
+-- Table structure for table `types`
 --
 
 CREATE TABLE `types` (
@@ -1485,7 +1494,7 @@ CREATE TABLE `types` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
--- Daten für Tabelle `types`
+-- Dumping data for table `types`
 --
 
 INSERT INTO `types` (`id`, `name`, `name_en`, `category_id`) VALUES
@@ -1535,7 +1544,7 @@ INSERT INTO `types` (`id`, `name`, `name_en`, `category_id`) VALUES
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `users`
+-- Table structure for table `users`
 --
 
 CREATE TABLE `users` (
@@ -1571,7 +1580,7 @@ CREATE TABLE `users` (
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `users_rights`
+-- Table structure for table `users_rights`
 --
 
 CREATE TABLE `users_rights` (
@@ -1595,7 +1604,7 @@ CREATE TABLE `users_rights` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
--- Daten für Tabelle `users_rights`
+-- Dumping data for table `users_rights`
 --
 
 INSERT INTO `users_rights` (`id`, `pub`, `position`, `moderator_id`, `name`, `shortname`, `view_table`, `add_table`, `edit_table`, `publish_table`, `date_table`, `delete_table`, `xkis_AdminPanel`, `xkis_UserRights`, `xkis_SendMail`, `xkis_SandMail`, `xkis_CommentsCenter`) VALUES
@@ -1605,102 +1614,102 @@ INSERT INTO `users_rights` (`id`, `pub`, `position`, `moderator_id`, `name`, `sh
 (5, 1, 3, 1, 'Trial', 'trial', '000000000000000', '000000000000000', '000000000000000', '000000000000000', '000000000000000', '000000000000000', 0, 0, 0, 0, 0);
 
 --
--- Indizes der exportierten Tabellen
+-- Indexes for dumped tables
 --
 
 --
--- Indizes für die Tabelle `admin_table`
+-- Indexes for table `admin_table`
 --
 ALTER TABLE `admin_table`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indizes für die Tabelle `blogs`
+-- Indexes for table `blogs`
 --
 ALTER TABLE `blogs`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indizes für die Tabelle `blog_authors`
+-- Indexes for table `blog_authors`
 --
 ALTER TABLE `blog_authors`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indizes für die Tabelle `blog_categories`
+-- Indexes for table `blog_categories`
 --
 ALTER TABLE `blog_categories`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indizes für die Tabelle `blog_images`
+-- Indexes for table `blog_images`
 --
 ALTER TABLE `blog_images`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indizes für die Tabelle `cache`
+-- Indexes for table `cache`
 --
 ALTER TABLE `cache`
   ADD PRIMARY KEY (`key`);
 
 --
--- Indizes für die Tabelle `cache_locks`
+-- Indexes for table `cache_locks`
 --
 ALTER TABLE `cache_locks`
   ADD PRIMARY KEY (`key`);
 
 --
--- Indizes für die Tabelle `camera`
+-- Indexes for table `camera`
 --
 ALTER TABLE `camera`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indizes für die Tabelle `categories`
+-- Indexes for table `categories`
 --
 ALTER TABLE `categories`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indizes für die Tabelle `comments`
+-- Indexes for table `comments`
 --
 ALTER TABLE `comments`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indizes für die Tabelle `didyouknow`
+-- Indexes for table `didyouknow`
 --
 ALTER TABLE `didyouknow`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indizes für die Tabelle `images`
+-- Indexes for table `images`
 --
 ALTER TABLE `images`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indizes für die Tabelle `image_categories`
+-- Indexes for table `image_categories`
 --
 ALTER TABLE `image_categories`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id` (`id`);
 
 --
--- Indizes für die Tabelle `migrations`
+-- Indexes for table `migrations`
 --
 ALTER TABLE `migrations`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indizes für die Tabelle `password_reset_tokens`
+-- Indexes for table `password_reset_tokens`
 --
 ALTER TABLE `password_reset_tokens`
   ADD PRIMARY KEY (`email`);
 
 --
--- Indizes für die Tabelle `personal_access_tokens`
+-- Indexes for table `personal_access_tokens`
 --
 ALTER TABLE `personal_access_tokens`
   ADD PRIMARY KEY (`id`),
@@ -1708,19 +1717,19 @@ ALTER TABLE `personal_access_tokens`
   ADD KEY `personal_access_tokens_tokenable_type_tokenable_id_index` (`tokenable_type`,`tokenable_id`);
 
 --
--- Indizes für die Tabelle `posts`
+-- Indexes for table `posts`
 --
 ALTER TABLE `posts`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indizes für die Tabelle `ratings`
+-- Indexes for table `ratings`
 --
 ALTER TABLE `ratings`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indizes für die Tabelle `sessions`
+-- Indexes for table `sessions`
 --
 ALTER TABLE `sessions`
   ADD PRIMARY KEY (`id`),
@@ -1728,163 +1737,159 @@ ALTER TABLE `sessions`
   ADD KEY `sessions_last_activity_index` (`last_activity`);
 
 --
--- Indizes für die Tabelle `texts`
+-- Indexes for table `texts`
 --
 ALTER TABLE `texts`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indizes für die Tabelle `types`
+-- Indexes for table `types`
 --
 ALTER TABLE `types`
   ADD PRIMARY KEY (`id`),
   ADD KEY `artcat_Category_id` (`category_id`);
 
 --
--- Indizes für die Tabelle `users`
+-- Indexes for table `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `users_email_unique` (`email`);
 
 --
--- Indizes für die Tabelle `users_rights`
+-- Indexes for table `users_rights`
 --
 ALTER TABLE `users_rights`
   ADD PRIMARY KEY (`id`);
 
 --
--- AUTO_INCREMENT für exportierte Tabellen
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT für Tabelle `admin_table`
+-- AUTO_INCREMENT for table `admin_table`
 --
 ALTER TABLE `admin_table`
   MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=104;
 
 --
--- AUTO_INCREMENT für Tabelle `blogs`
+-- AUTO_INCREMENT for table `blogs`
 --
 ALTER TABLE `blogs`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=237;
 
 --
--- AUTO_INCREMENT für Tabelle `blog_authors`
+-- AUTO_INCREMENT for table `blog_authors`
 --
 ALTER TABLE `blog_authors`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT für Tabelle `blog_categories`
+-- AUTO_INCREMENT for table `blog_categories`
 --
 ALTER TABLE `blog_categories`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
--- AUTO_INCREMENT für Tabelle `blog_images`
+-- AUTO_INCREMENT for table `blog_images`
 --
 ALTER TABLE `blog_images`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=334;
 
 --
--- AUTO_INCREMENT für Tabelle `camera`
+-- AUTO_INCREMENT for table `camera`
 --
 ALTER TABLE `camera`
   MODIFY `id` bigint(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
--- AUTO_INCREMENT für Tabelle `categories`
+-- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
--- AUTO_INCREMENT für Tabelle `comments`
+-- AUTO_INCREMENT for table `comments`
 --
 ALTER TABLE `comments`
   MODIFY `id` bigint(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 
 --
--- AUTO_INCREMENT für Tabelle `didyouknow`
+-- AUTO_INCREMENT for table `didyouknow`
 --
 ALTER TABLE `didyouknow`
   MODIFY `id` bigint(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=119;
 
 --
--- AUTO_INCREMENT für Tabelle `images`
+-- AUTO_INCREMENT for table `images`
 --
 ALTER TABLE `images`
   MODIFY `id` bigint(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=457;
 
 --
--- AUTO_INCREMENT für Tabelle `image_categories`
+-- AUTO_INCREMENT for table `image_categories`
 --
 ALTER TABLE `image_categories`
   MODIFY `id` bigint(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
--- AUTO_INCREMENT für Tabelle `migrations`
+-- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
--- AUTO_INCREMENT für Tabelle `personal_access_tokens`
+-- AUTO_INCREMENT for table `personal_access_tokens`
 --
 ALTER TABLE `personal_access_tokens`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT für Tabelle `posts`
+-- AUTO_INCREMENT for table `posts`
 --
 ALTER TABLE `posts`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT für Tabelle `ratings`
+-- AUTO_INCREMENT for table `ratings`
 --
 ALTER TABLE `ratings`
   MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
--- AUTO_INCREMENT für Tabelle `texts`
+-- AUTO_INCREMENT for table `texts`
 --
 ALTER TABLE `texts`
   MODIFY `id` bigint(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
--- AUTO_INCREMENT für Tabelle `types`
+-- AUTO_INCREMENT for table `types`
 --
 ALTER TABLE `types`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 
 --
--- AUTO_INCREMENT für Tabelle `users`
+-- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT für Tabelle `users_rights`
+-- AUTO_INCREMENT for table `users_rights`
 --
 ALTER TABLE `users_rights`
   MODIFY `id` bigint(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
--- Constraints der exportierten Tabellen
+-- Constraints for dumped tables
 --
 
 --
--- Constraints der Tabelle `types`
+-- Constraints for table `types`
 --
 ALTER TABLE `types`
   ADD CONSTRAINT `types_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`);
 COMMIT;
-
-
-
-
 
 INSERT INTO `users` (`id`, `first_name`, `nick_name`, `email`, `name`, `birthday`, `music`, `interests`, `occupation`, `email_verified_at`, `password`, `users_rights_id`, `profile_photo_path`, `is_admin`, `is_employee`, `is_customer`, `admin_id`, `company_id`, `customer_id`, `image_path`, `last_login_at`, `two_factor_secret`, `two_factor_recovery_codes`, `two_factor_confirmed_at`, `remember_token`, `created_at`, `updated_at`) VALUES
 (1, 'Admin', NULL, 'admin@example.com', 'Administrator', NULL, NULL, NULL, NULL, '2025-03-11 14:38:06', '$2y$12$tZaliTuKFNiFqhK/TTl7x.kKuAzj6dC.xVceEMWGJMa2TQRQ3uVnW', 3, NULL, 1, 0, 0, NULL, NULL, NULL, NULL, '2025-04-01 13:39:21', NULL, NULL, NULL, NULL, '2025-04-01 15:37:36', '2025-04-01 15:39:21');

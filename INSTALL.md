@@ -1,10 +1,18 @@
 ![MCSL Logo](public/MCSL.jpg)
 # Installation
-1. Install XAMPP/LAMPP
-2. download the repository and copy the content to `htdocsc/Yourpath` or `www/Yourpath` dir 
-3. resolve all dependencies
-4. import the `tables.sql` into your MySql/MariaDB database
-5. customize the DB values in .env
-6. run a shell in htdocs/Yourpath or www/Yourpath and run `npm run dev` & `php artisan serve`
-7. log in with the values e-mail: `admin@example.com` and password: `TE6a9qpQ2pB47eqa8UjY`.
-8. have fun
+1. Install `XAMPP/LAMPP`
+2. Install `node/js`
+3. Install `composer`
+4. download the repository and copy the content to `htdocsc/Yourpath` or `www/Yourpath` dir 
+5. import the `tables.sql` into your MySql/MariaDB database
+6.  run a shell in `htdocs/Yourpath` or `www/Yourpath` and run `npm install``
+7. cp .env.example .env
+8. Run a shell in Yourpath and execute `composer install` & ´composer update`
+9. run a shell `cp .env.example .env`
+10. customize the DB values in .env
+11. run `php artisan key:generate` in a shell
+12. run `php artisan storage:link` in shell
+13. run `npm run dev` & `php artisan serve`
+14. resolve all dependencies
+15. log in with the values e-mail: `admin@example.com` and password: `TE6a9qpQ2pB47eqa8UjY`.
+16. have fun

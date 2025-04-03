@@ -6,10 +6,16 @@
 4. download the repository and copy the content to `htdocsc/Yourpath` or `www/Yourpath` dir 
 5. import the `tables.sql` into your MySql/MariaDB database
 6.  run a shell in `htdocs/Yourpath` or `www/Yourpath` and run `npm install``
-7. cp .env.example .env
-8. Run a shell in Yourpath and execute `composer install` & ´composer update`
-9. run a shell `cp .env.example .env`
-10. customize the DB values in .env
+7. Run a shell in Yourpath and execute `composer install` & ´composer update`
+8. run a shell `cp .env.example .env`
+9. customize the DB values in .env   
+**-Example:**  
+    DB_CONNECTION=mysql  
+    DB_HOST=127.0.0.1  
+    DB_PORT=3306  
+    DB_DATABASE=oliver_rein  
+    DB_USERNAME=root  
+    DB_PASSWORD=meinpasswort  
 11. run `php artisan key:generate` in a shell
 12. run `php artisan storage:link` in shell
 13. run `npm run dev` & `php artisan serve`

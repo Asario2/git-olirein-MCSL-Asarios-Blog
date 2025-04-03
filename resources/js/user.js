@@ -27,11 +27,10 @@ if(document.location.toString().indexOf('?') !== -1) {
        $_GET[aux[0]] = aux[1];
     }
 }
-asyncasync function loadDarkMode() {
+async function loadDarkMode() {
     // Lade den gespeicherten Wert aus localStorage (Standard: 'light', falls nicht vorhanden)
     let mode = localStorage.getItem("theme") || "light";
 
-    console.log("Aktueller gespeicherter Mode aus localStorage:", mode);
 
     // Überprüfe, ob ein globales 'darkMode' gesetzt wurde
     if (window.darkMode) {

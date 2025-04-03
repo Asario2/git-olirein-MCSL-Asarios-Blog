@@ -3,36 +3,46 @@
         class="p-5 mx-auto sm:p-2 md:p-10 bg-layout-sun-0 text-layout-sun-800 dark:bg-layout-night-0 dark:text-layout-night-800"
     >
     <div class="relative w-full flex flex-col max-w-6xl mx-auto overflow-hidden rounded">
-            <img
-                :src="blog.url ? `/images/blogs/big/${blog.url}` : '/images/blogs/big/008.jpg'"
-                :alt="blog.title"
-                loading="lazy"
-                width="480"
-                height="360"
-                class="object-cover mx-auto rounded h-60 sm:h-96 bg-layout-sun-500 dark:bg-layout-night-500 fwa" style="max-width:950px;"
-            />
-            <div v-if="blog.madewithai" style="float: left;">
-            <AiButton big="full" style="position: relative; z-index: 10;"> :overlayImage="images/icons/blog.aiOverlayImage || 'images/icons/ai-dark.png'"></AiButton>
+    <!-- Blog-Bild -->
+    <div class="relative" style="z-index:0;">
+        <img
+            :src="`/images/blogs/${blog.url}`"
+            :alt="blog.name"
+            loading="lazy"
+            width="480"
+            height="360"
+            class="object-cover w-full  rounded lg:col-span-7 object-cover w-full rounded bg-layout-sun-500 dark:bg-layout-night-500 coverclass"
+        />
+
+        <!-- AI-Button in der rechten unteren Ecke des Bildes -->
+        <div v-if="blog.madewithai" class="ai-overlay">
+            <AiButton :big="true" :bigger="true"></AiButton>
         </div>
-            <div
-                class="p-2 pb-12 m-2 mx-auto -mt-16 space-y-6 lg:max-w-5xl sm:px-10 sm:mx-12 lg:rounded-md bg-layout-sun-100 dark:bg-layout-night-100 prose dark:prose-invert md:prose-lg lg:prose-xl"
+    </div>
+
+    <!-- **Neuer Container für den H1-Text unterhalb des Bildes** -->
+<div
+                class="p-2 pb-12 m-2 mx-auto w-full mt-0 space-y-6 lg:max-w-5xl sm:px-10 sm:mx-12 lg:rounded-md bg-layout-sun-100 dark:bg-layout-night-100 prose dark:prose-invert md:prose-lg lg:prose-xl"
             >
 
-                <div class="space-y-2">
+                <div class="space-y-2" style="z-index:100000 !important;">
                     <div
                         v-if="blog.blog_category.name"
-                        class="flex justify-end items-start"
+                        class="flex justify-end items-start z-20"
                     >
                         <div
-                            class="text-sm min-w-fit min-h-fit bg-primary-sun-500 text-primary-sun-800 dark:bg-primary-night-500 dark:text-primary-night-800 font-semibold px-2.5 py-0.5 rounded-lg whitespace-nowrap"
+                            class="title2 text-sm min-w-fit min-h-fit bg-primary-sun-500 text-primary-sun-800 dark:bg-primary-night-500 dark:text-primary-night-800 font-semibold px-2.5 py-0.5 rounded-lg whitespace-nowrap"
                         >
                             {{ blog.blog_category.name }}
                         </div>
                     </div>
+                    <div class="bg-layout-sun-100 w-full dark:bg-layout-night-100 p-4 title" style="min-width:300px;">
+                    <h1 class="pb-12 block font-title w-full">
+                            {{ blog.title }}
+                            <editbtns :Redit="blog.editRights" :id="blog.id" table="blogs" :Rdelete="blog.deleteRights"></editbtns>
+                        </h1>
+                    </div>
 
-                    <h1 class="pb-12 block font-title">
-                        {{ blog.title }} &nbsp;&nbsp;<editbtns :Redit="blog.editRights" :id="blog.id" table="blogs" :Rdelete="blog.deleteRights"></editbtns>
-                    </h1>
 
                     <div class="flex items-end justify-between">
                         <div
@@ -134,7 +144,7 @@
                 </div>
             </div>
         </div>
-    </div>
+</div>
 </template>
 <script>
 import IconPause from "@/Application/Components/Icons/Pause.vue";
@@ -207,12 +217,38 @@ export default {
     },
 };
 </script>
-<style scoped>
-.darkico
-{
-    right:-992px;
+<style>
+/* AI-Overlay-Bild in der rechten unteren Ecke */
+.ai-overlay {
+    position: absolute;
+    bottom: 10px;  /* Abstand von unten */
+    right: 10px;   /* Abstand von rechts */
+    z-index: 20;   /* Höher als andere Elemente */
+    background: rgba(0, 0, 0, 0.3); /* Leichte Transparenz für bessere Lesbarkeit */
+    padding: 5px;
+    border-radius: 4px;
 }
-@media screen and (min-width: 1023px) {
-.fwa {min-width:950px;}
+.bigger .ai-button, .ai-button-image{
+bottom:-10px;
+z-index:30;
+position:relative;
+right:-10px !important;
+margin:0 px auto;
+}
+@media screen and (max-width: 1023px) {
+    .coverclass{
+
+    max-width: 100%;
+}
+}
+/* Responsive Anpassung */
+@media screen and (min-width: 1024px) {
+    .fwa {
+        min-width: 950px;
+    }
+    .coverclass{
+margin-left:52px;
+}
+
 }
 </style>

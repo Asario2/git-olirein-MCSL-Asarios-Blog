@@ -153,7 +153,7 @@
                         v-model="field.value"
                         :value='field.value'
                         :checked="field.value"
-                        :id="field.name + '_' +  field.id"
+                        :id="field.name"
                         :required="isRequired(field.required)"
                     >
                         {{field.label}}</input-checkbox
@@ -345,7 +345,7 @@ const table_z = tablex;
 const tablex3 = tablex;
 let table = tablex;
 let xid3 = CleanId();
-console.log("xid:" + xid3);
+
 const routes = {
     getform: (tablex, id) => `/tables/form-data/${tablex3}/${xid3}`,
     getselroute: (name) => `/tables/sort-data/${name}`,
@@ -1394,7 +1394,6 @@ obj = obj.replace(/"formFields": \[.*\]/, "")
         .then((response) => {
             this.formFields = response.data;
             let formFields_old = response.data;
-            console.log(routes.getform(tablex, id));
             // JSON bereinigen
             let obj = JSON.stringify(this.formFields,null,2)
 
@@ -1414,7 +1413,7 @@ obj = obj.replace(/"formFields": \[.*\]/, "")
             //obj = obj.replace(/[\u0000-\u001F\u007F]/g, '');
             try {
                 obj = JSON.parse(obj);
-                console.log("✅ Geparstes Objekt:", obj);
+
             } catch (error) {
                 console.error("❌ JSON-Fehler:", error.message);
             }

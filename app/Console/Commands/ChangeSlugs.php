@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 
-class ConvertTimestamps extends Command
+class ChangeSlugs extends Command
 {
     protected $signature = 'change:slugs {table}';
     protected $description = 'Erneuere die Slugs in Blogs';

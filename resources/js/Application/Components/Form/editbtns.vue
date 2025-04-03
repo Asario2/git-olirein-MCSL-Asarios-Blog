@@ -12,19 +12,28 @@
 <script>
 import IconPencil from "@/Application/Components/Icons/Pencil.vue";
 import IconTrash from "@/Application/Components/Icons/Trash.vue";
+import { CleanTable, CleanId } from '@/helpers';
 export default {
     name: "editbtns",
     components: {
         IconTrash,
         IconPencil,
+        CleanTable,
+        CleanId,
     },
     props: {
         Redit: [String,Number],
         Rdelete: {String, default: 0,},
                 id: { type: Number },
-        table: { type: String },
-        id: Number,
+                table:{type:String},
+
     },
+    data()
+    {
+        // table: CleanTable();
+        // id: CleanId();
+    },
+
     mounted() {
         // console.log("Redit:", this.Redit);
         // console.log("Rdelete:", this.Rdelete);
@@ -42,7 +51,7 @@ export default {
                 }
             });
 
-           location.reload();
+        //    location.reload();
             // Optional: Seite neu laden oder Liste aktualisieren
         } catch (error) {
             console.error("Fehler beim Löschen:", error);

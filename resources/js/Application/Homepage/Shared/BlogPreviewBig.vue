@@ -5,21 +5,24 @@
         <!-- Das Bild des Blog-Posts -->
         <div class="blog-container mh_65 lg:col-span-7" style="">
             <Link
-        :href="route('home.blog.show', blog.autoslug)">
+        :href="route('home.blog.show', blog.autoslug)" class="block">
+
         <img
             :src="`/images/blogs/${blog.url}`"
             :alt="blog.name"
             loading="lazy"
             width="480"
             height="360"
-            class="object-cover w-full h-64 sm:h-96 rounded lg:col-span-7 bg-layout-sun-500 dark:bg-layout-night-500"
+            class="object-cover w-full  rounded lg:col-span-7 object-cover w-full rounded bg-layout-sun-500 dark:bg-layout-night-500"
         />
-        </Link>
-        <!-- Der AI-Button wird hier angezeigt -->
-        <div v-if="blog.madewithai" style="float: left;">
-            <AiButton big="big" style="position: relative; z-index: 10;"> :overlayImage="images/icons/blog.aiOverlayImage || 'images/icons/ai-dark.png'"></AiButton>
-        </div>
 
+        </Link>
+        <div class="relative">
+        <!-- Der AI-Button wird hier angezeigt -->
+        <div v-if="blog.madewithai">
+            <AiButton :big="true"></AiButton>
+        </div>
+    </div>
         </div>
 
         <div id="teaser-img" class="p-6 space-y-2 lg:col-span-5 overfl" style="">

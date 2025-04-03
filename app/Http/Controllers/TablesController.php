@@ -1519,7 +1519,7 @@ class TablesController extends Controller
 
         $formData = ($request->input('formData'));
         \Log::info("path: ".public_path()."/images/".$table."/big/".$formData['image_path']);
-        if(isset($formData['pub']) && (empty($formData['pub'] || @is_null($formData['pub'])))){
+        if((isset($formData['pub']) || Schema::hasColumn($table, 'pub')) && (empty($formData['pub']) || @is_null($formData['pub']))){
             $formData['pub'] = "1";
         }
         if (isset($formData['image_path']) && empty($formData['image_path'])) {
@@ -1649,8 +1649,7 @@ class TablesController extends Controller
     }
     public function DeleteTables(Request $request,$table,$id)
     {
-        $table = "images";
-        if (!Schema::hasTable($table)) {
+        if(!Schema::hasTable($table)) {
             return redirect()->back()->withErrors(['error' => 'Tabelle existiert nich5t']);
         }
         if(!CheckRights(Auth::id(),$table,"delete"))

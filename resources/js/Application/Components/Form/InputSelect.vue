@@ -8,7 +8,7 @@
         @input="$emit('update:modalValue', $event.target.value)"
         @change="$emit('input-change', $event.target.value, xname)"
         ref="select"
-        :id="xname + '_' + xid"
+        :id="name"
         :required="required"
         :options="options"
         :sortedOptions="options"

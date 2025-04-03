@@ -1,7 +1,7 @@
 <template>
         <!-- **Tabelle direkt unterhalb des Blog-Containers (fixiert)** -->
         <div class="w-full mt-2">
-            <table :class="['w-full border-collapse rounded-lg shadow-sm table-class', sm ? 'SmMaTable' : 'MaTable']" style="max-width:300px;" @click.stop>
+            <table :class="['w-full border-collapse justify-center rounded-lg shadow-sm table-class', sm ? 'SmMaTable' : 'MaTable']" style="max-width:300px;" @click.stop>
                 <tbody>
                     <tr>
                         <td class=" text-center">
@@ -393,6 +393,10 @@ showComments(newVal, oldVal) {
 #commentBox{
     max-width:300px !important;
     width:300px !important;
+}
+.tog-tab{
+    /* margin-left:-20px;
+    padding-left:10px; */
 }
 
 

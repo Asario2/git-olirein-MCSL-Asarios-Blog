@@ -241,17 +241,18 @@
                 >
                     <div class="pt-2 pb-3 space-y-1">
                         <ResponsiveNavLink
+                            :href="route('home.index')"
+                            target="_self"
+                        >
+                            Home
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
                             :href="route('admin.dashboard')"
                             :active="route().current('admin.dashboard')"
                         >
                             Dashboard
                         </ResponsiveNavLink>
-                        <ResponsiveNavLink
-                            :href="route('admin.handbook')"
-                            target="_blank"
-                        >
-                            Handbuch
-                        </ResponsiveNavLink>
+
                         <ResponsiveNavLink as="button">
                             <button-change-mode
                                 :mode="mode"

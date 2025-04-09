@@ -1,10 +1,10 @@
 <template>
         <!-- **Tabelle direkt unterhalb des Blog-Containers (fixiert)** -->
         <div class="w-full mt-2">
-            <table :class="['w-full border-collapse justify-center rounded-lg shadow-sm table-class', sm ? 'SmMaTable' : 'MaTable']" style="max-width:300px;" @click.stop>
+            <table :class="['w-full border-collapse mx-auto justify-center rounded-lg shadow-sm table-class',!nostars ? 'NSMaTable' : '', sm ? 'SmMaTable' : 'MaTable']" style="max-width:300px;" @click.stop>
                 <tbody>
                     <tr>
-                        <td class=" text-center">
+                        <td class=" text-center" width="60%">
                             <button  @click.stop.prevent="openComments(postId)"
                                 class="flex items-center gap-2 px-2 py-1 rounded-lg font-semibold bg-blue-500 text-white hover:bg-blue-600
                                     dark:bg-blue-600 dark:hover:bg-blue-700 dark:text-white text-center tog-tab" :data-post-id="postId">
@@ -12,7 +12,7 @@
                             </button>
                         </td>
 
-                        <td class="p-1.5 text-center">
+                        <td class="p-1.5 text-center" width="40%">
                             <button @click.stop.prevent="toggleShareBox(postId)"
                                 class="flex items-center gap-2 px-2 py-1 rounded-lg font-semibold bg-blue-500 text-white hover:bg-blue-600
                                     dark:bg-blue-600 dark:hover:bg-blue-700 dark:text-white text-center tog-tab" :data-post-id="postId">
@@ -20,7 +20,7 @@
                             </button>
                         </td>
 
-                        <td class=" text-center">
+                        <td class=" text-center" v-if="!nostars">
                             <button  @click.stop.prevent="toggleStarBox(postId)"
                                 class="flex items-center gap-2 px-2 py-1 rounded-lg font-semibold bg-blue-500 text-white hover:bg-blue-600
                                     dark:bg-blue-600 dark:hover:bg-blue-700 dark:text-white text-center tog-tab"  :data-post-id="postId">
@@ -168,6 +168,7 @@ import { nextTick } from "vue";
 import { route } from "ziggy-js";
 import IconShare from "@/Application/Components/Icons/IconShare.vue";
 import IconStar from "@/Application/Components/Icons/IconStar.vue";
+import { Boolean } from "php-parser";
 export default {
     name: "SocialButtons",
     //
@@ -201,7 +202,11 @@ export default {
         },
         sm:{
             type: String,
-        }
+        },
+        nostars:{
+            type: Boolean,
+            default: false,
+        },
     },
     data() {
     return {
@@ -395,6 +400,7 @@ showComments(newVal, oldVal) {
     width:300px !important;
 }
 .tog-tab{
+    max-height:999999999;
     /* margin-left:-20px;
     padding-left:10px; */
 }

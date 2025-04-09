@@ -13,6 +13,7 @@
             loading="lazy"
             width="480"
             height="360"
+            style="max-height:390px"
             class="object-cover w-full  rounded lg:col-span-7 object-cover w-full rounded bg-layout-sun-500 dark:bg-layout-night-500"
         />
 
@@ -71,7 +72,7 @@
                 ></display-number>
             </div>
         </Link>
-            <socialButtons :postId="blog.id"/>
+            <socialButtons :postId="blog.id" :nostars="true" />
         </div>
     </div>
 </template>

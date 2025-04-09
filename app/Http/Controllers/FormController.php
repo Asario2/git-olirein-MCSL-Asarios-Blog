@@ -1666,7 +1666,7 @@ let isPickerOpen_".$id." = false;
     var $j = jQuery.noConflict(); // Weist jQuery einer anderen Variable zu, um Konflikte zu vermeiden";
     </script>
     <button class="myBtn" id="myBtn_'.$id.'" type="button" OnCLick="document.getElementById(\'myModal_'.$id.'\').style.display=\'block\';">
-    <img src="/images/'.@$dom . $table . '/'. @$thumb . $value . '" alt="Bild" width="100">
+
 </button>'."\n\n".FormController::modbox($name,$value,$table,$id,'');
  }
 

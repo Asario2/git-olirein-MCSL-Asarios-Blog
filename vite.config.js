@@ -5,6 +5,9 @@ import vue from '@vitejs/plugin-vue';
 
 // Exportiere die Vite-Konfiguration korrekt
 export default defineConfig({
+define: {
+    'process.env': {} // Verhindert den Fehler
+  },
   plugins: [
     laravel({
       input: [

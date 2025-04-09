@@ -399,12 +399,13 @@ export default {
             type: String,
             default: "Administrator-Anwendung",
         },
+        isOpen: Boolean,
     },
 
     data() {
         return {
             mode: localStorage.theme ? localStorage.theme : "",
-            isOpen: false,
+            // isOpen: false,
             year: new Date().getFullYear(),
         };
     },

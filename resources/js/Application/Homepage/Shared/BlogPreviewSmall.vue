@@ -52,7 +52,7 @@
         </Link>
 
         <!-- **Tabelle direkt unterhalb des Blog-Containers (fixiert)** -->
-        <SocialButtons :postId="blog.id" sm="Sm"/>
+        <SocialButtons :postId="blog.id" sm="Sm"  :nostars="true"       />
 
     </div>
 </template>

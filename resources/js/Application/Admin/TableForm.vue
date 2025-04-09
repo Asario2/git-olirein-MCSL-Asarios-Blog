@@ -31,9 +31,11 @@
                         <!-- <pre>{{this.xsor_alt['admin_table_id'] }}</pre> -->
                         <a :href="'/admin/tables/create/' + tablex" target="" class="inline-flex items-center px-1 py-1.5 md:px-2 md:py-2 h-6 md:h-8 rounded-md font-medium text-xs tracking-widest disabled:opacity-25 transition cursor-pointer focus:ring focus:outline-none button_bg button_text_case_bg"><div class="flex items-center whitespace-nowrap"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="button_icon"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"></path></svg> Erstelle </div></a>
                         <input-group>
-    <form @submit.prevent="submitForm" enctype="multipart/form-data">
+
+    <form @submit.prevent="submitForm" enctype="multipart/form-data" >
         <div class="textar maxx grid grid-cols-1 lg:grid-cols-2 mb-2 gap-2 lg:gap-x-4 mt-2">
             <template v-for="(field, key) in ffo" :key="key">
+
                 <input-container v-if="field.name === 'reading_time'">
                     <InputFormText
                         :id="field.name"
@@ -69,22 +71,35 @@
                 </input-container>
 
                 <!-- Textarea für den Inhalt -->
-                <input-container v-else-if="['textarea_short', 'textarea'].includes(field.type)" :full-width="true">
-                    <InputFormTextArea
+                <input-container v-else-if="['textarea', 'textarea_short'].includes(field.type)" :full-width="true">
+
+                <Editor ref="editor"
                         :id="field.name"
                         :name="field.name"
                         v-model="field.value"
                         :rows="field.rows"
-                        :ref="field.name"
                         cols="25"
                         :placeholder="field.placeholder || ''"
                         :class="field.class"
+                        @focus="isFocused = true"
                         :required="isRequired(field.required)"
-                    >
+                >
                         <template #label>{{ field.label }}</template>
-                    </InputFormTextArea>
-                </input-container>
+                    </Editor>
 
+
+                </input-container>
+                <input-container v-else-if="field.type === 'textarea'">
+                <InputFormTextarea
+                        :id="field.name"
+                        :name="field.name"
+                        v-model="field.value"
+                        :placeholder="field.placeholder || ''"
+                        :required="isRequired(field.required)"
+                        >
+                        <template #label>{{ field.label }}</template>
+                    </InputFormTextarea>
+                </input-container>
                 <input-container v-else-if="field.type === 'text'">
                     <InputFormText
                         :id="field.name"
@@ -109,25 +124,27 @@
                 </input-container>
                 <input-container v-else-if="field.type ==='IID'">
                 <ImageUploadModal
-                    :isOpen="isModalOpen"
-                    :tablex="this.table_x"
-                    :column="field.name"
-                    :path="tablex"
-                    :ref="field.name"
-                    :value="imageId"
-                    :image="field.value"
-                    :namee="field.value"
-                    :namee2="field.name"
-                    @close="closeModal"
-                    @update:fileName="handleFileNameUpdate"
-                    @imageUploaded="handleImageUpload"
+                v-show="isModalOpen"
+                        :tablex="table_x"
+                        :column="name"
+                        :path="tablex"
+                        :ref="name"
+                        :value="imageId"
+                        :image="value"
+                        :namee="value"
+                        :namee2="name"
+                        :Message="false"
+                        @close="closeModal"
+                        @update:fileName="handleFileNameUpdate"
+                        @imageUploaded="handleImageUpload"
                 />
-                <button type="button" @click="openModal">
+                <button type="button" @click="openModal_alt">
 
-                    <p v-if="this.nf2 && typeof this.nf2 !== 'object' && this.nf2 != '[]' && this.nf2 != '008.jpg'">Hochgeladenes Bild: <img :src="'/images/'+ this.tablex +'/thumbs/' + this.nf2" width="100" alt="Vorschau1" title="Vorschau1"/></p>
+                    <p v-if="this.nf2 && typeof this.nf2 !== 'object' && this.nf2 != '[]' && this.nf2 != '008.jpg' ">Hochgeladenes Bild:
+                        <img  @error="event => event.target.src = 'images/' + tablex + '/thumbs/009.jpg'" :src="'/images/'+ this.tablex +'/thumbs/' + this.nf2" width="100" alt="Vorschau1" title="Vorschau1"/></p>
                     <p v-else-if="this.ffo['image_path']['value'] && this.ffo['image_path']['value'] != '008.jpg'">Hochgeladenes Bild: <img :src="'/images/'+ this.tablex +'/thumbs/' + this.ffo['image_path']['value']" width="100" alt="Vorschau2" title="Vorschau2"/></p>
                     <span v-else><img src="/images/blogs/thumbs/009.jpg" alt="Jetzt Bild Hochladen" width="100"  title="Jetzt Bild Hochladen" ></span>
-
+                        <input type="hidden" :id="field.name" :value="this.nf2">
                 </button>
                 <input type="hidden" :name="field.name" :value="this.ffo['image_path']['value'] ?? this.nf" :id="field.name" re="asd">
                 </input-container>
@@ -153,9 +170,8 @@
                         v-model="field.value"
                         :value='field.value'
                         :checked="field.value"
-                        :id="field.name"
-                        :required="isRequired(field.required)"
-                    >
+
+                        >
                         {{field.label}}</input-checkbox
                     >
                 </input-container>
@@ -410,7 +426,7 @@ import InputSelectEnum from "@/Application/Components/Form/InputSelectEnum.vue";
 import InputFormPrice from "@/Application/Components/Form/InputFormPrice.vue";
 import InputFormSelect from "@/Application/Components/Form/InputFormSelect.vue";
 import InputTextarea from "@/Application/Components/Form/InputTextarea.vue";
-import InputHtml from "@/Application/Components/Form/InputHtml.vue";
+import Editor from "@/Application/Components/Form/InputHtml.vue";
 import InputError from "@/Application/Components/Form/InputError.vue";
 import { throttle } from "lodash";
 import DialogModal from "@/Application/Components/DialogModal.vue";
@@ -447,7 +463,7 @@ export default defineComponent({
          InputSelect,
          InputSelectEnum,
          InputTextarea,
-         InputHtml,
+         Editor,
         InputFormTextArea,
         InputFormPrice,
         InputFormSelect,
@@ -459,6 +475,10 @@ export default defineComponent({
     },
 
     props: {
+        isModalOpen: {
+            type: Boolean,
+            default: false,
+        },
         modelValue: {
         type: [String, Number],
     },
@@ -521,12 +541,16 @@ export default defineComponent({
         field: Object,
 
     },
-// DZ
+    emit: ['update:isOpen', 'close'],
+
+    // DZ
     data() {
         return {
+            isModalOpen: false,
             table: reactive({ id: "1" }),// Standardwert setzen, falls leer
         formDatas: {},
         oobj:{},
+        sanitizedContent: '',
         uploadedIid: null,
         ItemName: "Beitrag",
         table_x: '',
@@ -542,7 +566,7 @@ export default defineComponent({
             so: [],
             xsor_alt: {},
 
-        isModalOpen: false,
+        isOpen: true,
         uploadedImageUrl: null,
         csrfToken: document.getElementById('token').value,
         preview_image: {},
@@ -699,6 +723,9 @@ export default defineComponent({
         },
     },
     watch:{
+        modelValue(newVal) {
+    console.log("modelValue wurde aktualisiert:", newVal);
+  },
         ffo: {
             deep: true,
             handler(newFields) {
@@ -858,43 +885,7 @@ if(document.location.toString().indexOf('?') !== -1) {
        $_GET[aux[0]] = aux[1];
     }
 }
-// function fetchFormData() {
-    //         axios
-    //             .get(routes.getform(table, id))
-    //             .then((response) => {
-    //                 this.formFields = response.data;
-    //                 var formFields_old = response.data;
-    //                 let obj = JSON.stringify(this.formFields, null, 2);
-    //                 obj = obj.replace(/"formFields": \[.*\]/, "");
-    //                 obj = obj.replace(/^\{|\}$/g, "");
-    //                 obj = obj
-    //                     .replace(/}\s*,\s*\n\s*}/g, "},")
-    //                     .replace(/[[\]]/g, "")
-    //                     .replace(/\[|\]$/, "");
-    //                 obj = obj.replace(/,\s*\n\s*{/g, ",");
-    //                 obj = obj.replace(/\s*\}(?!,)\s*/g, "}");
-    //                 obj = obj.replace(/}},/g, "\n   },");
-    //                 obj = obj.replace(/}}/g, "\n   }\n  }");
-
-    //                 this.ffo = JSON.parse(obj);
-    //                 const ffo = this.ffo;
-    //                 //            this.ffo = obj;
-    //                 formFields_old.forEach((field) => {
-    //                     this.setFormField(field);
-    //                 });
-
-    //                 // this.formFields.forEach(field => {
-    //                 //     this.formData[field.name] = field.value;
-    //                 // });
-    //             })
-    //             .catch((error) => {
-    //                 console.error(
-    //                     "Fehler beim Abrufen der Formulardaten4:",
-    //                     error,
-    //                 );
-    //             });
-    //     }
-    if(!$_GET['rl'])
+   if(!$_GET['rl'])
     {
        //location.href = location.href + "?rl=2";
     }
@@ -904,24 +895,6 @@ if(document.location.toString().indexOf('?') !== -1) {
         history.pushState(null, "", url);
     }
 
-
-//     $(document).ready(function () {
-//     // Prüfen, ob 'rl' in der URL vorhanden ist
-//     const urlParams = new URLSearchParams(window.location.search);
-
-//     if (!urlParams.has("rl")) {
-//         urlParams.set("rl", "2"); // 'rl=2' hinzufügen
-//         const newUrl = window.location.pathname + "?" + urlParams.toString();
-
-//         $.ajax({
-//             url: newUrl,
-//             success: function (data) {
-//                 history.pushState(null, "", newUrl); // URL in der Adressleiste aktualisieren
-//                 $("body").html($(data).find("body").html()); // Nur den Body ersetzen
-//             }
-//         });
-//     }
-// })
 
 });
 
@@ -985,8 +958,52 @@ return { ffo };
         };
     },
     methods: {
+  openModal_alt() {
+    console.log("Vor dem Setzen: " + this.isModalOpen);  // Überprüfe den aktuellen Wert
+
+
+    // Warten bis das DOM vollständig aktualisiert ist
+    this.$nextTick(() => {
+        this.isModalOpen = !this.isModalOpen;
+        const editor = this.$refs.editor;
+
+      // Sicherstellen, dass editor überhaupt existiert und ein DOM-Element ist
+      if (editor && typeof editor.focus === 'function') {
+        editor.focus(); // Fokus setzen
+      }
+
+      const selection = window.getSelection();
+      const range = document.createRange();
+
+      // Wenn es eine bestehende Auswahl gibt, setze den Cursor an das Ende der Auswahl
+      if (selection.rangeCount > 0) {
+        const currentRange = selection.getRangeAt(0);
+        range.setStart(currentRange.endContainer, currentRange.endOffset); // Cursor ans Ende setzen
+        range.setEnd(currentRange.endContainer, currentRange.endOffset);
+      } else {
+        // Wenn keine Auswahl vorhanden ist, setze den Cursor ans Ende des Editors
+        range.setStart(editor, editor.childNodes.length); // Ende des Editors
+        range.setEnd(editor, editor.childNodes.length);
+      }
+
+      selection.removeAllRanges();
+      selection.addRange(range);
+    });
+
+    console.log("Nach dem Setzen: " + this.isModalOpen); // Überprüfe den Wert nach $nextTick
+},
+
+        handleImageSelect(url) {
+      this.$refs.editor.insertImage(url)
+    },
         handleFileNameUpdate(fileName) {
       this.fileName = fileName;  // Setze den Wert von fileName
+    },
+    sanitizeContent(content) {
+        if (content.includes('location') || content.includes('ancestorOrigins')) {
+            return ''; // Oder einen Standardwert
+        }
+        return content;
     },
     async getSlug() {
         try {
@@ -1044,29 +1061,28 @@ return { ffo };
       }
 
   },
-        openModal() {
-      this.isModalOpen = true;  // Öffne das Modal
-    },
-    getValue() {
-      //console.log("Input Value:", this.$refs.image_path?.value || "Ref nicht gefunden");
-    },
-    closeModal() {
-      this.isModalOpen = false;  // Schließe das Modal
+      closeModal() {
+      this.isModalOpen = false;
+      let previewImage = null;
+      this.previewImage = null;
+      // Schließe das Modal
     },
     handleInput(event) {
     this.readingTime = event.target.value;
     this.updateFormData();
   },
     handleImageUpload(imageUrl) {
+        imageUrl = imageUrl.replace("images/blogs/big",'').replace("undefined",'');
      console.log("Bild-URL:", imageUrl);
       this.uploadedImageUrl = imageUrl;
       this.nf2 = imageUrl;
+      const ima_new = this.nf2;
     //    this.imageId = iid;
     },
 
         updateReadingTime() {
             if (!Array.isArray(this.ffo) || this.ffo.length === 0) {
-                console.warn("FFO ist leer oder kein Array:", this.ffo);
+                //console.log("FFO ist leer oder kein Array:", this.ffo);
                 return;
             }
             if (!this.ffo || this.ffo.length === 0) return;
@@ -1261,43 +1277,9 @@ obj = obj.replace(/"formFields": \[.*\]/, "")
     // obj = '{\n\"' + name + '": [\n' + obj + '\n]   \n}';
     //console.log("ob: " + obj);
             obj  = "["+obj+"]";
+            obj = obj.replace(/[\u0000-\u001F\u007F]/g, '');
 
-    // obj = JSON.parse(obj);
-    // obj = JSON.parse(obj);
-//     const transformed = obj.reduce((acc, item) => {
-//   acc[item.id] = item.name;
-//   return acc;
-// }, {});
-
-// obj = transformed;
             input = obj;
-            // let input2 = [];
-            // input = JSON.stringify(input);
-            // input = input.replace('.sortedOptions', '');
-            // input  = JSON.parse(input);
-            // this.sortedOptions = obj;
-           // console.log("obj vor der Zuweisung:", obj);
-            //this.xsor_alt[name] = this.stripslashes(JSON.stringify(Object.entries(obj)));
-            //console.log("sortedOptions:", sortedOptions);
-            // const newArray = Object.entries(sortedOptions).map(([key, value]) => ({
-            //     id: key,
-            //     ...value
-            // }));
-            // this.sortedOptions[name] = newArray;
-            // console.log("this.sortedOptions nach der Zuweisung:", this.sortedOptions[name]);
-
-
-            // console.log("SO:" + JSON.stringify([this.sortedOptions,input]))
-            // this.sortedOptions = Array.isArray(input[0][1]) ? input[0][1] : input;
-            // console.log("SO:", JSON.stringify(this.sortedOptions));
-            // console.log("input: " + JSON.stringify(input));
-           // console.log("Type of input:", typeof input);
-           // console.log("Check input:", Array.isArray(input) ? "Array" : "Not an Array");
-            // console.log("Content of input:", JSON.stringify(this.xsor[name], null, 2));
-            // this.sortedOptions  = JSON.stringify(input, null, 2);
-            // this.sortedOptions = JSON.parse(this.sortedOptions);
-            // this.options2 = this.sortedOptions;
-            // this.options = this.sortedOptions;
         })
         .catch((error) => {
             console.error("Fehler beim Abrufen der Formulardaten:3", error);
@@ -1395,6 +1377,8 @@ obj = obj.replace(/"formFields": \[.*\]/, "")
             this.formFields = response.data;
             let formFields_old = response.data;
             // JSON bereinigen
+            //console.log("Rohdaten:", JSON.stringify(response.data,null,2));
+
             let obj = JSON.stringify(this.formFields,null,2)
 
              obj = obj.replace(/"formFields": \[.*\]/, "")
@@ -1408,9 +1392,9 @@ obj = obj.replace(/"formFields": \[.*\]/, "")
                 .replace(/}}/g, "\n   }\n  }")
                 .replace(/"\d+"\s*:\s*{/g, '{')
                 .replace(/},\s*{/g, '},');
-            //  obj = "[" + obj + "]";
+            // obj = "[" + obj + "]";
             // console.log("OBJ: " + (obj));
-            //obj = obj.replace(/[\u0000-\u001F\u007F]/g, '');
+            obj = obj.replace(/[\u0000-\u001F\u007F]/g, '');
             try {
                 obj = JSON.parse(obj);
 
@@ -1506,6 +1490,7 @@ objectToCSVArray(obj) {
 async submitForm() {
 
         try {
+            // console.log(this.formData['content']);
 
 
 
@@ -1522,54 +1507,42 @@ async submitForm() {
             tablex = CleanTable();
             let response;
             var inputRef = this.$refs.image_path;
-            //console.log("XZAY" + JSON.stringify(inputRef,null,2));
-            // if (inputRef.length > 0) {
-            //    this.nf = inputRef[0].newFname;
-            //    if(!this.nf || this.nf == "[]" && !document.getElementById("image_path")){
-            //     this.nf = this.getOF();
-            //    }
-            //    else if(document.getElementById("image_path").value != '008.jpg')
-            //    {
-            //     this.nf = document.getElementById("image_path").value;
-            //     console.log("NF: "+this.nf);
-            //    }
-            //    jsonObject = JSON.parse(this.nf);
-            //    console.log(jsonObject.message);
-
-                this.formData['image_path'] = this.nf2;
-                // console.log(JSON.stringify(this.nf,null,2));
-            // }
-            // else{
-            //     this.nf = this.getOF(id,tablex);
-            // }
-            // console.log("Daten, die gesendet werden:",this.formData);
             if(this.textareaField &&  document.getElementById("reading_time"))
             {
                 this.formData['reading_time'] = this.readingTime;
 
             }
-            if(this.ffo['status'])
-            {
-                this.formData['status'] = document.getElementById("status").value;
-            }
-            if(this.ffo['itemscope'])
-            {
-                this.formData['itemscope'] = document.getElementById("itemscope").value;
-            }
-            if(this.ffo['category_id'])
-            {
-                this.formData['category_id'] = document.getElementById("category_id").value;
-            }
-            if(this.ffo['type_id'])
-            {
-                this.formData['type_id'] = document.getElementById("type_id").value;
-            }
-            if(this.ffo['autoslug'])
-            {
-                this.formData['autoslug'] = document.getElementById("autoslug").value;
+            Object.keys(this.ffo).forEach(name => {
 
-            }
-            const path = window.location.pathname; // Gibt "/admin/tables/show/Example" zurück
+                const element = document.getElementById(name);
+                const element_alt = document.getElementById(name + "_alt");
+                if (element_alt?.value) {
+                    this.formData[name] = element_alt.value
+                        .replace(/\[/g, '%5B')
+                        .replace(/\]/g, '%5D');
+                }
+
+                else if (element?.value) {
+                    this.formData[name] = element.value
+                        .replace(/\[/g, '%5B')
+                        .replace(/\]/g, '%5D');
+                }
+                else if(element_alt?.innerHTML)
+                {
+                    this.formData[name] = element.innerHTML
+                        .replace(/\[/g, '%5B')
+                        .replace(/\]/g, '%5D');
+                }
+                else if(element?.innerHTML)
+                {
+                    this.formData[name] = element.innerHTML
+                        .replace(/\[/g, '%5B')
+                        .replace(/\]/g, '%5D');
+                }
+
+
+            });
+              const path = window.location.pathname; // Gibt "/admin/tables/show/Example" zurück
             const segments = path.split("/"); // Teilt den Pfad in Segmente auf
             if(segments[segments.length - 2] == "create")
             {
@@ -1594,29 +1567,6 @@ async submitForm() {
         console.log("Daten, die gesendet werden:",this.formData);
         // location.href='/admin/tables/show/'+this.tablex;
     },
-// async submitForm() {
-//         // Überprüfen, ob `this.ffo` ein Objekt ist
-
-//         if (typeof this.ffo === 'object') {
-//             // Umwandlung von `this.ffo` in ein Array von [key, value] Paaren
-//             let formData = Object.entries(this.ffo).reduce((acc, [key, value]) => {
-//                 acc[key] = Object.entries(value);
-//                 return acc;
-//             }, {});
-
-//             try {
-
-//                 const response = await axios("admin.table.update",[formData,id,table]);
-//                 console.log("Formular erfolgreich gesendet!", response.data);
-//             } catch (error) {
-//                 console.error("Fehler beim Absenden:", error.response.data);
-//             }
-//         } else {
-//             console.error("this.ffo ist kein Objekt!");
-//         }
-//     },
-
-
         deleteTable() {
             this.confirmingTableDeletion = false;
             //

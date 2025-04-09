@@ -1,5 +1,5 @@
 <template>
-    <div v-if="isOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+    <div  v-show="isModalOpen" class="fixed inset-0 z-1000 flex items-center justify-center bg-black bg-opacity-50">
       <div class="bg-layout-sun-100 dark:bg-layout-night-100 rounded-lg shadow-lg w-full max-w-lg p-6">
         <form @submit.prevent="uploadImage">
           <h3 class="text-2xl font-semibold text-center mb-4">Bild hochladen</h3>
@@ -51,35 +51,38 @@
 
   <script>
   import { CleanTable, CleanId } from '@/helpers';
+  import md5 from 'md5';
+
   export default {
     props: {
-      isOpen: Boolean,
+        isOpen: [Boolean,Number],
       path: String,
       namee: String,
       column: String,
+      Message:{
+        type: [Boolean,Number],
+        default: false,
+    },
+    isModalOpen:[Number,Boolean],
+    namee2:String,
     },
     data() {
       return {
+        isOpen:this.isModalOpen,
         selectedImage: null,
         tablex: '',
         previewImage: null,
         uploading: false,
         progress: 0,
         newFname: '',
+
       };
     },
     methods: {
         triggerFileInput() {
       this.$refs.fileInput.click(); // Klick auf das unsichtbare Datei-Input auslösen
     },
-    handleFileChange(event) {
-      const file = event.target.files[0];
-      if (file) {
-       // console.log("Ausgewähltes Bild:", file.name);
-        // Weitere Logik für die Bildvorschau oder den Upload hier hinzufügen
-      }
-    },
-        handleDrop(event) {
+    handleDrop(event) {
   event.preventDefault(); // Standardverhalten verhindern
 
   const files = event.dataTransfer.files;
@@ -87,10 +90,7 @@
     this.handleFileChange({ target: { files } });
   }
 },
-      triggerFileInput() {
-        this.$refs.fileInput.click();
-      },
-      handleFileChange(event) {
+    handleFileChange(event) {
         const file = event.target.files[0];
         if (file) {
           this.selectedImage = file;
@@ -98,74 +98,128 @@
 
           const fileURL = URL.createObjectURL(file);
           this.previewImage = fileURL;
+          if (this.Message) {
+            const newfg = md5(file.name+'_1')+ '.jpg';
+            console.log("fn:" + newfg);
+    const input = document.getElementById(this.namee2);
 
-        //   this.$emit('imageUploaded', fileURL, this.newFname);
+    if(this.Message){
+        const imageUrl = `${newfg}`;
+    }
+    //input.value += `<img src="${newfg}" />`;
+    // this.$refs.editor.innerHTML += `<img src="${newfg}" /><br />`;
+    this.$emit('insertImage', newfg);
+    this.$emit('insertImage',this.nf2);
+}
+
         }
       },
-      async uploadImage() {
-        if (!this.selectedImage) return;
-        this.uploading = true;
-        this.progress = 0;
+      // In ImageUploadModal.vue
 
-        // Dynamische Tabellen- und ID-Extraktion aus der URL
-        this.tablex = CleanTable();
+async uploadImage() {
+    if (!this.selectedImage) return;
+    this.uploading = true;
+    this.progress = 0;
 
-        // FormData für den Upload
-        const formData = new FormData();
-        formData.append("image", this.selectedImage);
-        formData.append("path", this.path);
-        formData.append("namee", this.namee);
-        formData.append("_token", document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
-        formData.append("table", this.tablex);
+    // Dynamische Tabellen- und ID-Extraktion aus der URL
+    this.tablex = CleanTable();
 
-        const xhr = new XMLHttpRequest();
+    // FormData für den Upload
+    const formData = new FormData();
+    formData.append("image", this.selectedImage);
+    formData.append("path", this.path);
+    formData.append("namee", this.namee);
+    formData.append("_token", document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
+    formData.append("table", this.tablex);
+    if(this.Message){
+        formData.append("Message", this.tablex);
+    }
 
-        // Fortschrittsanzeige aktualisieren
-        xhr.upload.addEventListener("progress", (event) => {
-          if (event.lengthComputable) {
+    const xhr = new XMLHttpRequest();
+
+    // Fortschrittsanzeige aktualisieren
+    xhr.upload.addEventListener("progress", (event) => {
+        if (event.lengthComputable) {
             this.progress = Math.round((event.loaded / event.total) * 100);
-          }
-        });
+        }
+    });
 
-        // console.log("Upload für Tabelle: " + this.tablex);
-        xhr.open("POST", "/upload-image/" + this.tablex, true);
+    xhr.open("POST", "/upload-image/" + this.tablex, true);
 
-        xhr.onload = () => {
-          if (xhr.status === 200) {
-            // console.log("Server-Antwort:", xhr.responseText);
+    xhr.onload = () => {
+        if (xhr.status === 200) {
             try {
-              let response = JSON.parse(xhr.responseText);
+                let response = JSON.parse(xhr.responseText);
 
-              this.newFname = response.image_url;
-            //   console.log(response);
-              this.$emit('imageUploaded', response.image_url, this.newFname);
+                this.newFname = response.image_url;
+                if(this.Message){
+                    const imageUrl = '/images/messages/' + response.image_url;
+                }
+                else{
+                    const imageUrl = response.image_url;
+                }
 
-              // Status zurücksetzen & Modal schließen
-              this.uploading = false;
-              this.progress = 0;
-              this.$emit("close");
 
+                // Bild direkt in den Editor einfügen
+                this.$emit('imageUploaded', response.image_url);
+                this.$emit('uploaded', response.image_url);
+
+
+                // Modal schließen
+                this.uploading = false;
+                this.progress = 0;
+                this.closeModal();
             } catch (e) {
-              console.error("Fehler beim Parsen der JSON-Antwort:", e);
-              console.error("Antwort des Servers:", xhr.responseText);
+                console.error("Fehler beim Parsen der JSON-Antwort:", e);
+                console.error("Antwort des Servers:", xhr.responseText);
             }
-          } else {
+        } else {
             console.error("Fehler beim Upload, Status:", xhr.status);
             console.error("Antwort des Servers:", xhr.responseText);
-          }
-        };
+        }
+    };
 
-        xhr.onerror = () => {
-          console.error("Fehler beim Hochladen");
-          this.uploading = false;
-        };
+    xhr.onerror = () => {
+        console.error("Fehler beim Hochladen");
+        this.uploading = false;
+    };
 
-        xhr.send(formData);
-        },
+    xhr.send(formData);
+},
+
       closeModal() {
-        this.$emit("close");
+        this.selectedImage = null;
+  this.previewImage = null;
+  this.uploading = false;
+  this.progress = 0;
+  this.$emit("close");
       },
+
+
+    // Methode zum Aktualisieren des Inhalts (z. B. wenn du v-model verwendest)
+    updateValue() {
+        const editorContent = this.$refs.editor.innerHTML;
+   console.log("Editor-Inhalt aktualisiert:", editorContent);
+
+   //this.$emit("update:modelValue", editorContent);
     }
+  },
+  watch: {
+  isOpen(newValue) {
+    console.log('isOpen geändert:', newValue);  // Überprüfe, ob isOpen korrekt gesetzt wird
+  },
+  isModalOpen(newVal) {
+    if (newVal) {
+      // Modal wird geöffnet – vorherige Daten zurücksetzen
+      this.selectedImage = null;
+      this.previewImage = null;
+      this.uploading = false;
+      this.progress = 0;
+    }
+  }
+}
+
+
   };
   </script>
 

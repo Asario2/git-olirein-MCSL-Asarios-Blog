@@ -69,6 +69,15 @@ async function loadDarkMode() {
 // 🎯 Dark Mode direkt beim Laden der Seite setzen
 document.addEventListener("DOMContentLoaded", loadDarkMode);
 
+function checkImageExists(url, callback) {
+    const img = new Image();
+    img.onload = () => callback(true);   // Bild erfolgreich geladen
+    img.onerror = () => callback(false); // Bild konnte nicht geladen werden
+    img.src = url;
+  }
+  function decodeHtml(html) {
+    return html.replace(/%5B/g, '[').replace(/%5D/g, ']');
+}
 
 
 

@@ -129,10 +129,10 @@
                 </div>
                 <div class="text-layout-sun-800 dark:text-layout-night-800">
                     <div v-if="blog.markdown_on">
-                        <markdown :markdown="blog.content"></markdown>
+                        <markdown :markdown="decodedContent"></markdown>
                     </div>
 
-                    <div v-else v-html="blog.content"></div>
+                    <div v-else v-html="decodedContent"></div>
 
                     <h2 id="author_info">
                         Informationen zu {{ blog.blog_author.name }}
@@ -187,8 +187,15 @@ export default {
             seekValue: 0,
         };
     },
-
+    computed: {
+        decodedContent() {
+            return this.decodeHtml(this.blog.content);
+        }
+    },
     methods: {
+        decodeHtml(html) {
+            return html.replace(/%5B/g, '[').replace(/%5D/g, ']');
+        },
         play() {
             this.$refs.audioPlayer.play();
         },

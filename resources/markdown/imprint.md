@@ -9,7 +9,7 @@ Dorfplatz 10
 ## Kontakt  
 
 **Telefon:** +49 162 7716325  
-Email: paul.rieser@marblefx.de  
+Email: [paul.rieser[at]marblefx.de](mailto:paul.rieser@marblefx.de)  
 Website: [www.asario.de](https://www.asario.de)  
 
 ## Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV  

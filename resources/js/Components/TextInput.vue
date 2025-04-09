@@ -2,7 +2,7 @@
 import { onMounted, ref, computed } from "vue";
 
 defineProps({
-    modelValue: String,
+    modelValue: [String,Number],
     required: [Boolean, String], // Optional: `required` als Boolean oder String erlauben
 });
 

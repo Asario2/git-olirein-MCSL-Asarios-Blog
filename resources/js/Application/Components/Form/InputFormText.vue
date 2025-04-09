@@ -54,7 +54,7 @@
     props: {
     id: { type: String, required: true },
     name: { type: String, required: true },
-    modelValue: { type: String, default: '' },  // Use modelValue instead of value
+    modelValue: { type: [String,Number], default: '' },  // Use modelValue instead of value
     placeholder: { type: String, default: '' },
     required: {type:[String,Boolean ], default:''},
     disabled: Boolean,

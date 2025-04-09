@@ -39,7 +39,7 @@ class ImageUploadController extends Controller
 //$table_dir = Settings::image_paths[$request->table];
         $table = $request->table;
         $column = $request->column;
-        // $name = $request->name;
+        $Message = @$request->Message;
 
         // Den Dateinamen generieren und Bild speichern
         $imageName = md5($image->getClientOriginalName()."_".Auth::id()).".".$image->getClientOriginalExtension();
@@ -47,30 +47,49 @@ class ImageUploadController extends Controller
 
         $filename = $imageName;
         // Speicherpfad definieren
-        $IMOpath =  public_path("images/{$table}/orig/{$filename}");
+        $sizes = [1200];
         $tmpname = $_FILES['image']['tmp_name'];
-        // \Log::info("ii: ".json_encode($tmpname));
+       if(!$Message){
+        $IMOpath =  public_path("images/{$table}/orig/{$filename}");
 
         copy($tmpname,$IMOpath);
+
+        $sizes = [350, 800, 1400];
+        }
+
+        else{
+            $table = "messages";
+            // $prepath = "/images/messages/";
+        }
+        list($oldsize,$oldheight) = getimagesize($tmpname);
+
         // Bildgrößen anpassen und speichern
-        $sizes = [350, 800, 1400];  // Beispiel für 3 verschiedene Auflösungen
-        $big = ["350"=>"/thumbs/","800"=>'/',"1400"=>"/big/"];
+          // Beispiel für 3 verschiedene Auflösungen
+        $big = ["350"=>"/thumbs/","1200"=>'/',"800"=>'/',"1400"=>"/big/"];
         foreach ($sizes as $size) {
+            if($size > $oldsize)
+            {
+                $size2 = $oldsize;
+            }
+            else{
+                $size2 = $size;
+            }
             // Neues Imagick-Objekt erstellen
             $imagick = new \Imagick();
             $imagick->readImage($image->getPathname());
 
             // Bildgröße anpassen
-            $imagick->resizeImage($size, 0, \Imagick::FILTER_LANCZOS, 1); // 0 für automatische Höhe
+            $imagick->resizeImage($size2, 0, \Imagick::FILTER_LANCZOS, 1); // 0 für automatische Höhe
 
             // Speicherpfad für jede Version
             $resizedPath = "images/{$table}{$big[$size]}{$imageName}";
 
             // Bild speichern
             $imagick->writeImage($resizedPath);
-            if($size == 1400)
+            if($size == 1400 || $Message)
             {
                 list($width,$height) = getimagesize($resizedPath);
+                $imageName = "/".$resizedPath;
             }
 
             // Speicher freigeben
@@ -88,8 +107,7 @@ class ImageUploadController extends Controller
         //     'created_at' => now(),
         //     'updated_at' => now(),
         // ]);
-        \Log::info(json_encode(['message' => 'Bild erfolgreich hochgeladen.',
-        'image_url' => $imageName ]));
+        \Log::info(json_encode(['message' => $imageName]));
         return response()->json([
             'message' => 'Bild erfolgreich hochgeladen.',
             'image_url' => $imageName,

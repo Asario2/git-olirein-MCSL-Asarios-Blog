@@ -179,7 +179,9 @@ if(!function_exists("renderMarkdown"))
             $level = strlen($matches[1]); // Anzahl der # bestimmt die Ebene
             return "<h{$level}>{$matches[2]}</h{$level}>";
         }, $markdown2);
+        $markdown  = str_replace('´','`',$markdown);
         $markdown3 = $markdown;
+
         //$environment->addExtension(new CommonMarkCoreExtension());
        // dd($markdown3);
         // $converter = new CommonMarkConverter([], $environment);

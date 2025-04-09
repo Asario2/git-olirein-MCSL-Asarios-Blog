@@ -41,6 +41,21 @@ li {
     margin-left: 1.5rem; /* Einr�ckung */
     line-height: 1.8; /* Passt die Textausrichtung an */
 }
+.prose :where(code):not(:where([class~='not-prose'], [class~='not-prose'] *))::before {
+content: "" !important;
+}
+.prose :where(code):not(:where([class~='not-prose'], [class~='not-prose'] *))::after {
+content: "" !important;
+}
+.prose :where(code):not(:where([class~='not-prose'], [class~='not-prose'] *)){
+	background-color:#ccc		;
+	color:#000 !Important;
+	padding:5px;
+	border-radius:4px;
+}
+code, code em, code > strong{
+	color:#000 !Important;
+}
 ul,
 li {
     margin: 0;

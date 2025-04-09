@@ -272,6 +272,10 @@ class TablesController extends Controller
             }
             continue;
         }
+        if(substr_count($table,".")){
+            return;
+        }
+        \Log::info("aaaaa:".json_encode([$table,$id]));
         $tablez = [];
         if(!empty($id))
         {
@@ -1606,7 +1610,7 @@ class TablesController extends Controller
             // \Log::info('FormData:', $formData);
             // \Log::info($updated);
             $queries = DB::getQueryLog();
-                 \Log::info($queries);
+                 \Log::info("qry:".json_encode([$queries,$formData]));
             if ($updated) {
                 return response()->json(['message' => 'Daten erfolgreich aktualisiert!']);
             } else {

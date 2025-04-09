@@ -5,7 +5,11 @@
       >
         <slot name="label">Label</slot>
       </label>
-    <textarea
+      <InputHtml
+      :id="name"
+        :name="name"
+        ></InputHtml>
+    <!-- <textarea
         :id="id"
         :cols="20"
         :name="name"
@@ -16,17 +20,24 @@
         :value="modelValue"
         @input="$emit('update:modelValue', $event.target.value)"
     >
-    </textarea>
+    </textarea> -->
 </template>
 
 
 <script>
+import InputHtml from "@/Application/Components/Form/InputHtml.vue";
+
 export default {
     name: "InputFormTextArea",
+    components: {
+
+InputHtml,
+
+},
     props: {
         id: { type: String, required: true },
         name: { type: String, required: true },
-        modelValue: { type: String, default: "" }, // Use modelValue instead of value
+        modelValue: { type: [String,Number], default: "" }, // Use modelValue instead of value
         placeholder: { type: String, default: "" },
         required: { type: [String, Boolean], default: false },
         rows: {

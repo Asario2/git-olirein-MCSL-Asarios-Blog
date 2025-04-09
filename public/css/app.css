@@ -1,7 +1,7 @@
 .w-full
 {
     width:100% !important;
-	
+
 
 }
 .w-full{
@@ -46,6 +46,9 @@ article.wide h1,
 article.wide-icon h1,
 article.wide-icon-count h1 {
   font-size: 2em;
+}
+body {
+  direction: ltr !important;
 }
 @media only screen and (min-width: 600px) {
   article.wide h1,

@@ -87,10 +87,10 @@ const logout = () => {
                                                 <svg
                                                     class="ms-2 -me-0.5 h-4 w-4"
                                                     xmlns="http://www.w3.org/2000/svg"
-                                                    fill="none"
+
                                                     viewBox="0 0 24 24"
                                                     stroke-width="1.5"
-                                                    stroke="currentColor"
+                                                    stroke="currentColor" fill="none"
                                                 >
                                                     <path
                                                         stroke-linecap="round"
@@ -178,10 +178,10 @@ const logout = () => {
                                                                     "
                                                                     class="me-2 h-5 w-5 text-green-400"
                                                                     xmlns="http://www.w3.org/2000/svg"
-                                                                    fill="none"
+
                                                                     viewBox="0 0 24 24"
                                                                     stroke-width="1.5"
-                                                                    stroke="currentColor"
+                                                                    stroke="currentColor" fill="none"
                                                                 >
                                                                     <path
                                                                         stroke-linecap="round"
@@ -242,10 +242,10 @@ const logout = () => {
                                                 <svg
                                                     class="ms-2 -me-0.5 h-4 w-4"
                                                     xmlns="http://www.w3.org/2000/svg"
-                                                    fill="none"
+
                                                     viewBox="0 0 24 24"
                                                     stroke-width="1.5"
-                                                    stroke="currentColor"
+                                                    stroke="currentColor" fill="none"
                                                 >
                                                     <path
                                                         stroke-linecap="round"
@@ -307,8 +307,8 @@ const logout = () => {
                             >
                                 <svg
                                     class="h-6 w-6"
-                                    stroke="currentColor"
-                                    fill="none"
+                                    stroke="currentColor" fill="none"
+
                                     viewBox="0 0 24 24"
                                 >
                                     <path
@@ -482,10 +482,10 @@ const logout = () => {
                                                         "
                                                         class="me-2 h-5 w-5 text-green-400"
                                                         xmlns="http://www.w3.org/2000/svg"
-                                                        fill="none"
+
                                                         viewBox="0 0 24 24"
                                                         stroke-width="1.5"
-                                                        stroke="currentColor"
+                                                        stroke="currentColor" fill="none"
                                                     >
                                                         <path
                                                             stroke-linecap="round"

@@ -7,7 +7,7 @@
             >
                 <component
                     :is="dynamicIcon"
-                    class="w-6 h-6 stroke-layout-sun-100 dark:stroke-layout-night-100"
+                    class="w-6 h-6"
                 />
             </span>
             <h2

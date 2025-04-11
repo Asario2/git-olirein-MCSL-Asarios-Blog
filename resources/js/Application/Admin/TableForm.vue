@@ -29,7 +29,7 @@
 
                         <!-- <pre>{{ formData }}</pre> -->
                         <!-- <pre>{{this.xsor_alt['admin_table_id'] }}</pre> -->
-                        <a :href="'/admin/tables/create/' + tablex" target="" class="inline-flex items-center px-1 py-1.5 md:px-2 md:py-2 h-6 md:h-8 rounded-md font-medium text-xs tracking-widest disabled:opacity-25 transition cursor-pointer focus:ring focus:outline-none button_bg button_text_case_bg"><div class="flex items-center whitespace-nowrap"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="button_icon"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"></path></svg> Erstelle </div></a>
+                        <a :href="'/admin/tables/create/' + tablex" target="" class="inline-flex items-center px-1 py-1.5 md:px-2 md:py-2 h-6 md:h-8 rounded-md font-medium text-xs tracking-widest disabled:opacity-25 transition cursor-pointer focus:ring focus:outline-none button_bg button_text_case_bg"><div class="flex items-center whitespace-nowrap"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" class="button_icon"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"></path></svg> Erstelle </div></a>
                         <input-group>
 
     <form @submit.prevent="submitForm" enctype="multipart/form-data" >
@@ -141,7 +141,7 @@
                 <button type="button" @click="openModal_alt">
 
                     <p v-if="this.nf2 && typeof this.nf2 !== 'object' && this.nf2 != '[]' && this.nf2 != '008.jpg' ">Hochgeladenes Bild:
-                        <img  @error="event => event.target.src = 'images/' + tablex + '/thumbs/009.jpg'" :src="'/images/'+ this.tablex +'/thumbs/' + this.nf2" width="100" alt="Vorschau1" title="Vorschau1"/></p>
+                        <img  @error="event => event.target.src = '/images/' + tablex + '/thumbs/009.jpg'" :src="'/images/'+ this.tablex +'/thumbs/' + this.nf2" width="100" alt="Vorschau1" title="Vorschau1"/></p>
                     <p v-else-if="this.ffo['image_path']['value'] && this.ffo['image_path']['value'] != '008.jpg'">Hochgeladenes Bild: <img :src="'/images/'+ this.tablex +'/thumbs/' + this.ffo['image_path']['value']" width="100" alt="Vorschau2" title="Vorschau2"/></p>
                     <span v-else><img src="/images/blogs/thumbs/009.jpg" alt="Jetzt Bild Hochladen" width="100"  title="Jetzt Bild Hochladen" ></span>
                         <input type="hidden" :id="field.name" :value="this.nf2">
@@ -168,8 +168,7 @@
                     <input-checkbox
                         :name="field.name"
                         v-model="field.value"
-                        :value='field.value'
-                        :checked="field.value"
+                        :value="field.value"
 
                         >
                         {{field.label}}</input-checkbox
@@ -1077,7 +1076,7 @@ return { ffo };
     this.updateFormData();
   },
     handleImageUpload(imageUrl) {
-        imageUrl = imageUrl.replace("images/blogs/big",'').replace("undefined",'');
+        imageUrl = imageUrl.replace("images/blogs/big/",'').replace("images/images/big/",'').replace("undefined",'');
      console.log("Bild-URL:", imageUrl);
       this.uploadedImageUrl = imageUrl;
       this.nf2 = imageUrl;

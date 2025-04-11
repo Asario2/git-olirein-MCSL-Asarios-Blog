@@ -38,10 +38,10 @@ const close = () => {
                     <svg
                         class="h-6 w-6 text-red-600 dark:text-red-400"
                         xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
+
                         viewBox="0 0 24 24"
                         stroke-width="1.5"
-                        stroke="currentColor"
+                        stroke="currentColor" fill="none"
                     >
                         <path
                             stroke-linecap="round"

@@ -1,5 +1,5 @@
 <template>
-    <layout :header-title="'Bilder - ' + ocont.slug"><
+    <layout :header-title="'Bilder - ' + ocont.slug">
         <div @click="handleBodyClick">
         <div v-if="ocont.id" class="p-4 bg-layout-sun-200 dark:bg-layout-night-200">
         <hgroup>
@@ -96,10 +96,12 @@
 
     <!-- Rechte Spalte: Kurzinfos, Bewertungs-Slot, Datum und optionale Kameraangabe -->
     <div class="p-6 space-y-2 lg:col-span-3">
-        <div class="text-sm font-semibold text-layout-sun-800 dark:text-layout-night-800">
+        <div class=" font-semibold text-layout-sun-800 dark:text-layout-night-800">
         <h3>Kurzinfos</h3>
         </div>
-
+        <div v-if="entry.Format">
+        <b>Format:</b> {{ entry.Format }}
+        </div>
         <averageRating :postId="entry.id"/>
         <span v-if="editOn || deleteOn" class="flex space-x-2">
         <!-- Edit Icon -->

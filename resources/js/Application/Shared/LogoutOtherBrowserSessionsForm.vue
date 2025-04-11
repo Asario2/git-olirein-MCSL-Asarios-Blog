@@ -29,10 +29,10 @@
                             v-if="session.agent.is_desktop"
                             class="w-8 h-8 text-gray-500"
                             xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
+
                             viewBox="0 0 24 24"
                             stroke-width="1.5"
-                            stroke="currentColor"
+                            stroke="currentColor" fill="none"
                         >
                             <path
                                 stroke-linecap="round"
@@ -45,10 +45,10 @@
                             v-else
                             class="w-8 h-8 text-gray-500"
                             xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
+
                             viewBox="0 0 24 24"
                             stroke-width="1.5"
-                            stroke="currentColor"
+                            stroke="currentColor" fill="none"
                         >
                             <path
                                 stroke-linecap="round"

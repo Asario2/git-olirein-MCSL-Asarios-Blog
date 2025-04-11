@@ -3,7 +3,7 @@
         width="534"
         height="534"
         viewBox="0 0 534 534"
-        fill="none"
+
         xmlns="http://www.w3.org/2000/svg"
     >
         <path

@@ -58,7 +58,7 @@ const showingNavigationDropdown = ref(false);
                                                     class="-me-0.5 ms-2 h-4 w-4"
                                                     xmlns="http://www.w3.org/2000/svg"
                                                     viewBox="0 0 20 20"
-                                                    fill="currentColor"
+                                                    stroke="currentColor" fill="none"
                                                 >
                                                     <path
                                                         fill-rule="evenodd"
@@ -99,8 +99,8 @@ const showingNavigationDropdown = ref(false);
                             >
                                 <svg
                                     class="h-6 w-6"
-                                    stroke="currentColor"
-                                    fill="none"
+                                    stroke="currentColor" fill="none"
+
                                     viewBox="0 0 24 24"
                                 >
                                     <path

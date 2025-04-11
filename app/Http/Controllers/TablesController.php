@@ -463,7 +463,10 @@ class TablesController extends Controller
             $ord[0] = 'position';
             $ord[1] = 'ASC';
         }*/
-
+        elseif($table == "camera"){
+            $ord[0] = "name";
+            $ord[1] = "ASC";
+        }
         else {
             $ord[0] = "id";
             $ord[1] = "DESC";
@@ -1538,6 +1541,10 @@ class TablesController extends Controller
         $formData['img_y'] = $height;
         // Erstelle einen neuen Datensatz mit den validierten Eingabedaten
         }
+        if(Schema::hasColumn($table, 'preis')|| isset($formData['preis']))
+        {
+            $formData['preis'] = str_replace(",",".",$formData['preis']);
+        }
         $table_res = DB::table($table)->insert(
         $formData
         );
@@ -1588,8 +1595,12 @@ class TablesController extends Controller
         $formData['img_x'] = $width;
         $formData['img_y'] = $height;
         }
+        if(Schema::hasColumn($table, 'preis')|| isset($formData['preis']))
+        {
+            $formData['preis'] = str_replace(",",".",$formData['preis']);
+        }
         \Log::info($formData);
-        $formData = array_filter($formData);
+        $formData = ($formData);
 
         if (!Schema::hasTable($table)) {
             return response()->json(['error' => 'Tabelle nicht gefunden'], 404);

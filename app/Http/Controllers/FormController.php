@@ -52,6 +52,7 @@ class FormController extends Controller
             }
 
 
+
         $label = isset(Settings::exl[$name]) ? Settings::exl[$name] : $name;
         $class = FormController::getClass($name,1);
         $req   = FormController::getReq($name);
@@ -72,8 +73,13 @@ class FormController extends Controller
                 'class' => $class,
                 'rows'  => $rows,
                 "required" => $req,
-               // Hier ohne zusätzliche Array-Klammern!
-            ];
+
+                ];
+            if($name == "users_id")
+            {
+                $fields[$name]['users_id'] = Auth::id();
+                \Log::info("AUTHID:" . Auth::id());
+            }
         // $fields[$namefield] = [
         //     'name'  => "$name",
         //     'type'  => "$type",

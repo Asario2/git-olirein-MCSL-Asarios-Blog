@@ -76,7 +76,11 @@ function checkImageExists(url, callback) {
     img.src = url;
   }
   function decodeHtml(html) {
+    if(!html){
+        return "";
+    }
     return html.replace(/%5B/g, '[').replace(/%5D/g, ']');
+
 }
 
 

@@ -43,7 +43,11 @@ const submit = () => {
         >
             {{ status }}
         </div>
-
+        <div v-if="Object.keys(form.errors).length" class="mb-4 text-sm text-red-600 dark:text-red-400">
+            <div v-for="(message, key) in form.errors" :key="key">
+                {{ message }}
+            </div>
+        </div>
         <form @submit.prevent="submit">
             <div>
                 <InputLabel for="email" value="Email" />

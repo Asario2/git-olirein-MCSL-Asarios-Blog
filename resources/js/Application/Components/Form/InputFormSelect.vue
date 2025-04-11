@@ -7,30 +7,32 @@
         ref="select"
         :id="xname + '_' + xid"
         :required="required"
-
+        :users_id="users_id"
+        v-model="users_id"
     >
         <template v-if="Array.isArray(sortedOptions_sel)">
             <option
                 v-for="(option, key) in sortedOptions_sel"
-                :value="option[0]"
+                :value="String(option[0])"
                 :key="key"
 
-                :selected="option[0] === xval">
+                >
                 {{ option[1] }}
             </option>
         </template>
         <template v-else-if="typeof sortedOptions_sel === 'object'">
             <option
                 v-for="(value, key) in sortedOptions_sel"
-                :value="key"
-                :key="key"
+                :value="String(key)"
+                :key="key">
 
-                :selected="option === xval"
-            >
+
+
                 {{ value }}
             </option>
         </template>
     </select>
+
     <input type="hidden" :name="xname" id="hv" :value="selectedValue" />
 </template>
 
@@ -48,7 +50,7 @@ export default {
     },
 
     props: {
-        required: { type: [String, Boolean], default: false },
+        required: { type: [Number, String, Boolean], default: false },
         modelValue:{
             type: [String, Number],
         },
@@ -73,7 +75,7 @@ export default {
         },
         name:{
             type: String
-        }
+        },
     },
 
     emits: ["input-change"],
@@ -131,10 +133,3 @@ mounted() {
 };
 
 </script>
-<style scoped>
-
-.w50
-{
-    
-}
-</style>

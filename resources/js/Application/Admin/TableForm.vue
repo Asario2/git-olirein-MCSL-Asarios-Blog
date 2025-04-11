@@ -189,8 +189,6 @@
 
                                     </InputLabel>
                                     <InputSelect
-
-
                                     @input-change="updateFormData"
 
                                         :id="field.name"
@@ -199,14 +197,16 @@
                                         :options="`options: ${this.xsor_alt[field.name]?.length > 0 ? this.xsor_alt[field.name] : []}`"
                                         :ref="field.name"
                                         :name="field.name"
-                                        :xval="field.value"
+                                        :xval="field.name == 'users_id' ? field.users_id : field.value"
                                         :xname="field.name"
+                                        :users_id="field.name == 'users_id' ? field.users_id : ''"
                                         :required="isRequired(field.required)"
                                     >
 
                                 </InputSelect>
 
                                 </input-container>
+
                                 <input-container
                                         v-else-if="field.type === 'select_itemscope'"
 
@@ -539,6 +539,10 @@ export default defineComponent({
             default: '1',
         },
         field: Object,
+        users_id:{
+            type: [Number,String],
+            default:0,
+        },
 
     },
     emit: ['update:isOpen', 'close'],
@@ -547,6 +551,7 @@ export default defineComponent({
     data() {
         return {
             isModalOpen: false,
+
             table: reactive({ id: "1" }),// Standardwert setzen, falls leer
         formDatas: {},
         oobj:{},

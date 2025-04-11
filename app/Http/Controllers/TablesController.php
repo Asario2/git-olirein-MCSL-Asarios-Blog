@@ -1547,6 +1547,10 @@ class TablesController extends Controller
     }
     public function getSlug($table,$id='')
     {
+        if(!Schema::hasColumn($table, 'autoslug'))
+        {
+            return;
+        }
         $res = DB::table($table)->where("id",$id)->select('autoslug')->first();
         if(!empty($res) && $id && $res->autoslug != NULL)
         {

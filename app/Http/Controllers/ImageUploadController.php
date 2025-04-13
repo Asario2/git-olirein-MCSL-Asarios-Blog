@@ -8,7 +8,7 @@ use Storage;
 
 class ImageUploadController extends Controller
 {
-    public function upload(Request $request,$table)
+    public function upload(Request $request,$table,$iswatermark='1')
     {
         // Validierung der Eingabedaten
         // $validated = $request->validate([
@@ -37,6 +37,8 @@ class ImageUploadController extends Controller
         $image = $request->file('image') ?? [];
         $path = $request->path;
 //$table_dir = Settings::image_paths[$request->table];
+        $watermarkfile = $request->copyleft;
+        \Log::info("WMF: ".$watermarkfile);
         $table = $request->table;
         $column = $request->column;
         $Message = @$request->Message;
@@ -67,13 +69,16 @@ class ImageUploadController extends Controller
           // Beispiel für 3 verschiedene Auflösungen
         $big = ["350"=>"/thumbs/","1200"=>'/',"800"=>'/',"1400"=>"/big/"];
         foreach ($sizes as $size) {
+
             if($size > $oldsize)
             {
                 $size2 = $oldsize;
             }
             else{
+
                 $size2 = $size;
             }
+            $resizedPath = "images/{$table}{$big[$size]}{$imageName}";
             // Neues Imagick-Objekt erstellen
             $imagick = new \Imagick();
             $imagick->readImage($image->getPathname());
@@ -82,10 +87,32 @@ class ImageUploadController extends Controller
             $imagick->resizeImage($size2, 0, \Imagick::FILTER_LANCZOS, 1); // 0 für automatische Höhe
 
             // Speicherpfad für jede Version
-            $resizedPath = "images/{$table}{$big[$size]}{$imageName}";
+            if($iswatermark && $big[$size] != "/thumbs/" && !empty($watermarkfile))
+            {
+                $imagePath = $tmpname;
+                $watermarkPath = public_path("images/copyleft/".$watermarkfile.".png");
 
+                // Neues ImageMagick-Objekt erstellen
+                $imagick = new \Imagick($imagePath);
+                $imagick->resizeImage($size2, 0, \Imagick::FILTER_LANCZOS, 1); // 0 für automatische Höhe
+                // Wasserzeichenbild laden
+                $watermark = new \Imagick($watermarkPath);
+
+                // Berechne die Position des Wasserzeichens: rechte untere Ecke
+                $xPosition = $imagick->getImageWidth() - $watermark->getImageWidth() - 10; // 10px Abstand vom Rand
+                $yPosition = $imagick->getImageHeight() - $watermark->getImageHeight() - 10; // 10px Abstand vom Rand
+
+                // Setze das Wasserzeichen auf das Bild
+                $imagick->compositeImage($watermark, \Imagick::COMPOSITE_OVER, $xPosition, $yPosition);
+
+                // Speichern des neuen Bildes mit Wasserzeichen
+                $imagick->writeImage($resizedPath);
+            }
+            else{
+                $imagick->writeImage($resizedPath);
+            }
             // Bild speichern
-            $imagick->writeImage($resizedPath);
+
             if($size == 1400 || $Message)
             {
                 list($width,$height) = getimagesize($resizedPath);
@@ -118,6 +145,15 @@ class ImageUploadController extends Controller
     public function save(Request $request,$table)
     {
         \Log::info("resa:".$table);
+
+    }
+    public function CopyLeft()
+    {
+        $cl = DB::table('copyleft')->select('tag', 'name')->get();
+        return response()->json([
+            'message' => 'Copyleft Success',
+            'copyleft' => $cl,
+        ]);
 
     }
 }

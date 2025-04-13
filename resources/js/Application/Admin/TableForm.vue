@@ -126,13 +126,13 @@
                 <ImageUploadModal
                 v-show="isModalOpen"
                         :tablex="table_x"
-                        :column="name"
+                        :column="field.name"
                         :path="tablex"
-                        :ref="name"
+                        :ref="field.name"
                         :value="imageId"
-                        :image="value"
-                        :namee="value"
-                        :namee2="name"
+                        :image="field.value"
+                        :namee="field.value"
+                        :namee2="field.name"
                         :Message="false"
                         @close="closeModal"
                         @update:fileName="handleFileNameUpdate"
@@ -598,23 +598,7 @@ export default defineComponent({
             //
             confirmingTableDeletion: false,
             //
-            form: {
-                // table_author_id: this.table.table_author_id,
-                // table_category_id: this.table.table_category_id,
-                // markdown_on: this.table.markdown_on,
-                // table_image_id: this.table.table_image_id,
-                // table_date: this.table.table_date,
-                // title: this.table.title,
-                // summary: this.table.summary,
-                //content: this.table.content,
-                // reading_time: this.table.reading_time,
-                // audio_on: this.table.audio_on,
-                // audio_url: this.table.audio_url,
-                // audio_duration: this.table.audio_duration,
-                // formData: "@php echo $formData @endphp", // PHP-Ausgabe in JS-String
-                // ItemName: "@php echo $ItemName @endphp",
-                // ItemName_des: "@php echo $ItemName_des ?? $ItemName @endphp",
-            },
+
         };
     },
     computed: {
@@ -962,40 +946,41 @@ return { ffo };
         };
     },
     methods: {
-  openModal_alt() {
-    console.log("Vor dem Setzen: " + this.isModalOpen);  // Überprüfe den aktuellen Wert
+        openModal_alt() {
+    console.log("Vor dem Setzen: " + this.isModalOpen);
 
+    this.isModalOpen = !this.isModalOpen;
 
-    // Warten bis das DOM vollständig aktualisiert ist
     this.$nextTick(() => {
-        this.isModalOpen = !this.isModalOpen;
-        const editor = this.$refs.editor;
+      let editor = this.$refs.editor;
 
-      // Sicherstellen, dass editor überhaupt existiert und ein DOM-Element ist
-      if (editor && typeof editor.focus === 'function') {
-        editor.focus(); // Fokus setzen
+      // Falls es ein Array ist (z. B. bei dynamischen Komponenten)
+      if (Array.isArray(editor)) {
+        editor = editor[0];
       }
+
+      if (!editor || !(editor instanceof HTMLElement)) {
+        console.warn("Editor nicht gefunden oder kein HTML-Element:", editor);
+        return;
+      }
+
+      editor.focus();
 
       const selection = window.getSelection();
       const range = document.createRange();
 
-      // Wenn es eine bestehende Auswahl gibt, setze den Cursor an das Ende der Auswahl
-      if (selection.rangeCount > 0) {
-        const currentRange = selection.getRangeAt(0);
-        range.setStart(currentRange.endContainer, currentRange.endOffset); // Cursor ans Ende setzen
-        range.setEnd(currentRange.endContainer, currentRange.endOffset);
-      } else {
-        // Wenn keine Auswahl vorhanden ist, setze den Cursor ans Ende des Editors
-        range.setStart(editor, editor.childNodes.length); // Ende des Editors
-        range.setEnd(editor, editor.childNodes.length);
-      }
+      // Cursor ans Ende des Inhalts setzen
+      range.selectNodeContents(editor);
+      range.collapse(false);
 
       selection.removeAllRanges();
       selection.addRange(range);
     });
 
-    console.log("Nach dem Setzen: " + this.isModalOpen); // Überprüfe den Wert nach $nextTick
-},
+    console.log("Nach dem Setzen: " + this.isModalOpen);
+  },
+
+
 
         handleImageSelect(url) {
       this.$refs.editor.insertImage(url)

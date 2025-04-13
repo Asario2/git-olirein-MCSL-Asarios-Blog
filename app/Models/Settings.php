@@ -93,7 +93,7 @@ class Settings extends Model
 
 ];
 const searchable = ["images","blogs","didyouknow","shortpoems"];
-const statusvals  = ["empty"=>" ","forsale"=>"Zu Verkaufen","givenaway"=>"Verschenkt","sold"=>"Verkauft","unsaleable"=>"Unverkäuflich","lost"=>"Verloren","inwork"=>"In Arbeit"];
+const statusvals  = ["empty"=>"keine Angabe","forsale"=>"Zu Verkaufen","givenaway"=>"Verschenkt","sold"=>"Verkauft","unsaleable"=>"Unverkäuflich","lost"=>"Verloren","inwork"=>"In Arbeit"];
 const searchFields =
     [
         "admin_table" => ['name'],

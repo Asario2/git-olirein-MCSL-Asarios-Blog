@@ -13,7 +13,7 @@
         :options="options"
         :sortedOptions="options"
     >
-
+    <option disabled value="">Bitte wählen</option>
     <option v-for="option in this.arr" :key="option.id" :value="option.id">
   {{ option.name }}
 </option>

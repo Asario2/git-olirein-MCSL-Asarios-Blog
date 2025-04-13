@@ -22,6 +22,7 @@ use App\Http\Controllers\CategoryController;
 
 GlobalController::SetDomain();
 // include __DIR__."/extraroutes.php";
+Route::get('/copyleft/images', [ImageUploadController::class, 'CopyLeft'])->name('images.copyleft');
 Route::get('/db-check', function () {
     try {
         DB::connection()->getPdo();
@@ -41,7 +42,9 @@ Route::get('/GetAuth', function () {
 })->name("GetAuth");
 Route::get("api/getSlug/{table}/{id?}", [TablesController::class, "getSlug"])->name("getSlug");
 Route::get('/namebindings', [NameBindingsController::class, 'RefreshFields'])->name("ColumnFetcher");
-Route::post('/upload-image/{table}', [ImageUploadController::class, 'upload'])->name('upload.image');
+Route::post('/upload-image/{table}/{isw?}', [ImageUploadController::class, 'upload'])->name('upload.image');
+Route::get('/GetUserNull', [TablesController::class, 'GetUserNull'])->name('GetUserNull');
+
 Route::post('/save-image/{table}', [ImageUploadController::class, 'save'])->name('save.image');
 Route::get('/comments/{table}/{postId}', [CommentController::class, 'fetchComments'])->name('comments.fetch');
 Route::post('/save-rating', [RatingController::class, 'saveRating']);

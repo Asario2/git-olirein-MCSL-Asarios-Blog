@@ -1,9 +1,17 @@
 <template>
-    <div  v-show="isModalOpen" class="fixed inset-0 z-1000 flex items-center justify-center bg-black bg-opacity-50">
+    <div
+      v-show="isModalOpen"
+      class="fixed inset-0 z-1000 flex items-center justify-center bg-black bg-opacity-50"
+    >
       <div class="bg-layout-sun-100 dark:bg-layout-night-100 rounded-lg shadow-lg w-full max-w-lg p-6">
         <form @submit.prevent="uploadImage">
           <h3 class="text-2xl font-semibold text-center mb-4">Bild hochladen</h3>
-
+          <CopyLeftSelect
+                v-if="isImages && !Message"
+                v-model="form.copyleft"
+                label="Wasserzeichen"
+                name="copyleft"
+              />
           <!-- Datei-Dropzone -->
           <div
             class="border-2 border-dashed border-layout-sun-500 dark:border-layout-night-500 rounded-lg p-6 text-center cursor-pointer hover:bg-layout-sun-200 dark:hover:bg-layout-night-200"
@@ -19,6 +27,7 @@
               @change="handleFileChange"
             />
             <p class="text-layout-sun-700 dark:text-layout-night-700">
+
               Ziehe das Bild hierher oder klicke, um eine Datei auszuwählen.
             </p>
           </div>
@@ -36,10 +45,18 @@
 
           <!-- Buttons -->
           <div class="mt-6 flex justify-between">
-            <button @click="closeModal" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600">
+            <button
+              type="button"
+              @click="closeModal"
+              class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
+            >
               Abbrechen
             </button>
-            <button type="submit" v-if="selectedImage" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+            <button
+              type="submit"
+              v-if="selectedImage"
+              class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+            >
               Hochladen
             </button>
           </div>
@@ -48,182 +65,151 @@
     </div>
   </template>
 
-
   <script>
-  import { CleanTable, CleanId } from '@/helpers';
+  import { CleanTable as cleanTableFn } from '@/helpers';
   import md5 from 'md5';
+  import CopyLeftSelect from "@/Application/Components/Content/CopyLeftSelect.vue";
 
   export default {
+    name: 'ImageUploadModal',
+    components: {
+      CopyLeftSelect,
+    },
     props: {
-        isOpen: [Boolean,Number],
+      isOpen: [Boolean, Number],
       path: String,
       namee: String,
       column: String,
-      Message:{
-        type: [Boolean,Number],
+      namee2: String,
+      Message: {
+        type: [Boolean, Number],
         default: false,
-    },
-    isModalOpen:[Number,Boolean],
-    namee2:String,
-    },
+      },
+      isModalOpen: {
+    type: [Boolean, Number],
+    default: false
+  },
+},
+    computed: {
+  isImages() {
+    return cleanTableFn() === 'images';
+  },
+},
+
     data() {
       return {
-        isOpen:this.isModalOpen,
         selectedImage: null,
-        tablex: '',
         previewImage: null,
         uploading: false,
         progress: 0,
         newFname: '',
-
+        tablex: this.CleanTable(),
+        form: {
+          copyleft: ''
+        },
+        options: {
+      type: Array,
+      default: () => []
+    },
       };
     },
     methods: {
-        triggerFileInput() {
-      this.$refs.fileInput.click(); // Klick auf das unsichtbare Datei-Input auslösen
-    },
-    handleDrop(event) {
-  event.preventDefault(); // Standardverhalten verhindern
-
-  const files = event.dataTransfer.files;
-  if (files.length > 0) {
-    this.handleFileChange({ target: { files } });
-  }
-},
-    handleFileChange(event) {
+      CleanTable() {
+        return cleanTableFn();
+      },
+      triggerFileInput() {
+        this.$refs.fileInput.click();
+      },
+      handleDrop(event) {
+        const files = event.dataTransfer.files;
+        if (files.length > 0) {
+          this.handleFileChange({ target: { files } });
+        }
+      },
+      handleFileChange(event) {
         const file = event.target.files[0];
         if (file) {
           this.selectedImage = file;
           this.newFname = file.name;
+          this.previewImage = URL.createObjectURL(file);
 
-          const fileURL = URL.createObjectURL(file);
-          this.previewImage = fileURL;
           if (this.Message) {
-            const newfg = md5(file.name+'_1')+ '.jpg';
-            console.log("fn:" + newfg);
-    const input = document.getElementById(this.namee2);
-
-    if(this.Message){
-        const imageUrl = `${newfg}`;
-    }
-    //input.value += `<img src="${newfg}" />`;
-    // this.$refs.editor.innerHTML += `<img src="${newfg}" /><br />`;
-    this.$emit('insertImage', newfg);
-    this.$emit('insertImage',this.nf2);
-}
-
+            const newfg = md5(file.name + '_1') + '.jpg';
+            this.$emit('insertImage', newfg);
+          }
         }
       },
-      // In ImageUploadModal.vue
+      async uploadImage() {
+  if (!this.selectedImage) return;
 
-async uploadImage() {
-    if (!this.selectedImage) return;
-    this.uploading = true;
-    this.progress = 0;
+  this.uploading = true;
+  this.progress = 0;
 
-    // Dynamische Tabellen- und ID-Extraktion aus der URL
-    this.tablex = CleanTable();
+  // FormData für den Upload erstellen
+  const formData = new FormData();
+  formData.append('image', this.selectedImage);
+  formData.append('path', this.path);
+  formData.append('namee', this.namee);
+  formData.append('_token', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
+  formData.append('table', this.tablex);
+  formData.append('copyleft', this.form.copyleft);
 
-    // FormData für den Upload
-    const formData = new FormData();
-    formData.append("image", this.selectedImage);
-    formData.append("path", this.path);
-    formData.append("namee", this.namee);
-    formData.append("_token", document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
-    formData.append("table", this.tablex);
-    if(this.Message){
-        formData.append("Message", this.tablex);
+  // Überprüfung und Fehlerbehandlung im Upload-Prozess
+  const xhr = new XMLHttpRequest();
+  xhr.upload.addEventListener('progress', (event) => {
+    if (event.lengthComputable) {
+      this.progress = Math.round((event.loaded / event.total) * 100);
     }
+  });
 
-    const xhr = new XMLHttpRequest();
+  xhr.onload = () => {
+    this.uploading = false;
+    if (xhr.status === 200) {
+      const response = JSON.parse(xhr.responseText);
+      this.newFname = response.image_url;
+      this.$emit('imageUploaded', response.image_url);
+      this.closeModal();
+    } else {
+      console.error("Fehler beim Upload:", xhr.status);
+    }
+  };
 
-    // Fortschrittsanzeige aktualisieren
-    xhr.upload.addEventListener("progress", (event) => {
-        if (event.lengthComputable) {
-            this.progress = Math.round((event.loaded / event.total) * 100);
-        }
-    });
-
-    xhr.open("POST", "/upload-image/" + this.tablex, true);
-
-    xhr.onload = () => {
-        if (xhr.status === 200) {
-            try {
-                let response = JSON.parse(xhr.responseText);
-
-                this.newFname = response.image_url;
-                if(this.Message){
-                    const imageUrl = '/images/messages/' + response.image_url;
-                }
-                else{
-                    const imageUrl = response.image_url;
-                }
-
-
-                // Bild direkt in den Editor einfügen
-                this.$emit('imageUploaded', response.image_url);
-                this.$emit('uploaded', response.image_url);
-
-
-                // Modal schließen
-                this.uploading = false;
-                this.progress = 0;
-                this.closeModal();
-            } catch (e) {
-                console.error("Fehler beim Parsen der JSON-Antwort:", e);
-                console.error("Antwort des Servers:", xhr.responseText);
-            }
-        } else {
-            console.error("Fehler beim Upload, Status:", xhr.status);
-            console.error("Antwort des Servers:", xhr.responseText);
-        }
-    };
-
-    xhr.onerror = () => {
-        console.error("Fehler beim Hochladen");
-        this.uploading = false;
-    };
-
-    xhr.send(formData);
+  xhr.onerror = () => {
+    this.uploading = false;
+    console.error("Fehler beim Hochladen");
+  };
+  let isw = "0";
+  if(this.CleanTable() === "images" && !this.Message)
+  {
+     isw = "1";
+     const ASD = "SD";
+  }
+  xhr.open('POST', '/upload-image/' + this.tablex + "/" + isw, true);
+  xhr.send(formData);
 },
-
       closeModal() {
         this.selectedImage = null;
-  this.previewImage = null;
-  this.uploading = false;
-  this.progress = 0;
-  this.$emit("close");
+        this.previewImage = null;
+        this.uploading = false;
+        this.progress = 0;
+        this.$emit('close');
       },
-
-
-    // Methode zum Aktualisieren des Inhalts (z. B. wenn du v-model verwendest)
-    updateValue() {
-        const editorContent = this.$refs.editor.innerHTML;
-   console.log("Editor-Inhalt aktualisiert:", editorContent);
-
-   //this.$emit("update:modelValue", editorContent);
-    }
-  },
-  watch: {
-  isOpen(newValue) {
-    console.log('isOpen geändert:', newValue);  // Überprüfe, ob isOpen korrekt gesetzt wird
-  },
-  isModalOpen(newVal) {
+    },
+    watch: {
+        isModalOpen(newVal) {
     if (newVal) {
-      // Modal wird geöffnet – vorherige Daten zurücksetzen
+      // Modals öffnen, alles zurücksetzen
       this.selectedImage = null;
       this.previewImage = null;
       this.uploading = false;
       this.progress = 0;
     }
-  }
-}
-
-
+  },
+    },
   };
   </script>
 
-  <style>
+  <style scoped>
   .modal {
     position: fixed;
     top: 0;
@@ -235,20 +221,24 @@ async uploadImage() {
     justify-content: center;
     align-items: center;
   }
+
   .modal-content {
     background: white;
     padding: 20px;
     border-radius: 5px;
     text-align: center;
   }
+
   .dropzone {
     border: 2px dashed #ccc;
     padding: 20px;
     cursor: pointer;
   }
+
   .preview-container {
     margin-top: 10px;
   }
+
   .preview {
     max-width: 300px;
     width: auto;

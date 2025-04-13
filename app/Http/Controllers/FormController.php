@@ -184,7 +184,7 @@ class FormController extends Controller
     {
         if($name == "status"){
             $statusvals = [
-                ["id" => "empty", "name" => " "],
+                ["id" => "empty", "name" => "keine Angabe"],
                 ["id" => "forsale", "name" => "Zu Verkaufen"],
                 ["id" => "givenaway", "name" => "Verschenkt"],
                 ["id" => "sold", "name" => "Verkauft"],

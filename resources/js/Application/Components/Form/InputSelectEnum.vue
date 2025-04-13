@@ -16,7 +16,7 @@
         v-model="computedSelectedId"
     >
 
-
+    <option disabled value="">Bitte wählen</option>
     <option v-for="option in arr" :key="option.id" :value="String(option.id)">
 
     {{ option.name }}

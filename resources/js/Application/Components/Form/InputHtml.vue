@@ -102,6 +102,7 @@
 
         <!-- Textfeld -->
         <div class="mb-4 p-4 bg-layout-sun-0 dark:bg-layout-night-0 rounded-lg">
+
             <div
     ref="editor"
     :id="name"

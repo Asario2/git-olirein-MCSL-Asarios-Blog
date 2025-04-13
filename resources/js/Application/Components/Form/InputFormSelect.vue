@@ -9,7 +9,7 @@
         :required="required"
         :users_id="users_id"
         v-model="users_id"
-    >
+    > <option disabled value="">Bitte wählen</option>
         <template v-if="Array.isArray(sortedOptions_sel)">
             <option
                 v-for="(option, key) in sortedOptions_sel"

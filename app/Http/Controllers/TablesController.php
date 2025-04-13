@@ -1579,6 +1579,12 @@ class TablesController extends Controller
 
         return $slug;
     }
+    public function GetUserNull()
+    {
+        $unull = DB::table("users")->orderby("id","ASC")->pluck("name");
+        \Log::info("UNULL".$unull);
+        return response()->json($unull);
+    }
     public function UpdateTable(Request $request,$table, $id)
     {
             // Zugriff auf die übergebenen Daten
@@ -1598,6 +1604,9 @@ class TablesController extends Controller
         if(Schema::hasColumn($table, 'preis')|| isset($formData['preis']))
         {
             $formData['preis'] = str_replace(",",".",$formData['preis']);
+        }
+        if(empty($formData['preis']) && Schema::hasColumn($table, 'preis')){
+            $formData['preis'] = "0.0";
         }
         \Log::info($formData);
         $formData = ($formData);

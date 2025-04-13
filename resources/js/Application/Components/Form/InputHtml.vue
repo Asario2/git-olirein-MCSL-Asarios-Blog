@@ -64,7 +64,7 @@
             <button type="button" @mousedown.prevent
             @click="openModal_alt2" class="px-2.5 py-1 rounded-full hover:bg-layout-sun-0 hover:dark:bg-layout-night-0 cursor-pointer"
            v-tippy>
-                <b><IconPictures /></b>
+                <b><IconPictures stroke="white"/></b>
             </button>
             <tippy>Bildupload</tippy>
             <!-- Code Button -->
@@ -149,8 +149,8 @@ import { Tippy } from 'tippy.vue';
         ImageUploadModal,
 
     },
+    props:{
 
-    props: {
         // isModalOpen: {
         //     type: [Boolean,Number],
         //     default: false,
@@ -176,8 +176,8 @@ import { Tippy } from 'tippy.vue';
         },
         table_x: String,
 
-        placeholder: String
-        // isOpen:[Number,Boolean],
+        placeholder: String,
+
     },
 
     data() {

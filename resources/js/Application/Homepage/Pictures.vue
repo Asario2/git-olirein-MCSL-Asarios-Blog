@@ -68,15 +68,20 @@
 >
     <!-- Linke Spalte: Thumbnail -->
     <div class="relative lg:col-span-3">
-        <a :href="'/images/images/big/'+ entry.image_path" :data-pswp-width="entry.img_x" :data-pswp-height="entry.img_y">
-        <img
-        :src="'/images/images/thumbs/' + entry.image_path"  loading="lazy"
-        :alt="entry.title"
-        :title="entry.title"
-        @click="onClick"
-        class="w-full  rounded bg-layout-sun-500 dark:bg-layout-night-500 imgprev"
-        />
-    </a>
+        <a
+  :href="'/images/images/big/' + entry.image_path"
+  :data-pswp-width="entry.img_x"
+  :data-pswp-height="entry.img_y"
+>
+ <ZoomImage
+  :src="'/images/images/thumbs/' + entry.image_path"
+  :alt="entry.title"
+  :title="entry.title"
+  :width="300"
+  :height="300"
+  class="imgprev"
+/>
+</a>
     </div>
 
     <!-- Mittlere Spalte: Überschrift, Beschreibung und Kommentar-Slot -->
@@ -96,7 +101,7 @@
 
     <!-- Rechte Spalte: Kurzinfos, Bewertungs-Slot, Datum und optionale Kameraangabe -->
     <div class="p-6 space-y-2 lg:col-span-3">
-        <div class=" font-semibold text-layout-sun-800 dark:text-layout-night-800">
+        <div class="text-sm font-semibold text-layout-sun-800 dark:text-layout-night-800">
         <h3>Kurzinfos</h3>
         </div>
         <div v-if="entry.Format">
@@ -145,6 +150,7 @@ import averageRating from "@/Application/Components/Social/averageratings.vue";
 import IconPencil from "@/Application/Components/Icons/Pencil.vue";
 import InputIconHyperlink from "@/Application/Components/Form/InputIconHyperlink.vue";
 import SocialButtons from "@/Application/Components/Social/socialButtons.vue";
+import ZoomImage from "@/Application/Components/Content/ZoomImage.vue";
 import Share from "@/Application/Components/Social/share.vue";
 //import PswpTemplate from "@/Application/Components/Content/pswptemplate.vue";
 import AddRating from "@/Application/Components/Social/addrating.vue";
@@ -187,6 +193,7 @@ components: {
     InputIconHyperlink,
     averageRating,
     SocialButtons,
+    ZoomImage,
 },
 data() {
     return {

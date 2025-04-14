@@ -39,4 +39,5 @@ class DarkModeController extends Controller
         session()->put('darkmode',$val);
     }
 
+
 }

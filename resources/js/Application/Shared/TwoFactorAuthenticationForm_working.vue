@@ -12,7 +12,7 @@
                 Sie haben die Zwei-Faktor-Authentifizierung aktiviert.
             </h3>
 
-            <h3 v-else-if="twoFactorEnabled && confirming" class="form_text_h3">
+            <h3 v-else-if="confirming" class="form_text_h3">
                 Aktivierung der Zwei-Faktor-Authentifizierung abschließen.
             </h3>
 
@@ -152,9 +152,6 @@
                             </input-danger-button>
                         </confirms-password>
                     </button-group>
-                    <div class="mt-4 text-sm text-gray-400">
-                    [DEBUG] confirming: {{ confirming }}, twoFactorEnabled: {{ twoFactorEnabled }}, qrCode: {{ qrCode ? 'loaded' : 'null' }}
-                    </div>
                 </div>
             </div>
         </template>
@@ -216,10 +213,18 @@ export default {
             confirmationForm: useForm({
                 code: "",
             }),
-            twoFactorEnabled: this.$page.props.auth.user.two_factor_confirmed_at !== null,
+            twoFactorEnabled: false,
         };
     },
-
+    mounted() {
+    // Wenn zwei Faktoren aktiviert sind, aber keine Recovery-Codes da sind,
+    // gehen wir davon aus, dass die Aktivierung noch nicht bestätigt wurde.
+    if (this.$page.props.auth.user.two_factor_enabled && !this.hasRecoveryCodes()) {
+        this.confirming = true;
+        this.showQrCode();
+        this.showSetupKey();
+    }
+},
     computed: {
         page() {
             return usePage();
@@ -236,7 +241,7 @@ export default {
         {
             preserveScroll: true,
             onSuccess: async () => {
-                console.log("enable success – loading setup data...");
+                console.log("Enable success – loading setup data...");
 
                 await Promise.all([
                     this.showQrCode(),
@@ -244,9 +249,7 @@ export default {
                     this.showRecoveryCodes(),
                 ]);
 
-                this.twoFactorEnabled = true;
-                this.confirming = true;
-                console.log("2FA Setup Data loaded – now in confirming mode");
+                this.confirming = true; // Nur "Bestätigungsmodus", noch nicht aktiviert!
             },
             onFinish: () => {
                 this.enabling = false;
@@ -264,8 +267,8 @@ confirmTwoFactorAuthentication() {
             this.confirming = false;
             this.qrCode = null;
             this.setupKey = null;
-            this.recoveryCodes = [];
-            this.twoFactorEnabled = true; // JETZT aktivieren!
+            this.twoFactorEnabled = true; // Jetzt wirklich aktiviert!
+            console.log("2FA vollständig aktiviert");
         },
     });
 },

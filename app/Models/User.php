@@ -60,7 +60,10 @@ class User extends Authenticatable implements MustVerifyEmail
             'is_customer' => 'boolean',
         ];
     }
-
+    public function hasConfirmedTwoFactorAuthentication(): bool
+    {
+        return !is_null($this->two_factor_secret) && $this->two_factor_confirmed_at;
+    }
     public function getFullNameAttribute()
     {
         $name = $this->first_name;

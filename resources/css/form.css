@@ -4,7 +4,7 @@
     }
 
     .form_qr_code {
-        @apply mt-4 p-2 inline-block bg-layout-sun-0 dark:bg-layout-night-0;
+        @apply mt-4 p-2 inline-block bg-layout-sun-0 dark:bg-layout-sun-0;
     }
 
     .form_link {

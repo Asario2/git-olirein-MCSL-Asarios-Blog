@@ -3,11 +3,13 @@
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\BlogPostController;
 use App\Http\Controllers\RatingController;
 use App\Http\Controllers\NameBindingsController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\HandbookController;
 use App\Http\Controllers\ApplicationController;
+use App\Http\Controllers\TwoFactorController;
 use App\Http\Controllers\GlobalController;
 use App\Http\Controllers\DashboardAdminController;
 use App\Http\Controllers\CommentController;
@@ -40,6 +42,10 @@ Route::get('/GetAuth', function () {
     \Log::info("🚨 Nicht eingeloggt");
     return response()->json("false");
 })->name("GetAuth");
+Route::middleware(['auth'])->group(function () {
+    Route::post('/two-factor/setup', [TwoFactorController::class, 'setup'])->name('two-factor.setup');
+    Route::post('/two-factor/confirm', [TwoFactorController::class, 'confirm'])->name('two-factor.confirm_alt');
+});
 Route::get("api/getSlug/{table}/{id?}", [TablesController::class, "getSlug"])->name("getSlug");
 Route::get('/namebindings', [NameBindingsController::class, 'RefreshFields'])->name("ColumnFetcher");
 Route::post('/upload-image/{table}/{isw?}', [ImageUploadController::class, 'upload'])->name('upload.image');
@@ -95,7 +101,7 @@ Route::get('/home/invalid_signature', [HomeController::class, 'home_invalid_sign
 
 Route::get('/pictures', [App\Http\Controllers\PagesController::class, 'ab_images'])->name('images');
 Route::get('/pictures/{pic}/',[App\Http\Controllers\PagesController::class, 'ab_images_cat'])->name('pictures');
-Route::get('/blogposts', [BlogPostController::class, 'index'])->name('blogposts.index');
+// Route::get('/blogposts', [BlogPostController::class, 'index'])->name('blogposts.index');
 Route::get('/devmod', function () {
     // ShowRepo();
     //IMULController::smpix();
@@ -113,7 +119,7 @@ Route::get('/devmod', function () {
     Route::get('tables/{table}/create', [TablesController::class, 'createEntryForm'])->name('tables.create-table');
     Route::post('/comments/store/{table}/{postId}', [CommentController::class, 'store_alt'])->name('comments.store_alt');
     Route::post('/comments/{table}/{id}', [CommentController::class, 'store'])->name('comments.store');
-    Route::get('/{table}/{cat?}#headline_{id}', [PostController::class, 'show'])->name('posts.show');
+    // Route::get('/{table}/{cat?}#headline_{id}', [PostController::class, 'show'])->name('posts.show');
 
 
 // ===============================

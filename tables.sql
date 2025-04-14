@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 01, 2025 at 04:15 PM
+-- Generation Time: Apr 14, 2025 at 08:33 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -14,8 +14,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `oliver_rein`
 --
-CREATE DATABASE IF NOT EXISTS `oliver_rein` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
-USE `oliver_rein`;
 
 -- --------------------------------------------------------
 
@@ -264,7 +262,7 @@ INSERT INTO `blogs` (`id`, `blog_date`, `title`, `blog_categories_id`, `blog_aut
 (178, '2024-10-31 09:35:00', 'Und schon wieder haben wir Halloween!', 1, 1, 'Halloween ist wieder da - die Straßen füllen sich mit Kürbislaternen, die Kinder schlüpfen in schaurige Kostüme, und die Geistergeschichten erwachen zum Leben. Es ist die Zeit, in der Grusel und Kreativität Hand in Hand gehen. Die Tradition, die ihren Ursprung in irischen und keltischen Bräuchen hat, hat sich längst über die ganze Welt verbreitet und begeistert Jung und Alt. Ob gespenstische Deko, ausgehöhlte Kürbisse oder einfach ein gemütlicher Horrorfilmabend - Halloween bringt die Menschen auf eine unbeschwerte, magische Weise zusammen.\r\n\r\nDoch Halloween ist mehr als nur ein Fest des Schreckens. Es ist auch ein Spiegel für unsere Fantasie und Kreativität. Jedes Kostüm, jede verzierte Haustür und jede handgemachte Kürbislaterne erzählt eine eigene Geschichte. Vielleicht ist das der eigentliche Zauber von Halloween: einen Abend lang in eine andere Welt einzutauchen, zusammen mit Freunden und Familie die Nacht zu erobern und sich gemeinsam vor dem Spuk zu gruseln – nur um am nächsten Morgen mit einem Schmunzeln an das Abenteuer zurückzudenken.', 'Halloween ist wieder da - die Straßen füllen sich mit Kürbislaternen, die Kinder schlüpfen in schaurige Kostüme, und die Geistergeschichten erwachen zum Leben. Es ist die Zeit, in der Grusel und Kreativität Hand in Hand gehen. Die Tradition, die ihren Ursprung in irischen und keltischen Bräuchen hat, hat sich längst &hellip;', 'ykgu', 1, 1, 1, '88d46e6c705129501bdd680082b4ff7e.jpg', '2024-10-31 08:35:00', '2025-02-25 15:00:24'),
 (179, '2024-12-07 14:36:00', 'X-Mas 2024', 1, 1, 'Weihnachten 2024 - eine Zeit voller stiller Magie und sanfter Freude. Auf den Eislaufbahnen sammeln sich Kinder und Erwachsene gleichermaßen, umgeben vom Glanz der festlichen Beleuchtung. Das Echo der Kufen auf dem Eis mischt sich mit dem Lachen der Menschen, und die kühle Luft trägt den Hauch von Winter, während die Bewegung die Herzen erwärmt. Schlittschuhlaufen - ein schwebendes Glück, das die Tage heller und die Nächte leichter macht.\r\n\r\nAm Rande der Bahnen strömt der Duft von Glühwein und gebrannten Mandeln durch die kalte Luft, eine Einladung zum Verweilen. Der Glühwein, tiefrot und würzig, wärmt Hände und Seele, während die süßen Mandeln knuspernd Erinnerungen an vergangene Jahre heraufbeschwören. Inmitten des bunten Treibens auf den Weihnachtsmärkten entfaltet sich eine stille Harmonie - eine Feier des Augenblicks, voller Vertrautheit und leiser Freude.', 'Weihnachten 2024 - eine Zeit voller stiller Magie und sanfter Freude. Auf den Eislaufbahnen sammeln sich Kinder und Erwachsene gleichermaßen, umgeben vom Glanz der festlichen Beleuchtung. Das Echo der Kufen auf dem Eis mischt sich mit dem Lachen der Menschen, und die kühle Luft trägt den Hauch von Winter, während die &hellip;', 'y619', 1, 1, 1, 'ae9cca18e24abc8d33617425f56ad5ad.jpg', '2024-12-07 13:36:00', '2025-02-25 15:00:24'),
 (180, '2025-02-02 20:49:01', 'Warum MCSL auf Laravel/Vue basiert – Die Technologie hinter diesem Blog', 2, 1, 'In der Welt des modernen Web-Developments gibt es unzählige Frameworks und Plattformen, aber nur wenige bieten die **Flexibilität**, **Skalierbarkeit** und **Benutzerfreundlichkeit** von Laravel. Heute möchte ich ein wenig darüber sprechen, warum **MCSL** auf Laravel basiert und wie es gemeinsam mit **Vue.js** das **Rückgrat** unseres Blogs bildet.\n\n--- \n\n ## Warum Laravel?\n\nLaravel ist ein **PHP-Framework**, das für seine **elegante Syntax**, **robusten Funktionen** und **entwicklerfreundlichen Tools** bekannt ist. Es vereinfacht den Entwicklungsprozess und bietet gleichzeitig leistungsstarke Funktionen. Mit Features wie **Authentifizierung**, **Routing**, **Sessions** und **Caching** stellt Laravel alles zur Verfügung, was benötigt wird, um leistungsstarke Webanwendungen wie **MCSL** zu entwickeln.\n\n### **Wichtige Gründe, warum Laravel die Basis von MCSL ist:**\n\n- **Schnelle Entwicklungszeiten:**  \n  Laravel’s **Artisan CLI** automatisiert wiederkehrende Aufgaben und beschleunigt so den Entwicklungsprozess erheblich.  \n\n- **Modularität:**  \n  Laravel’s **modulare Architektur** ermöglicht es uns, Funktionen wie **Benutzerverwaltung**, **API-Integrationen** und **Datenverwaltung** einfach zu implementieren und zu erweitern.  \n\n- **Sicherheit:**  \n  Laravel bietet integrierten Schutz vor gängigen Sicherheitslücken wie **CSRF**, **SQL-Injektionen** und **XSS-Angriffen**, wodurch MCSL von Anfang an sicher ist.\n--- \n## **Warum Vue.js?**\n\nVue.js ist ein **JavaScript-Framework**, das speziell dafür entwickelt wurde, benutzerfreundliche und reaktive Benutzeroberflächen zu erstellen. Zusammen mit Laravel bildet es eine perfekte Kombination für moderne Webanwendungen.\n\n### **Vorteile von Vue.js in MCSL:**\n\n- **Echtzeit-Updates:**  \n  Vue.js ermöglicht es, **Benutzerinteraktionen** ohne komplette Seitenaktualisierungen zu verarbeiten, sodass Änderungen in Echtzeit angezeigt werden.\n\n- **Komponentenstruktur:**  \n  Vue.js erlaubt es, verschiedene Teile der Anwendung als unabhängige, wiederverwendbare Komponenten zu erstellen. Das fördert eine **saubere und modulare Codebasis**.\n\n- **Interaktive Benutzeroberflächen:**  \n  Vue.js ermöglicht es, **dynamische und benutzerfreundliche Oberflächen** zu entwickeln, die direkt mit Laravel’s API kommunizieren.\n--- \n## **MCSL: Laravel und Vue.js im Zusammenspiel**\n\nMCSL ist mehr als nur ein **Content-Management-System (CMS)** — es ist eine moderne Webplattform, die von den **Stärken von Laravel und Vue.js** profitiert. Laravel fungiert dabei als **starke Backend-Architektur**, während Vue.js eine **dynamische und reaktionsschnelle Benutzeroberfläche** bereitstellt.\n\n### **Kernkomponenten der MCSL-Architektur:**\n\n- **Echtzeit-Datenverwaltung:**  \n  Laravel und Vue.js ermöglichen es, Daten in Echtzeit zu aktualisieren und anzuzeigen.\n\n- **Nahtlose API-Integration:**  \n  Laravel bietet leistungsstarke APIs, die von Vue.js genutzt werden, um eine reibungslose Benutzererfahrung zu gewährleisten.\n\n- **Dynamische Benutzeroberflächen:**  \n  Dank Vue.js kann MCSL interaktive Funktionen wie Drag-and-Drop, Inline-Bearbeitung und Live-Datenaktualisierungen bieten.', 'In der Welt des modernen Web-Developments gibt es unzählige Frameworks und Plattformen, aber nur wenige bieten die **Flexibilität**, **Skalierbarkeit** und **Benutzerfreundlichkeit** von Laravel. Heute möchte ich ein wenig darüber sprechen, warum **MCSL** auf Laravel basiert und wie es gemeinsam mit **Vue.js** das **Rückgrat** unseres Blogs bildet. &hellip;', 'ylpa', 2, 1, 1, 'ef4f0c6ab9ff165247738d00d9a5afad.jpg', '2025-02-26 20:45:25', '2025-02-25 15:00:24'),
-(236, '2025-03-31 15:00:42', 'test', 3, 1, 'asdasdasd', 'asddds', 'yfi1', NULL, 1, 1, 'dad6a1d98fb07fc9fa896a46e68d2f0e.jpg', '2025-03-31 15:00:42', NULL);
+(259, '2025-04-05 08:25:50', 'test title', 2, 1, '<div>Hallo Welt !</div><div></div><a href=\"https://www.google.com\" target=\"_blank\">google</a><div><br></div>', '<hr>hallo welt&nbsp; ! SDDS', 'yhty', 1, 1, 1, '//54d362bc1354804b1178fa412758df04.jpg', '2025-04-05 08:25:50', NULL);
 
 -- --------------------------------------------------------
 
@@ -668,14 +666,6 @@ CREATE TABLE `cache` (
   `expiration` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `cache`
---
-
-INSERT INTO `cache` (`key`, `value`, `expiration`) VALUES
-('dc44958e29ffba8b810d21377ae366b5', 'i:1;', 1743514820),
-('dc44958e29ffba8b810d21377ae366b5:timer', 'i:1743514820;', 1743514820);
-
 -- --------------------------------------------------------
 
 --
@@ -788,6 +778,30 @@ INSERT INTO `comments` (`id`, `pub`, `users_id`, `post_id`, `admin_table_id`, `c
 (42, 1, 10, 333, NULL, 'hallo du däß', 'admin@example.com', '2025-03-30 13:21:57', '2025-03-30 13:21:57', 0),
 (43, 1, 10, 428, NULL, 'hallo welt !', 'admin@example.com', '2025-03-30 13:27:38', '2025-03-30 13:27:38', 0),
 (45, 1, 1, 428, NULL, 'hey du da !', 'parie@gmx.de', '2025-03-30 19:30:41', '2025-03-30 19:30:41', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `copyleft`
+--
+
+CREATE TABLE `copyleft` (
+  `id` bigint(11) NOT NULL,
+  `pub` tinyint(1) NOT NULL,
+  `tag` varchar(50) NOT NULL,
+  `name` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Dumping data for table `copyleft`
+--
+
+INSERT INTO `copyleft` (`id`, `pub`, `tag`, `name`) VALUES
+(1, 1, 'c_asario', 'Asario'),
+(2, 1, 'c_rob', 'Baxter the Dog'),
+(3, 1, 'c_liri', 'Chinagirl'),
+(4, 1, 'c_mazi', 'Maria Zinckernagel'),
+(5, 1, 'c_nitro', 'Nitropower');
 
 -- --------------------------------------------------------
 
@@ -1275,7 +1289,9 @@ INSERT INTO `images` (`id`, `pub`, `position`, `image_categories_id`, `headline`
 (428, 1, 5, 2, 'Mixed Smasher', 'Mixed Smasher', 'forsale', '2024-12-14 19:39:01', NULL, 0, 1400, 1403, 0, 'Mit Pouring Technik erstellt.', 'Created with pouring technique', 7, NULL, 'd08cff7d676612d1c7a9851cd6ceb0a2.jpg', NULL, 101.00, 1, 1, 1),
 (430, 1, 1, 1, 'Hello World', 'Hello World', 'unsaleable', '2025-03-14 19:39:01', NULL, 0, 1400, 680, 0, 'Eine Kachelvorlage aus PLA', 'A tile template made from PLA', 7, NULL, 'bb5844791b3afd328dffe366fc9eedef.jpg', '18x8cm', 50.00, 1, 1, 1),
 (453, 1, 1, 12, 'Hello World 3DP', 'Hello World 3DP', 'forsale', '2025-03-29 16:51:16', 5, 29, 1400, 668, 0, 'Halo', NULL, 7, NULL, 'e1ea6abb156103a03ad54535be5fbfbb.jpg', NULL, NULL, 1, 1, NULL),
-(454, 1, 0, 12, 'Hamburger Menu 3DP', 'Hamburger Menu 3DP', 'forsale', '2025-03-29 16:55:15', 5, 29, 1400, 1040, 0, NULL, NULL, 0, NULL, '0da5e1cf1c64b6226c5a3e1dba4e33ba.jpg', NULL, 29.50, 1, 1, 1);
+(459, 1, 1, 2, 'Strawberry Hearts', 'Strawberry Hearts', 'forsale', '2025-04-11 17:03:56', 3, 17, 1400, 1000, 0, 'Gespachtelter Acryl Hintergrund mit weißer Acrylfarbe/Stift auf Papier', 'Spackled acrylic background with white acrylic paint/marker on paper', 7, NULL, '/d2b6c3f003ff67d761cdf42ef1d7fdd9.jpg', 'A2', 100.00, 1, 1, 1),
+(454, 1, 0, 12, 'Hamburger Menu 3DP', 'Hamburger Menu 3DP', 'forsale', '2025-03-29 16:55:15', 5, 29, 1400, 1040, 0, NULL, NULL, 0, NULL, '0da5e1cf1c64b6226c5a3e1dba4e33ba.jpg', NULL, 29.50, 1, 1, 1),
+(461, 1, 0, 10, '12313', '23', 'unsaleable', '2025-04-13 13:46:58', 1, 39, 1400, 792, 0, 'Ein Schaumkuss', 'Choco Marshmallow', 3, NULL, '/989801a20fb0285eb9d90bef97d57319.jpg', NULL, 0.00, 1, 0, 1);
 
 -- --------------------------------------------------------
 
@@ -1320,7 +1336,7 @@ INSERT INTO `image_categories` (`id`, `pub`, `position`, `name`, `name_en`, `sho
 (7, 1, 7, 'fineliner', 'fineliner', 'fineliner', 'Meine Fineliner Kunstwerke', 'my fineliner artworks', 0, 0, 'Fineliner', 'fineliner.jpg', 'Fineliner Galerie', 'Fineliner Gallery', 'Fineliner Artworks von mir.\r\nDas sind meine Fineliner Bilder von 2003-fx_year()\r\nJa ich liebe meine Stabilo Fineliner ;)', 'My Fineliner Artworks. \nThis are Artworks from 2003-fx_year() \nYes I love my Stabilo Fineliners ;),', 'Painting', '2018-06-09 20:22:00', '2018-06-09 20:22:00', 1),
 (8, 1, 8, 'lampen', 'lamps', 'lampen', 'Lampen aus Leinw&auml;nden...', 'Lamps from Canvases', 5, 42, 'Lampen', 'lampen.png', 'Lampen aus bemalten Leinw&auml;nden', 'Lamps created with painted Canvases', 'Vor einiger Zeit hatte Chris aus dem Maleratelier die Idee zu einem Lichtobkjekt. Die Lampen bestehen zum Teil aus fertig montierten Prismen-Leinwänden sowie verschraubten planen Leinwänden. In den Prismen steckt eine Leuchtstoffröhre und in den Viereckigen eine normale Glühlampe. Die Lampen stehen zum größtem Teil in Rickling im Maleratelier wo auch einige meiner Acryl-Werke hängen. Schaut mal rein und schaut euch glücklich,', 'Some time ago Chris from the \"Maleratelier\" had the idea to a Light-Object. Some of the Lamps are made of mounted Prism Canvases others of screwed Canvases. In the Prism Canvas is a fluorescent tube installed. The Others are filled with a Light Bulb. Most of the lamps are shown in Ricklink in the \"Maleratelier\" where also some of my acrylic Images are shown. Have a look and enjoy.', 'Painting', '2017-02-03 20:08:59', '2017-02-03 20:08:59', 1),
 (9, 1, 9, 'monstarz', 'monstarz', 'monstarz', 'Mein Monstar in der gro&szlig;en weiten Welt', 'My monstar in the big wide world', 0, 0, 'Montstarz', 'monstar.jpg', 'Mein Monstar', 'My Monstar', 'Ich habe vor Jahren ein Monstar-Kuscheltier bekommen, und habe es auf die Reise quer durch die Welt geschickt. Verwandte und Freunde haben das Tier in Szene gesetzt und Fotografiert. Mein Monster in der großen weiten Welt. Shots by Chinagirl, Baxter the dog, Nitropower, mir und Maria Zinckernagel Ich finde mein Monstar extrem Fotogen.', 'Some years ago i recieved a Monstar as a gift from my Sister. Sometimes Monstar is traveling around the world and some of my friends and family members shot photos with it. Monstar in the whole wide world. Shots by Chinagirl, Baxter the dog, Nitropower, Maria Zinckernagel and me I think my monstar has a lot of Sex-Appeal.', 'Photograph', '2017-02-03 20:10:18', '2017-02-03 20:10:18', 0),
-(10, 1, 10, 'photos', 'photos', 'photos', 'Meine gemischten Photos', 'My mixed Photos', 1, 39, 'Photos', 'photos.jpg', 'Fotografien', 'Photographs', 'Fotos aufgenommen mit diversen Kameras an verschiedenen Orten. Ostsee, Berlin, Kreis Segeberg uvm,', 'Photos shooted with different Cameras on different places. Baltic Sea, Berlin, Kreis Segeberg etc.', 'Photograph', '2018-06-29 15:07:58', '2018-06-29 15:07:58', 0),
+(10, 1, 10, 'photos', 'photos', 'photos', 'Meine gemischten Photos', 'My mixed Photos', 1, 39, 'Photos', 'photos.jpg', 'Fotografien', 'Photographs', 'Fotos aufgenommen mit diversen Kameras an verschiedenen Orten. Ostsee, Berlin, Kreis Segeberg uvm.', 'Photos shooted with different Cameras on different places. Baltic Sea, Berlin, Kreis Segeberg etc.', 'Photograph', '2018-06-29 15:07:58', '2018-06-29 15:07:58', 0),
 (11, 1, 11, 'sketches', 'sketches', 'sketches', 'Skizzen und Kritzeleien', 'Sketches and Scribbled ones', 0, 0, 'Sketches', 'sketches.jpg', 'Sketches Galerie', 'Sketches Gallery', 'Skizzen und Entwürfe bzw. Konzeptzeichnungen sind hier. Hauptsächlich sind es Entwürfe die diese Galerie Prägen. Unter anderem sind es kleinere Zeichnungen die zwar fertig aber nicht Formatfüllend sind. Auch kleinere Experimente findet Ihr hier Versammelt unter dem Dach Sketches.', 'Sketches and schemes are in here. This gallery is characterized by schemes and drafts. Among others the pictures are very small but finished. Also smaller experiments you\'ll find here under the label Sketches.', 'Painting', '2017-02-03 20:14:25', '2017-02-03 20:14:25', 1),
 (12, 1, 12, 'ton', 'pottered', 'ton', 'Get&ouml;pferte Dinge', 'Pottered things', 5, 29, 'Ton', 'clay.jpg', 'get&ouml;pfertes', 'pottered', 'Einige Werke sind in 3D. Ausgestellt sind getöpferte Kunstwerke von Asario. Alles ist von mir handgemacht, mit Hilfe meines 3D-Druckers', 'Some works are in 3D. On display are pottery works of art by Asario. Everything is handmade by me, with the help of my 3D printer', 'Sculpture', '2017-05-28 16:12:44', '2017-05-28 16:12:44', 1),
 (13, 1, 13, 'zentangle', 'zentangle', 'zentangle', 'Meine Zentangle Galerie - Alles Handgetangelt', 'My Zentangle Gallery - All hand-tangled', 0, 0, 'Zentangles', 'zia_icon.jpg', 'Zentangle&reg;', 'Zentangle&reg;', 'Meine ersten Versuche mit Zentangle Inspired Art. Zentangles sind eigentlich Zeichnungen im Format 9x9cm, sind sie größer heißen sie offiziell \"Zentangle Inspired Art\". Es gibt diverse Zentangle Bücher und Hefte in denen die verschiedenen Muster abgedruckt sind, Ich habe einige davon zu Papier gebracht und unter anderem Postkarten mit diesen Mustern bemalt. Zentangles sind zum entspannen gut und fördern die Kreativität.', 'My first attemps with Zentangle Inspired Art. Actually Zentangle are 9cmx9cm big. Bigger ore Smaller Artworks are called \"Zentangle Inspired Arrt\". Their are plenty of books about Zentangles where different Patterns are printed in them. I Just made some Postcards and other Artworks with the patterns. You can relax while painting and it supports Creativity.', 'Painting', '2017-02-03 20:15:43', '2017-02-03 20:15:43', 1);
@@ -1424,8 +1440,8 @@ CREATE TABLE `ratings` (
 --
 
 INSERT INTO `ratings` (`id`, `users_id`, `image_id`, `table`, `rating`, `email`, `created_at`, `updated_at`) VALUES
-(1, 1, 428, 'Acryl', 4, NULL, '2025-03-30 15:53:50', '2025-03-30 19:31:18'),
-(5, 1, 359, 'Fasermaler', 4, NULL, '2025-03-30 16:41:05', '2025-03-30 18:30:23'),
+(1, 1, 428, 'Acryl', 4, NULL, '2025-03-30 15:53:50', '2025-04-13 12:50:49'),
+(5, 1, 359, 'Fasermaler', 5, NULL, '2025-03-30 16:41:05', '2025-04-11 16:33:42'),
 (6, NULL, 359, 'Fasermaler', 3, NULL, '2025-03-30 16:41:47', '2025-03-30 17:19:45'),
 (7, NULL, 428, 'Acryl', 5, NULL, '2025-03-30 17:23:03', '2025-03-30 19:09:52');
 
@@ -1449,8 +1465,7 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('1yGcGWxLEcrrPDD5ImRikWyfTsRT3vLqM7iLd4NT', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Iron Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiN1E0bEVRZFBieGFZeFJGWk9YbGQyMEE0TVFNcFpqU0RxQ3lhTzBuRSI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzU6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MS9hcGkvZGFyay1tb2RlIjt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo1OiJ0b2FzdCI7YTowOnt9fQ==', 1743512032),
-('otaoWM6JOZGc6zgT1dKmRYeputOEy7XBOgld1LMd', 11, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiazNiSjViUHdLVkNXS2dwZFd6Tmx0Z2VUZVhZVWpmMzhUdVFiOUtOdiI7czozOiJ1cmwiO2E6MDp7fXM6OToiX3ByZXZpb3VzIjthOjE6e3M6MzoidXJsIjtzOjM1OiJodHRwOi8vbG9jYWxob3N0OjgwODEvYXBpL2RhcmstbW9kZSI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjExO30=', 1743514761);
+('JY97uZKlMBGR4gpACEwDhWzhuLh0QoTmTf790nOV', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36', 'YTo5OntzOjY6Il90b2tlbiI7czo0MDoiUTIzd1NyTkNOU1c3bHVZdXVGYmNlOWRiWUI4anBaTVNPOW56OWtMcSI7czozOiJ1cmwiO2E6MDp7fXM6OToiX3ByZXZpb3VzIjthOjE6e3M6MzoidXJsIjtzOjg5OiJodHRwOi8vbG9jYWxob3N0OjgwODEvc3RvcmFnZS9wcm9maWxlLXBob3Rvcy85Z204VGRLVnA3OTAyR1VMTTVOMHhXZk50NmdqRGxWMWRVbFRHdTdSLmpwZyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fXM6NToidG9hc3QiO2E6MDp7fXM6NToibG9naW4iO2E6MDp7fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjE7czo0OiJhdXRoIjthOjE6e3M6MjE6InBhc3N3b3JkX2NvbmZpcm1lZF9hdCI7aToxNzQ0NjUzMTUzO31zOjIyOiJQSFBERUJVR0JBUl9TVEFDS19EQVRBIjthOjA6e319', 1744654830);
 
 -- --------------------------------------------------------
 
@@ -1572,6 +1587,7 @@ CREATE TABLE `users` (
   `two_factor_secret` text DEFAULT NULL,
   `two_factor_recovery_codes` text DEFAULT NULL,
   `two_factor_confirmed_at` datetime DEFAULT NULL,
+  `two_factor_enabled` tinyint(1) NOT NULL DEFAULT 0,
   `remember_token` varchar(100) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL
@@ -1678,6 +1694,12 @@ ALTER TABLE `comments`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `copyleft`
+--
+ALTER TABLE `copyleft`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `didyouknow`
 --
 ALTER TABLE `didyouknow`
@@ -1776,7 +1798,7 @@ ALTER TABLE `admin_table`
 -- AUTO_INCREMENT for table `blogs`
 --
 ALTER TABLE `blogs`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=237;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=260;
 
 --
 -- AUTO_INCREMENT for table `blog_authors`
@@ -1815,6 +1837,12 @@ ALTER TABLE `comments`
   MODIFY `id` bigint(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 
 --
+-- AUTO_INCREMENT for table `copyleft`
+--
+ALTER TABLE `copyleft`
+  MODIFY `id` bigint(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
 -- AUTO_INCREMENT for table `didyouknow`
 --
 ALTER TABLE `didyouknow`
@@ -1824,7 +1852,7 @@ ALTER TABLE `didyouknow`
 -- AUTO_INCREMENT for table `images`
 --
 ALTER TABLE `images`
-  MODIFY `id` bigint(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=457;
+  MODIFY `id` bigint(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=462;
 
 --
 -- AUTO_INCREMENT for table `image_categories`
@@ -1895,9 +1923,14 @@ COMMIT;
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `first_name`, `nick_name`, `email`, `name`, `birthday`, `music`, `interests`, `occupation`, `email_verified_at`, `password`, `users_rights_id`, `profile_photo_path`, `is_admin`, `is_employee`, `is_customer`, `admin_id`, `company_id`, `customer_id`, `image_path`, `last_login_at`, `two_factor_secret`, `two_factor_recovery_codes`, `two_factor_confirmed_at`, `remember_token`, `created_at`, `updated_at`) VALUES
-(11, 'Admin', 'admin', 'admin@example.com', 'Administrator', NULL, NULL, NULL, NULL, '2025-03-11 14:38:06', '$2y$12$tZaliTuKFNiFqhK/TTl7x.kKuAzj6dC.xVceEMWGJMa2TQRQ3uVnW', 1, NULL, 1, 0, 0, 1, NULL, NULL, NULL, '2025-04-01 14:26:41', NULL, NULL, NULL, NULL, '2025-04-01 15:37:36', '2025-04-01 16:26:41');
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+INSERT INTO `users` (`id`, `first_name`, `nick_name`, `email`, `name`, `birthday`, `music`, `interests`, `occupation`, `email_verified_at`, `password`, `users_rights_id`, `profile_photo_path`, `is_admin`, `is_employee`, `is_customer`, `admin_id`, `company_id`, `customer_id`, `image_path`, `last_login_at`, `two_factor_secret`, `two_factor_recovery_codes`, `two_factor_confirmed_at`, `two_factor_enabled`, `remember_token`, `created_at`, `updated_at`) VALUES
+(1, 'Admin', 'admin', 'admin@example.com', 'Administrator', NULL, NULL, NULL, NULL, '2025-03-11 14:38:06', '$2y$12$tZaliTuKFNiFqhK/TTl7x.kKuAzj6dC.xVceEMWGJMa2TQRQ3uVnW', 1, NULL, 1, 0, 0, 1, NULL, NULL, NULL, '2025-04-10 16:47:35', NULL, NULL, NULL, 0, NULL, '2025-04-01 15:37:36', '2025-04-10 18:47:35');
 COMMIT;
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

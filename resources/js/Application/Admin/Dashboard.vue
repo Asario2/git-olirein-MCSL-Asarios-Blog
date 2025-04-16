@@ -67,6 +67,18 @@
                 <!-- DB updaten -->
                 <template #description> Logs anzeigen    </template>
             </navigation-card>
+            <navigation-card
+                class="navigation_card"
+                title="Rechte"
+                :routeName="route('admin.users_rights')"
+                linkName="Benutzerberechtigungen"
+                target="_blank"
+                :withIcon="true"
+                icon="IconRight"
+            >
+                <!-- DB updaten -->
+                <template #description> Benutzer Rechte </template>
+            </navigation-card>
         </div>
     </layout>
 </template>

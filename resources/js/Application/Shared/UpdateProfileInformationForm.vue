@@ -26,7 +26,7 @@
                     <!-- Current Profile Photo -->
                     <div v-show="!photoPreview" class="mt-4">
                         <img
-                            :src="user.profile_photo_url"
+                            :src="user.profile_photo_url.replace('public','')"
                             :alt="user.name"
                             class="rounded-full h-20 w-20 object-cover"
                         />

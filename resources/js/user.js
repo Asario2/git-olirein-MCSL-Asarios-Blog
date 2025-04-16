@@ -82,6 +82,18 @@ function checkImageExists(url, callback) {
     return html.replace(/%5B/g, '[').replace(/%5D/g, ']');
 
 }
+function ucf(str) {
+    // Teilt den String an den Unterstrichen
+    const arr = str.split("_");
+
+    // Wandelt jedes Element des Arrays um, falls es mehr als ein Wort gibt
+    const na = arr.map(
+        (val) => val.charAt(0).toUpperCase() + val.slice(1).toLowerCase(),
+    );
+
+    // Setzt die W�rter mit einem Leerzeichen zusammen
+    return na.join(" ");
+}
 
 
 

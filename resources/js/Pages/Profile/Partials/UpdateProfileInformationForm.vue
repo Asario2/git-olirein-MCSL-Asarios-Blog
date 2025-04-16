@@ -74,7 +74,7 @@ const clearPhotoFileInput = () => {
     }
 };
 </script>
-
+<img src="" alt="Asario" class="rounded-full h-20 w-20 object-cover"></img>
 <template>
     <FormSection @submitted="updateProfileInformation">
         <template #title> Profile Information </template>
@@ -103,7 +103,7 @@ const clearPhotoFileInput = () => {
                 <!-- Current Profile Photo -->
                 <div v-show="!photoPreview" class="mt-2">
                     <img
-                        :src="user.profile_photo_url"
+                        :src="'images/' + user.profile_photo_url.replace('public','')"
                         :alt="user.name"
                         class="rounded-full h-20 w-20 object-cover"
                     />

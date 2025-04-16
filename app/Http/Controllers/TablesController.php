@@ -13,7 +13,8 @@ use App\Http\Controllers\IMULController;
 use App\Http\Controllers\GlobalController;
 use App\Models\Settings;
 use App\Models\Table;
-
+use App\Models\AdminTable;
+use App\Models\UsersRight;
 use App\Services\Inkrementierer;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
@@ -1688,6 +1689,19 @@ class TablesController extends Controller
         }
         DB::table($table)->where('id', $id)->delete();
 
+    }
+    public function URights(Request $request)
+    {
+        $tables = AdminTable::orderBy("name","ASC")->select('name')->get(); // oder dein gewünschtes Sortierfeld
+
+        // Beispiel: Aktuell eingeloggter Nutzer mit Rolle z. B. Moderator-ID = 1
+        $urid  = $request->urid ? $request->urid : "1";
+        $userRights = UsersRight::find($urid);
+        \Log::info("ass: ".json_Encode([$tables,$userRights]));
+        return Inertia::render('Admin/urights', [
+            'adminTables' => $tables,
+            'userRights' => $userRights,
+        ]);
     }
     // Funktion zum Löschen eines Eintrags
     public function destroy($table, $id)

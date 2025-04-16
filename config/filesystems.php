@@ -38,8 +38,8 @@ return [
 
         'public' => [
             'driver' => 'local',
-            'root' => storage_path('app/public'),
-            'url' => env('APP_URL').'/storage',
+            'root' => public_path(),
+            'url' => public_path(),
             'visibility' => 'public',
             'throw' => false,
         ],
@@ -47,6 +47,14 @@ return [
             'driver' => 'local',
             'root' => public_path(),
             'url' => public_path(),
+            "throw" => false
+
+        ],
+        'profile_disk' => [
+            'driver' => 'local',
+            'root' => public_path('images/'),
+            'url' => env('APP_URL') . '/images/',
+
             "throw" => false
 
         ],

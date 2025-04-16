@@ -50,6 +50,7 @@
 <script>
 import IconArrowLongRight from "@/Application/Components/Icons/ArrowLongRight.vue";
 import IconBook from "@/Application/Components/Icons/Book.vue";
+import IconRight from "@/Application/Components/Icons/IconRight.vue";
 import IconPictures from "@/Application/Components/Icons/IconPictures.vue";
 import IconDB from "@/Application/Components/Icons/db.vue";
 import IconLogs from "@/Application/Components/Icons/IconLogs.vue";
@@ -61,6 +62,7 @@ export default {
         IconArrowLongRight,
         IconBook,
         IconDB,
+        IconRight,
         IconPictures,
         IconLogs,
     },
@@ -105,6 +107,7 @@ export default {
             const icons = {
                 IconBook,
                 IconDB,
+                IconRight,
                 IconPictures,
                 IconLogs,
             };

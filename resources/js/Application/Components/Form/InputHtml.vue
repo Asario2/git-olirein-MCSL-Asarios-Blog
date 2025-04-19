@@ -6,8 +6,8 @@
         <!-- Menü -->
         <div
             class="mb-4 h-14 p-4 flex items-center bg-layout-sun-300 dark:bg-layout-night-300 rounded-lg"
-            v-if="isFocused"
-        >
+
+        ><p class='border rounded label p-1'>{{getLabel(name)}}</p>
             <!-- Bold Button -->
 
             <button type="button" @mousedown.prevent @click="toggleFormat('bold')" class="px-2.5 py-1 rounded-full hover:bg-layout-sun-0 hover:dark:bg-layout-night-0 cursor-pointer"
@@ -136,6 +136,7 @@
 import tippy from 'tippy.js';
 import 'tippy.js/dist/tippy.css';
 import ImageUploadModal from '@/Application/Components/ImageUploadModal.vue';
+import { GetSettings } from "@/helpers";
 import IconPictures from "@/Application/Components/Icons/IconPictures.vue";
 import IconCode from "@/Application/Components/Icons/IconCode.vue";
 import IconHyperLink from "@/Application/Components/Icons/IconHyperLink.vue";
@@ -186,12 +187,13 @@ import { Tippy } from 'tippy.vue';
             isFocused: false,
             isModalOpen: false,
             nf2: null,
-
+            settings: {},
 
         };
     },
 
-    mounted() {
+    async mounted() {
+        this.settings = await GetSettings();
         this.$nextTick(() => {
       tippy('[data-tippy-content]', {
         placement: 'right', // Beispiel für die Platzierung, kannst du nach Belieben anpassen
@@ -242,6 +244,9 @@ import { Tippy } from 'tippy.vue';
   }
 },
     methods: {
+        getLabel(name) {
+    return this.settings?.exl?.[name] ?? name;
+  },
     updateValue() {
         const html = this.$refs.editor.innerHTML
             .replace('%5B', '[')
@@ -716,5 +721,10 @@ setCursorAfterFormattedText(el) {
 .editor a {
   color: #2563eb; /* z. B. Tailwind blue-600 */
   text-decoration: underline;
+}
+.label{
+    border-radius:4px;
+    color:#999;
+    border-color:#999;
 }
 </style>

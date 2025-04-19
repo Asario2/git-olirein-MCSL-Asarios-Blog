@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 14, 2025 at 08:33 PM
+-- Generation Time: Apr 19, 2025 at 02:18 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -21,6 +21,7 @@ SET time_zone = "+00:00";
 -- Table structure for table `admin_table`
 --
 
+DROP TABLE IF EXISTS `admin_table`;
 CREATE TABLE `admin_table` (
   `id` bigint(20) NOT NULL,
   `pub` tinyint(1) DEFAULT 1,
@@ -59,6 +60,7 @@ INSERT INTO `admin_table` (`id`, `pub`, `position`, `name`, `description`, `modu
 -- Table structure for table `blogs`
 --
 
+DROP TABLE IF EXISTS `blogs`;
 CREATE TABLE `blogs` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `blog_date` timestamp NULL DEFAULT NULL,
@@ -262,7 +264,7 @@ INSERT INTO `blogs` (`id`, `blog_date`, `title`, `blog_categories_id`, `blog_aut
 (178, '2024-10-31 09:35:00', 'Und schon wieder haben wir Halloween!', 1, 1, 'Halloween ist wieder da - die Straßen füllen sich mit Kürbislaternen, die Kinder schlüpfen in schaurige Kostüme, und die Geistergeschichten erwachen zum Leben. Es ist die Zeit, in der Grusel und Kreativität Hand in Hand gehen. Die Tradition, die ihren Ursprung in irischen und keltischen Bräuchen hat, hat sich längst über die ganze Welt verbreitet und begeistert Jung und Alt. Ob gespenstische Deko, ausgehöhlte Kürbisse oder einfach ein gemütlicher Horrorfilmabend - Halloween bringt die Menschen auf eine unbeschwerte, magische Weise zusammen.\r\n\r\nDoch Halloween ist mehr als nur ein Fest des Schreckens. Es ist auch ein Spiegel für unsere Fantasie und Kreativität. Jedes Kostüm, jede verzierte Haustür und jede handgemachte Kürbislaterne erzählt eine eigene Geschichte. Vielleicht ist das der eigentliche Zauber von Halloween: einen Abend lang in eine andere Welt einzutauchen, zusammen mit Freunden und Familie die Nacht zu erobern und sich gemeinsam vor dem Spuk zu gruseln – nur um am nächsten Morgen mit einem Schmunzeln an das Abenteuer zurückzudenken.', 'Halloween ist wieder da - die Straßen füllen sich mit Kürbislaternen, die Kinder schlüpfen in schaurige Kostüme, und die Geistergeschichten erwachen zum Leben. Es ist die Zeit, in der Grusel und Kreativität Hand in Hand gehen. Die Tradition, die ihren Ursprung in irischen und keltischen Bräuchen hat, hat sich längst &hellip;', 'ykgu', 1, 1, 1, '88d46e6c705129501bdd680082b4ff7e.jpg', '2024-10-31 08:35:00', '2025-02-25 15:00:24'),
 (179, '2024-12-07 14:36:00', 'X-Mas 2024', 1, 1, 'Weihnachten 2024 - eine Zeit voller stiller Magie und sanfter Freude. Auf den Eislaufbahnen sammeln sich Kinder und Erwachsene gleichermaßen, umgeben vom Glanz der festlichen Beleuchtung. Das Echo der Kufen auf dem Eis mischt sich mit dem Lachen der Menschen, und die kühle Luft trägt den Hauch von Winter, während die Bewegung die Herzen erwärmt. Schlittschuhlaufen - ein schwebendes Glück, das die Tage heller und die Nächte leichter macht.\r\n\r\nAm Rande der Bahnen strömt der Duft von Glühwein und gebrannten Mandeln durch die kalte Luft, eine Einladung zum Verweilen. Der Glühwein, tiefrot und würzig, wärmt Hände und Seele, während die süßen Mandeln knuspernd Erinnerungen an vergangene Jahre heraufbeschwören. Inmitten des bunten Treibens auf den Weihnachtsmärkten entfaltet sich eine stille Harmonie - eine Feier des Augenblicks, voller Vertrautheit und leiser Freude.', 'Weihnachten 2024 - eine Zeit voller stiller Magie und sanfter Freude. Auf den Eislaufbahnen sammeln sich Kinder und Erwachsene gleichermaßen, umgeben vom Glanz der festlichen Beleuchtung. Das Echo der Kufen auf dem Eis mischt sich mit dem Lachen der Menschen, und die kühle Luft trägt den Hauch von Winter, während die &hellip;', 'y619', 1, 1, 1, 'ae9cca18e24abc8d33617425f56ad5ad.jpg', '2024-12-07 13:36:00', '2025-02-25 15:00:24'),
 (180, '2025-02-02 20:49:01', 'Warum MCSL auf Laravel/Vue basiert – Die Technologie hinter diesem Blog', 2, 1, 'In der Welt des modernen Web-Developments gibt es unzählige Frameworks und Plattformen, aber nur wenige bieten die **Flexibilität**, **Skalierbarkeit** und **Benutzerfreundlichkeit** von Laravel. Heute möchte ich ein wenig darüber sprechen, warum **MCSL** auf Laravel basiert und wie es gemeinsam mit **Vue.js** das **Rückgrat** unseres Blogs bildet.\n\n--- \n\n ## Warum Laravel?\n\nLaravel ist ein **PHP-Framework**, das für seine **elegante Syntax**, **robusten Funktionen** und **entwicklerfreundlichen Tools** bekannt ist. Es vereinfacht den Entwicklungsprozess und bietet gleichzeitig leistungsstarke Funktionen. Mit Features wie **Authentifizierung**, **Routing**, **Sessions** und **Caching** stellt Laravel alles zur Verfügung, was benötigt wird, um leistungsstarke Webanwendungen wie **MCSL** zu entwickeln.\n\n### **Wichtige Gründe, warum Laravel die Basis von MCSL ist:**\n\n- **Schnelle Entwicklungszeiten:**  \n  Laravel’s **Artisan CLI** automatisiert wiederkehrende Aufgaben und beschleunigt so den Entwicklungsprozess erheblich.  \n\n- **Modularität:**  \n  Laravel’s **modulare Architektur** ermöglicht es uns, Funktionen wie **Benutzerverwaltung**, **API-Integrationen** und **Datenverwaltung** einfach zu implementieren und zu erweitern.  \n\n- **Sicherheit:**  \n  Laravel bietet integrierten Schutz vor gängigen Sicherheitslücken wie **CSRF**, **SQL-Injektionen** und **XSS-Angriffen**, wodurch MCSL von Anfang an sicher ist.\n--- \n## **Warum Vue.js?**\n\nVue.js ist ein **JavaScript-Framework**, das speziell dafür entwickelt wurde, benutzerfreundliche und reaktive Benutzeroberflächen zu erstellen. Zusammen mit Laravel bildet es eine perfekte Kombination für moderne Webanwendungen.\n\n### **Vorteile von Vue.js in MCSL:**\n\n- **Echtzeit-Updates:**  \n  Vue.js ermöglicht es, **Benutzerinteraktionen** ohne komplette Seitenaktualisierungen zu verarbeiten, sodass Änderungen in Echtzeit angezeigt werden.\n\n- **Komponentenstruktur:**  \n  Vue.js erlaubt es, verschiedene Teile der Anwendung als unabhängige, wiederverwendbare Komponenten zu erstellen. Das fördert eine **saubere und modulare Codebasis**.\n\n- **Interaktive Benutzeroberflächen:**  \n  Vue.js ermöglicht es, **dynamische und benutzerfreundliche Oberflächen** zu entwickeln, die direkt mit Laravel’s API kommunizieren.\n--- \n## **MCSL: Laravel und Vue.js im Zusammenspiel**\n\nMCSL ist mehr als nur ein **Content-Management-System (CMS)** — es ist eine moderne Webplattform, die von den **Stärken von Laravel und Vue.js** profitiert. Laravel fungiert dabei als **starke Backend-Architektur**, während Vue.js eine **dynamische und reaktionsschnelle Benutzeroberfläche** bereitstellt.\n\n### **Kernkomponenten der MCSL-Architektur:**\n\n- **Echtzeit-Datenverwaltung:**  \n  Laravel und Vue.js ermöglichen es, Daten in Echtzeit zu aktualisieren und anzuzeigen.\n\n- **Nahtlose API-Integration:**  \n  Laravel bietet leistungsstarke APIs, die von Vue.js genutzt werden, um eine reibungslose Benutzererfahrung zu gewährleisten.\n\n- **Dynamische Benutzeroberflächen:**  \n  Dank Vue.js kann MCSL interaktive Funktionen wie Drag-and-Drop, Inline-Bearbeitung und Live-Datenaktualisierungen bieten.', 'In der Welt des modernen Web-Developments gibt es unzählige Frameworks und Plattformen, aber nur wenige bieten die **Flexibilität**, **Skalierbarkeit** und **Benutzerfreundlichkeit** von Laravel. Heute möchte ich ein wenig darüber sprechen, warum **MCSL** auf Laravel basiert und wie es gemeinsam mit **Vue.js** das **Rückgrat** unseres Blogs bildet. &hellip;', 'ylpa', 2, 1, 1, 'ef4f0c6ab9ff165247738d00d9a5afad.jpg', '2025-02-26 20:45:25', '2025-02-25 15:00:24'),
-(259, '2025-04-05 08:25:50', 'test title', 2, 1, '<div>Hallo Welt !</div><div></div><a href=\"https://www.google.com\" target=\"_blank\">google</a><div><br></div>', '<hr>hallo welt&nbsp; ! SDDS', 'yhty', 1, 1, 1, '//54d362bc1354804b1178fa412758df04.jpg', '2025-04-05 08:25:50', NULL);
+(259, '2025-04-05 08:25:50', 'test title', 2, 1, '<div>Hallo Welt !</div><div></div><a href=\"https://www.google.com\" target=\"_blank\">google</a><div><br></div>', '<hr>hallo welt&nbsp; ! SDDS', 'yhty', 1, 1, 0, '/e32609521bb9e23dbe9fccde9d5f5840.jpg', '2025-04-05 08:25:50', NULL);
 
 -- --------------------------------------------------------
 
@@ -270,6 +272,7 @@ INSERT INTO `blogs` (`id`, `blog_date`, `title`, `blog_categories_id`, `blog_aut
 -- Table structure for table `blog_authors`
 --
 
+DROP TABLE IF EXISTS `blog_authors`;
 CREATE TABLE `blog_authors` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `name` varchar(100) DEFAULT NULL,
@@ -292,6 +295,7 @@ INSERT INTO `blog_authors` (`id`, `name`, `users_id`, `info`, `created_at`, `upd
 -- Table structure for table `blog_categories`
 --
 
+DROP TABLE IF EXISTS `blog_categories`;
 CREATE TABLE `blog_categories` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `name` varchar(100) DEFAULT NULL,
@@ -315,6 +319,7 @@ INSERT INTO `blog_categories` (`id`, `name`, `summary`, `created_at`, `updated_a
 -- Table structure for table `blog_images`
 --
 
+DROP TABLE IF EXISTS `blog_images`;
 CREATE TABLE `blog_images` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `name` varchar(100) DEFAULT NULL,
@@ -660,6 +665,7 @@ INSERT INTO `blog_images` (`id`, `name`, `url`, `created_at`, `updated_at`) VALU
 -- Table structure for table `cache`
 --
 
+DROP TABLE IF EXISTS `cache`;
 CREATE TABLE `cache` (
   `key` varchar(255) NOT NULL,
   `value` mediumtext NOT NULL,
@@ -672,6 +678,7 @@ CREATE TABLE `cache` (
 -- Table structure for table `cache_locks`
 --
 
+DROP TABLE IF EXISTS `cache_locks`;
 CREATE TABLE `cache_locks` (
   `key` varchar(255) NOT NULL,
   `owner` varchar(255) NOT NULL,
@@ -684,6 +691,7 @@ CREATE TABLE `cache_locks` (
 -- Table structure for table `camera`
 --
 
+DROP TABLE IF EXISTS `camera`;
 CREATE TABLE `camera` (
   `id` bigint(11) NOT NULL,
   `pub` tinyint(2) DEFAULT NULL,
@@ -720,6 +728,7 @@ INSERT INTO `camera` (`id`, `pub`, `ordering`, `Longname`, `name`, `Mpixel`, `sh
 -- Table structure for table `categories`
 --
 
+DROP TABLE IF EXISTS `categories`;
 CREATE TABLE `categories` (
   `id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
@@ -744,6 +753,7 @@ INSERT INTO `categories` (`id`, `name`, `name_en`) VALUES
 -- Table structure for table `comments`
 --
 
+DROP TABLE IF EXISTS `comments`;
 CREATE TABLE `comments` (
   `id` bigint(11) NOT NULL,
   `pub` tinyint(2) NOT NULL DEFAULT 1,
@@ -785,6 +795,7 @@ INSERT INTO `comments` (`id`, `pub`, `users_id`, `post_id`, `admin_table_id`, `c
 -- Table structure for table `copyleft`
 --
 
+DROP TABLE IF EXISTS `copyleft`;
 CREATE TABLE `copyleft` (
   `id` bigint(11) NOT NULL,
   `pub` tinyint(1) NOT NULL,
@@ -809,6 +820,7 @@ INSERT INTO `copyleft` (`id`, `pub`, `tag`, `name`) VALUES
 -- Table structure for table `didyouknow`
 --
 
+DROP TABLE IF EXISTS `didyouknow`;
 CREATE TABLE `didyouknow` (
   `id` bigint(11) NOT NULL,
   `pub` tinyint(2) NOT NULL,
@@ -941,6 +953,7 @@ INSERT INTO `didyouknow` (`id`, `pub`, `position`, `author_id`, `headline`, `ans
 -- Table structure for table `images`
 --
 
+DROP TABLE IF EXISTS `images`;
 CREATE TABLE `images` (
   `id` bigint(11) NOT NULL,
   `pub` tinyint(1) NOT NULL DEFAULT 1,
@@ -1216,7 +1229,7 @@ INSERT INTO `images` (`id`, `pub`, `position`, `image_categories_id`, `headline`
 (307, 1, 60, 4, 'Waldschrat', 'Wood Gnome', 'sold', '2018-10-27 19:39:01', NULL, 0, 1602, 2463, 1540633852, 'Ein Ausmalbild mit Acrylfarbe ausgemalt mit Lederbandaufhängung.  <br />\r\nVielen Dank an Sigi für die Hilfe & Geduld mit mir.  <br />\r\nAus dem Buch Mythomorphia von Kerby Rosanes.', 'A colored pic colored with acrylic Colors on leather straps.  <br />\r\nLot of thanks to Sigi, who helped me with a lot of things.  <br />\r\nOut of the book Mythomorphia from Kerby Rosanes.', 6, '', 'waldschrat_12.jpg', '29x29 cm', 0.00, 1, 0, 1),
 (308, 1, 59, 10, 'Wintersegeberg', 'Wintersegeberg', 'empty', '2019-01-25 19:39:01', NULL, 0, 0, 0, 1548432384, 'Ein Bild aus dem verschneitem Bad Segeberg', 'An image from the snowily Bad Segeberg', 7, '', 'P1010666.JPG', '', 0.00, 1, 0, 1),
 (309, 1, 58, 2, 'Anubis', 'Anubis', 'forsale', '2019-02-07 19:39:01', NULL, 0, 2652, 2718, 1549556220, 'Eine Bild des &auml;gyptischen Gottes Anubis. Er ist in detaillierter, traditioneller R&uuml;stung mit farbenfrohen Mustern dargestellt.\r\n\r\nVielen Dank an Siggi.', 'An image of the Egyptian god Anubis. He is depicted in detailed, traditional armor with colourful patterns.\r\n\r\nMany thanks to Siggi.', 0, '', 'Anubis24.jpg', '60x60cm', 280.00, 1, 0, 1),
-(310, 1, 57, 10, 'Wasserball', 'Waterpolo', 'empty', '2024-10-02 19:39:01', NULL, 0, 3000, 2250, 1552725880, 'Bild vom Wasserballspiel zwischen OSC Potsdam und SSV Esslingen.  <br />\nIch war live dabei als Potsdam Esslingen mit 18:7 besiegte.', 'Image of the Waterpolo game betwen OSC Potsdam & SSV Esslingen.  <br />\nI was live there when Potsdam beated Esslingen with 18:7.', 7, '', 'h2opolo.jpg', '', 0.00, 1, 0, 1),
+(310, 1, 57, 10, 'Wasserball', 'Waterpolo', 'empty', '2022-10-02 19:39:01', 1, 1, 1400, 1050, 1552725880, 'Bild vom Wasserballspiel zwischen OSC Potsdam und SSV Esslingen.  <br>\nIch war live dabei als Potsdam Esslingen mit 18:7 besiegte.', 'Image of the Waterpolo game betwen OSC Potsdam &amp; SSV Esslingen.  <br>\nI was live there when Potsdam beated Esslingen with 18:7.', 7, NULL, '/d72a78058fd1dcb650fade87b52b19b4.jpg', NULL, 0.00, 1, 0, 1),
 (311, 1, 56, 5, 'Little Alfred', 'Little Alfred', 'empty', '2019-04-06 19:39:01', NULL, 0, 2560, 1440, 1554564146, 'Mein erstes Wallpaper 2019.  <br />\nIm Hintergrund Klein Alfred  <br />\nJetzt in WQHD Auflösung', 'My first Wallpaper in 2019.  <br />\nIn the Background little Alfred.  <br />\nNow in WQHD Resolution', 0, '', 'little-alfred.jpg', '2560x1440 Pixel', 0.00, 1, 0, 1),
 (312, 1, 55, 2, 'Bastet', 'Bastet', 'inwork', '2019-08-03 19:39:01', NULL, 0, 2357, 4320, 1564829730, 'Eine Weitere Ägyptische Göttin hat sich in die Acryl Galerie geschlichen.  <br />\nDie ersten Vorarbeiten sind gemacht, ist aber noch im Pre-Alpha Modus.', 'Another Goddess has arrived the Acrylic Gallery.  <br />\nIt\'s just a Pre-Alpha Version of Bastet.', 0, '', 'bastet15.jpg', '50x90 cm', 380.00, 1, 0, 1),
 (313, 1, 54, 2, 'Das Rangi Schweini', 'The Rangi Pig', 'givenaway', '2019-09-02 19:39:01', NULL, 0, 940, 783, 1567435136, 'Anlässlich der Geburt meines Neffen Alfred, habe ich dieses Schweini Bild gemalt.  <br />\nThx to Fenja.', 'To celebrate the birth of my nephew i made this picture.  <br />\nThx to Fenja.', 0, '', 'schweini-finished.jpg', '29x20 cm', 0.00, 1, 0, 1),
@@ -1291,7 +1304,7 @@ INSERT INTO `images` (`id`, `pub`, `position`, `image_categories_id`, `headline`
 (453, 1, 1, 12, 'Hello World 3DP', 'Hello World 3DP', 'forsale', '2025-03-29 16:51:16', 5, 29, 1400, 668, 0, 'Halo', NULL, 7, NULL, 'e1ea6abb156103a03ad54535be5fbfbb.jpg', NULL, NULL, 1, 1, NULL),
 (459, 1, 1, 2, 'Strawberry Hearts', 'Strawberry Hearts', 'forsale', '2025-04-11 17:03:56', 3, 17, 1400, 1000, 0, 'Gespachtelter Acryl Hintergrund mit weißer Acrylfarbe/Stift auf Papier', 'Spackled acrylic background with white acrylic paint/marker on paper', 7, NULL, '/d2b6c3f003ff67d761cdf42ef1d7fdd9.jpg', 'A2', 100.00, 1, 1, 1),
 (454, 1, 0, 12, 'Hamburger Menu 3DP', 'Hamburger Menu 3DP', 'forsale', '2025-03-29 16:55:15', 5, 29, 1400, 1040, 0, NULL, NULL, 0, NULL, '0da5e1cf1c64b6226c5a3e1dba4e33ba.jpg', NULL, 29.50, 1, 1, 1),
-(461, 1, 0, 10, '12313', '23', 'unsaleable', '2025-04-13 13:46:58', 1, 39, 1400, 792, 0, 'Ein Schaumkuss', 'Choco Marshmallow', 3, NULL, '/989801a20fb0285eb9d90bef97d57319.jpg', NULL, 0.00, 1, 0, 1);
+(461, 1, 0, 10, '12313', '23', 'unsaleable', '2025-04-13 13:46:58', 1, 39, 1400, 1400, 0, 'Ein Schaumkuss', 'Choco Marshmallow', 3, NULL, '/e32609521bb9e23dbe9fccde9d5f5840.jpg', NULL, 0.00, 1, 0, 1);
 
 -- --------------------------------------------------------
 
@@ -1299,6 +1312,7 @@ INSERT INTO `images` (`id`, `pub`, `position`, `image_categories_id`, `headline`
 -- Table structure for table `image_categories`
 --
 
+DROP TABLE IF EXISTS `image_categories`;
 CREATE TABLE `image_categories` (
   `id` bigint(11) NOT NULL,
   `pub` tinyint(2) NOT NULL,
@@ -1347,6 +1361,7 @@ INSERT INTO `image_categories` (`id`, `pub`, `position`, `name`, `name_en`, `sho
 -- Table structure for table `migrations`
 --
 
+DROP TABLE IF EXISTS `migrations`;
 CREATE TABLE `migrations` (
   `id` int(10) UNSIGNED NOT NULL,
   `migration` varchar(255) NOT NULL,
@@ -1375,6 +1390,7 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 -- Table structure for table `password_reset_tokens`
 --
 
+DROP TABLE IF EXISTS `password_reset_tokens`;
 CREATE TABLE `password_reset_tokens` (
   `email` varchar(255) NOT NULL,
   `token` varchar(255) NOT NULL,
@@ -1387,6 +1403,7 @@ CREATE TABLE `password_reset_tokens` (
 -- Table structure for table `personal_access_tokens`
 --
 
+DROP TABLE IF EXISTS `personal_access_tokens`;
 CREATE TABLE `personal_access_tokens` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `tokenable_type` varchar(255) NOT NULL,
@@ -1406,6 +1423,7 @@ CREATE TABLE `personal_access_tokens` (
 -- Table structure for table `posts`
 --
 
+DROP TABLE IF EXISTS `posts`;
 CREATE TABLE `posts` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `title` varchar(255) NOT NULL,
@@ -1424,6 +1442,7 @@ CREATE TABLE `posts` (
 -- Table structure for table `ratings`
 --
 
+DROP TABLE IF EXISTS `ratings`;
 CREATE TABLE `ratings` (
   `id` bigint(20) NOT NULL,
   `users_id` bigint(20) DEFAULT NULL,
@@ -1451,6 +1470,7 @@ INSERT INTO `ratings` (`id`, `users_id`, `image_id`, `table`, `rating`, `email`,
 -- Table structure for table `sessions`
 --
 
+DROP TABLE IF EXISTS `sessions`;
 CREATE TABLE `sessions` (
   `id` varchar(255) NOT NULL,
   `user_id` bigint(20) UNSIGNED DEFAULT NULL,
@@ -1465,7 +1485,7 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('JY97uZKlMBGR4gpACEwDhWzhuLh0QoTmTf790nOV', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36', 'YTo5OntzOjY6Il90b2tlbiI7czo0MDoiUTIzd1NyTkNOU1c3bHVZdXVGYmNlOWRiWUI4anBaTVNPOW56OWtMcSI7czozOiJ1cmwiO2E6MDp7fXM6OToiX3ByZXZpb3VzIjthOjE6e3M6MzoidXJsIjtzOjg5OiJodHRwOi8vbG9jYWxob3N0OjgwODEvc3RvcmFnZS9wcm9maWxlLXBob3Rvcy85Z204VGRLVnA3OTAyR1VMTTVOMHhXZk50NmdqRGxWMWRVbFRHdTdSLmpwZyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fXM6NToidG9hc3QiO2E6MDp7fXM6NToibG9naW4iO2E6MDp7fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjE7czo0OiJhdXRoIjthOjE6e3M6MjE6InBhc3N3b3JkX2NvbmZpcm1lZF9hdCI7aToxNzQ0NjUzMTUzO31zOjIyOiJQSFBERUJVR0JBUl9TVEFDS19EQVRBIjthOjA6e319', 1744654830);
+('SestRsyGQzhB90bSNydTTnAxEKhkeTKcMout6yiB', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36', 'YTo4OntzOjY6Il90b2tlbiI7czo0MDoib0puZUFvdGN4d1FjSFpKSVlYVTh4VWJ1eUFxVFFXVVdUc3o5S1NLeSI7czozOiJ1cmwiO2E6MDp7fXM6OToiX3ByZXZpb3VzIjthOjE6e3M6MzoidXJsIjtzOjM1OiJodHRwOi8vbG9jYWxob3N0OjgwODEvYXBpL2RhcmstbW9kZSI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjE7czoyMjoiUEhQREVCVUdCQVJfU1RBQ0tfREFUQSI7YTowOnt9czo1OiJ0b2FzdCI7YTowOnt9czo1OiJ0YWJsZSI7czo2OiJpbWFnZXMiO30=', 1745065059);
 
 -- --------------------------------------------------------
 
@@ -1473,6 +1493,7 @@ INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, 
 -- Table structure for table `texts`
 --
 
+DROP TABLE IF EXISTS `texts`;
 CREATE TABLE `texts` (
   `id` bigint(11) NOT NULL,
   `pub` tinyint(2) NOT NULL,
@@ -1501,6 +1522,7 @@ INSERT INTO `texts` (`id`, `pub`, `position`, `headline`, `text`, `type`, `autho
 -- Table structure for table `types`
 --
 
+DROP TABLE IF EXISTS `types`;
 CREATE TABLE `types` (
   `id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
@@ -1562,6 +1584,7 @@ INSERT INTO `types` (`id`, `name`, `name_en`, `category_id`) VALUES
 -- Table structure for table `users`
 --
 
+DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `first_name` varchar(255) DEFAULT NULL,
@@ -1582,7 +1605,6 @@ CREATE TABLE `users` (
   `admin_id` bigint(20) UNSIGNED DEFAULT NULL,
   `company_id` bigint(20) UNSIGNED DEFAULT NULL,
   `customer_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `image_path` varchar(255) DEFAULT NULL,
   `last_login_at` timestamp NULL DEFAULT NULL,
   `two_factor_secret` text DEFAULT NULL,
   `two_factor_recovery_codes` text DEFAULT NULL,
@@ -1599,6 +1621,7 @@ CREATE TABLE `users` (
 -- Table structure for table `users_rights`
 --
 
+DROP TABLE IF EXISTS `users_rights`;
 CREATE TABLE `users_rights` (
   `id` bigint(11) NOT NULL,
   `pub` tinyint(1) NOT NULL DEFAULT 1,
@@ -1612,22 +1635,25 @@ CREATE TABLE `users_rights` (
   `publish_table` text DEFAULT NULL,
   `date_table` text DEFAULT NULL,
   `delete_table` text DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `xkis_AdminPanel` tinyint(2) NOT NULL,
-  `xkis_UserRights` tinyint(2) NOT NULL,
+  `xkis_ChangePassword` tinyint(1) NOT NULL DEFAULT 0,
+  `xkis_CommentsCenter` tinyint(1) NOT NULL DEFAULT 0,
+  `xkis_LogViewer` tinyint(1) DEFAULT NULL,
   `xkis_SendMail` tinyint(1) NOT NULL DEFAULT 0,
-  `xkis_SandMail` tinyint(1) NOT NULL DEFAULT 0,
-  `xkis_CommentsCenter` tinyint(1) NOT NULL DEFAULT 0
+  `xkis_UserRights` tinyint(2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `users_rights`
 --
 
-INSERT INTO `users_rights` (`id`, `pub`, `position`, `moderator_id`, `name`, `shortname`, `view_table`, `add_table`, `edit_table`, `publish_table`, `date_table`, `delete_table`, `xkis_AdminPanel`, `xkis_UserRights`, `xkis_SendMail`, `xkis_SandMail`, `xkis_CommentsCenter`) VALUES
-(1, 1, 0, 1, 'Developer', 'dev', '11111111111111111111111111', '111111111111111111111111111111', '11111111111111111111111111111111111111111', '1111111111111111111111111111111111111111111111111111', '11111111111111111111111111111', '1111111111111111111111111111111111111111111111111111', 1, 1, 0, 1, 1),
-(2, 1, 1, 1, 'Moderator', 'mod', '0111111110100', '0111111110100', '0111111110100', '0111111110100', '0111111110000', '0111111110100', 1, 0, 0, 0, 1),
-(3, 1, 2, 1, 'Normal User', 'user', '000000000000000', '000000000000000', '000000000000000', '000000000000000', '000000000000000', '000000000000000', 0, 0, 0, 0, 0),
-(5, 1, 3, 1, 'Trial', 'trial', '000000000000000', '000000000000000', '000000000000000', '000000000000000', '000000000000000', '000000000000000', 0, 0, 0, 0, 0);
+INSERT INTO `users_rights` (`id`, `pub`, `position`, `moderator_id`, `name`, `shortname`, `view_table`, `add_table`, `edit_table`, `publish_table`, `date_table`, `delete_table`, `updated_at`, `xkis_AdminPanel`, `xkis_ChangePassword`, `xkis_CommentsCenter`, `xkis_LogViewer`, `xkis_SendMail`, `xkis_UserRights`) VALUES
+(1, 1, 0, 1, 'Developer', 'dev', '11111111111111', '11111111111111', '11111111111111', '11111111111111', '11111111111111', '11111111111111', '2025-04-18 15:40:30', 1, 1, 1, 1, 1, 1),
+(2, 1, 1, 1, 'Administrator', 'adm', '01111111111110', '01111111111110', '01111111111110', '01111111111110', '01111111111110', '01111111111110', '2025-04-18 15:15:59', 1, 0, 1, NULL, 1, 0),
+(3, 1, 2, 1, 'Moderator', 'mod', '01101111010100', '01101111010100', '01101111010100', '01101111010100', '01101111010100', '01101111010100', '2025-04-17 14:55:54', 1, 0, 1, NULL, 0, 0),
+(4, 1, 3, 1, 'Trial', 'trial', '00000000001000', '00000000001000', '00000000001000', '00000000001000', '00000000001000', '00000000001000', '2025-04-18 15:27:37', 1, 0, 0, NULL, 0, 0),
+(5, 1, 4, 1, 'Normal User', 'user', '000000000000000', '000000000000000', '000000000000000', '000000000000000', '000000000000000', '000000000000000', '2025-04-17 14:32:16', 0, 0, 0, NULL, 0, 0);
 
 --
 -- Indexes for dumped tables
@@ -1906,7 +1932,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `users_rights`
 --
 ALTER TABLE `users_rights`
-  MODIFY `id` bigint(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` bigint(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
 
 --
 -- Constraints for dumped tables
@@ -1919,13 +1945,6 @@ ALTER TABLE `types`
   ADD CONSTRAINT `types_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`);
 COMMIT;
 
---
--- Dumping data for table `users`
---
-
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-START TRANSACTION;
-SET time_zone = "+00:00";
 
 INSERT INTO `users` (`id`, `first_name`, `nick_name`, `email`, `name`, `birthday`, `music`, `interests`, `occupation`, `email_verified_at`, `password`, `users_rights_id`, `profile_photo_path`, `is_admin`, `is_employee`, `is_customer`, `admin_id`, `company_id`, `customer_id`, `image_path`, `last_login_at`, `two_factor_secret`, `two_factor_recovery_codes`, `two_factor_confirmed_at`, `two_factor_enabled`, `remember_token`, `created_at`, `updated_at`) VALUES
 (1, 'Admin', 'admin', 'admin@example.com', 'Administrator', NULL, NULL, NULL, NULL, '2025-03-11 14:38:06', '$2y$12$tZaliTuKFNiFqhK/TTl7x.kKuAzj6dC.xVceEMWGJMa2TQRQ3uVnW', 1, NULL, 1, 0, 0, 1, NULL, NULL, NULL, '2025-04-10 16:47:35', NULL, NULL, NULL, 0, NULL, '2025-04-01 15:37:36', '2025-04-10 18:47:35');

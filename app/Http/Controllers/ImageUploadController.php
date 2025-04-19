@@ -18,10 +18,10 @@ class ImageUploadController extends Controller
         //     'path' => 'string',
         //     'name' => "string"
         // ]);
-
+            \Log::info($request->all());
         // Das hochgeladene Bild holen
         $image = $request->file('image');
-
+        $Message = $request->Message === "true" ? true : false;
         if (!$request->hasFile('image')) {
            // \Log::info('Keine Datei empfangen!');
             return response()->json(['error' => 'Keine Datei empfangen!'], 400);
@@ -41,7 +41,8 @@ class ImageUploadController extends Controller
         \Log::info("WMF: ".$watermarkfile);
         $table = $table_ori = $request->table;
         $column = $request->column;
-        $Message = @$request->Message;
+
+            \Log::info(($Message));
 
         // Den Dateinamen generieren und Bild speichern
         $imageName = md5($image->getClientOriginalName()."_".Auth::id()).".".$image->getClientOriginalExtension();
@@ -58,7 +59,8 @@ class ImageUploadController extends Controller
 
         $sizes = [350, 800, 1400];
         }
-        else{
+        elseif($Message)
+        {
             $table = "messages";
             // $prepath = "/images/messages/";
         }
@@ -91,7 +93,7 @@ class ImageUploadController extends Controller
             $imagick->resizeImage($size2, 0, \Imagick::FILTER_LANCZOS, 1); // 0 für automatische Höhe
 
             // Speicherpfad für jede Version
-            if($iswatermark && $big[$size] != "/thumbs/" && !empty($watermarkfile))
+            if($iswatermark && $big[$size] != "/thumbs/" && !empty($watermarkfile) && !$Message)
             {
                 $imagePath = $tmpname;
                 $watermarkPath = public_path("images/copyleft/".$watermarkfile.".png");
@@ -131,14 +133,18 @@ class ImageUploadController extends Controller
 
 
         }
-        \Log::info($imageName);
+        if($Message){
+            $imageName = ($imageName);
+            \Log::info($Message);
+        }
+
         // $iid = DB::table($table_dir)->insertGetId([
         //     'name' => $name,
         //     'url' => $url,
         //     'created_at' => now(),
         //     'updated_at' => now(),
         // ]);
-        \Log::info(json_encode(['message' => $imageName]));
+        //\Log::info(json_encode(['message' => $imageName]));
         return response()->json([
             'message' => 'Bild erfolgreich hochgeladen.',
             'image_url' => $imageName,

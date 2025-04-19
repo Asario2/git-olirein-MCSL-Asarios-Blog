@@ -66,7 +66,7 @@
   </template>
 
   <script>
-  import { CleanTable as cleanTableFn } from '@/helpers';
+  import { CleanTable as cleanTableFn, GetAuth } from '@/helpers';
   import md5 from 'md5';
   import CopyLeftSelect from "@/Application/Components/Content/CopyLeftSelect.vue";
 
@@ -114,7 +114,34 @@
     },
       };
     },
+    async mounted() {
+         //this.fetchDataX();
+         this.GetAuth = await GetAuth();
+    },
     methods: {
+        GetAuth,
+        insertImage(imageUrl) {
+    const editor = this.$refs.editor; // Hier ist der Referenz-Editor
+    const selection = window.getSelection();
+    const range = selection.getRangeAt(0); // Hole den aktuellen Bereich
+
+    // Erstelle ein neues <img>-Tag mit der URL
+    const img = document.createElement('img');
+    img.src = imageUrl;
+    img.alt = 'Image';  // Optional: Füge einen Alt-Text hinzu
+    img.style.maxWidth = '100%';  // Optional: Maximalbreite definieren
+    img.style.display = 'block';  // Optional: Bild als Block-Element darstellen
+
+    // Füge das Bild an der aktuellen Cursor-Position ein
+    range.deleteContents();  // Lösche die aktuelle Auswahl (falls vorhanden)
+    range.insertNode(img);  // Füge das Bild ein
+
+    // Setze den Cursor direkt nach dem Bild
+    range.setStartAfter(img);
+    range.setEndAfter(img);
+    selection.removeAllRanges();
+    selection.addRange(range);
+  },
       CleanTable() {
         return cleanTableFn();
       },
@@ -133,11 +160,11 @@
           this.selectedImage = file;
           this.newFname = file.name;
           this.previewImage = URL.createObjectURL(file);
-
           if (this.Message) {
-            const newfg = md5(file.name + '_1') + '.jpg';
+            const extension = file.name.split('.').pop();
+            const newfg = (file.name + "_" + this.GetAuth()) + '.' + extension;
             this.$emit('insertImage', newfg);
-          }
+            }
         }
       },
       async uploadImage() {
@@ -150,10 +177,12 @@
   const formData = new FormData();
   formData.append('image', this.selectedImage);
   formData.append('path', this.path);
-  formData.append('namee', this.namee);
+  formData.append('namee', this.name);
   formData.append('_token', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
   formData.append('table', this.tablex);
   formData.append('copyleft', this.form.copyleft);
+  formData.append("Message",this.Message);
+
 
   // Überprüfung und Fehlerbehandlung im Upload-Prozess
   const xhr = new XMLHttpRequest();
@@ -168,7 +197,13 @@
     if (xhr.status === 200) {
       const response = JSON.parse(xhr.responseText);
       this.newFname = response.image_url;
+    if (this.Message) {
+      this.$emit('insertImage', response.image_url);
+    } else {
       this.$emit('imageUploaded', response.image_url);
+    }
+
+      console.log("ri:" + response.image_url);
       this.closeModal();
     } else {
       console.error("Fehler beim Upload:", xhr.status);
@@ -185,6 +220,7 @@
      isw = "1";
      const ASD = "SD";
   }
+  console.log("sel: " + JSON.stringify(this.selectedImage,null,2));
   xhr.open('POST', '/upload-image/' + this.tablex + "/" + isw, true);
   xhr.send(formData);
 },

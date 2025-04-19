@@ -141,10 +141,9 @@
                         @imageUploaded="handleImageUpload"
                 />
                 <button type="button" @click="openModal_alt">
-
                     <p v-if="this.nf2 && typeof this.nf2 !== 'object' && this.nf2 != '[]' && this.nf2 != '008.jpg' ">Hochgeladenes Bild:
 
-                        <img @error="event => event.target.src = '/images/' + tablex + '/thumbs/009.jpg'" :src="table_alter + this.nf2" width="100" alt="Vorschau1" title="Vorschau1"/></p>
+                        <img :src="table_alter + this.nf2" width="100" alt="Vorschau1" title="Vorschau1"/></p>
                         <p
                         v-else-if="ffo[this.column] && ffo[this.column].value && ffo[this.column].value !== '008.jpg'"
                         >
@@ -971,6 +970,9 @@ return { ffo };
     console.log("Vor dem Setzen: " + this.isModalOpen);
 
     this.isModalOpen = !this.isModalOpen;
+    if(this.Message)
+    {
+
 
     this.$nextTick(() => {
       let editor = this.$refs.editor;
@@ -981,7 +983,7 @@ return { ffo };
       }
 
       if (!editor || !(editor instanceof HTMLElement)) {
-        console.warn("Editor nicht gefunden oder kein HTML-Element:", editor);
+        console.log("Editor nicht gefunden oder kein HTML-Element:", editor);
         return;
       }
 
@@ -997,7 +999,7 @@ return { ffo };
       selection.removeAllRanges();
       selection.addRange(range);
     });
-
+    }
     console.log("Nach dem Setzen: " + this.isModalOpen);
   },
 
@@ -1742,3 +1744,11 @@ async submitForm() {
     },
 });
 </script>
+<style>
+select,datetime-local   {
+    max-width:560px !important;
+}
+a{
+    color:#55F;
+}
+</style>

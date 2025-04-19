@@ -5,8 +5,12 @@
 
 }
 .w-full{
-width:580px ;
-max-width:100%;
+max-width:560px !important;
+min-width:90%;
+}
+code{
+    background-color:#ccc;
+    padding:2px;
 }
 .w-half{
 min-width:100%;

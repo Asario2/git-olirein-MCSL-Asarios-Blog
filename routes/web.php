@@ -46,6 +46,9 @@ Route::get('/GetAuth', function () {
     \Log::info("🚨 Nicht eingeloggt");
     return response()->json("false");
 })->name("GetAuth");
+Route::get("/GETUserID", function (){
+    return Auth::id();
+});
 Route::middleware(['auth'])->group(function () {
     Route::post('/two-factor/setup', [TwoFactorController::class, 'setup'])->name('two-factor.setup');
     Route::post('/two-factor/confirm', [TwoFactorController::class, 'confirm'])->name('two-factor.confirm_alt');

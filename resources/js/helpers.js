@@ -44,7 +44,17 @@ export async function Authy(){
 }
 import {route} from 'ziggy-js';
 
-
+export async function GetAuth()
+{
+    try {
+        const response = await fetch('/GETUserID');
+        const data = await response;
+        console.log("DATA: " + data);
+        return data;
+    } catch (error){
+        console.error("Fehler bei der Authentifizierung",error);
+    }
+}
 export async function checkAuthAndRedirect() {
     try {
         const response = await fetch('/GetAuth');

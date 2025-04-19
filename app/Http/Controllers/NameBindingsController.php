@@ -40,7 +40,7 @@ class NameBindingsController extends Controller
     }
     public function RemoveDuplicates($cols)
     {
-         $exl = Settings::exl;
+         $exl = Settings::$exl;
         $columns = $cols;
         $filteredColumns = [];
         foreach($columns as $key=>$value)

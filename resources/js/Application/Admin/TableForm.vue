@@ -123,8 +123,10 @@
                     </InputFormPrice>
                 </input-container>
                 <input-container v-else-if="field.type ==='IID'">
+
                 <ImageUploadModal
-                v-show="isModalOpen"
+                        :alt_path="field.class === 'profile' ? 'profile_photos' : ''"
+                        v-show="isModalOpen"
                         :tablex="table_x"
                         :column="field.name"
                         :path="tablex"
@@ -141,12 +143,29 @@
                 <button type="button" @click="openModal_alt">
 
                     <p v-if="this.nf2 && typeof this.nf2 !== 'object' && this.nf2 != '[]' && this.nf2 != '008.jpg' ">Hochgeladenes Bild:
-                        <img  @error="event => event.target.src = '/images/' + tablex + '/thumbs/009.jpg'" :src="'/images/'+ this.tablex +'/thumbs/' + this.nf2" width="100" alt="Vorschau1" title="Vorschau1"/></p>
-                    <p v-else-if="this.ffo['image_path']['value'] && this.ffo['image_path']['value'] != '008.jpg'">Hochgeladenes Bild: <img :src="'/images/'+ this.tablex +'/thumbs/' + this.ffo['image_path']['value']" width="100" alt="Vorschau2" title="Vorschau2"/></p>
+
+                        <img @error="event => event.target.src = '/images/' + tablex + '/thumbs/009.jpg'" :src="table_alter + this.nf2" width="100" alt="Vorschau1" title="Vorschau1"/></p>
+                        <p
+                        v-else-if="ffo[this.column] && ffo[this.column].value && ffo[this.column].value !== '008.jpg'"
+                        >
+                        Hochgeladenes Bild:
+                        <img
+                            :src="`${table_older}${ffo[this.column].value}`"
+                            width="100"
+                            alt="Vorschau2"
+                            title="Vorschau2"
+                        />
+                        </p>
                     <span v-else><img src="/images/blogs/thumbs/009.jpg" alt="Jetzt Bild Hochladen" width="100"  title="Jetzt Bild Hochladen" ></span>
-                        <input type="hidden" :id="field.name" :value="this.nf2">
+                        <input type="hidden" :id="field.name" :value="this.nf2.replace('images//images/','images/')">
                 </button>
-                <input type="hidden" :name="field.name" :value="this.ffo['image_path']['value'] ?? this.nf" :id="field.name" re="asd">
+                <input
+                type="hidden"
+                :name="field.name"
+                :value="nf2.replace('images//images/','images/')"
+                :id="field.name"
+                />
+
                 </input-container>
                 <input-container v-else-if="field.type === 'datetime'">
                     <InputFormDateTime
@@ -378,6 +397,8 @@ sortOptions = sortOptions ?? {};
 // console.log(routes.getselroute("blog_authors"));
 import { defineComponent } from "vue";
 import { nextTick } from 'vue';
+import { GetSettings } from "@/helpers";
+
 
 import axios from "axios";
 import $ from "jquery";
@@ -1015,17 +1036,17 @@ return { ffo };
 
         this.nf = response.data;
       //  console.log(`/api/images/${this.xtable}/${this.xid}`);
-        if(document.getElementById('image_path') && document.getElementById('image_path').value != "008.jpg"){
+        if(document.getElementById(this.column) && document.getElementById(this.column).value != "008.jpg"){
 
-            this.nf = document.getElementById('image_path').value;
+            this.nf = document.getElementById(this.column).value;
         }
         else if(this.nf === "[]")
         {
-            this.nf = this.ffo['image_path']['value'];
+            this.nf = this.ffo[this.column]['value'];
         }
         else
         {
-            this.nf = this.ffo['image_path']['value'];
+            this.nf = this.ffo[this.column]['value'];
         }
         return this.nf;
       } catch (error){
@@ -1116,6 +1137,10 @@ return { ffo };
             if(this.fieldtype == "autoslug")
             {
                 this.formData[fieldname] = value;
+            }
+            if(this.fieldname == this.column)
+            {
+                this.formData[this.column] = value;
             }
             // console.log("aaaaaaaa" + JSON.stringify(this.formDatas,null,2));
         },
@@ -1351,10 +1376,10 @@ obj = obj.replace(/"formFields": \[.*\]/, "")
         },
         getdefnf(){
 
-            if(document.getElementById("image_path") && document.getElementById("image_path") != "008.jpg")
-            {
-                this.nf = document.getElementById("image_path").value;
-            }
+             if(document.getElementById(this.column) && document.getElementById(this.column) != "008.jpg")
+             {
+                 this.nf = document.getElementById(this.column).value;
+             }
 
 
 
@@ -1478,11 +1503,9 @@ objectToCSVArray(obj) {
 },
 async submitForm() {
 
+
         try {
             // console.log(this.formData['content']);
-
-
-
 
 
 
@@ -1495,12 +1518,14 @@ async submitForm() {
             xid = CleanId();
             tablex = CleanTable();
             let response;
-            var inputRef = this.$refs.image_path;
+            this.formData = this.formData ?? {};
+            // var inputRef = this.$refs.this.column;
             if(this.textareaField &&  document.getElementById("reading_time"))
             {
                 this.formData['reading_time'] = this.readingTime;
 
             }
+
             Object.keys(this.ffo).forEach(name => {
 
                 const element = document.getElementById(name);
@@ -1529,8 +1554,17 @@ async submitForm() {
                         .replace(/\]/g, '%5D');
                 }
 
-
             });
+
+            if(this.ffo['profile_photo_path'] || this.formData['profile_photo_path'])
+                {
+                    this.formData["profile_photo_path"] = document.getElementById("profile_photo_path").value;
+                }
+                if(this.ffo['image_path'] || this.formData['image_path'])
+                {
+                    this.formData["image_path"] = document.getElementById("image_path").value;
+                }
+                console.log("ffo:" + JSON.stringify(this.formData,null,2));
               const path = window.location.pathname; // Gibt "/admin/tables/show/Example" zurück
             const segments = path.split("/"); // Teilt den Pfad in Segmente auf
             if(segments[segments.length - 2] == "create")
@@ -1541,6 +1575,7 @@ async submitForm() {
             }
 
             else{
+
                 var xid = CleanId();
                 var tablex = CleanTable();
                 // const formData = {...this.formData };
@@ -1663,13 +1698,22 @@ async submitForm() {
     },
     async mounted() {
          //this.fetchDataX();
+         this.settings = await GetSettings();
+         this.xid = CleanId();
+        this.xtable = CleanTable();
+
+        this.column =  this.settings.impath?.[this.xtable] ?? this.settings.impath?.['default'];
+
+        console.log("col:" + this.column);
+        this.table_alter = this.settings.impath?.[this.xtable] ? '' : "/images/"+this.tablex+"/thumbs/";
+        this.table_older = this.settings.impath?.[this.xtable] ? "" : "/images/"+this.tablex+"/thumbs/";
          this.getImageUrl();
+
         this.fetchFormData();
         this.updateData();
         this.emptyChecker();
         this.updateReadingTime();
-        this.xid = CleanId();
-        this.xtable = CleanTable();
+
         this.aslug = await this.getSlug();
         if(!this.nf)
         {
@@ -1688,6 +1732,8 @@ async submitForm() {
     // console.log("field.name:", this.field?.name);
     // console.log("sortedOptions[field.name]:", this.sortedOptions[this.field.name]);
     // console.log("field.name:", this.field?.name);
+    console.log(this.ffo[this.column].value);
+        this.nf2 = this.ffo[this.column]['value'];
     },
     created() {
         this.updateReadingTime();

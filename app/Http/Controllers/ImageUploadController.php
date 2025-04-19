@@ -36,10 +36,10 @@ class ImageUploadController extends Controller
        // ]);
         $image = $request->file('image') ?? [];
         $path = $request->path;
-//$table_dir = Settings::image_paths[$request->table];
+//$table_dir = Settings::$image_paths[$request->table];
         $watermarkfile = $request->copyleft;
         \Log::info("WMF: ".$watermarkfile);
-        $table = $request->table;
+        $table = $table_ori = $request->table;
         $column = $request->column;
         $Message = @$request->Message;
 
@@ -51,23 +51,26 @@ class ImageUploadController extends Controller
         // Speicherpfad definieren
         $sizes = [1200];
         $tmpname = $_FILES['image']['tmp_name'];
-       if(!$Message){
+       if(!$Message && !array_key_exists($table, Settings::$impath)){
         $IMOpath =  public_path("images/{$table}/orig/{$filename}");
 
         copy($tmpname,$IMOpath);
 
         $sizes = [350, 800, 1400];
         }
-
         else{
             $table = "messages";
             // $prepath = "/images/messages/";
+        }
+        if(array_key_exists($table_ori, Settings::$impath)){
+            $sizes = ["500"];
+            $table = 'profile-photos';
         }
         list($oldsize,$oldheight) = getimagesize($tmpname);
 
         // Bildgrößen anpassen und speichern
           // Beispiel für 3 verschiedene Auflösungen
-        $big = ["350"=>"/thumbs/","1200"=>'/',"800"=>'/',"1400"=>"/big/"];
+        $big = ["350"=>"/thumbs/","1200"=>'/','500'=>"/","800"=>'/',"1400"=>"/big/"];
         foreach ($sizes as $size) {
 
             if($size > $oldsize)
@@ -79,6 +82,7 @@ class ImageUploadController extends Controller
                 $size2 = $size;
             }
             $resizedPath = "images/{$table}{$big[$size]}{$imageName}";
+            \Log::info("RP:".$resizedPath);
             // Neues Imagick-Objekt erstellen
             $imagick = new \Imagick();
             $imagick->readImage($image->getPathname());
@@ -113,7 +117,7 @@ class ImageUploadController extends Controller
             }
             // Bild speichern
 
-            if($size == 1400 || $Message)
+            if($size == 1400 || $Message || $size == "500")
             {
                 list($width,$height) = getimagesize($resizedPath);
                 $imageName = "/".$resizedPath;

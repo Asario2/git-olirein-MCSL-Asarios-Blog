@@ -57,7 +57,7 @@ class TablesController extends Controller
         $tables = DB::table('admin_table')->select('name', 'description')->orderby("created_at","DESC")->get();
         $table = "comments";
         $columns = Schema::getColumnListing($table);
-        $excl_cols = Settings::excl_cols;
+        $excl_cols = Settings::$excl_cols;
         $columns = array_diff($columns, $excl_cols);
 
         if ($table == "blog_posts" || $table == "mindblog" || $table == "images") {
@@ -84,7 +84,7 @@ class TablesController extends Controller
 
         // Hole alle Spalten der Tabelle, außer `created_at`, `updated_at`, `published_at`
         $columns = Schema::getColumnListing($table);
-        $excl_cols = Settings::excl_cols;
+        $excl_cols = Settings::$excl_cols;
         $columns = array_diff($columns, $excl_cols);
 
         // Bestimme die Sortierreihenfolge
@@ -124,7 +124,7 @@ class TablesController extends Controller
 
         // Hole alle Spalten der Tabelle, außer `created_at`, `updated_at`, `published_at`
         $columns = Schema::getColumnListing($table);
-        $excl_cols = Settings::excl_cols;
+        $excl_cols = Settings::$excl_cols;
         $columns = array_diff($columns, $excl_cols);
 
         // Bestimme die Sortierreihenfolge
@@ -163,7 +163,7 @@ class TablesController extends Controller
         // Weitere Beiträge laden
         // Hole alle Spalten der Tabelle, außer `created_at`, `updated_at`, `published_at`
         $columns = Schema::getColumnListing($table);
-        $excl_cols = Settings::excl_cols;
+        $excl_cols = Settings::$excl_cols;
         $columns = array_diff($columns, $excl_cols);
 
         // Bestimme die Sortierreihenfolge
@@ -225,12 +225,12 @@ class TablesController extends Controller
         }
         // Get all columns excluding 'created_at', 'updated_at', and 'published_at'
         $columns = Schema::getColumnListing($table);
-        $excl_cols = Settings::excl_cols;
+        $excl_cols = Settings::$excl_cols;
         $excl_cols[] = "position";
-        $ext_disabled = Settings::excl_disabled;
-        $ext_date = Settings::excl_datefields;
-        $exl = Settings::exl;
-        $req = Settings::no_req;
+        $ext_disabled = Settings::$excl_disabled;
+        $ext_date = Settings::$excl_datefields;
+        $exl = Settings::$exl;
+        $req = Settings::$no_req;
         $columns = array_diff($columns, $excl_cols);
 
         // Find the specific record by its ID
@@ -276,7 +276,7 @@ class TablesController extends Controller
         if(substr_count($table,".")){
             return;
         }
-        \Log::info("aaaaa:".json_encode([$table,$id]));
+        // \Log::info("aaaaa:".json_encode([$table,$id]));
         $tablez = [];
         if(!empty($id))
         {
@@ -472,23 +472,23 @@ class TablesController extends Controller
             $ord[0] = "id";
             $ord[1] = "DESC";
         }
-        $headline = Settings::headline[$table] ?? '';
+        $headline = Settings::$headline[$table] ?? '';
         $otherField = "".$table.".*";
         $otherField = $headline;
 
-        if(@Settings::otherField[$table])
+        if(@Settings::$otherField[$table])
         {
-        $otherField =    Settings::otherField[$table]." as description";
+        $otherField =    Settings::$otherField[$table]." as description";
         }$table_alt = $table;
         $of = $otherField;
         if(substr_count($otherField,"_idd"))
         {
-            $otherField = str_replace(["_idd","_id"],"",Settings::otherField[$table]);
+            $otherField = str_replace(["_idd","_id"],"",Settings::$otherField[$table]);
             $oa = true;
             $col = str_replace("_idd","_id",$otherField);
             $name = $otherField;
             $table_alt = $col;
-            $of = Settings::underCals[$table];
+            $of = Settings::$underCals[$table];
            // $qryadd  = join($name ON $table.$table."_id" = $name."id");
            //\Log::info($otherField);
         }
@@ -512,7 +512,7 @@ class TablesController extends Controller
             ->paginate(20)
             ->withQueryString();
 
-        $of = @Settings::otherField[$table];  // Das Feld, das du kürzen möchtest
+        $of = @Settings::$otherField[$table];  // Das Feld, das du kürzen möchtest
 
         $tables->getCollection()->transform(function ($item) use ($of) {
             // Stelle sicher, dass das Feld existiert, bevor du versuchst, es zu kürzen
@@ -645,7 +645,7 @@ class TablesController extends Controller
 
         // Hole alle Spalten der Tabelle, außer `created_at`, `updated_at`, `published_at`
         $columns = Schema::getColumnListing($table);
-        $excl_cols = Settings::excl_cols;
+        $excl_cols = Settings::$excl_cols;
         $columns = array_diff($columns, $excl_cols);
 
         // Bestimme die Sortierreihenfolge
@@ -691,11 +691,11 @@ class TablesController extends Controller
 
         // Hole alle Spalten der Tabelle, außer `created_at`, `updated_at`, `published_at`
         $columns = Schema::getColumnListing($table);
-        $ext_disabled = Settings::excl_disabled;
-        $ext_date = Settings::excl_datefields;
-        $exl = Settings::exl;
-        $req = Settings::no_req;
-        $excl_cols = Settings::excl_cols;
+        $ext_disabled = Settings::$excl_disabled;
+        $ext_date = Settings::$excl_datefields;
+        $exl = Settings::$exl;
+        $req = Settings::$no_req;
+        $excl_cols = Settings::$excl_cols;
         $columns = array_diff($columns, $excl_cols);
         if (Schema::hasColumn($table, "position"))
         {
@@ -770,11 +770,11 @@ class TablesController extends Controller
 
             // Hole die Spaltennamen der Tabelle (außer den zeitbezogenen Spalten)
             $columns = Schema::getColumnListing($table);
-            $excl_cols = Settings::excl_cols;
-            $ext_disabled = Settings::excl_disabled;
-            $ext_date = Settings::excl_datefields;
-            $exl = Settings::exl;
-            $req = Settings::no_req;
+            $excl_cols = Settings::$excl_cols;
+            $ext_disabled = Settings::$excl_disabled;
+            $ext_date = Settings::$excl_datefields;
+            $exl = Settings::$exl;
+            $req = Settings::$no_req;
             $excl_cols[] = "id";
             $excl_cols[] = "position";
             if (($key = array_search("password", $excl_cols)) !== false) {
@@ -808,7 +808,7 @@ class TablesController extends Controller
 
             // Hole die Spaltennamen der Tabelle
             $columns = Schema::getColumnListing($table);
-            $excl_cols = Settings::excl_cols;
+            $excl_cols = Settings::$excl_cols;
             $excludedColumns = $excl_cols;
 
             // Filtere die Spalten, um die ausgeschlossenen Spalten zu entfernen
@@ -891,7 +891,7 @@ class TablesController extends Controller
             {
                 $hcode = 'queue';
             }
-            $excl_cols = Settings::excl_cols;
+            $excl_cols = Settings::$excl_cols;
             $excl_cols[] = 'id';
             if (($key = array_search("password", $excl_cols)) !== false) {
                 unset($excl_cols[$key]);
@@ -906,7 +906,7 @@ class TablesController extends Controller
             if ($request->hasFile('image_path')) {
             $this->time = time();
             // vde($this->time);
-            if(!@is_array(Settings::image_sizes[$table])){
+            if(!@is_array(Settings::$image_sizes[$table])){
                 $this->tab = "default";
             }
             else
@@ -915,7 +915,7 @@ class TablesController extends Controller
             }
             if(is_dir(public_path("images/$table/big/")))
             {
-                $bsize = Settings::image_sizes[$this->tab]['big'] ??  1200;
+                $bsize = Settings::$image_sizes[$this->tab]['big'] ??  1200;
                 $imageUploadResponse = $imul->upload($request,$bsize,"image_path","images/$table/big/",'image_path',$this->time);
             }
             if(is_dir(public_path("images/$table/sm/")))
@@ -925,15 +925,15 @@ class TablesController extends Controller
             }
             if(is_dir(public_path("images/$table/bthumbs/")))
             {
-                $btsize = Settings::image_sizes[$this->tab]['bthumbs'] ??  490;
+                $btsize = Settings::$image_sizes[$this->tab]['bthumbs'] ??  490;
                 $imageUploadResponse = $imul->upload($request,$btsize,"image_path","images/$table/bthumbs/",'image_path',$this->time);
             }
             if(is_dir(public_path("images/$table/thumbs/")))
             {
-                $tsize = Settings::image_sizes[$this->tab]['thumbs'] ?? 350;
+                $tsize = Settings::$image_sizes[$this->tab]['thumbs'] ?? 350;
                 $imageUploadResponse = $imul->upload($request,$tsize,"image_path","images/$table/thumbs/",'image_path',$this->time);
             }
-            $dsize = Settings::image_sizes[$this->tab]['default'] ?? 700;
+            $dsize = Settings::$image_sizes[$this->tab]['default'] ?? 700;
             $imageUploadResponse = $imul->upload($request,$dsize,"image_path","images/$table/",'image_path',$this->time);
 
             if ($imageUploadResponse->status() === 200) {
@@ -953,7 +953,7 @@ class TablesController extends Controller
         }
 
 
-        $excl_cols = Settings::excl_cols;
+        $excl_cols = Settings::$excl_cols;
         //$columns = array_diff($columns, $excl_cols);
 
 
@@ -986,7 +986,7 @@ class TablesController extends Controller
 
                 if (substr_count($columna->Field,'_at'))
                 {
-                    $ints = Settings::int_date_tables;
+                    $ints = Settings::$int_date_tables;
                     $columno = array($columna,$data);
 
 
@@ -1445,7 +1445,7 @@ class TablesController extends Controller
         }
 
 
-        $excl_cols = Settings::excl_cols;
+        $excl_cols = Settings::$excl_cols;
         $excl_cols[] = "image_path";
 
         $columns = array_diff($columns, $excl_cols);
@@ -1591,7 +1591,7 @@ class TablesController extends Controller
             // Zugriff auf die übergebenen Daten
             $formData = ($request->input('formData')    );
 
-        if(isset($formData['image_path']) && empty($formData['image_path']) && empty($_FILES))
+        if((Schema::hasColumn($table, 'image_path')) && (empty($formData['image_path']) || is_null($formData['image_path'])))
         {
             $formData['image_path'] = "008.jpg";
         }
@@ -1609,8 +1609,8 @@ class TablesController extends Controller
         if(empty($formData['preis']) && Schema::hasColumn($table, 'preis')){
             $formData['preis'] = "0.0";
         }
-        \Log::info($formData);
-        $formData = ($formData);
+        $formData = array_diff_key($formData, array_flip(Settings::$excl_cols));
+
 
         if (!Schema::hasTable($table)) {
             return response()->json(['error' => 'Tabelle nicht gefunden'], 404);
@@ -1635,7 +1635,7 @@ class TablesController extends Controller
             // \Log::info('FormData:', $formData);
             // \Log::info($updated);
             $queries = DB::getQueryLog();
-                 \Log::info("qry:".json_encode([$queries,$formData]));
+            \Log::info("qry:".json_encode([$queries,$formData]));
             if ($updated) {
                 return response()->json(['message' => 'Daten erfolgreich aktualisiert!']);
             } else {
@@ -1697,11 +1697,99 @@ class TablesController extends Controller
         // Beispiel: Aktuell eingeloggter Nutzer mit Rolle z. B. Moderator-ID = 1
         $urid  = $request->urid ? $request->urid : "1";
         $userRights = UsersRight::find($urid);
-        \Log::info("ass: ".json_Encode([$tables,$userRights]));
+       // Schritt 1: Alle Spaltennamen der Tabelle holen
+        $columns = DB::getSchemaBuilder()->getColumnListing('users_rights');
+
+        // Schritt 2: Nur Spalten mit "xkis" im Namen filtern
+        $xkisColumns = array_filter($columns, fn($col) => str_contains($col, 'xkis'));
+
+        // Schritt 3: Eintrag für diesen Benutzer holen, aber nur die gefilterten Spalten
+        $data = DB::table('users_rights')
+            ->select($xkisColumns)
+            ->where('id', $urid)
+            ->first();
+
+        // Optional: als Array
+        $func = (array) $data;
+
+        //\Log::info("ass: ".json_Encode([$tables,$userRights]));
         return Inertia::render('Admin/urights', [
             'adminTables' => $tables,
             'userRights' => $userRights,
+            "urid"=>$urid,
+            "func"=>$func,
+            "roles"=>$this->GetAdmins($urid),
         ]);
+    }
+    public function GetURights(Request $request)
+    {
+        $urid  = $request->urid ? $request->urid : "1";
+        $userRights = UsersRight::find($urid);
+        return $userRights;
+    }
+    public function getRoles(Request $request)
+    {
+        $urid  = $request->urid ? $request->urid : "1";
+        $columns = DB::getSchemaBuilder()->getColumnListing('users_rights');
+
+        // Schritt 2: Nur Spalten mit "xkis" im Namen filtern
+        $xkisColumns = array_filter($columns, fn($col) => str_contains($col, 'xkis'));
+        $data = DB::table('users_rights')
+        ->select($xkisColumns)
+        ->where('id', $urid)
+        ->first();
+
+    // Optional: als Array
+    $func = (array) $data;
+
+        return json_encode($func);
+    }
+    public function SaveURights(Request $request)
+    {
+
+        $urid = $request->input('urid');
+
+    // Nur die *_table Felder extrahieren
+    $fields = [
+        'view_table',
+        'add_table',
+        'edit_table',
+        'publish_table',
+        'date_table',
+        'delete_table',
+    ];
+    foreach ($request->input() as $key => $value) {
+        if (str_starts_with($key, 'xkis_')) {
+            $fields[] = $key;
+        }
+    }
+    // Hole das passende Model anhand der ID
+    $userRight = UsersRight::find($urid);
+
+    if (!$userRight) {
+        return response()->json(['message' => 'Benutzerrechte nicht gefunden.'], 404);
+    }
+
+    // Werte setzen
+    foreach ($fields as $field) {
+        if ($request->has($field)) {
+            $userRight->$field = $request->input($field);
+        }
+        else
+        {
+            \Log::info($field);
+        }
+    }
+
+    $userRight->save();
+
+    return response()->json(['message' => 'Rechte erfolgreich gespeichert.']);
+    }
+    public function GetAdmins($urid)
+    {
+        $res = DB::table("users_rights")->select("id","name")->get();
+        \Log::info("res: ".json_encode($res));
+        return $res;
     }
     // Funktion zum Löschen eines Eintrags
     public function destroy($table, $id)

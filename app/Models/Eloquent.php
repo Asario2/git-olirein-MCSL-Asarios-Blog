@@ -38,7 +38,7 @@ class Eloquent extends Model
     public function scopeFilterDefault($query, $filters)
     {
         if (!empty($filters['search'])) {
-            $whvals = Settings::whvals(); // Dynamische Felder
+            $whvals = Settings::$whvals(); // Dynamische Felder
             foreach ($whvals as $whn) {
                 $query->orWhere($whn, 'like', '%' . $filters['search'] . '%');
             }

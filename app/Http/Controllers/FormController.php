@@ -32,7 +32,7 @@ class FormController extends Controller
     //VUE Formmaker
     public static function Fields($name,$value,$table,$id='',$create='')
     {
-        if(!in_array($name,Settings::excl_cols))
+        if(!in_array($name,Settings::$excl_cols))
         {
 
             if($create && $name == "image_path"){
@@ -53,7 +53,7 @@ class FormController extends Controller
 
 
 
-        $label = isset(Settings::exl[$name]) ? Settings::exl[$name] : $name;
+        $label = isset(Settings::$exl[$name]) ? Settings::$exl[$name] : $name;
         $class = FormController::getClass($name,1);
         $req   = FormController::getReq($name);
         $type = FormController::getClass($name);
@@ -78,7 +78,7 @@ class FormController extends Controller
             if($name == "users_id")
             {
                 $fields[$name]['users_id'] = Auth::id();
-                \Log::info("AUTHID:" . Auth::id());
+                // \Log::info("AUTHID:" . Auth::id());
             }
         // $fields[$namefield] = [
         //     'name'  => "$name",
@@ -99,7 +99,7 @@ class FormController extends Controller
     }
     public static function getReq($oname)
     {
-        $req = Settings::no_req;
+        $req = Settings::$no_req;
         if(!in_array(strtolower($oname),$req))
         {
             return "required";
@@ -302,6 +302,12 @@ class FormController extends Controller
             break;
             case "preis":
                 return "price";
+            break;
+            case "profile_photo_path":
+                if($cl){
+                    return "profile";
+                }
+                return "IID";
             break;
             case "pub":
                 return "pub";
@@ -1881,7 +1887,7 @@ upload_files($id);
     }
     public static function CopyField($name,$value,$table,$id)
     {
-        if(in_array($table,Settings::copyright_tables))
+        if(in_array($table,Settings::$copyright_tables))
         {
             $options = '';
             $opt = DB::table("camera")
@@ -1970,17 +1976,17 @@ upload_files($id);
     }
     public static function textArea($name,$value,$id)
     {
-        $req = Settings::no_req;
+        $req = Settings::$no_req;
         $reqi = 'required';
         if (in_array($name, $req))
         {
             $reqi = '';
         }
-        if(Settings::textfield == "Mdown")
+        if(Settings::$textfield == "Mdown")
         {
             return TextArea_md($name,$reqi,$value);
         }
-        elseif(Settings::textfield == "HTML")
+        elseif(Settings::$textfield == "HTML")
         {
             return TextArea_htm($name,$reqi,$value);
         }
@@ -1990,7 +1996,7 @@ upload_files($id);
     }
     public static function Tfield($name,$value)
     {
-        $req = Settings::no_req;
+        $req = Settings::$no_req;
         $reqi = 'required';
         if (in_array($name, $req))
         {

@@ -21,7 +21,8 @@ use League\CommonMark\CommonMarkConverter;
 use App\Http\Controllers\TablesController;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use App\Http\Controllers\CategoryController;
-
+use App\Http\Controllers\SettingsController;
+use App\Helpers\Settings;
 GlobalController::SetDomain();
 // include __DIR__."/extraroutes.php";
 Route::get('/copyleft/images', [ImageUploadController::class, 'CopyLeft'])->name('images.copyleft');
@@ -33,6 +34,9 @@ Route::get('/db-check', function () {
         return 'Fehler: ' . $e->getMessage();
     }
 });
+
+
+Route::get('/api/settings', [SettingsController::class, 'all']);
 Route::get('/GetAuth', function () {
     if (Auth::check()) {
         \Log::info("✅ Eingeloggt, User-ID: " . Auth::id());
@@ -45,9 +49,14 @@ Route::get('/GetAuth', function () {
 Route::middleware(['auth'])->group(function () {
     Route::post('/two-factor/setup', [TwoFactorController::class, 'setup'])->name('two-factor.setup');
     Route::post('/two-factor/confirm', [TwoFactorController::class, 'confirm'])->name('two-factor.confirm_alt');
+    Route::get("/get-user-rights",[TablesController::class,'URights'])->name("admin.users_rights");
+    Route::post("/admin/user-rights/save",[TablesController::class,'SaveURights'])->name("admin.users_rights.save");
+    Route::get("/admin/user-rights/get",[TablesController::class,'GetURights'])->name("admin.users_rights.get");
+    Route::get('/api/roles', [TablesController::class, 'getRoles']);
+
+    Route::get("api/getSlug/{table}/{id?}", [TablesController::class, "getSlug"])->name("getSlug");
 });
-Route::get("/get-user-rights",[TablesController::class,'URights'])->name("admin.users_rights");
-Route::get("api/getSlug/{table}/{id?}", [TablesController::class, "getSlug"])->name("getSlug");
+
 Route::get('/namebindings', [NameBindingsController::class, 'RefreshFields'])->name("ColumnFetcher");
 Route::post('/upload-image/{table}/{isw?}', [ImageUploadController::class, 'upload'])->name('upload.image');
 Route::get('/GetUserNull', [TablesController::class, 'GetUserNull'])->name('GetUserNull');

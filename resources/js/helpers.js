@@ -56,5 +56,25 @@ export async function checkAuthAndRedirect() {
         return "login"; // Falls ein Fehler auftritt, leite lieber um
     }
 }
+export async function GetSettings() {
+    try {
+        const response = await fetch('/api/settings');
+        const data = await response.json();
+
+        const settings = {};
+
+        // Alle Arrays (label, headline, test...) direkt zuweisen
+        Object.keys(data).forEach((key) => {
+            settings[key] = data[key];
+        });
+
+        return settings;
+    } catch (error) {
+        console.error("Fehler beim Laden der Settings:", error);
+        return {};
+    }
+
+}
+
 
 

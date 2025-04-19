@@ -75,7 +75,7 @@
                                             <img
                                                 class="h-8 w-8 rounded-full object-cover"
                                                 :src="
-                                               $page.props.auth.user.profile_photo_url.replace('public','')
+                                               $page.props.auth.user.profile_photo_url.replace('public','').replace('images/images/','images/')
                                                 "
                                                 :alt="
                                                     $page.props.userdata

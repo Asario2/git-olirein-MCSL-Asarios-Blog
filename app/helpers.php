@@ -79,7 +79,7 @@ if(!function_exists("renderText"))
 
 //             session(['table' => $table]); // Tabelle in der Session speichern
 
-//             $whvals = Settings::searchFields[$table] ?? []; // Hole Suchfelder
+//             $whvals = Settings::$searchFields[$table] ?? []; // Hole Suchfelder
 
 //             return $this->where(function ($query) use ($table, $filters, $whvals) {
 //                 foreach ($whvals as $whn) {
@@ -129,7 +129,7 @@ if(!function_exists("renderText"))
 
 
                     // $_GET['table'] = "images";
-                    $whvals = @Settings::searchFields[$_GET['table']] ?? []; // Rufe `whvals` korrekt auf
+                    $whvals = @Settings::$searchFields[$_GET['table']] ?? []; // Rufe `whvals` korrekt auf
 
                     session(['table' => @$_GET['table']]);
 

@@ -49,7 +49,7 @@
     window.$ = window.jQuery = $;
 export default {
     name: "Contents_Form_InputSelect",
-
+    emits: ["input-change", "update:modalValue"],
     data() {
         return {
         selectedOption: null,
@@ -217,13 +217,12 @@ arr() {
         return this.xsor[this.name]?.[this.name + ".sortedOptions"] || [];
     },
 mounted() {
-    this.actsel(); // Methode wird nach dem Mounten ausgeführt
-    this.getOptions();
-    //console.log("ss: " + (JSON.stringify(this.arr)));
-
-    //     if (Array.isArray(this.options[0])) {
-//     this.options = this.options[0]; // Array innerhalb des Arrays entfernen
-//   }
+    this.actsel(); // init jquery change
+  if (this.options && Array.isArray(this.options)) {
+    this.arr = this.options;
+  } else {
+    this.getOptions(); // Nur wenn keine Optionen übergeben wurden
+  }
 }
 };
 

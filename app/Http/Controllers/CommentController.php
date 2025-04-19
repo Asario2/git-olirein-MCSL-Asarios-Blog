@@ -142,7 +142,7 @@ class CommentController extends Controller
         $path = request()->path(); // Gibt "home/show/images/search/Fasermaler"
                 $parts = explode("/", $path);
                 $table_alt = $table;
-                // $sa = Settings::searchable;
+                // $sa = Settings::$searchable;
                 // \Log::info($parts);
                 // foreach($sa as $ta)
                 // {

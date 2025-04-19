@@ -18,6 +18,7 @@
                         type="password"
                         ref="currentPasswordInput"
                         name="current_password"
+                        autocomplete="current-password"
                         v-model="form.current_password"
                     ></input-element>
                     <input-error :message="form.errors.current_password" />
@@ -31,6 +32,7 @@
                     <input-element
                         type="password"
                         ref="currentPasswordInput"
+                        autocomplete="new-password"
                         name="password"
                         v-model="form.password"
                     ></input-element>
@@ -45,6 +47,7 @@
                     <input-element
                         type="password"
                         ref="currentPasswordInput"
+                        autocomplete="new-password"
                         name="password_confirmation"
                         v-model="form.password_confirmation"
                     ></input-element>

@@ -10,6 +10,9 @@
     <RightsTable
         :adminTables="adminTables"
         :userRights="userRights"
+        :urid="this.urid"
+        :roles="roles"
+        :func="func"
     />
     </Layout>
 </template>
@@ -35,6 +38,15 @@ export default {
         userRights: {
             type: Object,
             required: true,
+        },
+        urid:{
+            type:[String],
+        },
+        roles:{
+            type:[Array,Object],
+        },
+        func:{
+            type:[Object,Array],
         },
     },
 };

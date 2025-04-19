@@ -1,128 +1,262 @@
 <template>
-    <div>
-        <table class="np-dl-table w-full">
-            <thead class="np-dl-thead">
-                <tr>
-                    <th></th>
-                    <th>Tabelle</th>
-                    <th v-tippy="'Tabelle Anzeigen'">View</th>
-                    <th v-tippy="'Hinzufügen von Daten'">Add</th>
-                    <th v-tippy="'Bearbeiten'">Edit</th>
-                    <th v-tippy="'Veröffentlichen'">Publish</th>
-                    <th v-tippy="'Datum ändern'">Date</th>
-                    <th v-tippy="'Löschen'">Delete</th>
-                </tr>
-            </thead>
-            <tbody style="padding:5px;">
-                <tr v-for="(table, index) in adminTables" :key="table.id" class="np-dl-tr">
-                    <td class="np-dl-td-normal"><IconRight fill='currentColor' @click='togglerow(index)'   v-tippy="'Alle Rechte in dieser Zeile an/aus'" class="cursor-pointer"/></td>
-                    <td class="np-dl-td-normal">{{ this.ucf(table.name) }}</td>
+    <section class="p-5 mx-auto sm:p-2 md:p-10 bg-layout-sun-0 text-layout-sun-800 dark:bg-layout-night-0 dark:text-layout-night-800">
+      <div class="relative w-full flex flex-col max-w-6xl mx-auto overflow-hidden rounded">
 
-                    <td class="np-dl-td-normal"><InputCheckbox name='view_asd' v-tippy="this.ucf(adminTables[index]['name']) + ' Anzeigen'" v-model="rights.view_table[index]" /></td>
-                    <td class="np-dl-td-normal"><InputCheckbox name='view_asd' v-tippy="this.ucf(adminTables[index]['name']) + ' Hinzufügen'" v-model="rights.add_table[index]" /></td>
-                    <td class="np-dl-td-normal"><InputCheckbox name='view_asd'  v-tippy="this.ucf(adminTables[index]['name']) + ' Bearbeiten'" v-model="rights.edit_table[index]" /></td>
-                    <td class="np-dl-td-normal"><InputCheckbox name='view_asd'  v-tippy="this.ucf(adminTables[index]['name']) + ' Veröffentlichen'" v-model="rights.publish_table[index]" /></td>
-                    <td class="np-dl-td-normal"><InputCheckbox name='view_asd'  v-tippy="this.ucf(adminTables[index]['name']) + ' Datum ändern'" v-model="rights.date_table[index]" /></td>
-                    <td class="np-dl-td-normal"><InputCheckbox name='view_asd'  v-tippy="this.ucf(adminTables[index]['name']) +  ' Löschen'" v-model="rights.delete_table[index]" /></td>
-                </tr>
-            </tbody>
-        </table>
+        <!-- Tabs -->
+        <div class="w-full flex border-b border-gray-300 dark:border-layout-night-200 mb-4 space-x-2 items-center">
+          <!-- Tab Navigation -->
+          <span
+            @click="activeTab = 'tables'"
+            class="cursor-pointer px-4 py-2"
+            :class="activeTab === 'tables' ? 'border-b-2 border-blue-500 font-bold' : ''"
+          >
+            Tabellen
+          </span>
+          <span
+            @click="activeTab = 'functions'"
+            class="cursor-pointer px-4 py-2"
+            :class="activeTab === 'functions' ? 'border-b-2 border-blue-500 font-bold' : ''"
+          >
+            Funktionen
+          </span>
+          <span class="px-4 py-2 text-gray-400">Gruppe</span>
 
-        <button @click="saveRights">Speichern</button>
-    </div>
-</template>
+          <!-- Dropdown for roles -->
+          <div class="w-80 p-2.5 text-sm rounded-lg block text-layout-sun-900 bg-layout-sun-50 placeholder-layout-sun-400
+                      dark:text-layout-night-900 dark:bg-layout-night-50 dark:placeholder-layout-night-400
+                        dark:focus:ring-primary-night-500 dark:focus:border-primary-night-500 m-auto flr">
+            <InputSelect
 
-<script>
-import Breadcrumb from "@/Application/Components/Content/Breadcrumb.vue";
-import InputCheckbox from "@/Application/Components/Form/InputCheckbox.vue";
-import IconRight from "@/Application/Components/Icons/IconRight.vue";
-export default {
+            :xval="selected"
+            :xname="'role_id'"
+            :name="'role_id'"
+            :options="roles"
+            @update:modalValue="selected = $event"
+            @input-change="navigate"
+            />
+
+          </div>
+        </div>
+
+        <!-- Tabellen-Rechte Section -->
+<!-- Tabellen-Rechte Section -->
+<div v-if="activeTab === 'tables'" class="bg-layout-sun-100 dark:bg-layout-night-100 p-4 rounded-lg shadow-sm">
+  <table class="w-full border-collapse text-sm md:text-base rounded overflow-hidden">
+    <thead class="bg-layout-sun-200 dark:bg-layout-night-200 text-layout-sun-800 dark:text-layout-night-800">
+      <tr>
+        <th class="px-4 py-3 text-left">An/Aus</th>
+        <th class="px-4 py-3 text-left">Tabelle</th>
+        <th v-for="field in Object.keys(rights)" :key="field" class="px-4 py-3 text-center">
+          {{ ucf(field) }}
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        v-for="(table, index) in adminTables"
+        :key="table"
+        class="hover:bg-layout-sun-200 dark:hover:bg-layout-night-200 transition duration-200 border-b border-gray-200 dark:border-gray-700"
+      >
+        <td class="px-4 py-3 cursor-pointer">
+          <button @click="togglerow(index)" class="flex items-center text-blue-500">
+            <IconRight class="w-5 h-5" fill="currentColor" />
+          </button>
+        </td>
+        <td class="px-4 py-3">{{ ucf(table.name) }}</td>
+        <td
+          v-for="field in Object.keys(rights)"
+          :key="field"
+          class="px-4 py-3 text-center" align="center"
+        >
+          <input-checkbox v-model="rights[field][index]" />
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <button
+    @click="saveRights"
+    class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded mt-4 transition-colors"
+  >
+    Rechte speichern
+  </button>
+</div>
+
+
+        <!-- Funktionen-Rechte Section -->
+        <div v-if="activeTab === 'functions'" class="bg-layout-sun-100 dark:bg-layout-night-100 p-4 rounded-lg">
+
+          <functions
+            v-if="func"
+            :key="urid"
+            :urid="urid"
+            :func="func"
+            @save="saveRights"
+            />
+        </div>
+      </div>
+    </section>
+  </template>
+
+  <script>
+  import functions from "@/Application/Admin/functions.vue";
+  import { GetSettings } from "@/helpers";
+  import InputCheckbox from "@/Application/Components/Form/InputCheckbox.vue";
+  import InputSelect from "@/Application/Components/Form/InputSelect.vue";
+  import IconRight from "@/Application/Components/Icons/IconRight.vue"; // Assuming this is the correct import
+
+  export default {
     name: "RightsTable",
     components: {
-        Breadcrumb,
-        InputCheckbox,
-        IconRight,
+      functions,
+      InputCheckbox,
+      InputSelect,
+      IconRight, // Register IconRight component
     },
     props: {
-        adminTables: Array, // z. B. [{id: 1, name: "users"}, ...]
-         // z. B. { view_table: "101", add_table: "111", ... }
-         userRights: {
-        type: Object,
-            required:true,
+      adminTables: Array,
+      urid: {
+        type: [Boolean, Number, String],
+        default: "1",
+      },
+      roles: {
+        type: Array,
+        required: true,
+      },
+      func: {
+        type: [Array, Object, String, Number, Boolean],
+        required: true,
+      },
     },
-    },
-
     data() {
-        const rights = {};
-        const fields = [
-            "view_table",
-            "add_table",
-            "edit_table",
-            "publish_table",
-            "date_table",
-            "delete_table",
-        ];
+      const rights = {};
+      const fields = [
+        "view_table",
+        "add_table",
+        "edit_table",
+        "publish_table",
+        "date_table",
+        "delete_table",
+    ];
+      for (const field of fields) {
+        rights[field] = [];
+      }
 
-        for (const field of fields) {
-            rights[field] = [];
-        }
+      return {
+        rights,
+        userRights: {},
+        selected: String(this.urid),
+        activeTab: "tables",
+        settings: {},
+        func: {},
 
-        return { rights };
+
+      };
     },
-
-    mounted() {
-        this.initializeRights();
-        console.log("userRights:", this.userRights);
+    async mounted() {
+      this.settings = await GetSettings();
+      this.fetchRights(this.selected);
+        this.loadFunctions(this.urid);
+    },
+    watch: {
+        urid: {
+                immediate: true,
+                handler(newVal) {
+                if (newVal) {
+                    this.loadFunctions(newVal);
+                }
+                }
+            },
+            func: {
+    immediate: true,
+    handler(newVal) {
+      this.localFunc = { ...newVal }; // flaches Klonen
+    }
+  }
     },
 
     methods: {
-        initializeRights() {
-            const fieldNames = Object.keys(this.rights);
-            for (const field of fieldNames) {
-                const binaryString = this.userRights[field] || "";
-                const padded = binaryString.padEnd(this.adminTables.length, "0");
-
-                for (let i = 0; i < this.adminTables.length; i++) {
-                    this.rights[field][i] = padded[i] === "1";
-                }
-            }
-        },
-       ucf(str) {
-            // Teilt den String an den Unterstrichen
-            const arr = str.split("_");
-
-            // Wandelt jedes Element des Arrays um, falls es mehr als ein Wort gibt
-            const na = arr.map(
-                (val) => val.charAt(0).toUpperCase() + val.slice(1).toLowerCase(),
-            );
-
-            // Setzt die W�rter mit einem Leerzeichen zusammen
-            return na.join(" ");
-        },
-
-        saveRights() {
-            const payload = {};
-
-            for (const [key, values] of Object.entries(this.rights)) {
-                payload[key] = values.map((v) => (v ? "1" : "0")).join("");
-            }
-
-            axios.post("/admin/user-rights/save", payload).then((response) => {
-                alert("Rechte gespeichert!");
-            });
-        },
-        togglerow(index) {
-            const allEnabled = Object.keys(this.rights).every((field) => {
-                return this.rights[field][index] === true;
-            });
-
-            const newValue = !allEnabled;
-
-            for (const field in this.rights) {
-                this.rights[field][index] = newValue;
-            }
+        async loadFunctions(urid) {
+    try {
+      const response = await axios.get(`api/roles?urid=${urid}`);
+      this.func = response.data;
+      console.log("TFF" + this.func);
+    } catch (error) {
+      console.error("Fehler beim Laden der Funktionen:", error);
+    }
+  },
+loadFunc(urid) {
+  axios.get(`/api/roles?urid=${urid}`)
+    .then(response => {
+      this.func = response.data;
+    })
+    .catch(error => {
+      console.error("Fehler beim Laden der Funktionen:", error);
+    });
+},
+      async fetchRights(urid) {
+        try {
+          const response = await axios.get(`/admin/user-rights/get?urid=${urid}`);
+          this.userRights = response.data;
+          this.initializeRights();
+        } catch (e) {
+          console.error("Fehler beim Laden der Rechte:", e);
+        }
+      },
+      initializeRights() {
+        const fieldNames = Object.keys(this.rights);
+        for (const field of fieldNames) {
+          const binaryString = this.userRights[field] || "";
+          const padded = binaryString.padEnd(this.adminTables.length, "0");
+          for (let i = 0; i < this.adminTables.length; i++) {
+            this.rights[field][i] = padded[i] === "1";
+          }
+        }
+      },
+      ucf(str) {
+        return str
+          .split("_")
+          .map((val) => val.charAt(0).toUpperCase() + val.slice(1).toLowerCase())
+          .join(" ");
+      },
+      saveRights(p2) {
+        let payload = {};
+        for (const [key, values] of Object.entries(this.rights)) {
+          payload[key] = values.map((v) => (v ? "1" : "0")).join("");
+        }
+        payload["urid"] = this.selected;
+        for (const funcname in p2) {
+        if (Object.hasOwn(p2, funcname)) {
+            payload[funcname] = p2[funcname];
+        }
         }
 
+
+        axios.post("/admin/user-rights/save", payload).then(() => {
+        //   alert("Rechte gespeichert!");
+        });
+      },
+
+      togglerow(index) {
+        const allEnabled = Object.keys(this.rights).every(
+          (field) => this.rights[field][index]
+        );
+        const newValue = !allEnabled;
+
+        for (const field in this.rights) {
+          this.rights[field][index] = newValue;
+        }
+      },
+      navigate() {
+        this.fetchRights(this.selected);
+        this.loadFunc(this.selected);
+      },
     },
-};
-</script>
+  };
+  </script>
+
+  <style scoped>
+.flr{
+ justify-items:right !Important;
+}
+  </style>

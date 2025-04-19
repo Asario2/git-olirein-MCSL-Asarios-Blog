@@ -110,7 +110,7 @@
                     }
                 },
                 cleanPath() {
-                    const searchableTables = ["images", "blogs", "didyouknow","shortpoems"]; // Dein `Settings::searchable`
+                    const searchableTables = ["images", "blogs", "didyouknow","shortpoems"]; // Dein `Settings::$searchable`
                     const parts = window.location.pathname.split("/"); // Teile die URL in Segmente auf
 
                     let table = null;

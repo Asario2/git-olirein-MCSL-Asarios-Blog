@@ -30,6 +30,7 @@
                             v-model="form.email"
                             placeholder="Mailadresse"
                             ref="email"
+                            autocomplete="username"
                         ></input-element>
                         <input-error :message="errors.email" />
                     </input-container>

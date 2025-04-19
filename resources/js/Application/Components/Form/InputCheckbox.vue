@@ -1,4 +1,3 @@
-
 <template>
     <div class="flex items-center h-6">
         <div class="flex items-center h-6">
@@ -8,6 +7,7 @@
                 type="checkbox"
                 class="w-5 h-5 rounded border focus:ring-3 bg-primary-sun-50 text-primary-sun-500 border-primary-sun-300 focus:ring-primary-sun-300 ring-offset-primary-sun-800 checked:bg-primary-sun-500 dark:bg-primary-night-50 dark:text-primary-night-500 dark:border-primary-night-300 dark:focus:ring-primary-night-300 dark:ring-offset-primary-night-800 dark:checked:bg-primary-night-500"
                 :checked="!!modelValue"
+                :value="modelValue"
                 @change="toggle($event)"
             />
         </div>
@@ -30,7 +30,7 @@ export default {
     components: { IconExclamationCircle },
     emits: ["update:modelValue"],
     props: {
-        name: { type: String, required: true },
+        name: { type: String },
         modelValue: { type: [Number, Boolean], default: false },
         label: { type: String, default: "" },
         helptext: { type: String, default: "" },

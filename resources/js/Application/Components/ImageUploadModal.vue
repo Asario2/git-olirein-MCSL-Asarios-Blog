@@ -81,6 +81,7 @@
       namee: String,
       column: String,
       namee2: String,
+      altpath: String,
       Message: {
         type: [Boolean, Number],
         default: false,
@@ -103,7 +104,7 @@
         uploading: false,
         progress: 0,
         newFname: '',
-        tablex: this.CleanTable(),
+        tablex: this.altpath ? this.altpath : this.CleanTable(),
         form: {
           copyleft: ''
         },

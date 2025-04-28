@@ -48,7 +48,7 @@
                         <div class="flex justify-between items-center">
                     <search-filter
                         v-model="form.search"
-                        class="w-full"
+                        class="w-full w-full3"
                         @reset="reset"
                     >
                     </search-filter>
@@ -61,7 +61,7 @@
                     </alert>
                 </div>
                         <div id="gallery" v-for="entry in entries" :key="entry.id"
-    class="block max-w-sm gap-3 mx-auto sm:max-w-full group mb-4
+    class="block max-w-sm gap-3 mx-auto sm:max-w-full w-full3 group mb-4
         lg:grid lg:grid-cols-12 bg-layout-sun-100 dark:bg-layout-night-100
         border-2 border-layout-sun-300 dark:border-layout-night-300 p-4"
 
@@ -85,14 +85,14 @@
     </div>
 
     <!-- Mittlere Spalte: Überschrift, Beschreibung und Kommentar-Slot -->
-    <div class="p-6 space-y-2 lg:col-span-6">
+    <div class="p-6 space-y-2 lg:col-span-6 ml-6">
         <h2 class="text-xl font-semibold sm:text-2xl font-title whitespace-pre-line">
         <p v-html="entry.headline"></p>
         </h2>
 
-        <p class="text-layout-sun-700 dark:text-layout-night-700 whitespace-pre-line">
+        <div class="text-layout-sun-700 dark:text-layout-night-700 whitespace-pre-line">
             <p v-html="entry.message"></p>
-            </p>
+        </div>
 
 
             <SocialButtons :postId="entry.id" />
@@ -108,9 +108,9 @@
         <b>Format:</b> {{ entry.Format }}
         </div>
         <averageRating :postId="entry.id"/>
-        <span v-if="editOn || deleteOn" class="flex space-x-2">
+        <span v-if="hasRight('delete', 'images') || hasRight('edit', 'images') " class="flex space-x-2">
         <!-- Edit Icon -->
-        <span v-if="editOn"
+        <span v-if="hasRight('edit', 'images') "
                 class="inl"
                 @click.prevent="editDataRow(entry.id)">
             <icon-pencil class="w-6 h-6 cursor-pointer" v-tippy />
@@ -118,7 +118,7 @@
         </span>
 
         <!-- Delete Icon -->
-        <span v-if="deleteOn"
+        <span v-if="hasRight('delete', 'images') "
                 class="inl"
                 @click="deleteDataRow(entry.id)">
             <icon-trash class="w-6 h-6 cursor-pointer" v-tippy />
@@ -174,7 +174,7 @@ import { nextTick } from "vue";
 import { route } from "ziggy-js";
 import IconShare from "@/Application/Components/Icons/IconShare.vue";
 import IconStar from "@/Application/Components/Icons/IconStar.vue";
-
+import { hasRight,loadAllRights,isRightsReady } from '@/utils/rights';
 export default {
 components: {
     Layout,
@@ -208,6 +208,10 @@ data() {
         showComments: {}, // Zustand für die Anzeige der Kommentarfunktion
         entry: { id: null },
         lightbox: null,
+        rightsData: {},
+        rightsReady: false,
+        editOn: false,
+        deleteOn: false,
     };
 },
 watch: {
@@ -224,6 +228,15 @@ watch: {
             );
         }, 150),
         deep: true,
+    },
+},
+computed:{
+
+        isRightsReady() {
+      return this.$isRightsReady; // Zugriff auf globale Methode
+    },
+    hasRight() {
+      return this.$hasRight; // Zugriff auf globale Methode
     },
 },
 props: {
@@ -251,12 +264,7 @@ props: {
         type: [Array, Object],
         default: () => [],
     },
-    editOn: {
-        default: true,
-    },
-    deleteOn: {
-        default: true,
-    },
+
     createOn: {
         default: true,
     },
@@ -268,6 +276,22 @@ props: {
     },
 },
 methods: {
+    async hasRight(right, table) {
+    if (!this.rightsData[`${right}_${table}`] && table) {
+      await this.checkRight(right, table);
+    }
+    return this.rightsData[`${right}_${table}`] === 1;
+},
+
+  async checkRight(right, table) {
+    // Lade die Rechte für den User
+    const value = await GetRights(right, table);
+    // Speichere die geladenen Rechte im rightsData-Objekt
+    this.rightsData[`${right}_${table}`] = value;
+
+  },
+
+
     handleBodyClick(event) {
         this.$nextTick(() => {
             const box = document.getElementById("commentBox");
@@ -298,7 +322,7 @@ methods: {
         this.form = mapValues(this.form, () => null);
     },
     toggleStarBox(id) {
-    console.log(`toggleStarBox wurde für ID ${id} aufgerufen`);
+    // console.log(`toggleStarBox wurde für ID ${id} aufgerufen`);
 
     // Sicherstellen, dass showShareBox existiert
     if (!this.showStarBox) {
@@ -309,7 +333,7 @@ methods: {
 
     },
     toggleShareBox(id) {
-    console.log(`toggleShareBox wurde für ID ${id} aufgerufen`);
+    // console.log(`toggleShareBox wurde für ID ${id} aufgerufen`);
 
     // Sicherstellen, dass showShareBox existiert
     if (!this.showShareBox) {
@@ -318,7 +342,7 @@ methods: {
 
     this.showShareBox[id] = !this.showShareBox[id];
 
-    console.log("showShareBox:", this.showShareBox);
+    // console.log("showShareBox:", this.showShareBox);
 
     if (this.showShareBox[id]) {
         this.$nextTick(() => {
@@ -327,14 +351,14 @@ methods: {
                 console.error(`Shariff-Element für ID ${id} nicht gefunden.`);
                 return;
             }
-            console.log(`Shariff für ID ${id} wird initialisiert...`);
+            // console.log(`Shariff für ID ${id} wird initialisiert...`);
             this.initShariff(id);
         });
     } else {
         this.$nextTick(() => {
             const shariffRef = this.$refs['shariff_' + id];
             if (shariffRef) {
-                console.log(`Shariff-Inhalt für ID ${id} wird geleert.`);
+                // console.log(`Shariff-Inhalt für ID ${id} wird geleert.`);
                 shariffRef.innerHTML = "";
             }
         });
@@ -349,7 +373,7 @@ methods: {
             return;
         }
 
-        console.log(`Shariff wird für ID ${id} initialisiert`, shariffRef);
+        // console.log(`Shariff wird für ID ${id} initialisiert`, shariffRef);
         new Shariff(shariffRef, {
             services: ["facebook", "telegram", "whatsapp", "xing", "twitter"],
             theme: "classic",
@@ -379,7 +403,7 @@ methods: {
                 .delete(this.routeDelete + id)
                 .then(() => {
                     this.$emit("deleted");
-                    location.reload();
+                    this.$inertia.reload();
                 })
                 .catch((error) => {
                     console.error("Fehler beim Löschen:", error);
@@ -403,7 +427,7 @@ onClick() {
       }
     }
 },
-mounted() {
+async mounted() {
     document.body.addEventListener("click", this.handleBodyClick);
     this.lightbox = new PhotoSwipeLightbox({
         gallery: '#gallery',
@@ -421,7 +445,30 @@ mounted() {
         bgOpacity: 0.8, // Hintergrundtransparenz
       pswpModule: () => import('photoswipe')
     });
+
     this.lightbox.init();
+
+
+    const waitUntilReady = () => new Promise((resolve) => {
+    const check = () => {
+      if (window.isRightsReady && window.isRightsReady()) {
+        resolve();
+      } else {
+        setTimeout(check, 50);
+      }
+    };
+    check();
+  });
+
+  await waitUntilReady();
+
+  // Rechte prüfen
+  this.editOn = hasRight("edit", "images");
+  this.deleteOn =
+  //console.log(this.deleteOn,this.editOn);
+
+    await loadAllRights(); // aus utils/rights.js
+    this.rightsReady = true;
 },
 beforeUnmount() {
     if (this.lightbox) {

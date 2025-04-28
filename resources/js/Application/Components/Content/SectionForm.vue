@@ -9,11 +9,11 @@
             </template>
         </SectionTitle>
 
-        <div :class="withTitle ? 'mt-5 md:mt-0 md:col-span-2' : ''">
+        <div :class="withTitle ? 'mt-5 md:mt-0 md:col-span-2 w-full' : 'w-full'">
             <form @submit.prevent="$emit('submitted')">
                 <div class="flex flex-col">
                     <div
-                        class="px-1 lg:px-4 py-2 border-t border-r border-l border-layout-sun-100 dark:border-layout-night-100 bg-layout-sun-200 text-layout-sun-800 dark:bg-layout-night-200 dark:text-layout-night-800"
+                        class="w-full px-1 lg:px-4 py-2 border-t border-r border-l border-layout-sun-100 dark:border-layout-night-100 bg-layout-sun-200 text-layout-sun-800 dark:bg-layout-night-200 dark:text-layout-night-800"
                         :class="
                             hasActions
                                 ? 'lg:rounded-tl-lg lg:rounded-tr-lg'
@@ -25,7 +25,7 @@
                     </div>
                     <div
                         v-if="hasActions"
-                        class="px-1 md:px-4 lg:px-8 py-2 border-l border-r border-b border-layout-sun-100 dark:border-layout-night-100 bg-layout-sun-200 dark:bg-layout-night-200 lg:rounded-bl-lg lg:rounded-br-lg"
+                        class="w-full px-1 md:px-4 lg:px-8 py-2 border-l border-r border-b border-layout-sun-100 dark:border-layout-night-100 bg-layout-sun-200 dark:bg-layout-night-200 lg:rounded-bl-lg lg:rounded-br-lg"
                     >
                         <div class="flex items-center justify-end">
                             <slot name="actions" />
@@ -65,3 +65,19 @@ export default {
     },
 };
 </script>
+<style scoped>
+/* .w-full {width:100% !important}
+@media (min-width: 1024px) {
+    .w-full {
+        width: 1024px !important;
+
+    }
+}
+@media (min-width: 1210px) {
+    .w-full {
+        width: 1210px !important;
+
+    }
+} */
+
+</style>

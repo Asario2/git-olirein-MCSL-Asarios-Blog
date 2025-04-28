@@ -60,7 +60,7 @@ class TablesController extends Controller
         $excl_cols = Settings::$excl_cols;
         $columns = array_diff($columns, $excl_cols);
 
-        if ($table == "blog_posts" || $table == "mindblog" || $table == "images") {
+        if ($table == "blogs" || $table == "mindblog" || $table == "images") {
             $ord[0] = "created_at";
             $ord[1] = "DESC";
         }
@@ -88,7 +88,7 @@ class TablesController extends Controller
         $columns = array_diff($columns, $excl_cols);
 
         // Bestimme die Sortierreihenfolge
-        if ($table == "blog_posts" || $table == "mindblog" || $table == "images") {
+        if ($table == "blogs" || $table == "mindblog" || $table == "images") {
             $ord[0] = "created_at";
             $ord[1] = "DESC";
         }
@@ -128,7 +128,7 @@ class TablesController extends Controller
         $columns = array_diff($columns, $excl_cols);
 
         // Bestimme die Sortierreihenfolge
-        if ($table == "blog_posts" || $table == "mindblog" || $table == "images") {
+        if ($table == "blogs" || $table == "mindblog" || $table == "images") {
             $ord[0] = "created_at";
             $ord[1] = "DESC";
         }
@@ -167,7 +167,7 @@ class TablesController extends Controller
         $columns = array_diff($columns, $excl_cols);
 
         // Bestimme die Sortierreihenfolge
-        if ($table == "blog_posts" || $table == "mindblog" || $table == "images") {
+        if ($table == "blogs" || $table == "mindblog" || $table == "images") {
             $ord[0] = "created_at";
             $ord[1] = "DESC";
         }
@@ -370,7 +370,7 @@ class TablesController extends Controller
             $exists = $query->where('id', $id)->exists();
             $ffoo = ["formFields" => ["defekt" => "true"]];
             if (!$exists) {
-                \Log::info("exists:".json_encode($ffoo));
+                // \Log::info("exists:".json_encode($ffoo));
                  return response()->json(($ffoo));
             }
 
@@ -446,7 +446,7 @@ class TablesController extends Controller
 
         $tablez = [];
 
-        if ($table == "blog_posts" || $table == "mindblog") {
+        if ($table == "blogs" || $table == "mindblog") {
             $ord[0] = "created_at";
             $ord[1] = "DESC";
         }
@@ -565,6 +565,7 @@ class TablesController extends Controller
             "formData"  => "test",
             "tablez" => ucf($table),
             "table_q" => ucf($table),
+            "namealias" => ucf(Settings::$namealias[$table] ?? 'name')
         ]);
     }
     function stripslashes_recursive($data) {
@@ -637,7 +638,7 @@ class TablesController extends Controller
 
 
         }
-        \Log::info("t:".$table);
+        // \Log::info("t:".$table);
         if (!Schema::hasTable($table)) {
 
             return redirect()->back()->withErrors(['error' => 'Tabelle existiert nicht2']);
@@ -649,7 +650,7 @@ class TablesController extends Controller
         $columns = array_diff($columns, $excl_cols);
 
         // Bestimme die Sortierreihenfolge
-        if ($table == "blog_posts" || $table == "mindblog") {
+        if ($table == "blogs" || $table == "mindblog") {
             $ord[0] = "created_at";
             $ord[1] = "DESC";
         }
@@ -878,10 +879,6 @@ class TablesController extends Controller
             elseif(in_array('headline',$columns))
             {
                 $hcode = 'headline';
-            }
-            elseif(in_array('name',$columns))
-            {
-                $hcode = 'name';
             }
             elseif(in_array('name',$columns))
             {
@@ -1469,7 +1466,7 @@ class TablesController extends Controller
         // Aktualisiere den Eintrag
         DB::table($table)->where('id', $id)->update($data);
         $admTab = isset($_SESSION['adm_tab']) ? $_SESSION['adm_tab'] : '';
-                if ($table == "blog_posts" || $table == "mindblog" || $table == "images") {
+                if ($table == "blogs" || $table == "mindblog" || $table == "images") {
             $ord[0] = "created_at";
             $ord[1] = "DESC";
         }
@@ -1526,14 +1523,14 @@ class TablesController extends Controller
 
 
         $formData = ($request->input('formData'));
-        \Log::info("path: ".public_path()."/images/".$table."/big/".$formData['image_path']);
+        // \Log::info("path: ".public_path()."/images/".$table."/big/".$formData['image_path']);
         if((isset($formData['pub']) || Schema::hasColumn($table, 'pub')) && (empty($formData['pub']) || @is_null($formData['pub']))){
             $formData['pub'] = "1";
         }
         if (isset($formData['image_path']) && empty($formData['image_path'])) {
             $formData['image_path'] = "008.jpg";
         }
-        \Log::info(public_path()."/images/".$table."/big/".$formData['image_path']);
+        // \Log::info(public_path()."/images/".$table."/big/".$formData['image_path']);
         if(Schema::hasColumn($table, 'img_x'))
         {
         list($width,$height) = getimagesize(public_path()."/images/".$table."/big/".$formData['image_path']);
@@ -1583,7 +1580,7 @@ class TablesController extends Controller
     public function GetUserNull()
     {
         $unull = DB::table("users")->orderby("id","ASC")->pluck("name");
-        \Log::info("UNULL".$unull);
+        //\Log::info("UNULL".$unull);
         return response()->json($unull);
     }
     public function UpdateTable(Request $request,$table, $id)
@@ -1635,7 +1632,7 @@ class TablesController extends Controller
             // \Log::info('FormData:', $formData);
             // \Log::info($updated);
             $queries = DB::getQueryLog();
-            \Log::info("qry:".json_encode([$queries,$formData]));
+            //\Log::info("qry:".json_encode([$queries,$formData]));
             if ($updated) {
                 return response()->json(['message' => 'Daten erfolgreich aktualisiert!']);
             } else {
@@ -1690,8 +1687,20 @@ class TablesController extends Controller
         DB::table($table)->where('id', $id)->delete();
 
     }
+    function GetSRights($right)
+    {
+    //     $res = DB::table("users")
+    // ->leftJoin("users_rights", "users.users_groups_id", "=", "users_rights.id")->pluck("xkis_".$right);
+    // return response()->json($res);
+    }
     public function URights(Request $request)
     {
+        if(!CheckZRights("UserRights"))
+        {
+
+            header("Location: /no-rights");
+            exit;
+        }
         $tables = AdminTable::orderBy("name","ASC")->select('name')->get(); // oder dein gewünschtes Sortierfeld
 
         // Beispiel: Aktuell eingeloggter Nutzer mit Rolle z. B. Moderator-ID = 1
@@ -1701,7 +1710,7 @@ class TablesController extends Controller
         $columns = DB::getSchemaBuilder()->getColumnListing('users_rights');
 
         // Schritt 2: Nur Spalten mit "xkis" im Namen filtern
-        $xkisColumns = array_filter($columns, fn($col) => str_contains($col, 'xkis'));
+        $xkisColumns = array_filter($columns, fn($col) => str_contains($col, 'xkis_'));
 
         // Schritt 3: Eintrag für diesen Benutzer holen, aber nur die gefilterten Spalten
         $data = DB::table('users_rights')
@@ -1712,7 +1721,7 @@ class TablesController extends Controller
         // Optional: als Array
         $func = (array) $data;
 
-        //\Log::info("ass: ".json_Encode([$tables,$userRights]));
+        // \Log::info("ass: ".json_Encode([$func]));
         return Inertia::render('Admin/urights', [
             'adminTables' => $tables,
             'userRights' => $userRights,
@@ -1723,17 +1732,19 @@ class TablesController extends Controller
     }
     public function GetURights(Request $request)
     {
-        $urid  = $request->urid ? $request->urid : "1";
+        $urid  = $_GET['urid'];
+        // \Log::info($request->all());
         $userRights = UsersRight::find($urid);
-        return $userRights;
+        //\Log::info("UR: ".$userRights);
+        return response()->json($userRights);
     }
     public function getRoles(Request $request)
     {
-        $urid  = $request->urid ? $request->urid : "1";
+        $urid  = $request->urid ? $request->urid : "0";
         $columns = DB::getSchemaBuilder()->getColumnListing('users_rights');
 
         // Schritt 2: Nur Spalten mit "xkis" im Namen filtern
-        $xkisColumns = array_filter($columns, fn($col) => str_contains($col, 'xkis'));
+        $xkisColumns = array_filter($columns, fn($col) => str_contains($col, 'xkis_'));
         $data = DB::table('users_rights')
         ->select($xkisColumns)
         ->where('id', $urid)
@@ -1741,8 +1752,8 @@ class TablesController extends Controller
 
     // Optional: als Array
     $func = (array) $data;
-
-        return json_encode($func);
+        // \Log::info($func);
+        return response()->json($func);
     }
     public function SaveURights(Request $request)
     {
@@ -1777,7 +1788,7 @@ class TablesController extends Controller
         }
         else
         {
-            \Log::info($field);
+            // \Log::info($field);
         }
     }
 
@@ -1788,7 +1799,7 @@ class TablesController extends Controller
     public function GetAdmins($urid)
     {
         $res = DB::table("users_rights")->select("id","name")->get();
-        \Log::info("res: ".json_encode($res));
+        // \Log::info("res: ".json_encode($res));
         return $res;
     }
     // Funktion zum Löschen eines Eintrags

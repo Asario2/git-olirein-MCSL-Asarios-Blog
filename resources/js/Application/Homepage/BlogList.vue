@@ -26,7 +26,7 @@
                 <div class="flex justify-between items-center">
                     <search-filter
                         v-model="form.search"
-                        class="w-full"
+                        class="w-full w-full3"
                         @reset="reset"
                     >
                     </search-filter>

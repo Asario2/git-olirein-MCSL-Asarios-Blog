@@ -1,4 +1,236 @@
+import axios from 'axios';
 
+export async function loadRightsOnce() {
+  if (!cache.tables) {
+    try {
+      const res = await axios.get('/api/admin/tables');
+      // Überprüfen, ob die Antwort tatsächlich ein Array ist
+      if (Array.isArray(res.data)) {
+        cache.tables = res.data;
+      } else {
+        console.error('Unerwartetes Format für Tabellen:', res.data);
+        cache.tables = [];
+      }
+    } catch (error) {
+      console.error('Fehler beim Laden der Tabellen:', error);
+      cache.tables = [];
+    }
+  }
+
+  if (!cache.rights) {
+    try {
+        const uid = await GetAuth();
+      const res = await axios.get('/api/user/rights/' + uid);
+      // Überprüfen, ob die Antwort tatsächlich ein Objekt ist
+      if(res.data == "0")
+      {
+        return 0;
+      }
+      if (typeof res.data === 'object') {
+        cache.rights = res.data;
+      } else {
+        console.error('Unerwartetes Format für Rechte:', res.data);
+        cache.rights = {};
+      }
+    } catch (error) {
+      console.error('Fehler beim Laden der Rechte2:', error);
+      cache.rights = {};
+    }
+  }
+}
+
+
+const cache = {
+  tables: null,
+  rights: null,
+  ready: false,
+};
+
+export async function initRights() {
+  if (!cache.ready) {
+    const [tablesRes, rightsRes] = await Promise.all([
+      axios.get('/api/admin/tables'),
+      axios.get('/api/user/rights'),
+    ]);
+
+    cache.tables = tablesRes.data;
+    cache.rights = rightsRes.data;
+    cache.ready = true;
+  }
+}
+
+// export function GetRights(type, table) {
+//   if (!cache.ready) return 0;
+
+//   const t = cache.tables.find(t => t.name === table);
+//   if (!t) return 0;
+
+//   const str = cache.rights[type];
+//   if (!str) return 0;
+
+//   return str.charAt(t.position) === '1' ? 1 : 0;
+// }
+ export async function GetRights(right,table)
+ {
+    const res = axios.get('/api/user/rights/des/' + table + "/" + right);
+    const res2 = res.data;
+    return res2;
+ }
+// export async function GetRights(rightType, tableName) {
+//   await loadRightsOnce();
+//   if(!GetAuth()){
+//     return 0;
+//   }
+//     if(!rightType)
+//     {
+//         return 0;
+//     }
+//   // Überprüfen, ob die Tabellen als Array vorhanden sind
+//   if (!Array.isArray(cache.tables)) {
+//     console.error('Tabellen-Daten sind nicht im erwarteten Format');
+//     return 0;
+//   }
+
+//   const table = cache.tables.find(t => t.name === tableName);
+//   if (!table) {
+//     console.error(`Tabelle mit dem Namen "${tableName}" nicht gefunden.`);
+//     return 0;
+//   }
+
+//   const rightString = cache.rights?.[rightType];
+//   if (!rightString) {
+//     // console.error(`Rechttyp "${rightType}" nicht gefunden.`);
+//     return 0;
+//   }
+
+//   return rightString.charAt(table.position) === '1' ? 1 : 0;
+// }
+
+// // resources/js/services/rightsService.js
+// import axios from 'axios';
+
+// const cache = {
+//   tables: null,
+//   rights: null,
+// };
+
+// export async function loadRightsOnce() {
+//   if (!cache.tables) {
+//     const res = await axios.get('/api/admin/tables');
+//     cache.tables = res.data;
+//   }
+//   if (!cache.rights) {
+//     const res = await axios.get('/api/user/rights');
+//     cache.rights = res.data;
+//   }
+// }
+
+// export async function GetRights(rightType, tableName) {
+//   await loadRightsOnce();
+
+//   const table = cache.tables.find(t => t.name === tableName);
+//   if (!table) return 0;
+
+//   const rightString = cache.rights[rightType];
+//   if (!rightString) return 0;
+
+//   return rightString.charAt(table.position) === '1' ? 1 : 0;
+// }
+// // helper.js
+// import axios from 'axios';
+
+// export async function GetRights(rightType, tableName) {
+//   try {
+//     // Lade Tabellen (inkl. Position)
+//     const tablesRes = await axios.get('/api/admin/tables');
+//     const table = tablesRes.data.find(t => t.name === tableName);
+//     if (!table) return 0;
+
+//     // Lade Rechte des Users
+//     const rightsRes = await axios.get('/api/user/rights');
+//     const rightString = rightsRes.data[rightType];
+//     if (!rightString) return 0;
+
+//     // Prüfe die Position
+//     return rightString.charAt(table.position) === '1' ? 1 : 0;
+//   } catch (e) {
+//     console.error('Fehler bei GetRights:', e);
+//     return 0;
+//   }
+// }
+// export async function loadAllRights() {
+//   try {
+//     const response = await axios.get('/api/user/rights');
+//     return response.data;
+//   } catch (error) {
+//     console.error('Fehler beim Laden der Rechte:', error);
+//     return null;
+//   }
+// }
+
+// export async function GetRights(tableName, rightType) {
+//   try {
+//     // Lade Tabellen mit Positionen
+//     const tablesResponse = await axios.get('/api/admin/tables');
+//     const tables = tablesResponse.data;
+
+//     const targetTable = tables.find(t => t.name === tableName);
+//     if (!targetTable) {
+//       console.warn(`Tabelle "${tableName}" nicht gefunden.`);
+//       return false;
+//     }
+
+//     const position = targetTable.position;
+
+//     // Lade Benutzerrechte
+//     const rights = await loadAllRights();
+//     if (!rights || !rights[rightType]) {
+//       console.warn(`Rechttyp "${rightType}" nicht gefunden.`);
+//       return false;
+//     }
+
+//     // Bitweise Rechte prüfen
+//     return rights[rightType].charAt(position) === '1';
+//   } catch (err) {
+//     console.error('Fehler beim Prüfen des Rechts:', err);
+//     return false;
+//   }
+// }
+
+// export async function GetRights(tableName, rightType) {
+//     try {
+//         const uid = GetAuth();
+//       // Schritt 1: Lade alle Tabellen (mit Positionen)
+//       const tablesResponse = await axios.get('/admin/tablesR/' + uid);
+//       const tables = tablesResponse.data;
+
+//       const targetTable = tables.find(t => t.name === tableName);
+//       if (!targetTable) {
+//         console.error(`Tabelle "${tableName}" nicht gefunden.`);
+//         return false;
+//       }
+
+//       const position = targetTable.position;
+
+//       // Schritt 2: Lade Rechte
+//       const rightsResponse = await axios.get('/api/GetRights');
+//       const rights = rightsResponse.data;
+
+//       const rightString = rights[rightType];
+//       if (!rightString) {
+//         console.error(`Rechttyp "${rightType}" nicht gefunden.`);
+//         return false;
+//       }
+
+//       // Schritt 3: Prüfe die Position
+//       const bit = rightString.charAt(position);
+//       return bit === '1';
+
+//     } catch (error) {
+//       console.error('Fehler beim Prüfen des Rechts:', error);
+//       return false;
+//     }
+//   }
 export function CleanId() {
     const path = window.location.pathname; // Beispiel: "/admin/tables/show/123"
     let segments = path.split('/');
@@ -48,8 +280,8 @@ export async function GetAuth()
 {
     try {
         const response = await fetch('/GETUserID');
-        const data = await response;
-        console.log("DATA: " + data);
+        const data = await response.json();
+        // console.log("DATA: " + data);
         return data;
     } catch (error){
         console.error("Fehler bei der Authentifizierung",error);
@@ -59,7 +291,7 @@ export async function checkAuthAndRedirect() {
     try {
         const response = await fetch('/GetAuth');
         const data = await response.json();
-        console.log("?? Auth-Status:", data); // Debugging
+        // console.log("?? Auth-Status:", data); // Debugging
         return data === "true" ? "authenticated" : "login";
     } catch (error) {
         console.error("? Fehler beim Abrufen der Authentifizierung:", error);
@@ -77,13 +309,31 @@ export async function GetSettings() {
         Object.keys(data).forEach((key) => {
             settings[key] = data[key];
         });
-
         return settings;
     } catch (error) {
         console.error("Fehler beim Laden der Settings:", error);
         return {};
     }
 
+}
+export async function GetSRights(modul)
+{
+    try {
+        const response = await fetch('/api/GetSRights');
+        const data = await response.json();
+        if(data.sright)
+        {
+            return true;
+        }
+        return false;
+
+
+
+
+    } catch (error) {
+        console.error("Fehler beim Laden der Settings:", error);
+        return {};
+    }
 }
 
 

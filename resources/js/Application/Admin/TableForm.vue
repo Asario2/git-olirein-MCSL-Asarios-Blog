@@ -29,7 +29,10 @@
 
                         <!-- <pre>{{ formData }}</pre> -->
                         <!-- <pre>{{this.xsor_alt['admin_table_id'] }}</pre> -->
-                        <a :href="'/admin/tables/create/' + tablex" target="" class="inline-flex items-center px-1 py-1.5 md:px-2 md:py-2 h-6 md:h-8 rounded-md font-medium text-xs tracking-widest disabled:opacity-25 transition cursor-pointer focus:ring focus:outline-none button_bg button_text_case_bg"><div class="flex items-center whitespace-nowrap"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" class="button_icon"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"></path></svg> Erstelle </div></a>
+                        <a v-if="hasRight('add',tablex)" :href="'/admin/tables/create/' + tablex" target="" class="inline-flex items-center
+                        px-1 py-1.5 md:px-2 md:py-2 h-6 md:h-8 rounded-md font-medium text-xs tracking-widest
+                         disabled:opacity-25 transition cursor-pointer focus:ring focus:outline-none button_bg
+                          button_text_case_bg"><div class="flex items-center whitespace-nowrap"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" class="button_icon"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"></path></svg> Erstelle </div></a>
                         <input-group>
 
     <form @submit.prevent="submitForm" enctype="multipart/form-data" >
@@ -449,6 +452,7 @@ import Editor from "@/Application/Components/Form/InputHtml.vue";
 import InputError from "@/Application/Components/Form/InputError.vue";
 import { throttle } from "lodash";
 import DialogModal from "@/Application/Components/DialogModal.vue";
+import { hasRight,loadAllRights,isRightsReady } from '@/utils/rights';
 import { reactive } from "vue";
 import Alert from "@/Application/Components/Content/Alert.vue";
 // import { console } from "inspector/promises";
@@ -680,6 +684,12 @@ export default defineComponent({
     //     console.log(JSON.stringify(this.options));
     //     return options;
     // },
+    isRightsReady() {
+      return this.$isRightsReady; // Zugriff auf globale Methode
+    },
+    hasRight() {
+      return this.$hasRight; // Zugriff auf globale Methode
+    },
     sortedOptions_sel() {
         let options_sel;
         if (Array.isArray(this.options_sel)) {
@@ -732,7 +742,7 @@ export default defineComponent({
     },
     watch:{
         modelValue(newVal) {
-    console.log("modelValue wurde aktualisiert:", newVal);
+    // console.log("modelValue wurde aktualisiert:", newVal);
   },
         ffo: {
             deep: true,
@@ -967,7 +977,7 @@ return { ffo };
     },
     methods: {
         openModal_alt() {
-    console.log("Vor dem Setzen: " + this.isModalOpen);
+    // console.log("Vor dem Setzen: " + this.isModalOpen);
 
     this.isModalOpen = !this.isModalOpen;
     if(this.Message)
@@ -983,7 +993,7 @@ return { ffo };
       }
 
       if (!editor || !(editor instanceof HTMLElement)) {
-        console.log("Editor nicht gefunden oder kein HTML-Element:", editor);
+        // console.log("Editor nicht gefunden oder kein HTML-Element:", editor);
         return;
       }
 
@@ -1000,7 +1010,7 @@ return { ffo };
       selection.addRange(range);
     });
     }
-    console.log("Nach dem Setzen: " + this.isModalOpen);
+    // console.log("Nach dem Setzen: " + this.isModalOpen);
   },
 
 
@@ -1312,7 +1322,7 @@ obj = obj.replace(/"formFields": \[.*\]/, "")
                 .then((response) => {
 
                     sdata_sel = JSON.stringify(response.data);
-                    console.log(sdata_sel);
+                    // console.log(sdata_sel);
                     //sdata = sdata.replace(new RegExp(name, "g"), '');
                     sdata_sel = JSON.parse(sdata_sel);
                     // 1. JSON-String in Objekt umwandeln
@@ -1566,7 +1576,7 @@ async submitForm() {
                 {
                     this.formData["image_path"] = document.getElementById("image_path").value;
                 }
-                console.log("ffo:" + JSON.stringify(this.formData,null,2));
+                // console.log("ffo:" + JSON.stringify(this.formData,null,2));
               const path = window.location.pathname; // Gibt "/admin/tables/show/Example" zurück
             const segments = path.split("/"); // Teilt den Pfad in Segmente auf
             if(segments[segments.length - 2] == "create")
@@ -1700,13 +1710,20 @@ async submitForm() {
     },
     async mounted() {
          //this.fetchDataX();
+
          this.settings = await GetSettings();
          this.xid = CleanId();
         this.xtable = CleanTable();
-
+        const path = window.location.pathname;
+        if (path.includes("create") && (!hasRight('view', this.xtable) || !hasRight('add', this.xtable))) {
+            location.href = "/no-rights";
+        }
+        else if (path.includes("edit") && (!hasRight('view', this.xtable) || !hasRight('edit', this.xtable))) {
+            location.href = "/no-rights";
+        }
         this.column =  this.settings.impath?.[this.xtable] ?? this.settings.impath?.['default'];
 
-        console.log("col:" + this.column);
+        // console.log("col:" + this.column);
         this.table_alter = this.settings.impath?.[this.xtable] ? '' : "/images/"+this.tablex+"/thumbs/";
         this.table_older = this.settings.impath?.[this.xtable] ? "" : "/images/"+this.tablex+"/thumbs/";
          this.getImageUrl();
@@ -1734,8 +1751,8 @@ async submitForm() {
     // console.log("field.name:", this.field?.name);
     // console.log("sortedOptions[field.name]:", this.sortedOptions[this.field.name]);
     // console.log("field.name:", this.field?.name);
-    console.log(this.ffo[this.column].value);
-        this.nf2 = this.ffo[this.column]['value'];
+    // console.log(this.ffo[this.column].value);
+    this.nf2 = this.ffo[this.column]?.value;
     },
     created() {
         this.updateReadingTime();
@@ -1744,11 +1761,17 @@ async submitForm() {
     },
 });
 </script>
-<style>
+<style scoped>
 select,datetime-local   {
     max-width:560px !important;
 }
-a{
-    color:#55F;
+.editor a:link,.editor a:visited,.editor a:active,.editor a {
+  color: #2563eb !important; /* z. B. Tailwind blue-600 */
+  text-decoration: underline;
+}
+@media (min-width: 1024px) {
+    /* .w-full {
+        width: 100% !important;
+    } */
 }
 </style>

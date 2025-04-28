@@ -68,7 +68,7 @@
                     table: table,
                     _token: document.querySelector('meta[name="csrf-token"]')?.getAttribute('content'),
                 });
-                location.reload();
+                this.$inertia.reload();
             }
 
         } catch (error) {

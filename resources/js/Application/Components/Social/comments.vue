@@ -8,7 +8,7 @@
             <div :id="'commentBox_' + comment.id" class="flex items-start space-x-4">
             <!-- Profilbild -->
             <img
-                :src="comment.profile_photo_path ? `/${comment.profile_photo_path}` : defaultAvatar"
+                :src="'/images/' + comment.profile_photo_path ?? defaultAvatar"
                 alt="Profilbild"
                 class="w-[50px] h-[50px] object-cover rounded-full bg-gray-300 dark:bg-gray-600"
             />

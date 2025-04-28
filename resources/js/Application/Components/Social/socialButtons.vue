@@ -221,7 +221,7 @@ methods:{
         this.imageRemove(id);
         event.stopPropagation();
         this.showComments = this.showComments === id ? null : id;
-        console.log("showComments_alt2:", this.showComments);
+        // console.log("showComments_alt2:", this.showComments);
         const ti = document.getElementById('teaser-img');
         if(ti)
         {
@@ -242,7 +242,7 @@ methods:{
         const commentBox = document.getElementById("commentBox_" + id);
         if (commentBox) {
             const computedHeight = window.getComputedStyle(commentBox).height;
-            console.log(computedHeight); // Gibt die Höhe des Elements aus
+            // console.log(computedHeight); // Gibt die Höhe des Elements aus
         } else {
             //console.error("Element nicht gefunden! commentBox_"+id);
         }
@@ -258,7 +258,7 @@ methods:{
     },
     toggleStarBox(id) {
 
-    console.log(`toggleStarBox wurde für ID ${id} aufgerufen`);
+    // console.log(`toggleStarBox wurde für ID ${id} aufgerufen`);
 
     // Sicherstellen, dass showShareBox existiert
     if (!this.showStarBox) {
@@ -282,7 +282,7 @@ methods:{
     },
     toggleShareBox(id) {
 
-    console.log(`toggleShareBox wurde für ID ${id} aufgerufen`);
+    // console.log(`toggleShareBox wurde für ID ${id} aufgerufen`);
 
     // Sicherstellen, dass showShareBox existiert
     if (!this.showShareBox) {
@@ -302,7 +302,7 @@ methods:{
     }
     this.showShareBox[id] = !this.showShareBox[id];
 
-    console.log("showShareBox:", this.showShareBox);
+    // console.log("showShareBox:", this.showShareBox);
 
     if (this.showShareBox[id]) {
         this.$nextTick(() => {
@@ -311,14 +311,14 @@ methods:{
                 console.error(`Shariff-Element für ID ${id} nicht gefunden.`);
                 return;
             }
-            console.log(`Shariff für ID ${id} wird initialisiert...`);
+            // console.log(`Shariff für ID ${id} wird initialisiert...`);
             this.initShariff(id);
         });
     } else {
         this.$nextTick(() => {
             const shariffRef = this.$refs['shariff_' + id];
             if (shariffRef) {
-                console.log(`Shariff-Inhalt für ID ${id} wird geleert.`);
+                // console.log(`Shariff-Inhalt für ID ${id} wird geleert.`);
                 shariffRef.innerHTML = "";
             }
         });
@@ -333,7 +333,7 @@ methods:{
             return;
         }
 
-        console.log(`Shariff wird für ID ${id} initialisiert`, shariffRef);
+        // console.log(`Shariff wird für ID ${id} initialisiert`, shariffRef);
         new Shariff(shariffRef, {
             services: ["facebook", "telegram", "whatsapp", "xing", "twitter"],
             theme: "classic",
@@ -365,7 +365,7 @@ methods:{
                 .delete(this.routeDelete + id)
                 .then(() => {
                     this.$emit("deleted");
-                    location.reload();
+                    this.$inertia.reload();
                 })
                 .catch((error) => {
                     console.error("Fehler beim Löschen:", error);

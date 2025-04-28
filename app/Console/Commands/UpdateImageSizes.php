@@ -22,7 +22,7 @@ class UpdateImageSizes extends Command
         $directory = public_path('images/images/big/'); // Verzeichnis mit den Bildern
 
         // Hole alle Bilddateien im Verzeichnis
-        $files = glob($directory . '*.{jpg,jpeg,png,gif}', GLOB_BRACE);
+        $files = glob($directory . '*.{jpg,jpeg,png,gif,JPG,JPEG,PNG,GIF}', GLOB_BRACE);
 
         foreach ($files as $file) {
             // Hole die Breite und Höhe des Bildes

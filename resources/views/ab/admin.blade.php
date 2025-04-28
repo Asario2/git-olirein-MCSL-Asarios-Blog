@@ -134,7 +134,7 @@
                 let form = document.getElementById('uploadForm');
                 let formData = new FormData(form);
                 let xhr = new XMLHttpRequest();
-                
+
                 xhr.open('POST', form.action, true);
 
                 xhr.upload.addEventListener('progress', function(e) {
@@ -296,7 +296,7 @@
                             return response.json();
                         })
                         .then(data => {
-                            console.log(data.message);
+                            // console.log(data.message);
                         })
                         .catch(error => {
                             console.error('Error:', error);
@@ -457,8 +457,8 @@
                             order: order,
                         }),
                         success: function(response) {
-                            console.log(
-                                "Sortierreihenfolge wurde erfolgreich gespeichert.");
+                            // console.log(
+                            //     "Sortierreihenfolge wurde erfolgreich gespeichert.");
                         },
                         error: function(xhr) {
                             console.error("Fehler bei der Anfrage:", xhr.responseText);

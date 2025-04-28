@@ -2,7 +2,7 @@
     <div
         class="p-5 mx-auto sm:p-2 md:p-10 bg-layout-sun-0 text-layout-sun-800 dark:bg-layout-night-0 dark:text-layout-night-800"
     >
-    <div class="relative w-full flex flex-col max-w-6xl mx-auto overflow-hidden rounded">
+    <div class="relative w-full5 flex flex-col max-w-6xl mx-auto overflow-hidden rounded">
     <!-- Blog-Bild -->
     <div class="relative" style="z-index:0;">
         <img
@@ -11,7 +11,7 @@
             loading="lazy"
             width="480"
             height="360"
-            class="object-cover w-full  rounded lg:col-span-7 object-cover w-full rounded bg-layout-sun-500 dark:bg-layout-night-500 coverclass"
+            class="object-cover w-full5  rounded lg:col-span-7 object-cover rounded bg-layout-sun-500 dark:bg-layout-night-500 coverclass"
         />
 
         <!-- AI-Button in der rechten unteren Ecke des Bildes -->
@@ -22,7 +22,7 @@
 
     <!-- **Neuer Container für den H1-Text unterhalb des Bildes** -->
 <div
-                class="p-2 pb-12 m-2 mx-auto w-full mt-0 space-y-6 lg:max-w-5xl sm:px-10 sm:mx-12 lg:rounded-md bg-layout-sun-100 dark:bg-layout-night-100 prose dark:prose-invert md:prose-lg lg:prose-xl"
+                class="p-2 pb-12 m-2 mx-auto w-full5 mt-0 space-y-6 lg:max-w-5xl sm:px-10 sm:mx-12 lg:rounded-md bg-layout-sun-100 dark:bg-layout-night-100 prose dark:prose-invert md:prose-lg lg:prose-xl"
             >
 
                 <div class="space-y-2" style="z-index:100000 !important;">
@@ -36,10 +36,10 @@
                             {{ blog.blog_category.name }}
                         </div>
                     </div>
-                    <div class="bg-layout-sun-100 w-full dark:bg-layout-night-100 p-4 title" style="min-width:300px;">
-                    <h1 class="pb-12 block font-title w-full">
+                    <div class="bg-layout-sun-100 w-full5 dark:bg-layout-night-100 p-4 title" style="min-width:300px;">
+                    <h1 class="pb-12 block font-title w-full5">
                             {{ blog.title }}
-                            <editbtns :Redit="blog.editRights" :id="blog.id" table="blogs" :Rdelete="blog.deleteRights"></editbtns>
+                            <editbtns :id="blog.id" table="blogs"></editbtns>
                         </h1>
                     </div>
 
@@ -84,7 +84,7 @@
                             </span>
                         </div>
                         <input
-                            class="w-full h-1 bg-primary-sun-200 dark:bg-primary-night-200 cursor-pointer appearance-none"
+                            class="w-full5 h-1 bg-primary-sun-200 dark:bg-primary-night-200 cursor-pointer appearance-none"
                             type="range"
                             min="0"
                             max="100"
@@ -258,4 +258,9 @@ margin-left:52px;
 }
 
 }
+/* .w-full5{
+
+    width:99%;
+    max-width:100%;
+} */
 </style>

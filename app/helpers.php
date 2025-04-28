@@ -147,7 +147,7 @@ if(!function_exists("renderText"))
                     }
 
                 }
-                \Log::info("GT:".$table);
+                // \Log::info("GT:".$table);
                 $this->orWhere("{$table}.id","like",'%'.$filters['search'].'%');
                 // dd($this->toSql(), $this->getBindings());
 

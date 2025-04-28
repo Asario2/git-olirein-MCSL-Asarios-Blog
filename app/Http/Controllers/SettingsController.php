@@ -31,7 +31,10 @@ class SettingsController extends Controller
             'othafieldz' => Settings::$othafieldz,
             'otherField' => Settings::$otherField,
             'impath' => Settings::$impath,
+            'namealias' => Settings::$namealias,
+            'descalias' => Settings::$descalias,
 
         ]);
     }
 }
+

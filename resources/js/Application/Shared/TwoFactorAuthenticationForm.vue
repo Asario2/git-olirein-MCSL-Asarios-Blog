@@ -40,6 +40,12 @@
                     </div>
 
                     <div class="form_qr_code" v-html="qrCode" />
+                    <div v-if="setupKey" class="form_text_info">
+                        <p class="font-semibold">
+                            Einrichtungsschlüssel:
+                            <span v-html="setupKey"></span>
+                        </p>
+                    </div>
 
                     <div v-if="confirming">
                         <input-container :full-width="true" class="mt-4">
@@ -236,7 +242,7 @@ export default {
         {
             preserveScroll: true,
             onSuccess: async () => {
-                console.log("enable success – loading setup data...");
+                // console.log("enable success – loading setup data...");
 
                 await Promise.all([
                     this.showQrCode(),
@@ -246,7 +252,7 @@ export default {
 
                 this.twoFactorEnabled = true;
                 this.confirming = true;
-                console.log("2FA Setup Data loaded – now in confirming mode");
+                // console.log("2FA Setup Data loaded – now in confirming mode");
             },
             onFinish: () => {
                 this.enabling = false;

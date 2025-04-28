@@ -1,4 +1,4 @@
-.w-full
+/* .w-full
 {
     width:100% !important;
 
@@ -6,14 +6,34 @@
 }
 .w-full{
 max-width:560px !important;
-min-width:90%;
+
+width:350px !important;
+} */
+/* .w-full2{
+
+    max-width:50%;
+}
+.w-full3{
+	min-width:100% !important;
+	max-width:100% !important;
+	width:100% !important;
+}
+.w-half{
+min-width:300px;
+width:100%;
+max-width:560px;
+
+}
+.w-full7{
+    max-width:100%;
+    min-width:316px;
+} */
+SELECT.wf_2{
+    min-width:100% !important;
 }
 code{
     background-color:#ccc;
     padding:2px;
-}
-.w-half{
-min-width:100%;
 }
 .textar{
 	max-width:1180px;

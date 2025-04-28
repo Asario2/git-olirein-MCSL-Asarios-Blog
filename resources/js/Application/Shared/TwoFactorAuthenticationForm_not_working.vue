@@ -173,11 +173,11 @@
     };
   },
   mounted() {
-  console.log("TwoFactorAuthenticationForm Komponente wurde geladen!");
+//   console.log("TwoFactorAuthenticationForm Komponente wurde geladen!");
 },
   methods: {
     enableTwoFactorAuthentication() {
-      console.log("Aktivieren Button geklickt");
+    //   console.log("Aktivieren Button geklickt");
 
       this.enabling = true;
 

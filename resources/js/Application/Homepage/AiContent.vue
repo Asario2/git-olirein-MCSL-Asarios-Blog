@@ -5,7 +5,7 @@
         :header-image="$page.props.saas_url + '/images/blogimages/Blog_Idee_480x360.jpg'"
     >
         <section class="bg-layout-sun-0 text-layout-sun-800 dark:bg-layout-night-0 dark:text-layout-night-800">
-            <div class="w-full max-w-7xl mx-auto mt-5">
+            <div class="w-full3 max-w-7xl mx-auto mt-5">
                 <div v-if="data.length">
                     <div v-for="(item, index) in data" :key="index"
                         class="group hover:no-underline focus:no-underline lg:grid lg:grid-cols-12 lg:gap-6 bg-layout-sun-100 dark:bg-layout-night-100"
@@ -16,7 +16,7 @@
                                 :src="`/images/_ab/ai-teaser-light.jpg`"
                                 :alt="`Bild von ${item.headline}`"
                                 loading="lazy"
-                                class="object-cover w-full h-64 sm:h-96 rounded"
+                                class="object-cover w-full3 h-64 sm:h-96 rounded"
                             />
                             <!-- AI-Button -->
                             <AiButton  :overlayImage="'images/icons/ai-dark.png'"></AiButton>
@@ -42,6 +42,7 @@
                             <!-- Datum -->
                             <div class="text-xs text-layout-sun-600 dark:text-layout-night-600 py-2">
                                 Von: {{ item.author_name }}
+
                             </div>
 
                             <!-- Blog-Zusammenfassung -->
@@ -78,8 +79,8 @@ import Markdown from "@/Application/Components/Content/Markdown.vue";
 import mapValues from "lodash/mapValues";
 import pickBy from "lodash/pickBy";
 import throttle from "lodash/throttle";
-
-
+import { GetRights } from "@/helpers";
+import { hasRight,loadAllRights,isRightsReady } from '@/utils/rights';
 
 
 
@@ -104,19 +105,25 @@ export default defineComponent({
         AiButton,
         Markdown,
     },
-
+    data() {
+    return {
+      rightsData: {}, // Hier speichern wir die Rechte für den User
+      rightsReady: false,
+    };
+  },
     props: {
     data:{
         required:true,
         default: [],
     },
-    darkMode:  {
-        required: false,
-        // default: "dark",
-    },
+    // darkMode:  {
+    //     required: false,
+    //     // default: "dark",
+    // },
     blogarticle: {
             type: String,
         },
+
     },
     watch: {
 
@@ -124,12 +131,43 @@ export default defineComponent({
     computed:{
         darkMode(){
             this.darkMode = localStorage.getItem("theme");
-        }
+        },
+        isRightsReady() {
+      return this.$isRightsReady; // Zugriff auf globale Methode
+    },
+    hasRight() {
+      return this.$hasRight; // Zugriff auf globale Methode
+    },
 
     },
     methods: {
+    // Asynchrone Methode, um die Rechte zu laden
+    async hasRight(right, table) {
+    // Überprüfe, ob die Rechte bereits geladen wurden
+    if (!this.rightsData[`${right}_${table}`] && table) {
+      // Wenn die Rechte noch nicht geladen wurden, lade sie
+      await this.checkRight(right, table);
+    }
+    // Wenn die Rechte nach dem Laden vorhanden sind, gib den Wert zurück
+    return this.rightsData[`${right}_${table}`] === 1; // Beispiel: Wenn das Recht '1' ist, erlauben wir den Zugriff
+  },
 
-    },
+  async checkRight(right, table) {
+    // Lade die Rechte für den User
+    const value = await GetRights(right, table);
+    // Speichere die geladenen Rechte im rightsData-Objekt
+    this.$set(this.rightsData, `${right}_${table}`, value);
+  }
+
+  },
+    async mounted() {
+    // Rechte, die du brauchst dynamisch laden
+    // await this.checkRight('view_table', 'images');
+    // await this.checkRight('edit_table', 'blogs');
+    // beliebig erweiterbar
+    await loadAllRights(); // aus utils/rights.js
+    this.rightsReady = true;
+  },
 });
 </script>
 

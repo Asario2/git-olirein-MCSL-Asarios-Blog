@@ -5,7 +5,7 @@
                 :application-name="$page.props.applications.app_admin_name"
                 :start-page="false"
                 current="Liste der Tabellen"
-            ></breadcrumb>
+            />
         </template>
         <section class="mt-8">
             <list-container
@@ -18,44 +18,46 @@
                 :edit-on="false"
                 route-edit="admin.tables.edit"
                 :create-on="false"
-                route-create="admin.tables.create"
+                :route-create="routeCreate"
                 :delete-on="false"
                 route-delete="admin.tables.destroy"
             >
+
                 <template #header>
                     <tr>
                         <th class="np-dl-th-normal">Tabellenname</th>
                         <th class="np-dl-th-normal">Beschreibung</th>
-                        <th class="np-dl-th-normal"></th>
+                        <th class="np-dl-th-normal"><pre>{{ data     }}</pre></th>
                     </tr>
                 </template>
 
-                <template v-slot:datarow="data">
-                    <td class="np-dl-td-normal">
-                        <a
-                        :href="route('admin.tables.show', data.datarow.full_name)"
+                <template #datarow="data" >
 
-                            class="text-blue-600 dark:text-blue-600 hover:underline"
-                        >
-                            {{ data.datarow.name }}</a
-                        >
-                    </td>
-                    <td class="np-dl-td-normal">
-                        {{ data.datarow.description }}
-                    </td>
-                </template>
+                        <td class="np-dl-td-normal" v-if="canView(data.datarow.full_name)">
+                            <a
+                                :href="route('admin.tables.show', data.datarow.full_name)"
+                                class="text-blue-600 dark:text-blue-600 hover:underline"
+                            >
+                                {{ data.datarow.name }}
+                            </a>
+                        </td>
+                        <td class="np-dl-td-normal" v-if="canView(data.datarow.full_name)">
+                            {{ data.datarow.description }}
+                        </td>
+                    </template>
             </list-container>
         </section>
     </layout>
 </template>
+
 <script>
 import { defineComponent } from "vue";
-
 import Layout from "@/Application/Admin/Shared/Layout.vue";
 import Breadcrumb from "@/Application/Components/Content/Breadcrumb.vue";
 import ListContainer from "@/Application/Components/Lists/ListContainer.vue";
-import { CleanTable, CleanId } from '@/helpers';
-const table = CleanTable();
+import { CleanTable } from '@/helpers';
+import { data } from "jquery";
+import { hasRight,loadAllRights,isRightsReady } from '@/utils/rights';
 export default defineComponent({
     name: "Admin_TableList",
 
@@ -72,32 +74,61 @@ export default defineComponent({
             default: () => [],
         },
         datarows: {
-            type: [Array,String],
+            type: [Array, String],
             required: true,
             default: () => [],
         },
-        routeCreate: {
-        type: String,
-        default: route('admin.tables.create', table),
     },
+
+    data() {
+        return {
+            rightsData: {},
+            rightsReady: false,
+        };
     },
-    mounted() {
-        // this.loadRows();
+
+    computed: {
+        routeCreate() {
+            const table = CleanTable(); // oder aus props holen?
+            return route('admin.tables.create', table);
+        },
+        isRightsReady() {
+            return this.$isRightsReady;
+        },
+        hasRight() {
+            return this.$hasRight; // Zugriff auf globale Methode
+            },
     },
+
+    async mounted() {
+        // Dummy-Wartefunktion (wenn benötigt)
+        const waitUntilReady = () =>
+            new Promise((resolve) => {
+                const check = () => {
+                    if (window.isRightsReady && window.isRightsReady()) {
+                        resolve();
+                    } else {
+                        setTimeout(check, 50);
+                    }
+                };
+                check();
+            });
+    },
+
     methods: {
-        // async loadRows() {
-            //     try {
-            //         const response = await fetch('/api/table-rows'); // Beispiel-API
-            //         this.rows = await response.json();
-            //         console.log(this.rows);
-            //     } catch (error) {
-            //         console.error('Fehler beim Laden der Daten:', {
-            //     message: error.message,
-            //     stack: error.stack, // Stacktrace
-            //     response: error.response // Nur bei Axios verfügbar
-            // });
-            //     }
-        // },
+        async checkRight(right, table) {
+            const value = await GetRights(right, table);
+            this.rightsData[`${right}_${table}`] = value;
+        },
+        async hasRightLocal(right, table) {
+            if (!this.rightsData[`${right}_${table}`] && table) {
+                await this.checkRight(right, table);
+            }
+            return this.rightsData[`${right}_${table}`] === 1;
+        },
+        canView(table) {
+            return this.$hasRight('view', table); // Globale Methode
+        },
     },
 });
 </script>

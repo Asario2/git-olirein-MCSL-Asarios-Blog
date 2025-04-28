@@ -203,7 +203,7 @@
       this.$emit('imageUploaded', response.image_url);
     }
 
-      console.log("ri:" + response.image_url);
+    //   console.log("ri:" + response.image_url);
       this.closeModal();
     } else {
       console.error("Fehler beim Upload:", xhr.status);
@@ -212,7 +212,7 @@
 
   xhr.onerror = () => {
     this.uploading = false;
-    console.error("Fehler beim Hochladen");
+    console.error("Fehler beim Hochladen",xhr.status);
   };
   let isw = "0";
   if(this.CleanTable() === "images" && !this.Message)
@@ -220,7 +220,7 @@
      isw = "1";
      const ASD = "SD";
   }
-  console.log("sel: " + JSON.stringify(this.selectedImage,null,2));
+//   console.log("sel: " + JSON.stringify(this.selectedImage,null,2));
   xhr.open('POST', '/upload-image/' + this.tablex + "/" + isw, true);
   xhr.send(formData);
 },
@@ -281,4 +281,11 @@
     width: auto;
     height: auto;
   }
+  .w-full3{
+    width:400px;
+  }
+  /* .w-full{
+    min-width:320px;
+    max-width:400px;
+  } */
   </style>

@@ -1,5 +1,5 @@
 <template>
-    <div class="w-full flex flex-wrap items-center gap-2" :class="align">
+    <div class="w-full flex flex-wrap items-left gap-2" :class="left">
         <slot></slot>
     </div>
 </template>

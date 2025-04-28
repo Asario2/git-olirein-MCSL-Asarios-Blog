@@ -48,26 +48,26 @@
     },
     methods: {
       formatNumber(value) {
-        console.log("FORMAT START:", value);
+        // console.log("FORMAT START:", value);
         if (value === "" || value === null || value === undefined) {
           return "";
         }
 
         // Konvertiere zu Float und ersetze Dezimaltrennzeichen
         let floatValue = parseFloat(value.toString().replace(",", "."));
-        console.log("PARSE FLOAT:", floatValue);
+        // console.log("PARSE FLOAT:", floatValue);
 
         if (!isNaN(floatValue)) {
           // Stelle sicher, dass keine Tausendertrennzeichen entstehen
           let formatted = floatValue.toFixed(2).replace(".", ",");
-          console.log("FORMAT OUTPUT:", formatted);
+        //   console.log("FORMAT OUTPUT:", formatted);
           return formatted;
         }
 
         return "";
       },
       parseNumber(value) {
-        console.log("PARSE START:", value);
+        // console.log("PARSE START:", value);
 
         if (typeof value === "string") {
           // Entferne alle Leerzeichen und Tausendertrennzeichen (sicherheitshalber)
@@ -75,16 +75,16 @@
         }
 
         let numericValue = parseFloat(value);
-        console.log("PARSE OUTPUT:", numericValue);
+        // console.log("PARSE OUTPUT:", numericValue);
 
         return !isNaN(numericValue) ? numericValue : "";
       },
       formatAmount() {
-        console.log("FORMAT AMOUNT BEFORE:", this.rawInput);
+        // console.log("FORMAT AMOUNT BEFORE:", this.rawInput);
         let parsed = this.parseNumber(this.rawInput);
         this.rawInput = this.formatNumber(parsed);
         this.$emit("update:modelValue", parsed);
-        console.log("FORMAT AMOUNT AFTER:", this.rawInput);
+        // console.log("FORMAT AMOUNT AFTER:", this.rawInput);
       },
     },
   };

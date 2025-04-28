@@ -13,6 +13,7 @@
           :title="'Tabelle ' + tablez"
           :datarows="rows"
           :route-index="showRoute"
+          :xxtable="tableq"
           :filters="filters"
           search-filter="true"
           search-text="Suche nach Inhalten anhand ihres Namens oder ihrer Beschreibung."
@@ -27,8 +28,8 @@
           <template #header>
             <tr>
               <th class="np-dl-th-normal">ID</th>
-              <th class="np-dl-th-normal">Name</th>
-              <th class="np-dl-th-normal">Beschreibung</th>
+              <th class="np-dl-th-normal">{{ prename }}</th>
+              <th class="np-dl-th-normal">{{ predesc }}</th>
               <th class="np-dl-th-normal">Datum</th>
               <th class="np-dl-th-normal" colspan="2"></th>
             </tr>
@@ -39,8 +40,7 @@
               <td class="np-dl-td-normal">{{ data.datarow.description }}</td>
           </template>
         </list-container>
-        {{ this.tableq }}
-      </section>
+       </section>
     </layout>
   </template>
   <input type="hidden" id="tb_alt" value="{ table_alt }" />
@@ -52,9 +52,10 @@ let table = table_z.toLowerCase();
   import { defineComponent } from "vue";
   import Layout from "@/Application/Admin/Shared/Layout.vue";
   import { CleanTable, CleanId } from '@/helpers';
+  import { GetSettings } from "@/helpers";
   import Breadcrumb from "@/Application/Components/Content/Breadcrumb.vue";
   import ListContainer from "@/Application/Components/Lists/ListContainer.vue";
-
+  import { hasRight,loadAllRights,isRightsReady } from '@/utils/rights';
   export default defineComponent({
     name: "AdminTableShow",
     components: {
@@ -142,23 +143,51 @@ let table = table_z.toLowerCase();
       default: "",
     },
   },
+  async mounted() {
+        if(!hasRight("view",CleanTable()))
+        {
+            location.href="/no-rights";
+        }
+        this.settings = await GetSettings();
+        window.settings = this.settings;
+        if (window.settings?.namealias) {
+            this.namealias = window.settings.namealias;
+        }
+        if(window.settings?.descalias)
+        {
+            this.descalias = window.settings.descalias;
+        }
+
+    },
   data() {
     return {
       searchQuery: "test", // Lokale Suchanfrage
     //   rows: this.rows, // Props in lokale Daten kopieren
       ItemName: "Tabellen", // Kann von Backend oder durch andere Logik kommen.
-       // Initialisieren, falls leer
-
-    //    routeCreate:,
       tablez: this.ucf(table_z), // Hier kannst du den Wert von tablez setzen
         table: table.toLowerCase()  ,
          tableq: CleanTable(),
         // showRoute : route("admin.tables.show",table),
+        settings: {},
+        namealias: '',
+        descalias: '',
 
     };
   },
-  computed: {
 
+    computed:{
+        prename() {
+            return this.namealias[this.table] ?? 'Name';
+        },
+        predesc() {
+            return this.descalias[this.table] ?? 'Beschreibung';
+        },
+        isRightsReady() {
+      return this.$isRightsReady; // Zugriff auf globale Methode
+    },
+    hasRight() {
+      return this.$hasRight; // Zugriff auf globale Methode
+    },
     routeCreate() {
     return route( 'admin.tables.create', this.tableq);
   },
@@ -175,6 +204,22 @@ let table = table_z.toLowerCase();
   },
 
     methods: {
+//                 async hasRight(right, table) {
+//     // Überprüfe, ob die Rechte bereits geladen wurden
+//    if (!this.rightsData[`${right}_${table}`] && table) {
+//       // Wenn die Rechte noch nicht geladen wurden, lade sie
+//       await this.checkRight(right, table);
+//     }
+//     // Wenn die Rechte nach dem Laden vorhanden sind, gib den Wert zurück
+//     return this.rightsData[`${right}_${table}`] === 1; // Beispiel: Wenn das Recht '1' ist, erlauben wir den Zugriff
+//   },
+
+  async checkRight(right, table) {
+    // Lade die Rechte für den User
+    const value = await GetRights(right, table);
+    // Speichere die geladenen Rechte im rightsData-Objekt
+    this.$set(this.rightsData, `${right}_${table}`, value);
+  },
       createNew() {
         alert("Neuer Eintrag erstellen");
       },

@@ -2,7 +2,7 @@
     <!-- Toast -->
     <div v-if="message && show" class="mt-4">
         <div
-            class="flex items-center w-full p-4 rounded-lg shadow text-layout-sun-900 dark:text-layout-night-900"
+            class="flex items-center w-full3 p-4 rounded-lg shadow text-layout-sun-900 dark:text-layout-night-900"
             :class="alertClass"
             role="alert"
         >

@@ -34,7 +34,7 @@
         initShariff() {
       nextTick(() => {
         if (this.$refs.shariff) {
-            console.log('Shariff Element:', this.$refs.shariff);
+            // console.log('Shariff Element:', this.$refs.shariff);
             const shariffElement =  this.$refs.shariff;
 
         if (shariffElement) {

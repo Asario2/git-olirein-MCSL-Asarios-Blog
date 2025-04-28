@@ -129,7 +129,7 @@ class FormController extends Controller
     else{
         $id2 = "id";
     }
-
+    \Log::info("tab: ".$table);
     // Abfrage vorbereiten, abhängig von der Spalte 'pub'
     if (Schema::hasColumn($table, 'pub')) {
         $query = DB::table($table)->where("pub", "=", 1)->orderBy("name", "ASC");  // Nach 'name' sortieren

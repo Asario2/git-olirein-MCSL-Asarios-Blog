@@ -88,4 +88,8 @@ class User extends Authenticatable implements MustVerifyEmail
 
         return 'https://ui-avatars.com/api/?name=' . urlencode($name) . '&color=FFFFFF&background=0EA5E9';
     }
+    public function rights()
+    {
+        return $this->belongsTo(UsersRights::class, 'users_rights_id');
+    }
 }

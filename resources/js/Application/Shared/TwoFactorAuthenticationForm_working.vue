@@ -241,7 +241,7 @@ export default {
         {
             preserveScroll: true,
             onSuccess: async () => {
-                console.log("Enable success – loading setup data...");
+                // console.log("Enable success – loading setup data...");
 
                 await Promise.all([
                     this.showQrCode(),
@@ -268,7 +268,7 @@ confirmTwoFactorAuthentication() {
             this.qrCode = null;
             this.setupKey = null;
             this.twoFactorEnabled = true; // Jetzt wirklich aktiviert!
-            console.log("2FA vollständig aktiviert");
+            // console.log("2FA vollständig aktiviert");
         },
     });
 },

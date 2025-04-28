@@ -77,13 +77,13 @@ class HomeController extends Controller
 
         $table = "blogs";
         $blogs->aiOverlayImage = "ai-".@$_SESSION['dm'].".png";
-        foreach ($blogs as $blog) {
-            $blog->editRights = CheckRights(Auth::id(), $table, "edit");
-            $blog->viewRights = CheckRights(Auth::id(), $table, "view");
-            $blog->deleteRights = CheckRights(Auth::id(), $table, "delete");
-            $blog->addRights = CheckRights(Auth::id(), $table, "add");
-            $blog->date_tableRights = CheckRights(Auth::id(), $table, "date_table");
-        }
+        // foreach ($blogs as $blog) {
+        //     $blog->editRights = CheckRights(Auth::id(), $table, "edit");
+        //     $blog->viewRights = CheckRights(Auth::id(), $table, "view");
+        //     $blog->deleteRights = CheckRights(Auth::id(), $table, "delete");
+        //     $blog->addRights = CheckRights(Auth::id(), $table, "add");
+        //     $blog->date_tableRights = CheckRights(Auth::id(), $table, "date_table");
+        // }
             // \Log::info(json_encode($blogs, JSON_PRETTY_PRINT));
             // \Log::info("Test-Log-Eintrag");
 
@@ -172,6 +172,15 @@ class HomeController extends Controller
             'filters' => Request()->all('search')
         ]);
     }
+    public function no_rights()
+    {
+        $text = DB::table("texts")->where("type", "no-rights")->select('headline', 'text')->first();
+        \Log::info("TT:".json_encode($text));
+
+        return Inertia::render('Homepage/No-Rights', [
+            "texts" => $text  // Übergebe das Objekt direkt, nicht als JSON-String
+        ]);
+    }
     //
     public function home_blog_show($autoslug)
     {
@@ -182,8 +191,8 @@ class HomeController extends Controller
         // $blog->blog_images;
         $blog->url = $blog->image_path;
         $blog->blog_category;
-        $blog->editRights = CheckRights(Auth::id(),"blogs","edit");
-        $blog->deleteRights = CheckRights(Auth::id(),"blogs","delete");
+        // $blog->editRights = CheckRights(Auth::id(),"blogs","edit");
+        // $blog->deleteRights = CheckRights(Auth::id(),"blogs","delete");
         $blogarticle = null;
         //
         if ($blog->markdown_on) {

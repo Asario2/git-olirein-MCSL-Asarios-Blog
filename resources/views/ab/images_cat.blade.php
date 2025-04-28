@@ -79,7 +79,7 @@
             lightbox.on('afterChange', function() {
                 if (lightbox.pswp.currSlide && lightbox.pswp.currSlide.data) {
                     const imgElement = lightbox.pswp.currSlide.data.src; // Das aktuelle Bild
-                    console.log('Aktuelles Bild:', imgElement); // Protokolliere das aktuelle Bild
+                    // console.log('Aktuelles Bild:', imgElement); // Protokolliere das aktuelle Bild
                 } else {
                     console.warn('Aktuelle Folie oder Daten nicht verfügbar');
                 }

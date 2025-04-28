@@ -8,7 +8,7 @@
         </template>
 
         <div
-            class="bg-layout-sun-0 dark:bg-layout-night-0 grid grid-cols-1 md:grid-cols-2 gap-2 lg:gap-3 p-6 lg:p-4"
+            class="w-full bg-layout-sun-0 dark:bg-layout-night-0 grid grid-cols-1 md:grid-cols-2 gap-2 lg:gap-3 p-6 lg:p-4"
         >
             <!-- Blogartikel -->
             <navigation-card
@@ -16,13 +16,13 @@
                 title="Blogartikel"
                 :routeName="route('admin.tables.show','blogs')"
                 linkName="Liste der Blogartikel"
-                :routeName2="route('admin.blog.create', table)"
+                :routeName2="route('admin.tables.create', 'blogs')"
                 linkName2="Neuer Blogartikel"
                 :withIcon="true"
                 icon="IconBook"
             >
                 <template #description>
-                    Hier findest du eine Liste aller Blogartikel.
+                                Hier findest du eine Liste aller Blogartikel.
                 </template>
             </navigation-card>
             <!-- Bilder -->
@@ -101,3 +101,9 @@ export default defineComponent({
     },
 });
 </script>
+<style scoped>
+/* .w-full{
+    max-width: 100px !important;
+
+} */
+</style>

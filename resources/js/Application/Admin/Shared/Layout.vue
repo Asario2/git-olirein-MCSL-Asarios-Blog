@@ -133,7 +133,7 @@
                                             :with-icon="false"
                                             :with-route="true"
                                             :route-name="
-                                                route('central.dashboard')
+                                                route('admin.dashboard')
                                             "
                                         >
                                             <span
@@ -143,7 +143,7 @@
                                                 "
                                                 >Anwendung wechseln</span
                                             >
-                                            <span v-else>zur Startseite</span>
+                                            <span v-else>zum Dashboard</span>
                                         </dropdown-link>
 
                                         <!-- Account Management -->
@@ -335,7 +335,7 @@
             <!-- Page Content -->
             <main>
                 <div class="min-h-screen">
-                    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                    <div class="w-full3 max-w-7xl mx-auto sm:px-6 lg:px-8">
                         <!-- Toast -->
                         <div>
                             <toast></toast>

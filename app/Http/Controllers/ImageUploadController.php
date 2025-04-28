@@ -18,7 +18,7 @@ class ImageUploadController extends Controller
         //     'path' => 'string',
         //     'name' => "string"
         // ]);
-            \Log::info($request->all());
+            // \Log::info($request->all());
         // Das hochgeladene Bild holen
         $image = $request->file('image');
         $Message = $request->Message === "true" ? true : false;
@@ -38,11 +38,11 @@ class ImageUploadController extends Controller
         $path = $request->path;
 //$table_dir = Settings::$image_paths[$request->table];
         $watermarkfile = $request->copyleft;
-        \Log::info("WMF: ".$watermarkfile);
+        // \Log::info("WMF: ".$watermarkfile);
         $table = $table_ori = $request->table;
         $column = $request->column;
 
-            \Log::info(($Message));
+            // \Log::info(($Message));
 
         // Den Dateinamen generieren und Bild speichern
         $imageName = md5($image->getClientOriginalName()."_".Auth::id()).".".$image->getClientOriginalExtension();
@@ -84,7 +84,7 @@ class ImageUploadController extends Controller
                 $size2 = $size;
             }
             $resizedPath = "images/{$table}{$big[$size]}{$imageName}";
-            \Log::info("RP:".$resizedPath);
+            // \Log::info("RP:".$resizedPath);
             // Neues Imagick-Objekt erstellen
             $imagick = new \Imagick();
             $imagick->readImage($image->getPathname());
@@ -122,6 +122,7 @@ class ImageUploadController extends Controller
             if($size == 1400 || $Message || $size == "500")
             {
                 list($width,$height) = getimagesize($resizedPath);
+                
                 $imageName = "/".$resizedPath;
             }
 
@@ -135,7 +136,7 @@ class ImageUploadController extends Controller
         }
         if($Message){
             $imageName = ($imageName);
-            \Log::info($Message);
+            // \Log::info($Message);
         }
 
         // $iid = DB::table($table_dir)->insertGetId([
@@ -154,7 +155,7 @@ class ImageUploadController extends Controller
     }
     public function save(Request $request,$table)
     {
-        \Log::info("resa:".$table);
+        // \Log::info("resa:".$table);
 
     }
     public function CopyLeft()

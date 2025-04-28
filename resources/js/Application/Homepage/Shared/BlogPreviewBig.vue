@@ -14,7 +14,7 @@
             width="480"
             height="360"
             style="max-height:390px"
-            class="object-cover w-full  rounded lg:col-span-7 object-cover w-full rounded bg-layout-sun-500 dark:bg-layout-night-500"
+            class="object-cover w-full w-full3  rounded lg:col-span-7 object-cover w-full w-full3 rounded bg-layout-sun-500 dark:bg-layout-night-500"
         />
 
         </Link>
@@ -54,7 +54,7 @@
                     <span>{{ blog.author_name }}</span>
                 </div>
                 <div class="rl">
-                    <editbtns :Redit="blog.editRights" :id="blog.id" table="blogs" :Rdelete="blog.deleteRights"></editbtns>
+                    <editbtns :id="blog.id" table="blogs"></editbtns>
                 </div>
             </div>
 
@@ -105,12 +105,12 @@ export default {
         tablename:{
             type: String,
         },
-        editRights:{
-            type: Number,
-        },
-        deleteRights:{
-            type: Number,
-        },
+        // editRights:{
+        //     type: Number,
+        // },
+        // deleteRights:{
+        //     type: Number,
+        // },
     },
 };
 </script>
@@ -126,7 +126,7 @@ export default {
 }
 
 
-@media screen and (min-width: 1023px) {
+@media screen and (min-width: 1024px) {
 .overfl{
     overflow:hidden;
     max-height:385px;
@@ -139,7 +139,7 @@ export default {
   margin-bottom :236px;
 }
 }
-@media screen and (max-width: 1023px) {
+@media screen and (max-width: 1024px) {
 .overfl{
     overflow:visible;
 }

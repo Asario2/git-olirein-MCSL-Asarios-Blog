@@ -1,8 +1,8 @@
 <template>
-<span v-if="Redit == '1'">
+<span v-if="hasRight('edit',table)">
 <a :href="'admin/tables/edit/'+ id+ '/' + table + ''" @click.stop><IconPencil class="sm-pencil cursor-pointer"></IconPencil></a>
 </span>&nbsp;&nbsp;
-<span v-if="Rdelete == '1'">
+<span v-if="hasRight('delete',table)">
 <form @submit.prevent="deletePost" style="display:inline">
     <button @click.stop type="submit" onclick="return confirm('Sind Sie sicher, dass Sie diesen Blogbeitrag löschen möchten?');"><IconTrash class="sm-pencil cursor-pointer"></IconTrash></button>
 </form>
@@ -12,6 +12,7 @@
 <script>
 import IconPencil from "@/Application/Components/Icons/Pencil.vue";
 import IconTrash from "@/Application/Components/Icons/Trash.vue";
+import { hasRight,loadAllRights,isRightsReady } from '@/utils/rights';
 import { CleanTable, CleanId } from '@/helpers';
 export default {
     name: "editbtns",
@@ -22,7 +23,10 @@ export default {
         CleanId,
     },
     props: {
-        Redit: [String,Number],
+        Redit: {
+            type: [String],
+            default:0
+        },
         Rdelete: {String, default: 0,},
                 id: { type: Number },
                 table:{type:String},
@@ -30,20 +34,52 @@ export default {
     },
     data()
     {
-        // table: CleanTable();
-        // id: CleanId();
+        return {
+        rightsData: {}, // Hier speichern wir die Rechte für den User
+      rightsReady: false,
+        }
+    },
+    computed:{
+        darkMode(){
+            this.darkMode = localStorage.getItem("theme");
+        },
+        isRightsReady() {
+      return this.$isRightsReady; // Zugriff auf globale Methode
+    },
+    hasRight() {
+      return this.$hasRight; // Zugriff auf globale Methode
     },
 
-    mounted() {
-        // console.log("Redit:", this.Redit);
-        // console.log("Rdelete:", this.Rdelete);
-        // console.log("id:", this.id);
-        // console.log("table:", this.table);
+    },
+    async mounted() {
+    this.rightsReady = true;
     },
     methods: {
+        async hasRight(right, table) {
+    // Überprüfe, ob die Rechte bereits geladen wurden
+    if (!this.rightsData[`${right}_${table}`] && table) {
+      // Wenn die Rechte noch nicht geladen wurden, lade sie
+      await this.checkRight(right, table);
+    }
+    // Wenn die Rechte nach dem Laden vorhanden sind, gib den Wert zurück
+    return this.rightsData[`${right}_${table}`] === 1; // Beispiel: Wenn das Recht '1' ist, erlauben wir den Zugriff
+  },
+
+  async checkRight(right, table) {
+    // Lade die Rechte für den User
+    const value = await GetRights(right, table);
+    // Speichere die geladenen Rechte im rightsData-Objekt
+    this.$set(this.rightsData, `${right}_${table}`, value);
+  },
+
     async deletePost() {
         try {
-            console.log(`aad: admin/tables/delete/${this.table}/${this.id}`);
+            if(!hasRight("delete",table))
+            {
+                 alert("Sie haben nicht die benötigten Rechet zum löschen des Datensatzes");
+                 return "";
+            }
+            // console.log(`aad: admin/tables/delete/${this.table}/${this.id}`);
             // DELETE-Anfrage mit Parametern in der URL
             await axios.delete(`admin/tables/delete/${this.table}/${this.id}`, {
                 params: {

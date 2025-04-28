@@ -124,10 +124,10 @@ textarea.txt {
     overflow: auto;
 }
 
-@media (min-width: 1025px) {
+@media (min-width: 1024px) {
     .maxx {
         min-width: 209%;
-        max-width: 209%;
+        max-width: 100%;
     }
     .txt {
         max-width: 560px !important;

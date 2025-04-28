@@ -35,7 +35,7 @@ dark:bg-blue-600 dark:hover:bg-blue-700 dark:text-white">
         initShariff() {
       nextTick(() => {
         if (this.$refs.shariff) {
-            console.log('Shariff Element:', this.$refs.shariff);
+            // console.log('Shariff Element:', this.$refs.shariff);
             const shariffElement = document.getElementById('shariff-container');
 
         if (shariffElement) {

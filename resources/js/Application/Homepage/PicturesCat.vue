@@ -7,50 +7,49 @@
           </div>
 
           <!-- Grid für Bilder -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
             <div
               v-for="(ima, index) in data"
               :key="ima.id"
-              class="bg-white dark:bg-gray-800 p-2 rounded-lg shadow-md relative group"
+              class="bg-white dark:bg-gray-800 p-2 rounded-lg shadow-md relative group overflow-hidden"
             >
-            <a :href="route('home.images.gallery',[ima.slug])">
+              <a :href="route('home.images.gallery', [ima.slug])">
+                <!-- Bild mit Zoom-In Effekt -->
+                <div class="relative w-full5 overflow-hidden rounded-sm">
+                  <img
+                    :src="`/images/_ab/images_cat/${ima.name}.jpg`"
+                    :alt="ima.shortname"
+                    :title="'zur ' + ima.shortname + 'Galerie'"
+                    class="w-full5 h-full object-cover transition-transform duration-500 ease-in-out transform group-hover:scale-110"
+                  />
+                  <!-- Overlay in Blau -->
+                  <div
+                    class="absolute top-0 left-0 w-full5 h-full bg-blue-500 opacity-40 transition-opacity duration-300 group-hover:opacity-0"
+                  ></div>
+                </div>
 
-              <!-- Bild -->
-
-              <div class="relative w-full overflow-hidden rounded-sm">
-                <img
-                  :src="`/images/_ab/images_cat/${ima.name}.jpg`"
-                  :alt="ima.shortname" :title="'zur ' + ima.shortname + 'Galerie'"
-                  class="w-full h-full object-cover transition-all duration-300"
-                />
-                <!-- Overlay in Blau -->
+                <!-- Text oben -->
                 <div
-                  class="absolute top-0 left-0 w-full h-full bg-blue-500 opacity-40 transition-opacity duration-300 group-hover:opacity-0"
-                ></div>
-              </div>
-
-              <!-- Text der immer sichtbar ist (oben) -->
-              <div
-                class="absolute left-0 right-0 text-center text-white transition-all duration-300 bott"
-              >
-                <h5
-                  class="text-lg font-semibold group-hover:text-shadow-md transition-all duration-300 ucfirst"
+                  class="absolute left-0 right-0 text-center text-white transition-all duration-300 bott title-top"
                 >
-                  {{ ima.name }}
-                </h5>
-              </div>
+                  <h5
+                    class="text-lg font-semibold group-hover:text-shadow-md transition-all duration-300 ucfirst"
+                  >
+                    {{ ima.name }}
+                  </h5>
+                </div>
 
-              <!-- Text der beim Hover angezeigt wird (darunter) -->
-              <div
-                class="absolute bott2 left-0 right-0 text-center text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-              >
-                <p class="text-sm opacity-75 text-shadow ucfirst" >{{decodeEntities(ima.heading_alt)}}"</p>
-              </div>
-            </a>
+                <!-- Text unten -->
+                <div
+                  class="absolute bott2 left-0 right-0 text-center text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                >
+                  <p class="text-sm opacity-75 text-shadow ucfirst">
+                    {{ decodeEntities(ima.heading_alt) }}
+                  </p>
+                </div>
+              </a>
             </div>
-
           </div>
-
         </div>
       </div>
     </layout>
@@ -58,74 +57,66 @@
 
   <script>
   import Layout from "@/Application/Homepage/Shared/Layout.vue";
-
   import he from 'he';
-
+  import { GetRights } from "@/helpers";
   export default {
-    components: { Layout},
+    components: { Layout },
     props: {
       data: Array,
       ima: Object,
     },
     methods: {
-    decodeEntities(text) {
-      return he.decode(text); // wandelt HTML-Entitäten in Zeichen um
+      decodeEntities(text) {
+        return he.decode(text);
+      },
     },
-
-  }
-
   };
   </script>
 
-<style scoped>
-/* Text Shadow nur im Hover Zustand */
-.group:hover .group-hover\:text-shadow-md {
-  text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
-}
+  <style scoped>
+  /* Bildgröße */
+  .w-full5 {
+    width: 260px;
+    height: 250px;
+  }
 
-/* Container für die Bilder */
-.group:hover .absolute {
-  transform: translateY(-1.5rem);
-}
+  /* Hover-Effekt für obere Titelzeile */
+  .group:hover .title-top {
+    transform: translateY(-1.5rem);
+  }
 
-.group:hover .group-hover\:opacity-100 {
-  opacity: 1;
-}
+  /* Textschatten im Hover */
+  /* .group:hover .group-hover\:text-shadow-md {
+    /*text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
+  } */
 
-.group {
-  position: relative;
-}
+  /* Sichtbarkeit Hover-Text */
+  .group:hover .group-hover\:opacity-100 {
+    opacity: 1;
+  }
 
-.group:hover .image {
-  transform: scale(1.1);
-}
-  .style1 { background-color: rgba(57, 78, 149, 0.6); } /* Blau 40% Opazität */
-  .style2 { background-color: rgba(0, 123, 255, 0.6); }
-  .style3 { background-color: rgba(0, 86, 179, 0.6); }
-  .style4 { background-color: rgba(102, 179, 255, 0.6); }
-  .style5 { background-color: rgba(30, 144, 255, 0.6); }
-  .style6 { background-color: rgba(58, 135, 208, 0.6); }
-
-  /* Textschatten hinzufügen */
+  /* Textschatten für untere Zeile */
   .text-shadow {
-    text-shadow: 3px 3px 2px rgba(0, 0, 0, 1.0),
-                -3px -3px 2px rgba(0,0,0,1.0),
-                -3px 3px 2px rgba(0,0,0,1.0),
-                3px -3px 2px rgba(0,0,0,1.0),
-                3px 3px 1px rgba(0, 0, 0, 1.0),
-                -3px -3px 1px rgba(0,0,0,1.0),
-                -3px 3px 1px rgba(0,0,0,1.0),
-                3px -3px 1px rgba(0,0,0,1.0);
-  }
-  .bott{
-    bottom:120px;
-  }
-  .bott2{
-    top:140px;
+    text-shadow:
+
+      3px 3px 0px rgba(0, 0, 0, 1.0),
+      -3px -3px 0px rgba(0, 0, 0, 1.0),
+      -3px 3px 0px rgba(0, 0, 0, 1.0),
+      3px -3px 0px rgba(0, 0, 0, 1.0);
   }
 
+  /* Position obere Zeile */
+  .bott {
+    bottom: 120px;
+  }
+
+  /* Position untere Hover-Zeile */
+  .bott2 {
+    top: 140px;
+  }
+
+  /* Großbuchstaben am Anfang */
   .ucfirst::first-letter {
-  text-transform: uppercase;
+    text-transform: uppercase;
   }
   </style>
-

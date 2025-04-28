@@ -1,12 +1,12 @@
 <template>
     <Head :title="title"></Head>
     <div
-        class="bg-layout-sun-0 text-layout-sun-900 dark:bg-layout-night-0 dark:text-layout-night-900"
+        class="bg-layout-sun-0 text-layout-sun-900 dark:bg-layout-night-0 dark:text-layout-night-900"   
     >
         <div class="flex flex-col">
             <!-- Header -->
             <header
-                class="p-4 w-full bg-layout-sun-50 text-layout-sun-800 dark:bg-layout-night-50 dark:text-layout-night-800"
+                class="p-4  bg-layout-sun-50 text-layout-sun-800 dark:bg-layout-night-50 dark:text-layout-night-800"
             >
                 <div
                     class="container mx-auto md:max-w-6xl px-2 lg:px-8 py-2.5 rounded"
@@ -41,14 +41,14 @@
                     <slot name="logo" />
                 </div>
 
-                <div class="w-full sm:max-w-md mt-6 px-2 py-4 overflow-hidden">
+                <div class=" sm:max-w-md mt-6 px-2 py-4 overflow-hidden">
                     <slot />
                 </div>
             </div>
 
             <!-- Footer -->
             <footer
-                class="p-4 w-full bg-layout-sun-50 text-layout-sun-800 dark:bg-layout-night-50 dark:text-layout-night-800"
+                class="p-4  bg-layout-sun-50 text-layout-sun-800 dark:bg-layout-night-50 dark:text-layout-night-800"
             >
                 <div
                     class="container mx-auto md:max-w-6xl px-2 lg:px-8 py-2.5 rounded"

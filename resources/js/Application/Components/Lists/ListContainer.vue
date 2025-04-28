@@ -2,123 +2,101 @@
     <div>
         <div :class="[withinAccordion ? 'mx-1' : 'np-dl-outer-container']">
             <div class="np-dl-data-container">
+                <!-- Titel und Button-Gruppe -->
                 <div class="np-dl-title">
-                    <div
-                        class="flex flex-col md:flex-row items-center justify-between gap-4"
-                    >
+                    <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                        <div>{{ title }}</div>
                         <div>
-                            {{ title }}
-                        </div>
-                        <div>
-                            <button-group>
-                                <input-icon-hyperlink
-                                    v-if="createOn"
-                                    :href="routeCreate"
-                                    display_type="table"
-                                >
-                                    <template #icon>
-                                        <icon-plus-circle
-                                            class="button_icon"
-                                        ></icon-plus-circle>
+                            <button-group v-if="hasRight('add',tablex)">
+                                <input-icon-hyperlink v-if="createOn" :href="routeCreate" display_type="table">
+                                    <template #icon >
+                                        <icon-plus-circle class="button_icon" />
                                         Erstelle
                                     </template>
                                 </input-icon-hyperlink>
-                                <slot name="button"></slot>
+                                <slot name="button" />
                             </button-group>
                         </div>
                     </div>
                 </div>
 
-                <!-- Liste der Fehler -->
+                <!-- Fehleranzeige -->
                 <error-list :errors="errors" />
 
-                <div class="mb-4" v-if="searchFilter">
+                <!-- Suchfeld -->
+                <div v-if="searchFilter" class="mb-4">
                     <div class="my-6 flex justify-between items-center">
                         <search-filter
                             v-model="form.search"
                             class="w-full"
                             :searchText="searchText"
                             @reset="reset"
-                        >
-                        </search-filter>
+                        />
                     </div>
                 </div>
+                <!-- Tabelle -->
                 <table class="np-dl-table">
                     <thead class="np-dl-thead">
-                        <slot name="header"></slot>
+                        <slot name="header" />
                     </thead>
                     <tbody v-if="numberOfRows > 0">
-                        <tr
-                            v-for="datarow in datarows.data"
-                            :key="datarow[rowId]"
-                            class="np-dl-tr"
-                        >
-                            <slot name="datarow" :datarow="datarow"></slot>
-                            <td v-if="datarow.created_at"
-                            class="np-dl-td-normal">
-                            {{ new Date(datarow.created_at).toLocaleString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' }) }}
+                        <tr v-for="datarow in datarows.data" :key="datarow[rowId]" class="np-dl-tr">
+                            <slot name="datarow" :datarow="datarow" />
+                            <td v-if="datarow.created_at && hasRight('view', datarow.full_name)" class="np-dl-td-normal">
+                               {{ new Date(datarow.created_at).toLocaleString('de-DE', {
+                                    day: '2-digit', month: '2-digit', year: 'numeric',
+                                    hour: '2-digit', minute: '2-digit', second: '2-digit'
+                                }) }}
                             </td>
-                            <td
-                                v-if="editOn"
+                            <td v-if="hasRight('edit', datarow.full_name) && hasRight('view', datarow.full_name)"
                                 class="np-dl-td-edit"
-                                @click.prevent="editDataRow(datarow[rowId])"
-                            >
+                                @click.prevent="editDataRow(datarow[rowId])">
                                 <icon-pencil class="w-6 h-6" v-tippy />
                                 <tippy>{{ editDescription }}</tippy>
                             </td>
-                            <td
-                                v-if="deleteOn"
+                            <td v-else-if="hasRight('view',datarow.full_name)"
+                            class="np-dl-td-edit"></td>
+                            <td v-if="hasRight('delete', datarow.full_name) && hasRight('view', datarow.full_name)"
                                 class="np-dl-td-edit"
-                                @click="deleteDataRow(datarow[rowId])"
-                            >
+                                @click="deleteDataRow(datarow[rowId])">
                                 <icon-trash class="w-6 h-6" v-tippy />
                                 <tippy>{{ deleteDescription }}</tippy>
                             </td>
+                            <td v-else-if="hasRight('view',datarow.full_name)"
+                            class="np-dl-td-edit"></td>
                         </tr>
                     </tbody>
                 </table>
 
+                <!-- Pagination -->
                 <pagination :links="datarows.links" v-if="numberOfRows > 0" />
-            </div>
-            <div v-if="numberOfRows == 0" class="np-dl-td-no-entries">
-                <alert type="info">
-                    {{ noEntries }}
-                </alert>
+                <div v-else class="np-dl-td-no-entries">
+                    <alert type="info">{{ noEntries }}</alert>
+                </div>
             </div>
         </div>
     </div>
-    <!-- ENDS Anzeige der Liste -->
 </template>
+
 <script>
 import { Link } from "@inertiajs/vue3";
-
 import SearchFilter from "@/Application/Components/Lists/SearchFilter.vue";
 import Pagination from "@/Application/Components/Lists/Pagination.vue";
-
 import ButtonGroup from "@/Application/Components/Form/ButtonGroup.vue";
 import InputIconHyperlink from "@/Application/Components/Form/InputIconHyperlink.vue";
-
 import ErrorList from "@/Application/Components/Form/ErrorList.vue";
-
 import IconPlusCircle from "@/Application/Components/Icons/PlusCircle.vue";
 import IconPencil from "@/Application/Components/Icons/Pencil.vue";
-import IconEye from "@/Application/Components/Icons/Eye.vue";
 import IconTrash from "@/Application/Components/Icons/Trash.vue";
-
-import { CleanTable, CleanId } from '@/helpers';
 import Alert from "@/Application/Components/Content/Alert.vue";
-
+import { GetRights,CleanTable } from '@/helpers';
 import mapValues from "lodash/mapValues";
 import pickBy from "lodash/pickBy";
 import throttle from "lodash/throttle";
-
-const table = CleanTable();
-
-const id = CleanId();
+import { hasRight } from "@/utils/rights";
 
 export default {
     name: "Contents_Lists_ListContainer",
-
     components: {
         Link,
         SearchFilter,
@@ -129,225 +107,124 @@ export default {
         IconPlusCircle,
         IconPencil,
         IconTrash,
-        IconEye,
         Alert,
     },
-    //
-    emits: ["list-container-search-reset", "deleted",'update-list'],
-    //
     props: {
-        items:{
-
-        },
-        withinAccordion: {
-            type: Boolean,
-            default: false,
-        },
-        title: {
-            type: String,
-            required: false,
-        },
-        rowId: {
-            type: String,
-            default: "id",
-        },
-        datarows: {
-            type: [Object, Array,String],
-            default: () => [],
-        },
-        noEntries: {
-            type: String,
-            default: "Es wurden keine Datensätze gefunden.",
-        },
-        filters: {
-            type: [Object, Array],
-            default: () => [],
-        },
-        routeIndex: {
-            type: String,
-            default: null,
-        },
-        routeParamName: {
-            type: [Number, String],
-            default: "table",
-        },
-        routeParamValue: {
-            type: [Number, String],
-            default: table,
-        },
-        searchFilter: {
-            type: Boolean,
-            default: true,
-        },
-        searchText: {
-            type: String,
-            default: "Hier kannst du den Suchbegriff eingeben",
-        },
-        searchValue: {
-            type: String,
-            default: null,
-        },
-        showOn: {
-            type: Boolean,
-            default: false,
-        },
-        routeShow: {
-            type: String,
-        },
-        routeDelete: {
-            type: String,
-        },
-        deleteOn: {
-            type: Boolean,
-            default: false,
-        },
-        editOn: {
-            type: Boolean,
-            default: false,
-        },
-        routeEdit: {
-            type: String,
-        },
-        createOn: {
-            type: Boolean,
-            default: false,
-        },
-        deleteDescription: {
-            type: String,
-            default: "Datendatz löschen",
-        },
-        editDescription: {
-            type: String,
-            default: "Daten ändern",
-        },
-        errors: {
-            type: Object,
-            default: () => ({}),
-        },
-        tableq:{
-            type: String
-        },
+        items: {},
+        withinAccordion: { type: Boolean, default: false },
+        title: { type: String, required: false },
+        rowId: { type: String, default: "id" },
+        datarows: { type: [Object, Array, String], default: () => [] },
+        datarow: { type: [Object, Array, String], default: () => [] },
+        noEntries: { type: String, default: "Es wurden keine Datensätze gefunden." },
+        filters: { type: [Object, Array], default: () => [] },
+        routeIndex: { type: String, default: null },
+        routeParamName: { type: [Number, String], default: "table" },
+        routeParamValue: { type: [Number, String], default: null },
+        searchFilter: { type: Boolean, default: true },
+        searchText: { type: String, default: "Hier kannst du den Suchbegriff eingeben" },
+        searchValue: { type: String, default: null },
+        showOn: { type: Boolean, default: false },
+        routeShow: { type: String },
+        routeDelete: { type: String },
+        deleteOn: { type: Boolean, default: false },
+        editOn: { type: Boolean, default: false },
+        routeEdit: { type: String },
+        createOn: { type: Boolean, default: false },
+        deleteDescription: { type: String, default: "Datensatz löschen" },
+        editDescription: { type: String, default: "Daten ändern" },
+        errors: { type: Object, default: () => ({}) },
+        tableq: { type: String },
     },
-    //
+    async mounted() {
+  if (!this.datarow?.full_name) {
+    this.datarow.full_name = CleanTable();
+  }
+},
     data() {
         return {
-            form: {
-                search: this.filters.search,
-            },
-
-        routeCreate: "/admin/tables/create/" + this.tableq,
-        routeDelete: "/admin/tables/delete/" + this.tableq + "/",
+            form: { search: this.filters.search },
+            rightsData: {},
+            rightsReady: false,
+            routeCreate: "/admin/tables/create/" + this.tableq,
+            routeDelete: "/admin/tables/delete/" + this.tableq + "/",
         };
     },
-    //
     created() {
         this.form.search = this.searchValue;
     },
-    //
     computed: {
         numberOfRows() {
-            //console.log('numberOfRows')
             if (Array.isArray(this.datarows.data)) {
                 return this.datarows.data.length;
             } else if (typeof this.datarows === "object") {
-                return Object.keys(this.datarows.data).length;
+                return Object.keys(this.datarows.data || {}).length;
             } else {
                 return 0;
             }
         },
+        isRightsReady() {
+            return this.$isRightsReady;
+        },
+        hasRight() {
+      return this.$hasRight; // Zugriff auf globale Methode
     },
-    //
+    },
     watch: {
         form: {
+            handler: throttle(function () {
+                let query = pickBy(this.form);
+                let url = this.routeIndex;
 
-    handler: throttle(function () {
-        let query = pickBy(this.form);
-        let paramName = null
-        let paramValue = null
-        if (this.routeParamName && this.routeParamValue) {
-            paramName = this.routeParamName;
-            paramValue = this.routeParamValue;
-        }
+                if (!(typeof url === "string" && url.startsWith("http"))) {
+                    url = this.route(this.routeIndex, Object.keys(query).length ? query : { remember: "forget" });
+                }
 
-        let url = this.routeIndex;
-
-        // Prüfe, ob routeIndex bereits eine URL ist
-        if (!(typeof url === "string" && url.startsWith("http"))) {
-            url = this.route(this.routeIndex, Object.keys(query).length ? query : { remember: "forget" });
-        }
-
-        if (this.searchFilter) {
-            if (paramName && paramValue) {
-                this.$inertia.get(url, {
-                    search: this.form.search,
-                    [paramName]: paramValue,
-                    page: 1,
-                }, {
-                    preserveState: true,
-                });
-            } else {
-                this.$inertia.get(url, {
-                    search: this.form.search,
-                    page: 1,
-                }, {
-                    preserveState: true,
-                });
-            }
-        }
-    }, 150),
-    deep: true,
-}
-
+                if (this.searchFilter) {
+                    const params = {
+                        search: this.form.search,
+                        page: 1,
+                        ...(this.routeParamName && this.routeParamValue && {
+                            [this.routeParamName]: this.routeParamValue,
+                        }),
+                    };
+                    this.$inertia.get(url, params, { preserveState: true });
+                }
+            }, 0),
+            deep: true,
+        },
     },
-    //
     methods: {
         reset() {
             this.form = mapValues(this.form, () => null);
             this.$emit("list-container-search-reset");
         },
-        async confirmDelete(id) {
-            if (confirm("Wollen Sie diesen Beitrag wirklich löschen?")) {
-                await axios.delete(this.routeDelete);
-                this.$emit("update-list", id); // Sendet die ID an die Parent-Komponente
+        async hasRight(right, table) {
+            if (!this.rightsData[`${right}_${table}`] && table) {
+                await this.checkRight(right, table);
+
             }
+            return this.rightsData[`${right}_${table}`] === 1;
         },
-        cleanPath() {
-                const searchableTables = ["images", "blogs", "didyouknow", "shortpoems"];
-                const parts = window.location.pathname.split("/");
-                return searchableTables.find((ta) => parts.includes(ta)) || null;
-            },
-        //
-        showDataRow(id) {
-            this.$inertia.get(this.route(this.routeShow, id));
+        async checkRight(right, table) {
+            const value = await GetRights(right, table);
+            this.rightsData[`${right}_${table}`] = value;
+
         },
         deleteDataRow(id) {
-            console.log(this.routeDelete + id);
             if (confirm("Wollen Sie diesen Beitrag wirklich löschen?")) {
-                axios
-                    .delete(this.routeDelete + id)
+                axios.delete(this.routeDelete + id)
                     .then(() => {
-                        this.$emit("deleted"); // Event nach erfolgreichem Löschen
-
-                        location.reload();
+                        this.$emit("deleted");
+                        this.$inertia.reload();
                     })
-                    .catch((error) => {
-                        console.error("Fehler beim Löschen:", error);
-                    });
+                    .catch(error => console.error("Fehler beim Löschen:", error));
             }
-
         },
-        editDataRow(id){
-            console.log(this.tableq);
-            location.href='/admin/tables/edit/'+ id + '/' + this.tableq;
+        editDataRow(id) {
+            this.$inertia.visit(`/admin/tables/edit/${id}/${this.tableq}`);
         },
-        // async confirmDelete(id) {
-        //     if (confirm("Wollen Sie diesen Beitrag wirklich löschen?")) {
-        //     await axios.delete(this.routeDelete);
-        //     this.items = this.items.filter(item => item.id !== id);
-        //     }
-        // }
-
-
     },
+
 };
 </script>

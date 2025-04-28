@@ -414,8 +414,8 @@ export default {
   margin-top: 0.4rem;
   margin-bottom: 0.15rem;
 }
-.editor a {
-  color: #2563eb; /* z. B. Tailwind blue-600 */
+.editor a:link,.editor a:visited,.editor a:active,.editor a {
+  color: #2563eb !important; /* z. B. Tailwind blue-600 */
   text-decoration: underline;
 }
 .label{

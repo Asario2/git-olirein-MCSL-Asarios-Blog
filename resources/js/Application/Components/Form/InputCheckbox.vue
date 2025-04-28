@@ -1,4 +1,4 @@
-<template>
+    <template>
     <div class="flex items-center h-6">
         <div class="flex items-center h-6">
             <input
@@ -31,14 +31,23 @@ export default {
     emits: ["update:modelValue"],
     props: {
         name: { type: String },
-        modelValue: { type: [Number, Boolean], default: false },
+        modelValue: { type: [Number, Boolean, String], default: false },
         label: { type: String, default: "" },
         helptext: { type: String, default: "" },
     },
     methods: {
         toggle(e) {
-            this.$emit("update:modelValue", e.target.checked ? 1 : 0);
+            if (e && e.target) {
+                this.$emit("update:modelValue", e.target.checked ? 1 : 0);
+            } else {
+                // Fallback beim Mounten (z. B. Standardwert setzen)
+                this.$emit("update:modelValue", this.modelValue ?? 0);
+            }
         },
+
+    },
+    mounted() {
+        this.toggle();
     },
 };
 </script>

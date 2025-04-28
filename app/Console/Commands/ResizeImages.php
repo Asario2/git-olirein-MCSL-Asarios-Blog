@@ -15,7 +15,7 @@ class ResizeImages extends Command
 
     public function handle()
     {
-        $sourceDirs = [public_path("images/images/orig"), public_path('images/images/big')];
+        $sourceDirs = [public_path("images/images/orig")        ];
         $thumbsDir = public_path('images/images/thumbs');
 
         if (!File::exists($thumbsDir)) {

@@ -22,6 +22,7 @@ use App\Http\Controllers\TablesController;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\RightsController;
 use App\Helpers\Settings;
 GlobalController::SetDomain();
 // include __DIR__."/extraroutes.php";
@@ -34,28 +35,37 @@ Route::get('/db-check', function () {
         return 'Fehler: ' . $e->getMessage();
     }
 });
+Route::get("/api/user/rights/des/{table}/{right}",[RightsController::class,"GetRights"])->name("GetRights");
+Route::get("/api/user/rights",[RightsController::class,"GetRights_all"])->name("GetRights_all");
+Route::get('/no-rights', [HomeController::class, 'no_rights'])->name('tables.noview');
 
 
 Route::get('/api/settings', [SettingsController::class, 'all']);
 Route::get('/GetAuth', function () {
     if (Auth::check()) {
-        \Log::info("✅ Eingeloggt, User-ID: " . Auth::id());
+        // \Log::info("✅ Eingeloggt, User-ID: " . Auth::id());
         return response()->json("true");
     }
 
-    \Log::info("🚨 Nicht eingeloggt");
+    // \Log::i  nfo("🚨 Nicht eingeloggt");
     return response()->json("false");
 })->name("GetAuth");
 Route::get("/GETUserID", function (){
-    return Auth::id();
+    return response()->json(Auth::id());
 });
+
+
+Route::get('api/admin_table_positions', [RightsController::class,"GetTables_posi"])->name("GetTablesPosi");
+Route::get('/api/roles/{urid}', [TablesController::class, 'getRoles']);
+Route::get("/admin/user-rights/get",[TablesController::class,'GetURights'])->name("admin.users_rights.get");
 Route::middleware(['auth'])->group(function () {
     Route::post('/two-factor/setup', [TwoFactorController::class, 'setup'])->name('two-factor.setup');
     Route::post('/two-factor/confirm', [TwoFactorController::class, 'confirm'])->name('two-factor.confirm_alt');
-    Route::get("/get-user-rights",[TablesController::class,'URights'])->name("admin.users_rights");
-    Route::post("/admin/user-rights/save",[TablesController::class,'SaveURights'])->name("admin.users_rights.save");
-    Route::get("/admin/user-rights/get",[TablesController::class,'GetURights'])->name("admin.users_rights.get");
-    Route::get('/api/roles', [TablesController::class, 'getRoles']);
+    Route::get("/admin/User_Rights",[TablesController::class,'URights'])->name("admin.users_rights");
+    Route::get("/api/GetSRights",[TablesController::class,'GetSRights'])->name("admin.GetSRights");
+    Route::post("/api/admin/user-rights/save",[TablesController::class,'SaveURights'])->name("admin.users_rights.save");
+
+
 
     Route::get("api/getSlug/{table}/{id?}", [TablesController::class, "getSlug"])->name("getSlug");
 });

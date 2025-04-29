@@ -408,7 +408,7 @@ showComments(newVal, oldVal) {
 
 .shariff{
     margin-top:-11px;
-    z-index:10000;
+    z-index:100;
 }
 @media screen and (max-width: 1023px) {
 .MaTable{

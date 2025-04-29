@@ -119,7 +119,7 @@
     color: orange; /* Hover-Farbe */
   }
   .rating-container{
-    z-index:10000;
+    z-index:100;
     margin-top:-16px;
   }
   </style>

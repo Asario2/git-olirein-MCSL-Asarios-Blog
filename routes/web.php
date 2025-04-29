@@ -53,7 +53,7 @@ Route::get('/GetAuth', function () {
 Route::get("/GETUserID", function (){
     return response()->json(Auth::id());
 });
-
+Route::get('/get-total-rating/{table}', [RatingController::class, 'getTotalRating']);
 
 Route::get('api/admin_table_positions', [RightsController::class,"GetTables_posi"])->name("GetTablesPosi");
 Route::get('/api/roles/{urid}', [TablesController::class, 'getRoles']);

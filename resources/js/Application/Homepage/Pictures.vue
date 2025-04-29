@@ -107,7 +107,7 @@
         <div v-if="entry.Format">
         <b>Format:</b> {{ entry.Format }}
         </div>
-        <averageRating :postId="entry.id"/>
+        <averageRating :postId="entry.id"  :av="parseFloat(ratings['original'][entry.id]?.average) || 0" :tot="ratings['original'][entry.id]?.total || 0"/>
         <span v-if="hasRight('delete', 'images') || hasRight('edit', 'images') " class="flex space-x-2">
         <!-- Edit Icon -->
         <span v-if="hasRight('edit', 'images') "
@@ -243,6 +243,9 @@ props: {
     filters: {
         type: Object,
         default: () => ({}),
+    },
+    ratings:{
+        type:Object,
     },
     searchFilter: {
         type: Boolean,

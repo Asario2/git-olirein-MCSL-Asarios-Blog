@@ -15,7 +15,6 @@
                             <img
                                 :src="`/images/_ab/ai-teaser-light.jpg`"
                                 :alt="`Bild von ${item.headline}`"
-                                loading="lazy"
                                 class="object-cover w-full3 h-64 sm:h-96 rounded"
                             />
                             <!-- AI-Button -->

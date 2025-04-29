@@ -10,7 +10,6 @@
         <img
             :src="`/images/blogs/${blog.url}`"
             :alt="blog.name"
-            loading="lazy"
             width="480"
             height="360"
             style="max-height:390px"

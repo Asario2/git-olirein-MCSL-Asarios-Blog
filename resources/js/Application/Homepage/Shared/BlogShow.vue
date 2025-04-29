@@ -8,7 +8,6 @@
         <img
             :src="`/images/blogs/${blog.url}`"
             :alt="blog.name"
-            loading="lazy"
             width="480"
             height="360"
             class="object-cover w-full5  rounded lg:col-span-7 object-cover rounded bg-layout-sun-500 dark:bg-layout-night-500 coverclass"
@@ -25,7 +24,7 @@
                 class="p-2 pb-12 m-2 mx-auto w-full5 mt-0 space-y-6 lg:max-w-5xl sm:px-10 sm:mx-12 lg:rounded-md bg-layout-sun-100 dark:bg-layout-night-100 prose dark:prose-invert md:prose-lg lg:prose-xl"
             >
 
-                <div class="space-y-2" style="z-index:100000 !important;">
+                <div class="space-y-2" style="z-index:100 !important;">
                     <div
                         v-if="blog.blog_category.name"
                         class="flex justify-end items-start z-20"

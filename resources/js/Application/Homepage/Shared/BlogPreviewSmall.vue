@@ -11,7 +11,7 @@
                     class="object-cover w-full rounded h-44 bg-layout-sun-500 dark:bg-layout-night-500"
                     :src="`/images/blogs/thumbs/${blog.url}` || '/images/blogs/008.jpg'"
                     :alt="blog.name"
-                    loading="lazy"
+                   
                     width="480"
                     height="360"
                 />

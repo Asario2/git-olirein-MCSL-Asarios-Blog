@@ -11,7 +11,7 @@ use Illuminate\Support\Str;
 use Laravel\Jetstream\Jetstream;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Session;
-
+use App\Http\Controllers\RatingController;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -125,12 +125,13 @@ class HomeController extends Controller
         ->orderBy($ord[0], $ord[1])
         ->get();
         // \Log::info([$entries->toSql(), $entries->getBindings()]);
-
+        $rat = RatingController::getTotalRating("images");
         $ocont = DB::table("image_categories")->where("slug",$slug)->first();
         return Inertia::render('Homepage/Pictures', [
             'entries' => $entries,
             'ocont' => $ocont,
-            'filters' => Request()->all('search')
+            'filters' => Request()->all('search'),
+            'ratings' => $rat,
         ]);
     }
     //

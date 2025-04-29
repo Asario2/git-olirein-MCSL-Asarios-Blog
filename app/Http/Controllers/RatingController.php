@@ -112,16 +112,30 @@ class RatingController extends Controller
         return $id;
     }
     public function getAverageRating($table, $postId)
-{
-    $result = DB::table('ratings')
-        ->where('table', $table)
-        ->where('image_id', $postId)
-        ->selectRaw('AVG(rating) as average, COUNT(id) as total')
-        ->first();
+    {
+        $result = DB::table('ratings')
+            ->where('table', $table)
+            ->where('image_id', $postId)
+            ->selectRaw('AVG(rating) as average, COUNT(id) as total')
+            ->first();
 
-    return response()->json([
-        'average' => $result->average ? round($result->average, 1) : 0,
-        'total' => $result->total ?? 0
-    ]);
-}
+        return response()->json([
+            'average' => $result->average ? round($result->average, 1) : 0,
+            'total' => $result->total ?? 0
+        ]);
+    }
+    public static function getTotalRating($table)
+    {
+        $table = basename($_SERVER['REQUEST_URI']);
+        $rating = DB::table('ratings')
+            ->where('table', $table)
+            ->groupBy('image_id')
+            ->selectRaw('image_id, AVG(rating) as average, COUNT(id) as total')
+            ->get()
+            ->keyBy('image_id');
+        $queries = DB::getQueryLog();
+
+        \Log::info(json_encode([$rating,$queries,$table]));
+        return response()->json($rating);
+    }
 }

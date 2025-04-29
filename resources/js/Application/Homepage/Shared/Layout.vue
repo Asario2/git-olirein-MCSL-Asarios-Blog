@@ -22,7 +22,7 @@
     <main :class="mode" id="app-layout-start">
       <section class="relative bg-layout-sun-50 text-layout-sun-900 dark:bg-layout-night-50 dark:text-layout-night-900 transition-colors duration-1000">
         <!-- Header -->
-        <nav class="fixed top-0 left-0 right-0 z-50 bg-layout-sun-50 text-layout-sun-900 dark:bg-layout-night-50 dark:text-layout-night-900 border-b border-layout-sun-200 dark:border-layout-night-200">
+        <nav class="fixed top-0 left-0 right-0 z-150 bg-layout-sun-50 text-layout-sun-900 dark:bg-layout-night-50 dark:text-layout-night-900 border-b border-layout-sun-200 dark:border-layout-night-200">
           <div class="container mx-auto max-w-6xl p-6 lg:flex lg:items-center lg:justify-between">
             <div class="flex items-center justify-between">
               <brand-header :route-name="route('home.index')" :brand_1="$page.props.applications.brand_name_1" :brand_2="$page.props.applications.brand_name_2" :app-name="$page.props.applications.app_name"></brand-header>
@@ -204,7 +204,8 @@ export default {
       isOpen: false,
       year: new Date().getFullYear(),
       pendingRequests: 0, // Wird bei jeder Anfrage erhöht
-      isLoading: false,   // Kontrolliert den Loader
+      isLoading: true, // Spinner anzeigen, wenn Ladeprozess läuft
+      search: '',
       imagesLoaded: false,
     };
   },

@@ -16,7 +16,7 @@
 - ![Version](https://img.shields.io/badge/version-2.19.5-green) Share function with Shariff (#13)  
 - ![Version](https://img.shields.io/badge/version-2.20.2-green) Ratings Store (#13)  
 - ![Version](https://img.shields.io/badge/version-2.21.4-green) Ratings Show (#13)  
-- ![Version](https://img.shields.io/badge/version-2.21.9-green) fixed show/hide Bugs (#13)  
+- ![Version](https://img.shields.io/badge/version-2.21.9-green) fixed show/hide Bugs in socialmedia script (#13)  
 - ![Version](https://img.shields.io/badge/version-2.22.2-green) Rating Half Stars (#13)  
 - ![Version](https://img.shields.io/badge/version-2.23.7-green) Redirect to login on Comments/Ratings (#13)  
 - ![Version](https://img.shields.io/badge/version-2.24.6-green) Fixed Bug in TableForm.vue (#14)  

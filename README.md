@@ -1,5 +1,6 @@
 ![Why MCSL is Built on Laravel/Vue](public/MCSL.jpg)
-# Why MCSL is Built on Laravel/Vue – The Technology Behind This Blog
+![Version](https://img.shields.io/badge/version-2.47.2-green)
+# Why MCSL is Built on Laravel/Vue â€“ The Technology Behind This Blog
 In the world of modern web development, there are countless frameworks and platforms, but only a few offer the **flexibility**, **scalability**, and **user-friendliness** of Laravel. Today, I want to talk about why **MCSL** is built on Laravel and how it, together with **Vue.js**, forms the **backbone** of our blog.
 
 ---
@@ -11,10 +12,10 @@ Laravel is a **PHP framework** known for its **elegant syntax**, **robust featur
 ### **Key Reasons Why Laravel is the Foundation of MCSL:**
 
 - **Fast Development Time:**  
-  Laravel’s **Artisan CLI** automates repetitive tasks, significantly speeding up development.
+  Laravelâ€™s **Artisan CLI** automates repetitive tasks, significantly speeding up development.
 
 - **Modularity:**  
-  Laravel’s **modular architecture** allows us to easily implement and extend features like **user management**, **API integrations**, and **data management**.
+  Laravelâ€™s **modular architecture** allows us to easily implement and extend features like **user management**, **API integrations**, and **data management**.
 
 - **Security:**  
   Laravel provides built-in protection against common security threats such as **CSRF**, **SQL injection**, and **XSS attacks**, ensuring MCSL is secure from the start.
@@ -34,13 +35,13 @@ Vue.js is a **JavaScript framework** specifically designed for building user-fri
   Vue.js enables the creation of reusable, independent components, promoting a **clean and modular codebase**.
 
 - **Interactive User Interfaces:**  
-  Vue.js makes it possible to develop **dynamic and user-friendly interfaces** that communicate directly with Laravel’s API.
+  Vue.js makes it possible to develop **dynamic and user-friendly interfaces** that communicate directly with Laravelâ€™s API.
 
 ---
 
 ## **MCSL: Laravel and Vue.js in Action**
 
-MCSL is more than just a **Content Management System (CMS)** — it is a modern web platform that leverages the **strengths of Laravel and Vue.js**. Laravel acts as the **strong backend architecture**, while Vue.js provides a **dynamic and responsive user interface**.
+MCSL is more than just a **Content Management System (CMS)** â€” it is a modern web platform that leverages the **strengths of Laravel and Vue.js**. Laravel acts as the **strong backend architecture**, while Vue.js provides a **dynamic and responsive user interface**.
 
 ### **Core Components of the MCSL Architecture:**
 

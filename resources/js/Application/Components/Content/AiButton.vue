@@ -35,13 +35,14 @@ export default {
     position: absolute;
     bottom: 0px;
     right: 0px;
-    z-index: 48;
+    z-index: 38;
     width:64px;
 }
 
 .ai-button-image {
     width: 64px;
     height: 64px;
+    z-index:39;
 }
 
 .big .ai-button {
@@ -55,6 +56,7 @@ export default {
 }
 .bigger .ai-button{
 bottom:0;
-right:64px !important;
+right:128px !important;
+width:64px;
 }
 </style>

@@ -62,7 +62,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/two-factor/setup', [TwoFactorController::class, 'setup'])->name('two-factor.setup');
     Route::post('/two-factor/confirm', [TwoFactorController::class, 'confirm'])->name('two-factor.confirm_alt');
     Route::get("/admin/User_Rights",[TablesController::class,'URights'])->name("admin.users_rights");
-    Route::get("/api/GetSRights",[TablesController::class,'GetSRights'])->name("admin.GetSRights");
+    Route::get("/api/GetSRights/",[TablesController::class,'GetSRights'])->name("admin.GetSRights");
     Route::post("/api/admin/user-rights/save",[TablesController::class,'SaveURights'])->name("admin.users_rights.save");
 
 

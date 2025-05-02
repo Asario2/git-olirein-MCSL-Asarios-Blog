@@ -1687,12 +1687,59 @@ class TablesController extends Controller
         DB::table($table)->where('id', $id)->delete();
 
     }
-    function GetSRights($right)
+    function GetSRights()
     {
-    //     $res = DB::table("users")
-    // ->leftJoin("users_rights", "users.users_groups_id", "=", "users_rights.id")->pluck("xkis_".$right);
-    // return response()->json($res);
+        $userId = Auth::id();
+        $xkisColumns = collect(Schema::getColumnListing('users_rights'))
+    ->filter(fn($col) => Str::startsWith($col, 'xkis_'))
+    ->values();
+
+$user = DB::table('users')
+    ->leftJoin('users_rights', 'users.users_rights_id', '=', 'users_rights.id')
+    ->where('users.id', $userId)
+    ->select('users.*', ...$xkisColumns->map(fn($col) => "users_rights.$col")->toArray())
+    ->first();
+
+// Optional: Rechte auslagern als assoziatives Array
+$rights = [];
+foreach ($xkisColumns as $col) {
+    $rights[Str::after($col, 'xkis_')] = (bool) $user->$col;
+}
+
+// Entferne ggf. die xkis_-Spalten aus $user
+foreach ($xkisColumns as $col) {
+    unset($user->$col);
+}
+    \Log::info("ur__".json_encode($rights));
+// Füge Rechte als Objekt hinzu
+$user->rights = $rights;
+
+return response()->json($user);
     }
+    // function GetSRights()
+    // {
+    //     // $res = DB::table("users")
+    //     //     ->leftJoin("users_rights", "users.users_groups_id", "=", "users_rights.id")->pluck("xkis_".$right);
+    //     //     return response()->json($res);
+    //     $user = auth()->user();
+
+    //     if (!$user) {
+    //         return response()->json([]);
+    //     }
+    //     $columns = DB::getSchemaBuilder()->getColumnListing('users_rights');
+
+    //     // Schritt 2: Nur Spalten mit "xkis" im Namen filtern
+    //     $xkisColumns = array_filter($columns, fn($col) => str_contains($col, 'xkis_'));
+    //     \Log::info("ur__".json_encode($xkisColumns));
+    //     $rights = DB::table('users')
+    //         ->leftJoin('users_rights', 'users.users_rights_id', '=', 'users_rights.id')
+    //         ->where('users.id', $user->id)
+    //         ->select(
+    //                 $xkisColumns
+    //         )
+    //         ->first();
+
+    // }
     public function URights(Request $request)
     {
         if(!CheckZRights("UserRights"))

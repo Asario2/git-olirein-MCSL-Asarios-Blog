@@ -20,25 +20,25 @@
     </meta-header>
 
     <main :class="mode" id="app-layout-start">
-      <section class="relative bg-layout-sun-50 text-layout-sun-900 dark:bg-layout-night-50 dark:text-layout-night-900 transition-colors duration-1000">
+      <section class="relative bg-layout-sun-50 text-layout-sun-900 dark:bg-layout-night-50 dark:text-layout-night-900 transition-colors duration-1000"  style='z-index:50;'>
         <!-- Header -->
-        <nav class="fixed top-0 left-0 right-0 z-150 bg-layout-sun-50 text-layout-sun-900 dark:bg-layout-night-50 dark:text-layout-night-900 border-b border-layout-sun-200 dark:border-layout-night-200">
-          <div class="container mx-auto max-w-6xl p-6 lg:flex lg:items-center lg:justify-between">
+        <nav class="fixed top-0 left-0 right-0 z-30 bg-layout-sun-50 text-layout-sun-900 dark:bg-layout-night-50 dark:text-layout-night-900 border-b border-layout-sun-200 dark:border-layout-night-200"  style='z-index:50;'>
+          <div class="container mx-auto max-w-6xl p-6 lg:flex lg:items-center lg:justify-between" style='z-index:50;'>
             <div class="flex items-center justify-between">
               <brand-header :route-name="route('home.index')" :brand_1="$page.props.applications.brand_name_1" :brand_2="$page.props.applications.brand_name_2" :app-name="$page.props.applications.app_name"></brand-header>
 
               <!-- Mobile menu button -->
               <div class="flex lg:hidden">
                 <button v-on:click="toggleNavbar()" type="button" class="focus:outline-none text-primary-sun-1000 hover:text-primary-sun-800 focus:text-primary-sun-800 dark:text-primary-night-1000 dark:hover:text-primary-night-800 dark:focus:text-primary-night-800" aria-label="toggle menu">
-                  <icon-menu class="w-6 h-6" v-if="!isOpen"></icon-menu>
-                  <icon-close class="w-6 h-6" v-if="isOpen"></icon-close>
+                  <icon-menu class="w-6 h-6" v-if="!isOpen_Menu"></icon-menu>
+                  <icon-close class="w-6 h-6" v-if="isOpen_Menu"></icon-close>
                 </button>
               </div>
             </div>
 
             <!-- Mobile Menu open: "block", Menu closed: "hidden" -->
-            <div :class="[isOpen ? 'translate-x-0 opacity-100 ' : 'opacity-0 -translate-x-full']" class="absolute inset-x-0 mt-6 w-full px-6 py-4 shadow-md transition-all duration-300 ease-in-out bg-primary-sun-200 dark:bg-primary-night-200 lg:relative lg:top-0 lg:mt-0 lg:flex lg:w-auto lg:translate-x-0 lg:items-center lg:bg-transparent lg:p-0 lg:opacity-100 lg:shadow-none lg:dark:bg-transparent">
-              <div class="flex flex-col items-center space-y-4 lg:mt-0 lg:flex-row lg:space-y-0 lg:space-x-8">
+            <div :class="[isOpen_Menu ? 'translate-x-0 opacity-100 ' : 'opacity-0 -translate-x-full']" style='z-index:10000000;' class="absolute inset-x-0 mt-6 w-full px-6 py-4 shadow-md transition-all duration-300 ease-in-out bg-primary-sun-200 dark:bg-primary-night-200 lg:relative lg:top-0 lg:mt-0 lg:flex lg:w-auto lg:translate-x-0 lg:items-center lg:bg-transparent lg:p-0 lg:opacity-100 lg:shadow-none lg:dark:bg-transparent">
+              <div class="flex flex-col items-center space-y-4 lg:mt-0 lg:flex-row lg:space-y-0 lg:space-x-8" style='z-index:10000000;'>
                 <link-header :route-name="route('home.index')" name="Home"></link-header>
                 <link-header :route-name="route('home.images.index')" name="Bilder"></link-header>
                 <link-header :route-name="route('home.pricing')" name="Preise"></link-header>
@@ -60,7 +60,7 @@
         </nav>
 
         <!-- Loading -->
-        <div v-if="isLoading" id="loader" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm transition-all">
+        <div v-if="isLoading" id="loader" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm transition-all" style='z-index:999999999'>
         <div class="text-center">
             <svg class="animate-spin h-10 w-10 text-primary-sun-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -181,6 +181,7 @@ import BrandHeader from "@/Application/Shared/BrandHeader.vue";
 import LinkHeader from "@/Application/Shared/LinkHeader.vue";
 import BrandFooter from "@/Application/Shared/BrandFooter.vue";
 import LinkFooter from "@/Application/Shared/LinkFooter.vue";
+import IconMenu from "@/Application/Components/Icons/Menu.vue"
 import Toast from "@/Application/Components/Content/Toast.vue";
 import ButtonChangeMode from "@/Application/Components/ButtonChangeMode.vue";
 import { ref } from "vue";
@@ -195,13 +196,14 @@ export default {
     BrandFooter,
     LinkFooter,
     Toast,
+    IconMenu,
     ButtonChangeMode
   },
 
   data() {
     return {
       mode: localStorage.theme ? localStorage.theme : "",
-      isOpen: false,
+      isOpen_Menu: false,
       year: new Date().getFullYear(),
       pendingRequests: 0, // Wird bei jeder Anfrage erhöht
       isLoading: true, // Spinner anzeigen, wenn Ladeprozess läuft
@@ -212,7 +214,7 @@ export default {
 
   mounted() {
     // Debugging: Prüfen, ob die Seite zum ersten Mal geladen wird
-    console.log('mounted called');
+
 
     // Den 'search' Parameter prüfen
     const urlParams = new URLSearchParams(window.location.search);
@@ -229,7 +231,7 @@ export default {
 
     // Axios Interceptoren
     axios.interceptors.request.use((config) => {
-      console.log('Request sent, pendingRequests:', this.pendingRequests);
+    //   console.log('Request sent, pendingRequests:', this.pendingRequests);
       this.pendingRequests += 1;
       this.setLoadingState(this.searchval);
       return config;
@@ -238,7 +240,7 @@ export default {
     axios.interceptors.response.use(
       (response) => {
         this.pendingRequests -= 1;
-        console.log('Response received, pendingRequests:', this.pendingRequests);
+        // console.log('Response received, pendingRequests:', this.pendingRequests);
         this.checkLoadingState();
         return response;
       },
@@ -256,14 +258,14 @@ export default {
 
   methods: {
     setLoadingState(state) {
-      console.log('Setting loading state to:', state);
+    //   console.log('Setting loading state to:', state);
       this.isLoading = state;
     },
 
     checkLoadingState() {
       // Überprüft den Status und blendet den Loader aus, wenn alle Bilder geladen sind und keine ausstehenden Anfragen mehr vorhanden sind
       if (this.pendingRequests === 0 && this.imagesLoaded) {
-        console.log('All requests completed and images loaded, hiding loader');
+        //console.log('All requests completed and images loaded, hiding loader');
         this.setLoadingState(false);
       }
     },
@@ -274,7 +276,7 @@ export default {
       let imagesLoadedCount = 0;
 
       if (totalImages === 0) {
-        console.log('No images found');
+        //console.log('No images found');
         this.imagesLoaded = true; // Keine Bilder, also direkt auf true setzen
         this.checkLoadingState();  // Prüfe den Lade-Status erneut
         return;
@@ -287,9 +289,9 @@ export default {
         } else {
           img.addEventListener('load', () => {
             imagesLoadedCount++;
-            console.log(`Image ${index + 1} loaded`);
+            //console.log(`Image ${index + 1} loaded`);
             if (imagesLoadedCount === totalImages) {
-              console.log('All images loaded');
+              //console.log('All images loaded');
               this.imagesLoaded = true;
               this.checkLoadingState();  // Prüfe den Lade-Status erneut
             }
@@ -298,14 +300,14 @@ export default {
       });
 
       if (imagesLoadedCount === totalImages) {
-        console.log('All images were already loaded');
+       // console.log('All images were already loaded');
         this.imagesLoaded = true;
         this.checkLoadingState();  // Prüfe den Lade-Status erneut
       }
     },
 
     toggleNavbar() {
-      this.isOpen = !this.isOpen;
+      this.isOpen_Menu = !this.isOpen_Menu;
     },
 
     // Ändert den Modus (Light/Dark)

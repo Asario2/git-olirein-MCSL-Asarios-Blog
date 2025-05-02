@@ -54,7 +54,7 @@ class FormController extends Controller
 
 
         $label = isset(Settings::$exl[$name]) ? Settings::$exl[$name] : $name;
-        $class = FormController::getClass($name,1);
+        $class = FormController::getClass($name,1,$table);
         $req   = FormController::getReq($name);
         $type = FormController::getClass($name);
         $rows = FormController::getRows($type);
@@ -129,7 +129,7 @@ class FormController extends Controller
     else{
         $id2 = "id";
     }
-    \Log::info("tab: ".$table);
+    // \Log::info("tab: ".$table);
     // Abfrage vorbereiten, abhängig von der Spalte 'pub'
     if (Schema::hasColumn($table, 'pub')) {
         $query = DB::table($table)->where("pub", "=", 1)->orderBy("name", "ASC");  // Nach 'name' sortieren
@@ -220,7 +220,7 @@ class FormController extends Controller
 
         return $result;
     }
-    public static function getClass($name,$cl='')
+    public static function getClass($name,$cl='',$table='')
     {
         switch($name)
         {
@@ -237,23 +237,23 @@ class FormController extends Controller
             case "autoslug":
                 return "autoSlug";
             break;
-            case "category_id":
-                return "artselect";
-            break;
-            case "type_id":
-                return "hidden";
-            break;
-            case "blog_authors_id":
+                   case "blog_authors_id":
                 return "select_id";
             break;
             case "blog_categories_id":
                 return "select_id";
             break;
             case "blog_date":
+                if($cl && !CheckRights(Auth::id(),$table,"date")){
+                    return "disabled";
+                }
                 return "datetime";
             break;
             case "camera_id":
                 return "select_id";
+            break;
+            case "category_id":
+                return "artselect";
             break;
             case "content":
                 return "textarea";
@@ -262,6 +262,9 @@ class FormController extends Controller
                 return "textarea";
             break;
             case "created_at":
+                if($cl && !CheckRights(Auth::id(),$table,"date")){
+                    return "disabled";
+                }
                 return "datetime";
             break;
             case "description":
@@ -320,6 +323,9 @@ class FormController extends Controller
             break;
             case "summary":
                 return "textarea_short";
+            break;
+            case "type_id":
+                return "hidden";
             break;
             case "users_id":
                 return "select_id";

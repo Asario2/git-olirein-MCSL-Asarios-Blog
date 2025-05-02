@@ -25,7 +25,7 @@
               <!-- Tabellen-Rechte Section -->
 <!-- Tabellen-Rechte Section -->
 <div v-if="activeTab === 'tables'" class="bg-layout-sun-100 dark:bg-layout-night-100 p-4 rounded-lg shadow-sm">
-  <table class="w-full w-full3 border-collapse text-sm md:text-base rounded overflow-hidden">
+  <table class="w-full border-collapse text-sm md:text-base rounded overflow-hidden">
     <thead class="bg-layout-sun-200 dark:bg-layout-night-200 text-layout-sun-800 dark:text-layout-night-800">
       <tr>
         <th class="px-4 py-3 text-left"><nobr>An/Aus</nobr></th>

@@ -316,24 +316,37 @@ export async function GetSettings() {
     }
 
 }
-export async function GetSRights(modul)
-{
-    try {
-        const response = await fetch('/api/GetSRights');
-        const data = await response.json();
-        if(data.sright)
-        {
-            return true;
-        }
-        return false;
+// export async function GetSRights(modul)
+// {
+//     try {
+//         const response = await fetch('/api/GetSRights/' + modul);
+//         const data = await response.json();
+//         if(data.sright)
+//         {
+//             return true;
+//         }
+//         return false;
 
 
 
 
-    } catch (error) {
-        console.error("Fehler beim Laden der Settings:", error);
-        return {};
-    }
+//     } catch (error) {
+//         console.error("Fehler beim Laden der Settings:", error);
+//         return {};
+//     }
+// }
+let cachedRights = null;
+
+export async function loadRights() {
+  if (cachedRights) return cachedRights;
+
+  const res = await axios.get('/api/GetSRights/');
+  cachedRights = res.data.rights;
+  return cachedRights;
+}
+
+export function GetSRights(modul) {
+ // return cachedRights?.[modul] === true;
 }
 
 

@@ -15,16 +15,16 @@
             >
               <a :href="route('home.images.gallery', [ima.slug])">
                 <!-- Bild mit Zoom-In Effekt -->
-                <div class="relative w-full5 overflow-hidden rounded-sm">
+                <div class="relative w-full overflow-hidden rounded-sm">
                   <img
                     :src="`/images/_ab/images_cat/${ima.name}.jpg`"
                     :alt="ima.shortname"
                     :title="'zur ' + ima.shortname + 'Galerie'"
-                    class="w-full5 h-full object-cover transition-transform duration-500 ease-in-out transform group-hover:scale-110"
+                    class="w-full h-full object-cover transition-transform duration-500 ease-in-out transform group-hover:scale-110"
                   />
                   <!-- Overlay in Blau -->
                   <div
-                    class="absolute top-0 left-0 w-full5 h-full bg-blue-500 opacity-40 transition-opacity duration-300 group-hover:opacity-0"
+                    class="absolute top-0 left-0 w-full h-full bg-blue-500 opacity-40 transition-opacity duration-300 group-hover:opacity-0"
                   ></div>
                 </div>
 

@@ -1,7 +1,7 @@
 <template>
         <!-- **Tabelle direkt unterhalb des Blog-Containers (fixiert)** -->
         <div class="w-full mt-2">
-            <table :class="['w-full border-collapse mx-auto justify-center rounded-lg shadow-sm table-class',!nostars ? 'NSMaTable' : '', sm ? 'SmMaTable' : 'MaTable']" style="max-width:300px;" @click.stop>
+            <table :class="['w-full border-collapse mx-auto justify-center rounded-lg shadow-sm table-class',nostars ? 'NSMaTable' : 'MaTable']" style="max-width:300px;" @click.stop>
                 <tbody>
                     <tr>
                         <td class=" text-center" width="60%">
@@ -32,9 +32,9 @@
                     <!-- Kommentarbox -->
 
                     <tr v-if="showComments == postId">
-                        <td colspan="3" class="p-4" style="z-index:1000;"  :id="'commentBox_' + postId">
+                        <td colspan="3" class="p-4" style="z-index:49;"  :id="'commentBox_' + postId">
 
-                            <div style="z-index:1000;" class="w300 relative border border-gray-300 p-4 rounded-lg shadow-sm bg-white dark:bg-gray-800">
+                            <div style="z-index:49;" class="w300 relative border border-gray-300 p-4 rounded-lg shadow-sm bg-white dark:bg-gray-800">
                                 <button @click.stop.prevent="closeComments(this.postId)" class="absolute top-2 right-2 text-red-500 text-xl bold">
                                     <b>&times;</b>
                                 </button>
@@ -389,7 +389,7 @@ showComments(newVal, oldVal) {
         if (newVal !== oldVal) {
             // Hier rufst du die Methode auf, wenn sich der Wert von `showComments` ändert
             this.imageRemove(this.postId);
-            alert(this.postId);
+            //alert(this.postId);
         }
     }
 };
@@ -399,23 +399,33 @@ showComments(newVal, oldVal) {
     max-width:300px !important;
     width:300px !important;
 }
-.tog-tab{
-    max-height:999999999;
-    /* margin-left:-20px;
-    padding-left:10px; */
-}
-
-
 .shariff{
     margin-top:-11px;
-    z-index:100;
+    z-index:49;
 }
-@media screen and (max-width: 1023px) {
+
+@media screen and (max-width: 1000px) {
 .MaTable{
-margin-left:-38px;
+margin-left:-58px;
 }
 .SmMaTable{
 margin-left:-7px;
+}
+.MaTable_blogs{
+margin-left:-38px;
+}
+.SmMaTable_blogs{
+margin-left:-38px;
+}
+}
+@media screen and (max-width: 361px) {
+.MaTable{
+margin-left:-68px !important;
+}
+}
+@media screen and (min-width: 1024px) {
+.Matable{
+    margin-left:0px;
 }
 }
 .w300{

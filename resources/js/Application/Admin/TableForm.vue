@@ -177,7 +177,7 @@
                         v-model="field.value"
                         :value="field.value"
                         :placeholder="field.placeholder || ''"
-                        :class="field.class"
+                        :disabled="field.class"
                         :required="isRequired(field.required)"
                         >
                         <template #label>{{ field.label }}</template>

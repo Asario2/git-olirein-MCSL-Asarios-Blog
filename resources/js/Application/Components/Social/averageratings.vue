@@ -36,8 +36,8 @@ export default {
 },
 
   data() {
-    console.log('Average Rating:', this.av);  // Debugging
-    console.log('Total Votes:', this.tot);    // Debugging
+    // console.log('Average Rating:', this.av);  // Debugging
+    // console.log('Total Votes:', this.tot);    // Debugging
 
 
     return {
@@ -64,7 +64,7 @@ export default {
     },
   },
   mounted(){
-    console.log("str:" + this.tot);
+    // console.log("str:" + this.tot);
   }
 };
 </script>

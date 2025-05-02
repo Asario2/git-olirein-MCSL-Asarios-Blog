@@ -53,7 +53,7 @@ class HomeController extends Controller
             'blog_authors.name as author_name',
             'blogs.image_path as url',
             'blog_categories.name as category_name',
-            "blogs.xis_aiImage as madewithai",
+            "blogs.xis_aiImage as madewithai"
             )
             ->join('blog_authors', 'blog_authors.id', '=', 'blogs.blog_authors_id')
             ->join('blog_categories', 'blog_categories.id', '=', 'blogs.blog_categories_id')
@@ -63,7 +63,7 @@ class HomeController extends Controller
             ->filterBlog(Request::only('search'))
             ->orderBy('blogs.blog_date', 'desc')
             ->orderBy('blogs.id', 'desc')
-            ->paginate(100)
+            ->paginate(22)
             ->withQueryString();
         //
         $blogs->getCollection()->transform(function ($blog) {
@@ -84,7 +84,7 @@ class HomeController extends Controller
         //     $blog->addRights = CheckRights(Auth::id(), $table, "add");
         //     $blog->date_tableRights = CheckRights(Auth::id(), $table, "date_table");
         // }
-            // \Log::info(json_encode($blogs, JSON_PRETTY_PRINT));
+            \Log::info(json_encode($blogs, JSON_PRETTY_PRINT));
             // \Log::info("Test-Log-Eintrag");
 
         return Inertia::render('Homepage/BlogList', [
@@ -123,7 +123,8 @@ class HomeController extends Controller
             $query->filterdefault(['search' => request('search')]);
         })
         ->orderBy($ord[0], $ord[1])
-        ->get();
+        ->paginate(25);
+
         // \Log::info([$entries->toSql(), $entries->getBindings()]);
         $rat = RatingController::getTotalRating("images");
         $ocont = DB::table("image_categories")->where("slug",$slug)->first();

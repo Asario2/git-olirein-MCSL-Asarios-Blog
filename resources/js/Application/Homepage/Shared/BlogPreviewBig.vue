@@ -1,6 +1,6 @@
 <template>
 
-     <div id="teaser-img2" class="block max-w-sm gap-3 mx-auto mh_65 sm:max-w-full group hover:no-underline focus:no-underline lg:grid lg:grid-cols-12 bg-layout-sun-100 dark:bg-layout-night-100 overfl" style="z-index:2;margin-bottom:-0px;" :class="{ 'disable-link': isCommentActive }"
+     <div id="teaser-img2" class="block max-w-sm gap-3 mx-auto mh_65 sm:max-w-full group hover:no-underline focus:no-underline lg:grid lg:grid-cols-12 bg-layout-sun-100 dark:bg-layout-night-100 overfl" style="z-index:0;margin-bottom:-0px;" :class="{ 'disable-link': isCommentActive }"
     >
         <!-- Das Bild des Blog-Posts -->
         <div class="blog-container mh_65 lg:col-span-7" style="">
@@ -13,7 +13,7 @@
             width="480"
             height="360"
             style="max-height:390px"
-            class="object-cover w-full w-full3  rounded lg:col-span-7 object-cover w-full w-full3 rounded bg-layout-sun-500 dark:bg-layout-night-500"
+            class="object-cover w-full rounded lg:col-span-7 object-cover rounded bg-layout-sun-500 dark:bg-layout-night-500"
         />
 
         </Link>
@@ -134,7 +134,7 @@ export default {
   position: fixed;  /* Fixiere das Bild auf dem Bildschirm */
   bottom: 16px;     /* Abstand von der unteren Kante */
   right: 16px;      /* Abstand von der rechten Kante */
-  z-index: 9999;
+  z-index: 39;
   margin-bottom :236px;
 }
 }

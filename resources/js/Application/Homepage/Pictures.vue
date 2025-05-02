@@ -48,20 +48,20 @@
                         <div class="flex justify-between items-center">
                     <search-filter
                         v-model="form.search"
-                        class="w-full w-full3"
+                        class="w-full"
                         @reset="reset"
                     >
                     </search-filter>
                 </div>
 
-                <div v-if="entries.length == 0 && form.search">
+                <div v-if="entries.data.length == 0 && form.search">
                     <alert type="warning">
                         Für den vorgegebenen Suchbegriff wurden keine
                         Blogartikel gefunden.
                     </alert>
                 </div>
-                        <div id="gallery" v-for="entry in entries" :key="entry.id"
-    class="block max-w-sm gap-3 mx-auto sm:max-w-full w-full3 group mb-4
+                        <div id="gallery" v-for="entry in entries.data" :key="entry.id"
+    class="w-full block max-w-sm gap-3 mx-auto sm:max-w-full group mb-4
         lg:grid lg:grid-cols-12 bg-layout-sun-100 dark:bg-layout-night-100
         border-2 border-layout-sun-300 dark:border-layout-night-300 p-4"
 
@@ -135,6 +135,36 @@
         </div>
     </div>
 </div>
+<!-- Pagination -->
+<div class="flex items-center justify-center flex-wrap mt-6 -mb-1 text-xs md:text-base bg-transparent text-layout-sun-700 dark:text-layout-night-700">
+                    <template v-for="(link, index) in entries.links" :key="index">
+                        <!-- Deaktivierte Links -->
+                        <div
+                            v-if="!link.url"
+                            class="flex items-center px-3 py-0.5 mx-1 mb-1 rounded-md cursor-not-allowed"
+                        >
+                            <span v-html="link.label"></span>
+                        </div>
+
+                        <!-- Aktive Seite -->
+                        <a
+                            v-else-if="link.active"
+                            :href="link.url"
+                            class="flex items-center px-2.5 py-0.5 mx-1 mb-1 h-7 transition-colors duration-200 transform rounded-md border border-primary-sun-500 text-primary-sun-900 dark:border-primary-night-500 dark:text-primary-night-900 hover:bg-layout-sun-200 hover:text-layout-sun-800 dark:hover:bg-layout-night-200 dark:hover:text-layout-night-800 font-bold"
+                        >
+                            <span v-html="link.label"></span>
+                        </a>
+
+                        <!-- Normale Links -->
+                        <a
+                            v-else
+                            :href="link.url"
+                            class="flex items-center px-2.5 py-0.5 mx-1 mb-1 h-7 transition-colors duration-200 transform rounded-md border hover:bg-layout-sun-200 hover:text-layout-sun-800 dark:hover:bg-layout-night-200 dark:hover:text-layout-night-800"
+                        >
+                            <span v-html="link.label"></span>
+                        </a>
+                    </template>
+                </div>
 </div>
 
     </layout>

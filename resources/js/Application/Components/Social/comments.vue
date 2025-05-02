@@ -45,6 +45,8 @@
             v-model="newComment"
             class="w-full p-2 rounded-lg dark:bg-gray-900 dark:text-white"
             placeholder="Schreibe einen Kommentar..."
+            @keydown.enter.exact.prevent="submitComment"
+            @keydown.enter.shift="insertNewline"
         ></textarea>
         <button
             @click="submitComment"
@@ -81,6 +83,7 @@
                 comments: [],
                 newComment: "", // Eingabefeld für neuen Kommentar
                 defaultAvatar: "/images/default_avatar.png", // Fallback-Profilbild
+                comment: "",
             };
             },
             async mounted() {
@@ -99,6 +102,21 @@
             });
             },
             methods: {
+
+        insertNewline(event) {
+            // Erlaubt Zeilenumbruch bei Shift+Enter
+            const textarea = event.target;
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+            this.newComment =
+                this.newComment.substring(0, start) +
+                "\n" +
+                this.newComment.substring(end);
+            this.$nextTick(() => {
+                textarea.selectionStart = textarea.selectionEnd = start + 1;
+            });
+        },
+
                 async confirmDelete(commentId) {
                     if (!confirm("Möchtest du diesen Kommentar wirklich löschen?")) return;
 

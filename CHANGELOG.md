@@ -34,3 +34,6 @@
 ![Version](https://img.shields.io/badge/version-2.44.4-green) Label for formatted textarea buttons (#22)  
 ![Version](https://img.shields.io/badge/version-2.45.1-green) Fix Bug in image Upload for textfields (#23)  
 ![Version](https://img.shields.io/badge/version-2.47.2-green) Compact rating queries to data from controller (#25)  
+![Version](https://img.shields.io/badge/version-2.48.4-green) Improve Experience on Mobile Devices (#26)  
+![Version](https://img.shields.io/badge/version-2.49.1-green) Include Pagination on Blogs/Images (#27)
+![Version](https://img.shields.io/badge/version-2.49.8-green) Fixed evil bug in TableForm Select handling (#28)  

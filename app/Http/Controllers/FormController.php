@@ -28,6 +28,7 @@ class FormController extends Controller
     {
        GlobalController::SetDomain();
 
+
     }
     //VUE Formmaker
     public static function Fields($name,$value,$table,$id='',$create='')
@@ -119,8 +120,11 @@ class FormController extends Controller
         return [];
     }
 
-    $table = str_replace("_id", '', $name);
 
+    $table = str_replace("_id", '', $name);
+    if (!Schema::hasTable($table)) {
+        return [];
+    }
     // Bestimmen, welche ID-Spalte verwendet werden soll
     $id = 'id'; // Standardmäßig 'id'
     if (Schema::hasColumn($table, 'position')) {
@@ -352,6 +356,7 @@ class FormController extends Controller
                 return "text";
             break;
         }
+
     }
     // Methode, die das Formular anzeigt
     /**

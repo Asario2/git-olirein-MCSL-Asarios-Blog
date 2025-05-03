@@ -30,7 +30,7 @@
               <th class="np-dl-th-normal">ID</th>
               <th class="np-dl-th-normal">{{ prename }}</th>
               <th class="np-dl-th-normal">{{ predesc }}</th>
-              <th class="np-dl-th-normal">Datum</th>
+              <th class="np-dl-th-normal" v-if="hasCreated">Datum</th>
               <th class="np-dl-th-normal" colspan="2"></th>
             </tr>
           </template>
@@ -53,6 +53,7 @@ let table = table_z.toLowerCase();
   import Layout from "@/Application/Admin/Shared/Layout.vue";
   import { CleanTable, CleanId } from '@/helpers';
   import { GetSettings } from "@/helpers";
+
   import Breadcrumb from "@/Application/Components/Content/Breadcrumb.vue";
   import ListContainer from "@/Application/Components/Lists/ListContainer.vue";
   import { hasRight,loadAllRights,isRightsReady } from '@/utils/rights';
@@ -142,12 +143,16 @@ let table = table_z.toLowerCase();
       type: String,
       default: "",
     },
+
+
+
   },
   async mounted() {
-        if(!hasRight("view",CleanTable()))
-        {
-            location.href="/no-rights";
-        }
+        // if(!hasRight("view",CleanTable()))
+        // {
+        //     location.href="/no-rights";
+        // }
+        this.checkhasCreated();
         this.settings = await GetSettings();
         window.settings = this.settings;
         if (window.settings?.namealias) {
@@ -171,7 +176,7 @@ let table = table_z.toLowerCase();
         settings: {},
         namealias: '',
         descalias: '',
-
+        hasCreated: false,
     };
   },
 
@@ -200,10 +205,22 @@ let table = table_z.toLowerCase();
   },
     formattedTableName() {
     //   return this.ucf(this.table_z);
-    }
-  },
+    },
+
+},
 
     methods: {
+        checkhasCreated(){
+    axios.get(`/hasCreated/${this.table}`)
+  .then(response => {
+    this.hasCreated = response.data;
+    return response.data;
+
+  })
+  .catch(error => {
+    console.error('Fehler:', error);
+  });
+},
 //                 async hasRight(right, table) {
 //     // Überprüfe, ob die Rechte bereits geladen wurden
 //    if (!this.rightsData[`${right}_${table}`] && table) {

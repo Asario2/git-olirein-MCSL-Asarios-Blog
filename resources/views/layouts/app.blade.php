@@ -29,11 +29,11 @@
     <link type='text/css' href='/css/app.css' rel='stylesheet'>
     <script src='/js/app.js' type='module'></script>
     <link rel="stylesheet" href="/photoswipe/photoswipe.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="/css/all.min.css">
 
     <!-- java scripts for datepicker-->
     <!-- Moment.js (abhängig vom datetimepicker) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+    <script src="/js/moment.min.js"></script>
 
     <!-- Datetimepicker CSS -->
     <link rel="stylesheet" href="{{ asset('css/tempusdominus-bootstrap-4.min.css') }}" />
@@ -43,17 +43,17 @@
 
     <link type='text/css' href='{{ asset('css/bootstrap.css') }}' rel='stylesheet'>
     <link type='text/css' href='{{ asset('css/user.css') }}' rel='stylesheet'>
-    {{-- <script src="http://ab.localhost.de:8000/js/jquery.min.js"></script> --}}
+    {{-- <script src="/js/jquery.min.js"></script> --}}
     <script src="{{ asset('js/jquery.js') }}"></script>
     <script src="{{ asset('js/shariff.complete.js') }}"></script>
 
-    {{-- <script async src="http://ab.localhost.de:8000/js/shariff.complete.js"></script> --}}
-    {{-- <script src="http://ab.localhost.de:8000/js/bootstrap.min.js"></script> --}}
+    {{-- <script async src="/js/shariff.complete.js"></script> --}}
+    {{-- <script src="/js/bootstrap.min.js"></script> --}}
     <script src="{{ asset('js/bootstrap.js') }}"></script>
     <script src="{{ asset('js/users.js') }}"></script>
 
 
-    {{-- <script src="http://ab.localhost.de:8000/js/users.js"></script> --}}
+    {{-- <script src="/js/users.js"></script> --}}
 
 
 </head>
@@ -172,9 +172,9 @@
         });
     </script>
     <script src="{{ asset('js/jquery.js') }}"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="/js/jquery-3.6.0.min.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
 
 </body>
 

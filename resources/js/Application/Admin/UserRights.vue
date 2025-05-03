@@ -10,9 +10,9 @@
         <!-- Rollen Auswahl -->
         <div class="ml-auto">
           <InputSelect
-            :xval="selected"
-            :xname="'role_id'"
-            :name="'role_id'"
+            v-model="selected"
+            :xname="'users_rights_id'"
+            :name="'users_rights_id'"
             :options="roles"
             @update:modalValue="selected = $event"
             @input-change="navigate"
@@ -26,7 +26,7 @@
 <!-- Tabellen-Rechte Section -->
 <div v-if="activeTab === 'tables'" class="bg-layout-sun-100 dark:bg-layout-night-100 p-4 rounded-lg shadow-sm">
   <table class="w-full border-collapse text-sm md:text-base rounded overflow-hidden">
-    <thead class="bg-layout-sun-200 dark:bg-layout-night-200 text-layout-sun-800 dark:text-layout-night-800">
+    <thead class="bg-layout-sun-300 dark:bg-layout-night-300 text-layout-sun-800 dark:text-layout-night-800">
       <tr>
         <th class="px-4 py-3 text-left"><nobr>An/Aus</nobr></th>
         <th class="px-4 py-3 text-left">Tabelle</th>
@@ -74,7 +74,7 @@
         <!-- {{ lf }} -->
         <div class="p-4 bg-layout-sun-100 dark:bg-layout-night-100 rounded-lg shadow-sm">
       <table class="w-full border-collapse text-sm md:text-base">
-        <thead class="bg-layout-sun-200 dark:bg-layout-night-200 text-layout-sun-800 dark:text-layout-night-800">
+        <thead class="bg-layout-sun-300 dark:bg-layout-night-300 text-layout-sun-800 dark:text-layout-night-800">
           <tr>
             <th class="px-4 py-3 text-left">Modul</th>
             <th class="px-4 py-3 text-left">Beschreibung</th>
@@ -82,7 +82,7 @@
           </tr>
         </thead>
         <tbody>
-            <tr v-for="(value, key) in lf" :key="key">
+            <tr class="hover:bg-layout-sun-200 dark:hover:bg-layout-night-200 transition duration-200 border-b border-gray-200 dark:border-gray-700" v-for="(value, key) in lf" :key="key">
             <td class="px-4 py-3 text-left">{{ stripXkis(key) }}</td>
             <td class="px-4 py-3 text-left">{{ getLabel(key) }}</td>
             <td class="px-4 py-3 text-left">
@@ -107,13 +107,12 @@
 
 <script>
 import { GetSettings } from "@/helpers";
-import Functions from "@/Application/Admin/functions.vue";
 import InputSelect from "@/Application/Components/Form/InputSelect.vue";
 import InputCheckbox from "@/Application/Components/Form/InputCheckbox.vue";
 import IconRight from "@/Application/Components/Icons/IconRight.vue"; // Assuming this is the correct import
 export default {
   name: "Rightstable",
-  components: { Functions, InputSelect , InputCheckbox,IconRight},
+  components: { InputSelect , InputCheckbox,IconRight},
   props: {
     adminTables: Array,
     urid: [String, Number],
@@ -313,24 +312,17 @@ saveRights() {
         return key.replace(/^xkis_/, '');
       },
       getLabel(key) {
-        const labels = {
-          xkis_AdminPanel: "Admin Panel",
-          xkis_ChangePassword: "Passwort ändern",
-          xkis_CommentsCenter: "Kommentarzentrum",
-          xkis_DataBases: "Datenbanken",
-          xkis_LogViewer: "Log Viewer",
-          xkis_SendMail: "E-Mail senden",
-          xkis_UserRights: "Benutzerrechte",
-        };
-        return labels[key] || this.stripXkis(key);
+
+        let labels = this.settings?.exl?.[this.stripXkis(key)]
+
+        return labels || this.stripXkis(key);
     },
 },
     async mounted() {
         console.log("urid im mounted:", this.urid);  // Verwende 'this.urid' hier direkt
-
-  this.settings = await GetSettings();
-  this.fetchRights(this.urid);  // Statt this.selected, direkt this.urid verwenden
-  this.loadFunctions(this.urid);
+        this.settings = await GetSettings();
+        this.fetchRights(this.urid);  // Statt this.selected, direkt this.urid verwenden
+        this.loadFunctions(this.urid);
 },
 watch: {
       localFunc: {

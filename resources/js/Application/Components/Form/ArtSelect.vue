@@ -8,7 +8,7 @@
         v-model="selectedCategory"
         class="w-full wf_2 p-2.5 text-sm rounded-lg block border border-layout-sun-300 text-layout-sun-900 bg-layout-sun-50 placeholder-layout-sun-400 focus:ring-primary-sun-500 focus:border-primary-sun-500 dark:border-layout-night-300 dark:text-layout-night-900 dark:bg-layout-night-50 dark:placeholder-layout-night-400 dark:focus:ring-primary-night-500 dark:focus:border-primary-night-500"
       >
-        <option value="" disabled>Bitte wählen</option>
+        <option value="0" disabled>Bitte wählen</option>
         <option v-for="category in sortedCategories" :key="category.id" :value="category.id">
           {{ category.name }}
         </option>
@@ -22,7 +22,7 @@
         v-model="selectedMedium"
         class="w-full wf_2 p-2.5 text-sm rounded-lg block border border-layout-sun-300 text-layout-sun-900 bg-layout-sun-50 placeholder-layout-sun-400 focus:ring-primary-sun-500 focus:border-primary-sun-500 dark:border-layout-night-300 dark:text-layout-night-900 dark:bg-layout-night-50 dark:placeholder-layout-night-400 dark:focus:ring-primary-night-500 dark:focus:border-primary-night-500"
       >
-        <option value="" disabled>Bitte wählen</option>
+        <option value="0" disabled>Bitte wählen</option>
         <option v-for="medium in formattedMediums(selectedCategory)" :key="medium.id" :value="medium.id">
           {{ medium.name }}
         </option>

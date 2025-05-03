@@ -177,7 +177,7 @@
                         v-model="field.value"
                         :value="field.value"
                         :placeholder="field.placeholder || ''"
-                        :disabled="field.class"
+                        :disabled="field.class !== 'datetime'"
                         :required="isRequired(field.required)"
                         >
                         <template #label>{{ field.label }}</template>
@@ -208,19 +208,15 @@
                                         :label="field.label">
 
                                     </InputLabel>
+                                    {{ console.log('xsor_alt:', field.name, this.xsor_alt[field.name]) }}
                                     <InputSelect
                                     @input-change="updateFormData"
+                                    :id="field.name"
+                                    :model-value="field.value"
 
-                                        :id="field.name"
-                                        :model-value="field.value"
-
-                                        :options="`options: ${this.xsor_alt[field.name]?.length > 0 ? this.xsor_alt[field.name] : []}`"
-                                        :ref="field.name"
-                                        :name="field.name"
-                                        :xval="field.name == 'users_id' ? field.users_id : field.value"
-                                        :xname="field.name"
-                                        :users_id="field.name == 'users_id' ? field.users_id : ''"
-                                        :required="isRequired(field.required)"
+                                    :name="field.name"
+                                    :xname="field.name"
+                                    :required="isRequired(field.required)"
                                     >
 
                                 </InputSelect>
@@ -512,14 +508,7 @@ export default defineComponent({
         type: [String, Number],
         default: 1,
     },
-        // table: {
-        //     type: Object,
-        //     default: () => ({}),
-        // },
-        // formFields:{
-        //     type: Object,
-        //     default: () => ({}),
-        // },
+
         editstate: {
             type: String,
             default: "",
@@ -545,14 +534,6 @@ export default defineComponent({
             type: String,
             default:table_z,
         },
-        // tablez: {
-        //     type: String,
-        //     default:table_z,
-        // },
-        // rows:{
-        //     type:Array,
-        //     default: [],
-        // },
         breadcrumbs: {
             type: Object,
             required: true,
@@ -602,21 +583,10 @@ export default defineComponent({
             ulimage: null,
 
 
-            //         name: "testname",
-            //         type: "text",
-            //         value: "valuei"
-            // }],
-            // formFields:  {},
-            ///formFields:[],
+
             options:    {},
             options_sel: {},
-            //   formData: {},
-            // field: [{ name: '', label: '', type:'' } ],
-
-            // formData: {},
-           // formFields: {}, // FormField-Daten
-            //formData: reactive({}), // Dynamisch erstelltes Formular-Objekt
-                sdata: {},
+            sdata: {},
             loading: false,
             loadingText: null,
             //
@@ -626,64 +596,34 @@ export default defineComponent({
         };
     },
     computed: {
+        xsor_alt(){
+            try {
+          const res = axios.get(`/tables/sort-data/${field.name}`);
+          const key = `${field.name}.sortedOptions`;
+                alert("yes");
+          console.log(`[${field.name}] API-Rohdaten:`, res.data);
 
+          if (Array.isArray(res.data)) {
+            this.fetchedOptions = res.data;
+          } else if (res.data && Array.isArray(res.data[key])) {
+            this.fetchedOptions = res.data[key];
+          } else if (res.data && typeof res.data[key] === "object") {
+            this.fetchedOptions = res.data[key]; // wird später konvertiert
+          } else {
+            console.warn(`[${field.name}] Keine passenden Daten im Response:`, res.data);
+          }
+        } catch (error) {
+          console.error(`[${field.name}] Fehler beim Abrufen der Daten:`, error);
+        }
+        return this.fetchedOptions;
+        },
 
 
                 sortedOptions() {
 
 
-                }
-        // if (!this.options || !Array.isArray(this.options)) return [];
+                },
 
-
-
-        // const sorted = this.options.map(obj => {
-        //     return Object.fromEntries(
-        //         Object.entries(obj).map(([outerKey, innerObj]) => {
-        //             const rawInnerObj = innerObj;
-
-
-        //             const sortedInner = Object.fromEntries(
-        //                 Object.entries(rawInnerObj)
-        //                     .sort(([, a], [, b]) => {
-
-        //                         if (typeof a === 'string' && typeof b === 'string') {
-        //                             return a.localeCompare(b);
-        //                         } else if (typeof a === 'number' && typeof b === 'number') {
-        //                             return a - b;
-        //                         }
-        //                         return 0;
-        //                     })
-        //             );
-
-        //             return [outerKey, sortedInner];
-        //         })
-        //     );
-        // });
-
-        // nextTick(() => {
-        //     console.log("Nach der Sortierung:", JSON.stringify(sorted, null, 2));
-        // });
-
-        // return sorted;
-
-
-,
-
-
-    // sortedOptions() {
-    //     let options;
-    //     if (Array.isArray(this.options)) {
-    //         options = [...this.options];  // Kopiere das Array
-    //     } else if (typeof this.options === 'object') {
-    //         options = Object.entries(this.options).map(([key, value]) => [key, value]);
-    //     } else {
-    //         options = [];
-    //     }
-    //     console.log('sortedOptions:', options); // Überprüfe den Inhalt von sortedOptions
-    //     console.log(JSON.stringify(this.options));
-    //     return options;
-    // },
     isRightsReady() {
       return this.$isRightsReady; // Zugriff auf globale Methode
     },
@@ -728,7 +668,7 @@ export default defineComponent({
         // },
         dynamicFormData() {
             return this.formFields.reduce((acc, field) => {
-                if (!field.name.includes("_id") && !field.name.includes("_iid"))
+                if (!field.name.includes("_idxx") && !field.name.includes("_iid"))
                 {
                     acc[field.name] = this.formData[field.name] || field.value;
                 }
@@ -740,367 +680,367 @@ export default defineComponent({
             return this.field?.value || 1; // Falls field.value leer ist, dann 0 setzen
         },
     },
-    watch:{
-        modelValue(newVal) {
-    // console.log("modelValue wurde aktualisiert:", newVal);
-  },
-        ffo: {
-            deep: true,
-            handler(newFields) {
-                const textareaField = Object.values(newFields).find(field =>
-                    ["textarea"].includes(field.type)
-                );
-                this.textareaField = textareaField;
-                if (textareaField &&  document.getElementById("reading_time")) {
-
-                    this.readingTime = this.calculateReadingTime(textareaField.value);
-                    this.readingTime = this.readingTime  < 1 ? "1" : this.readingTime;
-                   // console.log("RT:"+this.readingTime);
-                }
-                let fod = {};
-
-            }
-
+            watch:{
+                modelValue(newVal) {
+            // console.log("modelValue wurde aktualisiert:", newVal);
         },
-        'field.value': {
-      immediate: true, // Direkt beim Laden ausführen
-      handler(newId) {
-        if (newId) {
-          this.fetchImage(newId,this.tablex);
-        }
-      }
-    },
-    field: {
-        handler(newField) {
-      this.readingTime = newField?.value || 1;
-    },
-    deep: true, // Falls field ein Objekt ist
-    immediate: true // Setzt den Wert direkt nach dem Mounten
+                ffo: {
+                    deep: true,
+                    handler(newFields) {
+                        const textareaField = Object.values(newFields).find(field =>
+                            ["textarea"].includes(field.type)
+                        );
+                        this.textareaField = textareaField;
+                        if (textareaField &&  document.getElementById("reading_time")) {
 
-        // handler(newField) {
-        //     if (Array.isArray(newField) && newField.length > 0) {
-        //         this.fieldValue = newField[0]?.value || "";
-        //     }
-        // },
-        // immediate: true, // Führt den Watcher direkt beim Mounten aus
+                            this.readingTime = this.calculateReadingTime(textareaField.value);
+                            this.readingTime = this.readingTime  < 1 ? "1" : this.readingTime;
+                        // console.log("RT:"+this.readingTime);
+                        }
+                        let fod = {};
 
-    },
-
-
-
-        fieldValue(newValue) {
-      this.readingTime = Math.ceil(newValue.trim().split(/\s+/).length / 190);
-
-      if(this.readingTime == "0")
-      {
-        // this.readingTime = 1;
-      }
-      //console.log("Berechnete Lesezeit:", this.readingTime);
-    },
-        updateData() {
-            if (this.formData.length < 1) {
-                this.formData = {};
-            }
-            if (
-                typeof this.formFields === "object" &&
-                !Array.isArray(this.formFields)
-            ) {
-                const fieldsArray = Object.values(this.formFields);
-                fieldsArray.forEach((field) => {
-                    if (!field.name.includes("_id")){
-                        this.formData[field.name] = field.value || "";
                     }
+
+                },
+                'field.value': {
+            immediate: true, // Direkt beim Laden ausführen
+            handler(newId) {
+                if (newId) {
+                this.fetchImage(newId,this.tablex);
+                }
+            }
+            },
+            field: {
+                handler(newField) {
+            this.readingTime = newField?.value || 1;
+            },
+            deep: true, // Falls field ein Objekt ist
+            immediate: true // Setzt den Wert direkt nach dem Mounten
+
+                // handler(newField) {
+                //     if (Array.isArray(newField) && newField.length > 0) {
+                //         this.fieldValue = newField[0]?.value || "";
+                //     }
+                // },
+                // immediate: true, // Führt den Watcher direkt beim Mounten aus
+
+            },
+
+
+
+                fieldValue(newValue) {
+            this.readingTime = Math.ceil(newValue.trim().split(/\s+/).length / 190);
+
+            if(this.readingTime == "0")
+            {
+                // this.readingTime = 1;
+            }
+            //console.log("Berechnete Lesezeit:", this.readingTime);
+            },
+                updateData() {
+                    if (this.formData.length < 1) {
+                        this.formData = {};
+                    }
+                    if (
+                        typeof this.formFields === "object" &&
+                        !Array.isArray(this.formFields)
+                    ) {
+                        const fieldsArray = Object.values(this.formFields);
+                        fieldsArray.forEach((field) => {
+                            if (!field.name.includes("_id")){
+                                this.formData[field.name] = field.value || "";
+                            }
+                        });
+                    }
+                },
+                formFields(newVal) {
+                    // console.log("formFields geändert:", newVal);
+                },
+                form: {
+                    handler: throttle(function () {
+                        let query = pickBy(this.form);
+                        let paramName = "table";
+                        // const path = window.location.pathname; // Gibt "/admin/tables/show/Example" zurück
+                        // const segments = path.split("/"); // Teilt den Pfad in Segmente auf
+                        // let lastSegment = segments[segments.length - 1];
+                        lastSegment = CleanTable();
+                        let paramValue = lastSegment;
+
+
+                        //   let paramValue = document.getElementById("tb_alt").value;
+
+                        // Dynamische Parameter für die Route
+                        if (this.routeParamName && this.routeParamValue) {
+                            paramName = this.routeParamName; // z.B. 'table_alt'
+                            paramValue = this.routeParamValue; // Der Wert, z.B. der Tabellenname
+                        }
+
+                        // Wenn ein Filter für die Suche existiert
+                        if (this.searchFilter) {
+                            // Wenn der dynamische Parameter existiert, Route mit dem Parameter aufrufen
+                            if (paramName && paramValue) {
+                                this.$inertia.get(
+                                    this.route(this.routeIndex, {
+                                        [paramName]: paramValue,
+                                    }), // Ziggy erstellt die Route
+                                    {
+                                        search: this.form.search,
+                                        [paramName]: paramValue, // Dynamischer Parameter
+                                        page: 1,
+                                    },
+                                    {
+                                        preserveState: true,
+                                    },
+                                );
+                            }
+                            // Wenn kein dynamischer Parameter existiert, normale Route ohne Parameter
+                            if (!paramName || !paramValue) {
+                                this.$inertia.get(
+                                    this.route(
+                                        this.routeIndex,
+                                        Object.keys(query).length
+                                            ? query
+                                            : { remember: "forget" }, // Query-Parameter für Filter
+                                    ),
+                                    {
+                                        search: this.form.search,
+                                        page: 1,
+                                    },
+                                    {
+                                        preserveState: true,
+                                    },
+                                );
+                            }
+                        }
+                    }, 150),
+                    deep: true,
+                },
+                modelValue(newValue) {
+                this.selectedValue = newValue;
+                this.xval = newValue;
+            }
+            },
+            defineProps() {
+                // ffo: [String, Array, Object, Number];
+            },
+            setup() {
+                const ffo = ref(localStorage.getItem("ffo") || "Standardwert");
+
+        watch(ffo, (newValue) => {
+            localStorage.setItem("ffo", newValue);
+            var $_GET = {};
+        if(document.location.toString().indexOf('?') !== -1) {
+            var query = document.location
+                        .toString()
+                        // get the query string
+                        .replace(/^.*?\?/, '')
+                        // and remove any existing hash string (thanks, @vrijdenker)
+                        .replace(/#.*$/, '')
+                        .split('&');
+
+            for(var i=0, l=query.length; i<l; i++) {
+            var aux = decodeURIComponent(query[i]).split('=');
+            $_GET[aux[0]] = aux[1];
+            }
+        }
+        if(!$_GET['rl'])
+            {
+            //location.href = location.href + "?rl=2";
+            }
+            if($_GET['rl']  == "2")
+            {
+                let url = location.href.replace(/\?rl=2/g, '');
+                history.pushState(null, "", url);
+            }
+
+
+        });
+
+        return { ffo };
+
+
+                return { ffor };
+
+                const formFields = reactive({
+                    idField: {
+                        name: "id",
+                        type: "text",
+                        label: "ID",
+                        value: "2",
+                        id: "2",
+                        class: "disabled",
+                        rows: "8",
+                    },
+                    nameField: {
+                        name: "name",
+                        type: "text",
+                        label: "Name",
+                        value: "Devlog",
+                        id: "2",
+                        class: "text",
+                        rows: "8",
+                    },
+                    summaryField: {
+                        name: "summary",
+                        type: "textarea_short",
+                        label: "Zusammenfassung",
+                        value: "short description of this one",
+                        id: "2",
+                        class: "textarea_short",
+                        rows: "4",
+                    },
+                    created_atField: {
+                        name: "created_at",
+                        type: "datetime",
+                        label: "Erstellt am:",
+                        value: "2025-01-22 09:02:27",
+                        id: "2",
+                        class: "datetime",
+                        rows: "8",
+                    },
                 });
+                //this.formData = reactive({});
+
+                // Instead of using $set, just update directly
+                // formData.field1 = 'newvalue';
+
+                onMounted(() => {
+                    //   Object.keys(formFields).forEach((key) => {
+                    //     formData[formFields[key].name] = formFields[key].value;
+                    //   });
+                });
+
+                return {
+                    formFields,
+                    // formData
+                };
+            },
+            methods: {
+                openModal_alt() {
+            // console.log("Vor dem Setzen: " + this.isModalOpen);
+
+            this.isModalOpen = !this.isModalOpen;
+            if(this.Message)
+            {
+
+
+            this.$nextTick(() => {
+            let editor = this.$refs.editor;
+
+            // Falls es ein Array ist (z. B. bei dynamischen Komponenten)
+            if (Array.isArray(editor)) {
+                editor = editor[0];
             }
+
+            if (!editor || !(editor instanceof HTMLElement)) {
+                // console.log("Editor nicht gefunden oder kein HTML-Element:", editor);
+                return;
+            }
+
+            editor.focus();
+
+            const selection = window.getSelection();
+            const range = document.createRange();
+
+            // Cursor ans Ende des Inhalts setzen
+            range.selectNodeContents(editor);
+            range.collapse(false);
+
+            selection.removeAllRanges();
+            selection.addRange(range);
+            });
+            }
+            // console.log("Nach dem Setzen: " + this.isModalOpen);
         },
-        formFields(newVal) {
-            // console.log("formFields geändert:", newVal);
-        },
-        form: {
-            handler: throttle(function () {
-                let query = pickBy(this.form);
-                let paramName = "table";
-                // const path = window.location.pathname; // Gibt "/admin/tables/show/Example" zurück
-                // const segments = path.split("/"); // Teilt den Pfad in Segmente auf
-                // let lastSegment = segments[segments.length - 1];
-                lastSegment = CleanTable();
-                let paramValue = lastSegment;
 
 
-                //   let paramValue = document.getElementById("tb_alt").value;
 
-                // Dynamische Parameter für die Route
-                if (this.routeParamName && this.routeParamValue) {
-                    paramName = this.routeParamName; // z.B. 'table_alt'
-                    paramValue = this.routeParamValue; // Der Wert, z.B. der Tabellenname
+                handleImageSelect(url) {
+            this.$refs.editor.insertImage(url)
+            },
+                handleFileNameUpdate(fileName) {
+            this.fileName = fileName;  // Setze den Wert von fileName
+            },
+            sanitizeContent(content) {
+                if (content.includes('location') || content.includes('ancestorOrigins')) {
+                    return ''; // Oder einen Standardwert
                 }
+                return content;
+            },
+            async getSlug() {
+                try {
 
-                // Wenn ein Filter für die Suche existiert
-                if (this.searchFilter) {
-                    // Wenn der dynamische Parameter existiert, Route mit dem Parameter aufrufen
-                    if (paramName && paramValue) {
-                        this.$inertia.get(
-                            this.route(this.routeIndex, {
-                                [paramName]: paramValue,
-                            }), // Ziggy erstellt die Route
-                            {
-                                search: this.form.search,
-                                [paramName]: paramValue, // Dynamischer Parameter
-                                page: 1,
-                            },
-                            {
-                                preserveState: true,
-                            },
-                        );
-                    }
-                    // Wenn kein dynamischer Parameter existiert, normale Route ohne Parameter
-                    if (!paramName || !paramValue) {
-                        this.$inertia.get(
-                            this.route(
-                                this.routeIndex,
-                                Object.keys(query).length
-                                    ? query
-                                    : { remember: "forget" }, // Query-Parameter für Filter
-                            ),
-                            {
-                                search: this.form.search,
-                                page: 1,
-                            },
-                            {
-                                preserveState: true,
-                            },
-                        );
-                    }
+                    const response = await axios.get(`/api/getSlug/${this.xtable}/${this.xid}`);
+
+                    return response.data.autoslug || "";
+                } catch (error) {
+                    console.error("No Slug Found");
+                    return "";
                 }
-            }, 150),
-            deep: true,
+            },
+            async getOF() {
+                const path = window.location.pathname; // Gibt "/admin/tables/show/Example" zurück
+                    this.xid = CleanId();
+                    this.xtable = CleanTable();
+            try {
+                const response = await axios.get(`/api/images/${this.xtable}/${this.xid}`);
+                // alert(this.xid);
+
+                this.nf = response.data;
+            //  console.log(`/api/images/${this.xtable}/${this.xid}`);
+                if(document.getElementById(this.column) && document.getElementById(this.column).value != "008.jpg"){
+
+                    this.nf = document.getElementById(this.column).value;
+                }
+                else if(this.nf === "[]")
+                {
+                    this.nf = this.ffo[this.column]['value'];
+                }
+                else
+                {
+                    this.nf = this.ffo[this.column]['value'];
+                }
+                return this.nf;
+            } catch (error){
+                console.error("Not fetchable");
+            }
+            },
+                async fetchImage(id,table) {
+            try {
+                if(!id){
+                id = this.imageId;
+                }
+                const response = await axios.get(`/api/images/${table}/${this.xid}`); // Laravel API-Route
+                //console.log(response);
+                if (response.data.url) {
+
+                this.ulimage = response.data.url;
+                } else {
+                console.warn("Keine URL gefunden für ID:", id);
+                }
+            } catch (error) {
+                console.error("Fehler beim Laden des Bildes:", error);
+            }
+
         },
-        modelValue(newValue) {
-        this.selectedValue = newValue;
-        this.xval = newValue;
-    }
-    },
-    defineProps() {
-        // ffo: [String, Array, Object, Number];
-    },
-    setup() {
-        const ffo = ref(localStorage.getItem("ffo") || "Standardwert");
-
-watch(ffo, (newValue) => {
-    localStorage.setItem("ffo", newValue);
-    var $_GET = {};
-if(document.location.toString().indexOf('?') !== -1) {
-    var query = document.location
-                   .toString()
-                   // get the query string
-                   .replace(/^.*?\?/, '')
-                   // and remove any existing hash string (thanks, @vrijdenker)
-                   .replace(/#.*$/, '')
-                   .split('&');
-
-    for(var i=0, l=query.length; i<l; i++) {
-       var aux = decodeURIComponent(query[i]).split('=');
-       $_GET[aux[0]] = aux[1];
-    }
-}
-   if(!$_GET['rl'])
-    {
-       //location.href = location.href + "?rl=2";
-    }
-    if($_GET['rl']  == "2")
-    {
-        let url = location.href.replace(/\?rl=2/g, '');
-        history.pushState(null, "", url);
-    }
-
-
-});
-
-return { ffo };
-
-
-        return { ffor };
-
-        const formFields = reactive({
-            idField: {
-                name: "id",
-                type: "text",
-                label: "ID",
-                value: "2",
-                id: "2",
-                class: "disabled",
-                rows: "8",
+            closeModal() {
+            this.isModalOpen = false;
+            let previewImage = null;
+            this.previewImage = null;
+            // Schließe das Modal
             },
-            nameField: {
-                name: "name",
-                type: "text",
-                label: "Name",
-                value: "Devlog",
-                id: "2",
-                class: "text",
-                rows: "8",
+            handleInput(event) {
+            this.readingTime = event.target.value;
+            this.updateFormData();
+        },
+            handleImageUpload(imageUrl) {
+                imageUrl = imageUrl.replace("images/blogs/big/",'').replace("images/images/big/",'').replace("undefined",'');
+            console.log("Bild-URL:", imageUrl);
+            this.uploadedImageUrl = imageUrl;
+            this.nf2 = imageUrl;
+            const ima_new = this.nf2;
+            //    this.imageId = iid;
             },
-            summaryField: {
-                name: "summary",
-                type: "textarea_short",
-                label: "Zusammenfassung",
-                value: "short description of this one",
-                id: "2",
-                class: "textarea_short",
-                rows: "4",
-            },
-            created_atField: {
-                name: "created_at",
-                type: "datetime",
-                label: "Erstellt am:",
-                value: "2025-01-22 09:02:27",
-                id: "2",
-                class: "datetime",
-                rows: "8",
-            },
-        });
-        //this.formData = reactive({});
-
-        // Instead of using $set, just update directly
-        // formData.field1 = 'newvalue';
-
-        onMounted(() => {
-            //   Object.keys(formFields).forEach((key) => {
-            //     formData[formFields[key].name] = formFields[key].value;
-            //   });
-        });
-
-        return {
-            formFields,
-            // formData
-        };
-    },
-    methods: {
-        openModal_alt() {
-    // console.log("Vor dem Setzen: " + this.isModalOpen);
-
-    this.isModalOpen = !this.isModalOpen;
-    if(this.Message)
-    {
-
-
-    this.$nextTick(() => {
-      let editor = this.$refs.editor;
-
-      // Falls es ein Array ist (z. B. bei dynamischen Komponenten)
-      if (Array.isArray(editor)) {
-        editor = editor[0];
-      }
-
-      if (!editor || !(editor instanceof HTMLElement)) {
-        // console.log("Editor nicht gefunden oder kein HTML-Element:", editor);
-        return;
-      }
-
-      editor.focus();
-
-      const selection = window.getSelection();
-      const range = document.createRange();
-
-      // Cursor ans Ende des Inhalts setzen
-      range.selectNodeContents(editor);
-      range.collapse(false);
-
-      selection.removeAllRanges();
-      selection.addRange(range);
-    });
-    }
-    // console.log("Nach dem Setzen: " + this.isModalOpen);
-  },
-
-
-
-        handleImageSelect(url) {
-      this.$refs.editor.insertImage(url)
-    },
-        handleFileNameUpdate(fileName) {
-      this.fileName = fileName;  // Setze den Wert von fileName
-    },
-    sanitizeContent(content) {
-        if (content.includes('location') || content.includes('ancestorOrigins')) {
-            return ''; // Oder einen Standardwert
-        }
-        return content;
-    },
-    async getSlug() {
-        try {
-
-            const response = await axios.get(`/api/getSlug/${this.xtable}/${this.xid}`);
-
-            return response.data.autoslug || "";
-        } catch (error) {
-            console.error("No Slug Found");
-            return "";
-        }
-    },
-    async getOF() {
-        const path = window.location.pathname; // Gibt "/admin/tables/show/Example" zurück
-              this.xid = CleanId();
-              this.xtable = CleanTable();
-      try {
-        const response = await axios.get(`/api/images/${this.xtable}/${this.xid}`);
-        // alert(this.xid);
-
-        this.nf = response.data;
-      //  console.log(`/api/images/${this.xtable}/${this.xid}`);
-        if(document.getElementById(this.column) && document.getElementById(this.column).value != "008.jpg"){
-
-            this.nf = document.getElementById(this.column).value;
-        }
-        else if(this.nf === "[]")
-        {
-            this.nf = this.ffo[this.column]['value'];
-        }
-        else
-        {
-            this.nf = this.ffo[this.column]['value'];
-        }
-        return this.nf;
-      } catch (error){
-        console.error("Not fetchable");
-      }
-    },
-        async fetchImage(id,table) {
-      try {
-        if(!id){
-           id = this.imageId;
-        }
-        const response = await axios.get(`/api/images/${table}/${this.xid}`); // Laravel API-Route
-        //console.log(response);
-        if (response.data.url) {
-
-          this.ulimage = response.data.url;
-        } else {
-          console.warn("Keine URL gefunden für ID:", id);
-        }
-      } catch (error) {
-        console.error("Fehler beim Laden des Bildes:", error);
-      }
-
-  },
-      closeModal() {
-      this.isModalOpen = false;
-      let previewImage = null;
-      this.previewImage = null;
-      // Schließe das Modal
-    },
-    handleInput(event) {
-    this.readingTime = event.target.value;
-    this.updateFormData();
-  },
-    handleImageUpload(imageUrl) {
-        imageUrl = imageUrl.replace("images/blogs/big/",'').replace("images/images/big/",'').replace("undefined",'');
-     console.log("Bild-URL:", imageUrl);
-      this.uploadedImageUrl = imageUrl;
-      this.nf2 = imageUrl;
-      const ima_new = this.nf2;
-    //    this.imageId = iid;
-    },
 
         updateReadingTime() {
             if (!Array.isArray(this.ffo) || this.ffo.length === 0) {
@@ -1469,11 +1409,7 @@ quotebrace(obj){
 remom(str){
 // Variable, um die Anzahl der Vorkommen von ","
 let commaCount = 0;
-// str = Object.entries(str);
-// Ersetze jedes ungerade Vorkommen von ","
-//  var str = JSON.stringify(str);
-// str = str.replace(/[^:]*:\s*{/g, '{');
-// console.log(str);
+
 str = Object.entries((str));
 str.forEach(([key, value]) => {
 
@@ -1542,28 +1478,35 @@ async submitForm() {
 
                 const element = document.getElementById(name);
                 const element_alt = document.getElementById(name + "_alt");
+
                 if (element_alt?.value) {
                     this.formData[name] = element_alt.value
                         .replace(/\[/g, '%5B')
                         .replace(/\]/g, '%5D');
+
                 }
 
                 else if (element?.value) {
                     this.formData[name] = element.value
                         .replace(/\[/g, '%5B')
                         .replace(/\]/g, '%5D');
+                        console.log("TREFFER,EV" + name);
                 }
                 else if(element_alt?.innerHTML)
                 {
                     this.formData[name] = element.innerHTML
                         .replace(/\[/g, '%5B')
                         .replace(/\]/g, '%5D');
+
                 }
                 else if(element?.innerHTML)
                 {
+                    console.log("NAME:" + name);
                     this.formData[name] = element.innerHTML
                         .replace(/\[/g, '%5B')
                         .replace(/\]/g, '%5D');
+
+
                 }
 
             });
@@ -1579,6 +1522,7 @@ async submitForm() {
                 // console.log("ffo:" + JSON.stringify(this.formData,null,2));
               const path = window.location.pathname; // Gibt "/admin/tables/show/Example" zurück
             const segments = path.split("/"); // Teilt den Pfad in Segmente auf
+            console.log("Daten, die gesendet werden:",this.formData);
             if(segments[segments.length - 2] == "create")
             {
                 response = await axios.post(`/admin/tables/store/${this.tablex}`, {
@@ -1600,7 +1544,7 @@ async submitForm() {
         } catch (error) {
             console.error("Fehler beim Absenden:", error);
         }
-        console.log("Daten, die gesendet werden:",this.formData);
+
         // location.href='/admin/tables/show/'+this.tablex;
     },
         deleteTable() {
@@ -1715,12 +1659,6 @@ async submitForm() {
          this.xid = CleanId();
         this.xtable = CleanTable();
         const path = window.location.pathname;
-        if (path.includes("create") && (!hasRight('view', this.xtable) || !hasRight('add', this.xtable))) {
-            location.href = "/no-rights";
-        }
-        else if (path.includes("edit") && (!hasRight('view', this.xtable) || !hasRight('edit', this.xtable))) {
-            location.href = "/no-rights";
-        }
         this.column =  this.settings.impath?.[this.xtable] ?? this.settings.impath?.['default'];
 
         // console.log("col:" + this.column);
@@ -1739,19 +1677,8 @@ async submitForm() {
             this.nf = this.getdefnf();
         }
         this.table_image = "images";
-        // const inputRef = this.$refs.blog_images_iid?.value;
-        // console.log("iR:" + inputRef);
-        //     if (Array.isArray(inputRef) && inputRef.length > 0) {
-        //         this.ref2 = inputRef[1]._value;
-        //
-
         this.fetchImage(this.ref3,this.table_image);
-        // alert("yes");
-    //     console.log("sortedOptions:", this.sortedOptions);
-    // console.log("field.name:", this.field?.name);
-    // console.log("sortedOptions[field.name]:", this.sortedOptions[this.field.name]);
-    // console.log("field.name:", this.field?.name);
-    // console.log(this.ffo[this.column].value);
+
     this.nf2 = this.ffo[this.column]?.value;
     },
     created() {

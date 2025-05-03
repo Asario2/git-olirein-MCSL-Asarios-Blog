@@ -11,7 +11,7 @@
             class="w-full bg-layout-sun-0 dark:bg-layout-night-0 grid grid-cols-1 md:grid-cols-2 gap-2 lg:gap-3 p-6 lg:p-4"
         >
             <!-- Blogartikel -->
-            <navigation-card
+            <navigation-card v-if="canView('blogs')"
                 class="navigation_card"
                 title="Blogartikel"
                 :routeName="route('admin.tables.show','blogs')"
@@ -26,7 +26,7 @@
                 </template>
             </navigation-card>
             <!-- Bilder -->
-            <navigation-card
+            <navigation-card v-if="canView('images')"
                 class="navigation_card"
                 title="Bilder"
                 :routeName="route('admin.tables.show','images')"
@@ -41,7 +41,7 @@
                 </template>
             </navigation-card>
             <!-- Tabellen Overview -->
-            <navigation-card
+            <navigation-card v-if="modulRights?.DataBases"
                 class="navigation_card"
                 title="Tabellen"
                 :routeName="route('admin.tables.index', table)"
@@ -55,7 +55,7 @@
                 </template>
             </navigation-card>
             <!-- laravel.log -->
-            <navigation-card
+            <navigation-card v-if="modulRights?.LogViewer"
                 class="navigation_card"
                 title="Log"
                 :routeName="route('admin.laravel_log')"
@@ -67,12 +67,12 @@
                 <!-- DB updaten -->
                 <template #description> Logs anzeigen    </template>
             </navigation-card>
-            <navigation-card
+            <navigation-card v-if="modulRights?.UserRights"
                 class="navigation_card"
                 title="Rechte"
                 :routeName="route('admin.users_rights')"
                 linkName="Benutzerberechtigungen"
-                target="_blank"
+                target="_self"
                 :withIcon="true"
                 icon="IconRight"
             >
@@ -91,6 +91,7 @@ import Breadcrumb from "@/Application/Components/Content/Breadcrumb.vue";
 
 import NavigationCard from "@/Application/Components/NavigationCard.vue";
 import { GetSRights,loadRights } from '@/helpers';
+import { hasRight,loadAllRights,isRightsReady } from '@/utils/rights';
 export default defineComponent({
     name: "Admin_Dashboard",
 
@@ -105,6 +106,8 @@ export default defineComponent({
   data() {
     return {
       modulRights: null,
+      rightsData: {},
+      rightsReady: false,
     };
   },
 
@@ -112,8 +115,36 @@ export default defineComponent({
     this.modulRights = await loadRights();
 
     console.log("Geladene Rechte:", this.modulRights);
-  }
+  },
+  computed: {
+        routeCreate() {
+            const table = CleanTable(); // oder aus props holen?
+            return route('admin.tables.create', table);
+        },
+        isRightsReady() {
+            return this.$isRightsReady;
+        },
+        hasRight() {
+            return this.$hasRight; // Zugriff auf globale Methode
+            },
+    },
+    methods: {
+        async checkRight(right, table) {
+            const value = await GetRights(right, table);
+            this.rightsData[`${right}_${table}`] = value;
+        },
+        async hasRightLocal(right, table) {
+            if (!this.rightsData[`${right}_${table}`] && table) {
+                await this.checkRight(right, table);
+            }
+            return this.rightsData[`${right}_${table}`] === 1;
+        },
+        canView(table) {
+            return this.$hasRight('view', table); // Globale Methode
+        },
+    },
 });
+
 </script>
 <style scoped>
 /* .w-full{

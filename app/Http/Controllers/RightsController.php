@@ -21,27 +21,11 @@ class RightsController extends Controller
      * @param int $user_id ID des Benutzers
      * @return \Illuminate\Http\JsonResponse
      */
-    // public function GetRights($table, $right, $user_id)
-    // {
-    //     // Tabelle in admin_tables finden
-    //     $adminTable = AdminTable::where('name', $table)->first();
-
-    //     if (!$adminTable) {
-    //         return response()->json(['error' => 'Tabelle nicht gefunden'], 404);
-    //     }
-
-    //     // Benutzerrechte für diese Tabelle holen
-    //     $userRight = UserRight::where('users_id', $user_id)
-    //         ->where('position', $adminTable->position)
-    //         ->first();
-
-    //     if (!$userRight || !isset($userRight->$right)) {
-    //         return response()->json(['value' => 0]); // Kein Recht oder Spalte existiert nicht
-    //     }
-
-    //     return response()->json(['value' => $userRight->$right]);
-    // }
-
+    public  function hasCreated($table)
+    {
+        $exists = Schema::hasTable($table) && Schema::hasColumn($table, 'created_at');
+        return response()->json($exists);
+    }
     public function getUserRights(Request $request,$table,$right)
     {
         if(!Auth::check())

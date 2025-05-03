@@ -8,27 +8,14 @@
 
 
         </hgroup>
-        <input-icon-hyperlink
-    v-if="createOn"
-    :href="routeCreate"
-    display_type="table"
->
-    <template #icon>
-        <icon-plus-circle class="button_icon"></icon-plus-circle>
-        Erstelle
-    </template>
-</input-icon-hyperlink>
-
-    </div>
+       </div>
     <div>
-        <div
-                class="p-2 md:p-4"
-                v-if="entries.length == 0 && !form.search"
-            >
+            <div class="p-2 md:p-4" v-if="Array.isArray(entries.data) && entries.data.length === 0 && form.search">
                 <alert type="warning">
-                    Zurzeit liegen keine Bilder vor!
+                    Für den vorgegebenen Suchbegriff wurden keine Bilder gefunden.
                 </alert>
             </div>
+
                             <button-group>
                                 <input-icon-hyperlink
                                     v-if="createOn"
@@ -46,21 +33,16 @@
                             </button-group>
                         </div>
                         <div class="flex justify-between items-center">
-                    <search-filter
-                        v-model="form.search"
-                        class="w-full"
-                        @reset="reset"
-                    >
-                    </search-filter>
+                            <search-filter
+                            v-if="searchFilter"
+                            v-model="form.search"
+                            class="w-full"
+                            @reset="reset"
+                            />
+
                 </div>
 
-                <div v-if="entries.data.length == 0 && form.search">
-                    <alert type="warning">
-                        Für den vorgegebenen Suchbegriff wurden keine
-                        Blogartikel gefunden.
-                    </alert>
-                </div>
-                        <div id="gallery" v-for="entry in entries.data" :key="entry.id"
+                <div id="gallery" v-for="entry in entries.data" :key="entry.id"
     class="w-full block max-w-sm gap-3 mx-auto sm:max-w-full group mb-4
         lg:grid lg:grid-cols-12 bg-layout-sun-100 dark:bg-layout-night-100
         border-2 border-layout-sun-300 dark:border-layout-night-300 p-4"
@@ -107,7 +89,7 @@
         <div v-if="entry.Format">
         <b>Format:</b> {{ entry.Format }}
         </div>
-        <averageRating :postId="entry.id"  :av="parseFloat(ratings['original'][entry.id]?.average) || 0" :tot="ratings['original'][entry.id]?.total || 0"/>
+        <averageRating :postId="entry.id" :av="parseFloat(ratings['original'][entry.id]?.average) || 0" :tot="ratings['original'][entry.id]?.total || 0"/>
         <span v-if="hasRight('delete', 'images') || hasRight('edit', 'images') " class="flex space-x-2">
         <!-- Edit Icon -->
         <span v-if="hasRight('edit', 'images') "
@@ -135,6 +117,7 @@
         </div>
     </div>
 </div>
+
 <!-- Pagination -->
 <div class="flex items-center justify-center flex-wrap mt-6 -mb-1 text-xs md:text-base bg-transparent text-layout-sun-700 dark:text-layout-night-700">
                     <template v-for="(link, index) in entries.links" :key="index">
@@ -290,7 +273,7 @@ props: {
         default: null,
     },
     entries: {
-        type: [Array],
+        type: [Array, Object],
         default: () => [],
     },
     ocont: {
@@ -307,6 +290,8 @@ props: {
     editDescription: {
         default: "Eintrag bearbeiten",
     },
+    data: Object,
+
 },
 methods: {
     async hasRight(right, table) {
@@ -461,6 +446,8 @@ onClick() {
     }
 },
 async mounted() {
+
+    console.log(JSON.stringify(this.entries,null,2));
     document.body.addEventListener("click", this.handleBodyClick);
     this.lightbox = new PhotoSwipeLightbox({
         gallery: '#gallery',

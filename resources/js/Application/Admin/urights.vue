@@ -32,7 +32,7 @@
     },
     props: {
       adminTables: Array,
-      roles: Array,
+      roles: [Array,Object],
       urid: [String, Number],
     },
     data() {

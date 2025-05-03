@@ -104,14 +104,14 @@
     </script>
 
     <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.4/jquery.datetimepicker.min.css" />
+        href="/css/jquery.datetimepicker.min.css" />
 
     <!-- Here by using Id selector the datetime picker will load on this input element -->
 
-    <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+    <script src="/js/jquery-2.2.4.min.js"></script>
+    <script src="/js/jquery-ui.min.js"></script>
     <script
-        src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.4/build/jquery.datetimepicker.full.min.js">
+        src="/js/jquery.datetimepicker.full.min.js">
     </script>
     <br /><br />
     <br />

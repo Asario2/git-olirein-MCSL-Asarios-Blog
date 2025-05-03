@@ -260,6 +260,7 @@ class TablesController extends Controller
         return $this->EditTables($request,0,$table);
     }
     function EditTables(Request $request,$id = '',$table='blogs'){
+
         $path = request()->path(); // Gibt "home/show/images/search/Fasermaler"
         $parts = explode("/", $path);
 
@@ -272,6 +273,11 @@ class TablesController extends Controller
 
             }
             continue;
+        }
+        if(!CheckRights(Auth::id(),$table,"edit"))
+        {
+            header("Location: /no-rights");
+            exit;
         }
         if(substr_count($table,".")){
             return;
@@ -442,6 +448,11 @@ class TablesController extends Controller
         if (!$table || !Schema::hasTable($table)) {
             abort(404, "Tabelle existiert nicht.1");
         }
+        if(!CheckRights(Auth::id(),$table,"view"))
+        {
+            header("Location: /no-rights");
+            exit;
+        }
 
 
         $tablez = [];
@@ -578,6 +589,11 @@ class TablesController extends Controller
     public function ListTables(Request $request,$table_alt='')
     {
         $table = $table_alt;
+        if(!CheckZRights("DataBases"))
+        {
+            header("Location: /no-rights");
+            exit;
+        }
         $tables = Table::select("admin_table.name as full_name","admin_table.name","admin_table.*")->filterBlog($request->only('search'))
             ->orderBy('name', 'ASC')
             ->paginate(20)

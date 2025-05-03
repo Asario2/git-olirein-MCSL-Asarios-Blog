@@ -239,6 +239,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::get('/admin', function () {
             return Redirect::route('admin.dashboard');
         })->name('admin.redirect.route');
+        Route::get('/hasCreated/{table}',[RightsController::class,"HasCreated"])->name('hasCreated');
 
 
         // =======

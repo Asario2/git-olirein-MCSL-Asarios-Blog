@@ -23,7 +23,6 @@
                         @reset="reset"
                     />
                 </div>
-
                 <div v-if="blogs.data.length === 0 && form.search">
                     <alert type="warning">
                         Für den vorgegebenen Suchbegriff wurden keine Blogartikel gefunden.

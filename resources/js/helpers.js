@@ -346,7 +346,7 @@ export async function loadRights() {
 }
 
 export function GetSRights(modul) {
- // return cachedRights?.[modul] === true;
+    return cachedRights?.[modul] === true;
 }
 
 

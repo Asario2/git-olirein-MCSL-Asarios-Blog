@@ -46,7 +46,7 @@
     <div id ="loading"> Lade Content </div>
     <div class="spacer">
     </div>
-    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="/js/jquery-2.1.4.min.js"></script>
     <script type="module">
         document.addEventListener('DOMContentLoaded', async () => {
             const PhotoSwipeLightbox = (await import(

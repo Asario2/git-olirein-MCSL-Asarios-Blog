@@ -122,11 +122,13 @@ class HomeController extends Controller
         ->when(request("search"), function ($query) {
             $query->filterdefault(['search' => request('search')]);
         })
-        ->orderBy($ord[0], $ord[1])
-        ->paginate(25);
+        ->orderBy($ord[0], $ord[1]) // ← erst sortieren
+        ->paginate(25);             // ← dann paginieren
 
-        // \Log::info([$entries->toSql(), $entries->getBindings()]);
+
+        \Log::info("cr:".CheckRights(Auth::id(),"images","date"));
         $rat = RatingController::getTotalRating("images");
+        \Log::info("en:" . json_encode([$rat]));
         $ocont = DB::table("image_categories")->where("slug",$slug)->first();
         return Inertia::render('Homepage/Pictures', [
             'entries' => $entries,
@@ -163,15 +165,17 @@ class HomeController extends Controller
             });
         })
         ->orderBy($ord[0], $ord[1])
-        ->get();
+        ->paginate(25);             // ← dann paginierenp
 
         $queries = DB::getQueryLog();
         //\Log::info  ("QQ:".json_encode($queries));
+        $rat = RatingController::getTotalRating("images");
         $ocont = DB::table("image_categories")->where("slug",$slug)->first();
         return Inertia::render('Homepage/Pictures', [
             'entries' => $entries,
             'ocont' => $ocont,
-            'filters' => Request()->all('search')
+            'filters' => Request()->all('search'),
+            'ratings' => $rat,
         ]);
     }
     public function no_rights()

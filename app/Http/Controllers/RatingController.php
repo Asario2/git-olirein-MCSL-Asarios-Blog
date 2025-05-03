@@ -126,7 +126,8 @@ class RatingController extends Controller
     }
     public static function getTotalRating($table)
     {
-        $table = basename($_SERVER['REQUEST_URI']);
+        $url = $_SERVER['REQUEST_URI'];
+        $table = basename(parse_url(request()->fullUrl(), PHP_URL_PATH));
         $rating = DB::table('ratings')
             ->where('table', $table)
             ->groupBy('image_id')

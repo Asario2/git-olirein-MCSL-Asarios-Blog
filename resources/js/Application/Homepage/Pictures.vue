@@ -447,7 +447,7 @@ onClick() {
 },
 async mounted() {
 
-    console.log(JSON.stringify(this.entries,null,2));
+    
     document.body.addEventListener("click", this.handleBodyClick);
     this.lightbox = new PhotoSwipeLightbox({
         gallery: '#gallery',

@@ -103,6 +103,10 @@ Route::get('/home/show/pictures/{slug}', [HomeController::class, 'home_images'])
 Route::get('/home/show/pictures/search/{slug}', [HomeController::class, 'home_images_search'])->name('home.images.gallery.search');
 // Pictures Overview
 Route::get('/home/pictures', [HomeController::class, 'home_images_index'])->name('home.images.index');
+// Shortpoems
+Route::get('/home/shortpoems', [HomeController::class, 'home_shortpoems'])->name('home.shortpoems');
+// DidYouKnow
+Route::get('/home/didyouknow', [HomeController::class, 'home_didyouknow'])->name('home.didyouknow');
 // Liste der Blogartikel
 Route::get('/blogs', [HomeController::class, 'home_blog_index'])->name('home.blog.index')->middleware('remember');
 // Display Blogartikel

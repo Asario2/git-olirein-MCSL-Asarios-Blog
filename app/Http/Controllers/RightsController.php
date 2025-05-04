@@ -122,7 +122,7 @@ function GetRights_all()
     if(!Auth::check())
     {
         //return response()->json(0);
-        $userId = 1;
+        $userId = 0;
     }
     // Stelle sicher, dass der Benutzer eingeloggt ist
     else{
@@ -133,6 +133,7 @@ function GetRights_all()
     ->leftJoin("users_rights", "users.users_rights_id", "=", "users_rights.id")
     ->select("users_rights.view_table","users_rights.add_table","users_rights.edit_table","users_rights.publish_table","users_rights.date_table","users_rights.delete_table")
     ->first();
+    \Log::info("RFE:".json_encode($rightfe));
     return response()->json(["userRights",$rightfe]);
 }
 }

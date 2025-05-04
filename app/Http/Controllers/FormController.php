@@ -51,7 +51,7 @@ class FormController extends Controller
             {
                 $value = $value;
             }
-
+            $value = html_entity_decode($value);
 
 
         $label = isset(Settings::$exl[$name]) ? Settings::$exl[$name] : $name;
@@ -324,6 +324,12 @@ class FormController extends Controller
             break;
             case "status":
                 return "select";
+            break;
+            case "story":
+                return "textarea_short";
+            break;
+            case "story_en":
+                return "textarea_short";
             break;
             case "summary":
                 return "textarea_short";

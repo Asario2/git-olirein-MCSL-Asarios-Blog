@@ -1,36 +1,80 @@
 // utils/rights.js
-
 let userRights = {};
-let adminTablePositions = {}; // Umgewandelt von Array zu Objekt
+let adminTablePositions = {};
 let rightsReady = false;
+let isAuthenticated = false;
+
+import { CleanTable, GetAuth } from '@/helpers';
+
+/**
+ * Einmaliger Ladevorgang aller Rechte und Tabellenpositionen
+ */
+let rightsPromise = null;
 
 export async function loadAllRights() {
-  const [rightsRes, tablesRes] = await Promise.all([
-    axios.get('/api/user/rights'),
-    axios.get('/api/admin_table_positions'),
-  ]);
+  if (rightsPromise) return rightsPromise;
 
-  userRights = rightsRes.data[1];
+  rightsPromise = (async () => {
+    const [rightsRes, tablesRes] = await Promise.all([
+      axios.get('/api/user/rights'),
+      axios.get('/api/admin_table_positions'),
+    ]);
 
-  // Umwandeln von adminTablePositions von Array zu Objekt
-  adminTablePositions = tablesRes.data[1].reduce((acc, item) => {
-    acc[item.name] = item.position;
-    return acc;
-  }, {});
+    userRights = rightsRes.data[1];
+    adminTablePositions = tablesRes.data[1].reduce((acc, item) => {
+      acc[item.name] = item.position;
+      return acc;
+    }, {});
 
-//   console.log('✅ userRights:', userRights);
-//   console.log('✅ adminTablePositions:', adminTablePositions);
+    isAuthenticated = await GetAuth();
+    rightsReady = true;
+    return true;
+  })();
 
-  rightsReady = true;
+  return rightsPromise;
 }
-import { CleanTable, CleanId } from '@/helpers';
+
+/**
+ * Rechteprüfung für Templates (synchron, z. B. für v-if)
+ */
 export function hasRight(right, table) {
-  if (!userRights || !adminTablePositions) {
-    console.error('❌ Rechte oder Tabellenpositionen noch nicht geladen.');
+  if (!rightsReady || !isAuthenticated) {
+    console.warn(`⚠️ Rechteprüfung fehlgeschlagen – ready=${rightsReady}, auth=${isAuthenticated}`);
     return false;
   }
+
   table = table ?? CleanTable();
-  const rightKey = `${right}_table`; // z. B. "view_table"
+  const rightKey = `${right}_table`;
+  const rightsString = userRights[rightKey];
+  const position = adminTablePositions[table];
+
+  if (typeof rightsString !== 'string') {
+    console.error(`❌ Rechte-String für '${rightKey}' fehlt`);
+    return false;
+  }
+
+  if (typeof position !== 'number' && typeof position !== 'string') {
+    console.error(`❌ Position für Tabelle '${table}' fehlt`);
+    return false;
+  }
+
+  const result = rightsString.charAt(position) === '1';
+  console.log(`🔍 hasRight(${right}, ${table}) = ${result}`);
+  return result;
+}
+export function hasRightSync(right, table) {
+  if (!isAuthenticated) {
+    console.warn("⚠️ User ist nicht authentifiziert");
+    return false;
+  }
+
+  if (!rightsReady) {
+    console.warn("⚠️ Rechte sind noch nicht bereit");
+    return false;
+  }
+
+  table = table ?? CleanTable();
+  const rightKey = `${right}_table`;
   const rightsString = userRights[rightKey];
   const position = adminTablePositions[table];
 
@@ -44,9 +88,13 @@ export function hasRight(right, table) {
     return false;
   }
 
-  return rightsString.charAt(position) === '1';
+  const result = rightsString.charAt(position) === '1';
+  console.log(`🔍 ${rightKey} @${table} = ${result}`);
+  return result;
 }
+
 
 export function isRightsReady() {
   return rightsReady;
 }
+

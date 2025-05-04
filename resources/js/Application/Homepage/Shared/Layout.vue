@@ -41,8 +41,10 @@
               <div class="flex flex-col items-center space-y-4 lg:mt-0 lg:flex-row lg:space-y-0 lg:space-x-8" style='z-index:10000000;'>
                 <link-header :route-name="route('home.index')" name="Home"></link-header>
                 <link-header :route-name="route('home.images.index')" name="Bilder"></link-header>
-                <link-header :route-name="route('home.pricing')" name="Preise"></link-header>
+                <!--<link-header :route-name="route('home.pricing')" name="Preise"></link-header>-->
                 <link-header :route-name="route('home.blog.index')" name="Blog"></link-header>
+                <link-header :route-name="route('home.shortpoems')" name="Shortpoems"></link-header>
+                <link-header :route-name="route('home.didyouknow')" name="DidYouKnow"></link-header>
 
                 <template v-if="!$page.props.userdata.user_id">
                   <link-header :route-name="route('login')" name="Login"></link-header>

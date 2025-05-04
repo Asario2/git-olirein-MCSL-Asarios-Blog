@@ -1490,7 +1490,6 @@ async submitForm() {
                     this.formData[name] = element.value
                         .replace(/\[/g, '%5B')
                         .replace(/\]/g, '%5D');
-                        console.log("TREFFER,EV" + name);
                 }
                 else if(element_alt?.innerHTML)
                 {
@@ -1501,7 +1500,6 @@ async submitForm() {
                 }
                 else if(element?.innerHTML)
                 {
-                    console.log("NAME:" + name);
                     this.formData[name] = element.innerHTML
                         .replace(/\[/g, '%5B')
                         .replace(/\]/g, '%5D');

@@ -92,6 +92,7 @@
             "users_rights" => 'name',
             "camera"=>"name",
             "testfield"=>"title",
+            "shortpoems"=>"headline",
 
     ];
     public static array $searchable = ["images","blogs","didyouknow","shortpoems"];
@@ -111,6 +112,7 @@
             "users_rights" => ['name'],
             "camera" => ['name'],
             "testfield" => ['title'.'content'],
+            "shortpoems" => ['headline','story']
 
     ];
     public static array $namealias = [
@@ -136,5 +138,6 @@
     "camera"=> "Longname",
     'testfield' => "content",
     'comments'      => 'users_idd',
+    "shortpoems"    => "story",
     ];
     }

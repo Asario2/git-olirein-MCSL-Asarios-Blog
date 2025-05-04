@@ -1623,8 +1623,10 @@ class TablesController extends Controller
             $formData['preis'] = "0.0";
         }
         $formData = array_diff_key($formData, array_flip(Settings::$excl_cols));
-
-
+        if (Schema::hasColumn($table,"updated_at")) {
+            $formData["updated_at"] = now();
+        }
+            // \Log::info("FD:".json_encode($formData));
         if (!Schema::hasTable($table)) {
             return response()->json(['error' => 'Tabelle nicht gefunden'], 404);
         }
@@ -1648,13 +1650,35 @@ class TablesController extends Controller
             // \Log::info('FormData:', $formData);
             // \Log::info($updated);
             $queries = DB::getQueryLog();
-            //\Log::info("qry:".json_encode([$queries,$formData]));
-            if ($updated) {
-                return response()->json(['message' => 'Daten erfolgreich aktualisiert!']);
-            } else {
+            $sql = DB::table($table)->where('id', $id)->toSql();
 
-                return response()->json(['error' => implode("|",$formData)], 507);
-            }
+            // $this->debugUpdateQuery($table,$id,$formData);
+            // if ($updated) {
+                return response()->json(['message' => 'Daten erfolgreich aktualisiert!']);
+            // } else {
+
+            //     return response()->json(['error' => implode("|",$formData)], 507);
+            // }
+    }
+    function debugUpdateQuery($table, $id, $formData)
+    {
+        DB::enableQueryLog();
+
+        // Führe die Update-Anweisung aus
+        DB::table($table)->where('id', $id)->update($formData);
+
+        // Hole die Query-Log
+        $queries = DB::getQueryLog();
+        $lastQuery = end($queries);
+
+        // Repliziere gebundene Werte in das SQL-Statement
+        $sql = $lastQuery['query'];
+        foreach ($lastQuery['bindings'] as $binding) {
+            $value = is_numeric($binding) ? $binding : "'" . addslashes($binding) . "'";
+            $sql = preg_replace('/\?/', $value, $sql, 1);
+        }
+
+        \Log::info("SQL:".$sql);
     }
 
 

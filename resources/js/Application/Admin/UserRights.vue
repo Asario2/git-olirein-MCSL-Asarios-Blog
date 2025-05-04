@@ -345,5 +345,8 @@ watch: {
 
 </script>
 
-<style scoped>
+<style>
+.wff{
+    min-width:200px !Important;
+}
 </style>

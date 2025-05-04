@@ -26,45 +26,56 @@ library.add(faPencilAlt, faTrashCan);
 
 const appName = import.meta.env.VITE_APP_NAME || "Starter Eleven";
 
-createInertiaApp({
-  title: (title) => `${title} - ${appName}`,
-  resolve: (name) =>
-    resolvePageComponent(
-      `./Application/${name}.vue`,
-      import.meta.glob("./Application/**/*.vue"),
-    ),
-  setup({ el, App, props, plugin }) {
-    // Vue App vorbereiten
-    const app = createApp({ render: () => h(App, props) });
+loadAllRights()
+  .then(() => {
+    createInertiaApp({
+      title: (title) => `${title} - ${appName}`,
+      resolve: (name) =>
+        resolvePageComponent(
+          `./Application/${name}.vue`,
+          import.meta.glob("./Application/**/*.vue"),
+        ),
+      setup({ el, App, props, plugin }) {
+        const app = createApp({ render: () => h(App, props) });
 
-    // Rechte laden, dann App mounten
-    loadAllRights().then(() => {
-      // Globale Methoden registrieren
-      app.config.globalProperties.$hasRight = hasRight;
-      app.config.globalProperties.$isRightsReady = isRightsReady;
+        // Globale Rechtefunktionen registrieren
+        app.config.globalProperties.$hasRight = hasRight;
+        app.config.globalProperties.$isRightsReady = isRightsReady;
 
-      // Plugins
-      app
-        .use(plugin)
-        .use(ZiggyVue)
-        .use(i18nVue, {
-          resolve: async (lang) => {
-            const langs = import.meta.glob("../../lang/*.json");
-            return await langs[`../../lang/${lang}.json`]();
-          },
-        })
-        .use(TippyPlugin, {
-          tippyDefaults: {},
-        });
+        // Plugins
+        app
+          .use(plugin)
+          .use(ZiggyVue)
+          .use(i18nVue, {
+            resolve: async (lang) => {
+              const langs = import.meta.glob("../../lang/*.json");
+              return await langs[`../../lang/${lang}.json`]();
+            },
+          })
+          .use(TippyPlugin, {
+            tippyDefaults: {},
+          });
 
-      // Globale Komponenten
-      app.component("font-awesome-icon", FontAwesomeIcon);
+        // Globale Komponenten
+        app.component("font-awesome-icon", FontAwesomeIcon);
 
-      // App mounten
-      app.mount(el);
+        // App mounten
+        app.mount(el);
+      },
+      progress: {
+        color: "#0EA5E9",
+      },
     });
-  },
-  progress: {
-    color: "#0EA5E9",
-  },
-});
+  })
+  .catch((error) => {
+
+    // // Optional: Einfacher Fallback, z. B. Hinweis anzeigen
+    // const fallback = document.createElement("div");
+    // fallback.innerHTML = `
+    //   <div style="padding:2rem;text-align:center;font-family:sans-serif">
+    //     <h2>Fehler beim Laden der Benutzerrechte</h2>
+    //     <p>Bitte laden Sie die Seite neu oder melden Sie sich erneut an.</p>
+    //   </div>
+    // `;
+    // document.body.appendChild(fallback);
+  });

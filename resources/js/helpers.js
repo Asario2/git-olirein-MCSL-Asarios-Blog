@@ -20,7 +20,10 @@ export async function loadRightsOnce() {
   if (!cache.rights) {
     try {
         const uid = await GetAuth();
-      const res = await axios.get('/api/user/rights/' + uid);
+     if(!uid){
+        return 0;
+     }
+        const res = await axios.get('/api/user/rights/' + uid);
       // Überprüfen, ob die Antwort tatsächlich ein Objekt ist
       if(res.data == "0")
       {
@@ -282,7 +285,7 @@ export async function GetAuth()
         const response = await fetch('/GETUserID');
         const data = await response.json();
         // console.log("DATA: " + data);
-        return data;
+        return !!data?.id;
     } catch (error){
         console.error("Fehler bei der Authentifizierung",error);
     }

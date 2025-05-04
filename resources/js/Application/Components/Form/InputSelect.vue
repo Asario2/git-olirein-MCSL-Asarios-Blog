@@ -7,7 +7,6 @@
         :name="xname"
         :id="name"
         :required="required"
-        style="min-width 200px;"
         >
         <option disabled value="0">Bitte wählen</option>
         <option
@@ -132,8 +131,5 @@
 .w-fully{
     min-width:94%;
     max-width:94%;
-}
-.wff{
-    min-width:200px !Important;
 }
 </style>

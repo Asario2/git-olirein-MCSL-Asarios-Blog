@@ -123,7 +123,7 @@ class HomeController extends Controller
             $query->filterdefault(['search' => request('search')]);
         })
         ->orderBy($ord[0], $ord[1]) // ← erst sortieren
-        ->paginate(25);             // ← dann paginieren
+        ->paginate(20);             // ← dann paginieren
 
 
         \Log::info("cr:".CheckRights(Auth::id(),"images","date"));
@@ -138,6 +138,44 @@ class HomeController extends Controller
         ]);
     }
     //
+    public function home_shortpoems()
+    {
+        $values = DB::table("shortpoems")->orderBy("created_at","DESC")->get();
+        \Log::info("VALS:".json_encode($values));
+        // $values = DB::table("shortpoems")->select('id', 'headline', 'story')->get();
+        // return Inertia::render('Homepage/Shortpoems', [
+        //     // 'values' => $values,
+        //     'entries' => [['headline' => 'Test', 'story' => 'Nur ein Test']],
+        // ]);
+
+        $values = $values->map(function ($item) {
+            $item->story = html_entity_decode($item->story);
+            $item->headline = html_entity_decode($item->headline);
+            return $item;
+        });
+        return Inertia::render('Pages/Shortpoems', [
+            'values' => $values,
+        ]);
+    }
+    public function home_didyouknow()
+    {
+        $values = DB::table("didyouknow")->orderBy("created_at","DESC")->get();
+        \Log::info("VALS:".json_encode($values));
+        // $values = DB::table("shortpoems")->select('id', 'headline', 'story')->get();
+        // return Inertia::render('Homepage/Shortpoems', [
+        //     // 'values' => $values,
+        //     'entries' => [['headline' => 'Test', 'story' => 'Nur ein Test']],
+        // ]);
+
+        $values = $values->map(function ($item) {
+            $item->answer = html_entity_decode($item->answer);
+            $item->headline = html_entity_decode($item->headline);
+            return $item;
+        });
+        return Inertia::render('Pages/didyouknow', [
+            'values' => $values,
+        ]);
+    }
     public function home_images_search(Request $request,$slug)
     {
         if($slug != "Alphabet")

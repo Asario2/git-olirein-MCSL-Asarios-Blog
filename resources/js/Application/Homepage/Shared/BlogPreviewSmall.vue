@@ -1,4 +1,5 @@
 <template>
+
     <div class="blog-container w-full max-w-sm mx-auto group rounded hover:no-underline focus:no-underline bg-layout-sun-100 dark:bg-layout-night-100">
         <Link
             :href="route('home.blog.show', blog.autoslug)"
@@ -11,7 +12,7 @@
                     class="object-cover w-full rounded h-44 bg-layout-sun-500 dark:bg-layout-night-500"
                     :src="`/images/blogs/thumbs/${blog.url}` || '/images/blogs/008.jpg'"
                     :alt="blog.name"
-                   
+
                     width="480"
                     height="360"
                 />
@@ -106,6 +107,9 @@ export default {
 
     props: {
         blog: {
+            type: Object,
+        },
+        blogs: {
             type: Object,
         },
         aiOverlayImage: {
@@ -237,7 +241,7 @@ methods:{
 
         location.href = rt;
     },
-}
+},
 };
 </script>
 <style scoped>

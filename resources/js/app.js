@@ -26,23 +26,26 @@ library.add(faPencilAlt, faTrashCan);
 
 const appName = import.meta.env.VITE_APP_NAME || "Starter Eleven";
 
+// Rechte laden
 loadAllRights()
   .then(() => {
+    // Erstelle Inertia-App
     createInertiaApp({
       title: (title) => `${title} - ${appName}`,
       resolve: (name) =>
         resolvePageComponent(
           `./Application/${name}.vue`,
-          import.meta.glob("./Application/**/*.vue"),
+          import.meta.glob("./Application/**/*.vue")
         ),
       setup({ el, App, props, plugin }) {
+        // App erstellen
         const app = createApp({ render: () => h(App, props) });
 
         // Globale Rechtefunktionen registrieren
         app.config.globalProperties.$hasRight = hasRight;
         app.config.globalProperties.$isRightsReady = isRightsReady;
 
-        // Plugins
+        // Plugins hinzufügen
         app
           .use(plugin)
           .use(ZiggyVue)
@@ -53,7 +56,7 @@ loadAllRights()
             },
           })
           .use(TippyPlugin, {
-            tippyDefaults: {},
+            tippyDefaults: {} // Tooltip-Einstellungen
           });
 
         // Globale Komponenten
@@ -63,13 +66,13 @@ loadAllRights()
         app.mount(el);
       },
       progress: {
-        color: "#0EA5E9",
+        color: "#0EA5E9", // Fortschrittsbalken-Farbe
       },
     });
   })
   .catch((error) => {
-
-    // // Optional: Einfacher Fallback, z. B. Hinweis anzeigen
+    // Fehlerbehandlung
+return "";
     // const fallback = document.createElement("div");
     // fallback.innerHTML = `
     //   <div style="padding:2rem;text-align:center;font-family:sans-serif">
@@ -78,4 +81,5 @@ loadAllRights()
     //   </div>
     // `;
     // document.body.appendChild(fallback);
+    // console.error("Fehler beim Laden der Benutzerrechte: ", error);
   });

@@ -140,11 +140,12 @@ class HomeController extends Controller
     //
     public function home_shortpoems()
     {
+        $rat = RatingController::getTotalRating("shortpoems");
         $values = DB::table("shortpoems")->orderBy("created_at","DESC")->get();
         \Log::info("VALS:".json_encode($values));
         // $values = DB::table("shortpoems")->select('id', 'headline', 'story')->get();
         // return Inertia::render('Homepage/Shortpoems', [
-        //     // 'values' => $values,
+        //     // 'items' => $values,
         //     'entries' => [['headline' => 'Test', 'story' => 'Nur ein Test']],
         // ]);
 
@@ -154,16 +155,18 @@ class HomeController extends Controller
             return $item;
         });
         return Inertia::render('Pages/Shortpoems', [
-            'values' => $values,
+            'items' => $values,
+            'ratings' => $rat,
         ]);
     }
     public function home_didyouknow()
     {
         $values = DB::table("didyouknow")->orderBy("created_at","DESC")->get();
+        $rat = RatingController::getTotalRating("didyouknow");
         \Log::info("VALS:".json_encode($values));
         // $values = DB::table("shortpoems")->select('id', 'headline', 'story')->get();
         // return Inertia::render('Homepage/Shortpoems', [
-        //     // 'values' => $values,
+        //     // 'items' => $values,
         //     'entries' => [['headline' => 'Test', 'story' => 'Nur ein Test']],
         // ]);
 
@@ -173,7 +176,8 @@ class HomeController extends Controller
             return $item;
         });
         return Inertia::render('Pages/didyouknow', [
-            'values' => $values,
+            'items' => $values,
+            'ratings' => $rat,
         ]);
     }
     public function home_images_search(Request $request,$slug)

@@ -1,5 +1,6 @@
 <template>
-    <layout :header-title="'Bilder - ' + ocont.slug">
+    <Layout>
+        <MetaHeader :title="'Bilder - ' + ocont.slug" />
         <div @click="handleBodyClick">
         <div v-if="ocont.id" class="p-4 bg-layout-sun-200 dark:bg-layout-night-200">
         <hgroup>
@@ -42,23 +43,24 @@
 
                 </div>
 
-                <div id="gallery" v-for="entry in entries.data" :key="entry.id"
+                <div id="gallery" v-for="item in entries.data" :key="item.id"
     class="w-full block max-w-sm gap-3 mx-auto sm:max-w-full group mb-4
         lg:grid lg:grid-cols-12 bg-layout-sun-100 dark:bg-layout-night-100
         border-2 border-layout-sun-300 dark:border-layout-night-300 p-4"
 
 >
+
     <!-- Linke Spalte: Thumbnail -->
-    <div class="relative lg:col-span-3">
+    <div :id="'st' + item.id" class="relative lg:col-span-3">
         <a
-  :href="'/images/images/big/' + entry.image_path"
-  :data-pswp-width="entry.img_x"
-  :data-pswp-height="entry.img_y"
+  :href="'/images/images/big/' + item.image_path"
+  :data-pswp-width="item.img_x"
+  :data-pswp-height="item.img_y"
 >
  <ZoomImage
-  :src="'/images/images/thumbs/' + entry.image_path"
-  :alt="entry.title"
-  :title="entry.title"
+  :src="'/images/images/thumbs/' + item.image_path"
+  :alt="item.title"
+  :title="item.title"
   :width="300"
   :height="300"
   class="imgprev"
@@ -69,15 +71,15 @@
     <!-- Mittlere Spalte: Überschrift, Beschreibung und Kommentar-Slot -->
     <div class="p-6 space-y-2 lg:col-span-6 ml-6">
         <h2 class="text-xl font-semibold sm:text-2xl font-title whitespace-pre-line">
-        <p v-html="entry.headline"></p>
+        <p v-html="item.headline"></p>
         </h2>
 
         <div class="text-layout-sun-700 dark:text-layout-night-700 whitespace-pre-line">
-            <p v-html="entry.message"></p>
+            <p v-html="item.message"></p>
         </div>
 
 
-            <SocialButtons :postId="entry.id" />
+            <SocialButtons :postId="item.id" />
 </div>
 
 
@@ -86,15 +88,15 @@
         <div class="text-sm font-semibold text-layout-sun-800 dark:text-layout-night-800">
         <h3>Kurzinfos</h3>
         </div>
-        <div v-if="entry.Format">
-        <b>Format:</b> {{ entry.Format }}
+        <div v-if="item.Format">
+        <b>Format:</b> {{ item.Format }}
         </div>
-        <averageRating :postId="entry.id" :av="parseFloat(ratings['original'][entry.id]?.average) || 0" :tot="ratings['original'][entry.id]?.total || 0"/>
+        <averageRating :postId="item.id" :av="parseFloat(ratings['original'][item.id]?.average) || 0" :tot="ratings['original'][item.id]?.total || 0"/>
         <span v-if="hasRight('delete', 'images') || hasRight('edit', 'images') " class="flex space-x-2">
         <!-- Edit Icon -->
         <span v-if="hasRight('edit', 'images') "
                 class="inl"
-                @click.prevent="editDataRow(entry.id)">
+                @click.prevent="editDataRow(item.id)">
             <icon-pencil class="w-6 h-6 cursor-pointer" v-tippy />
             <tippy>{{ editDescription }}</tippy>
         </span>
@@ -102,18 +104,18 @@
         <!-- Delete Icon -->
         <span v-if="hasRight('delete', 'images') "
                 class="inl"
-                @click="deleteDataRow(entry.id)">
+                @click="deleteDataRow(item.id)">
             <icon-trash class="w-6 h-6 cursor-pointer" v-tippy />
             <tippy>{{ deleteDescription }}</tippy>
         </span>
         </span>
 
         <div class="text-xs text-layout-sun-600 dark:text-layout-night-600">
-        <display-date :value="entry.created_at" :time-on="false" />
+        <display-date :value="item.created_at" :time-on="false" />
         </div>
 
-        <div v-if="entry.camera" class="text-xs text-layout-sun-600 dark:text-layout-night-600">
-        <IconCamera />&nbsp;&nbsp;{{ entry.camera }}
+        <div v-if="item.camera" class="text-xs text-layout-sun-600 dark:text-layout-night-600">
+        <IconCamera />&nbsp;&nbsp;{{ item.camera }}
         </div>
     </div>
 </div>
@@ -173,6 +175,7 @@ import IconComment from "@/Application/Components/Icons/IconComment.vue";
 import { throttle } from "lodash";
 import mapValues from "lodash/mapValues";
 import pickBy from "lodash/pickBy";
+import MetaHeader from "@/Application/Homepage/Shared/MetaHeader.vue";
 import IconEye from "@/Application/Components/Icons/Eye.vue";
 import IconTrash from "@/Application/Components/Icons/Trash.vue";
 import DisplayDate from "@/Application/Components/Content/DisplayDate.vue";
@@ -207,6 +210,7 @@ components: {
     averageRating,
     SocialButtons,
     ZoomImage,
+    MetaHeader,
 },
 data() {
     return {
@@ -219,7 +223,7 @@ data() {
         showShareBox: {},
         showStarBox: {},
         showComments: {}, // Zustand für die Anzeige der Kommentarfunktion
-        entry: { id: null },
+        item: { id: null },
         lightbox: null,
         rightsData: {},
         rightsReady: false,
@@ -446,8 +450,25 @@ onClick() {
     }
 },
 async mounted() {
+    const hash = window.location.hash;
+            if (hash && hash.startsWith("#st")) {
+                const id = hash.replace("#st", "");
+                const index = this.entries.data.findIndex((item) => String(item.id) === id);
 
-    
+                if (index !== -1) {
+                this.openIndex = index;
+
+                // Warten, bis das Element sichtbar gerendert ist
+                this.$nextTick(() => {
+                    const el = document.getElementById(`st${id}`);
+                    if (el) {
+                    const y = el.getBoundingClientRect().top + window.pageYOffset - 130;
+                    window.scrollTo({ top: y, behavior: 'smooth' });
+                    }
+                });
+                }
+            }
+
     document.body.addEventListener("click", this.handleBodyClick);
     this.lightbox = new PhotoSwipeLightbox({
         gallery: '#gallery',

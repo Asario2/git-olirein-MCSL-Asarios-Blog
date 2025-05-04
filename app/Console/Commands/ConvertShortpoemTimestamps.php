@@ -27,6 +27,19 @@ class ConvertShortpoemTimestamps extends Command
      */
     public function handle()
     {
+        DB::table('didyouknow')->get()->each(function ($row) {
+            DB::table('didyouknow')
+                ->where('id', $row->id)
+                ->update([
+                    'updated_at' => \Carbon\Carbon::createFromTimestamp($row->chg_date),
+                ]);
+        });
+
+        $this->info('Zeitstempel erfolgreich konvertiert.');
+    }
+
+     public function handle_sp()
+    {
         DB::table('shortpoems')->get()->each(function ($row) {
             DB::table('shortpoems')
                 ->where('id', $row->id)

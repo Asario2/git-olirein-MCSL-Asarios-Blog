@@ -1,5 +1,6 @@
 <template>
-    <layout header-title="Bilder Übersicht">
+    <Layout>
+        <MetaHeader title="Meine Bilder Übersicht" />
       <div class="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
         <div class="container mx-auto py-8">
           <div class="flex justify-between items-center mb-4">
@@ -58,9 +59,10 @@
   <script>
   import Layout from "@/Application/Homepage/Shared/Layout.vue";
   import he from 'he';
+  import MetaHeader from "@/Application/Homepage/Shared/MetaHeader.vue";
   import { GetRights } from "@/helpers";
   export default {
-    components: { Layout },
+    components: { Layout, MetaHeader },
     props: {
       data: Array,
       ima: Object,

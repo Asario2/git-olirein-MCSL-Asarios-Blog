@@ -37,6 +37,7 @@
                             <blog-preview-small
                                 v-if="index > 0"
                                 :blog="blog"
+                                :blogs="blogs.data"
                             />
                         </template>
                     </div>

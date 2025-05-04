@@ -68,7 +68,8 @@
                     table: table,
                     _token: document.querySelector('meta[name="csrf-token"]')?.getAttribute('content'),
                 });
-                this.$inertia.reload();
+                window.location.hash = '#st' + this.postId;
+                window.location.reload();
             }
 
         } catch (error) {

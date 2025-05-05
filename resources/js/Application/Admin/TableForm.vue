@@ -208,7 +208,6 @@
                                         :label="field.label">
 
                                     </InputLabel>
-                                    {{ console.log('xsor_alt:', field.name, this.xsor_alt[field.name]) }}
                                     <InputSelect
                                     @input-change="updateFormData"
                                     :id="field.name"
@@ -601,7 +600,7 @@ export default defineComponent({
           const res = axios.get(`/tables/sort-data/${field.name}`);
           const key = `${field.name}.sortedOptions`;
                 alert("yes");
-          console.log(`[${field.name}] API-Rohdaten:`, res.data);
+        //   console.log(`[${field.name}] API-Rohdaten:`, res.data);
 
           if (Array.isArray(res.data)) {
             this.fetchedOptions = res.data;
@@ -610,7 +609,7 @@ export default defineComponent({
           } else if (res.data && typeof res.data[key] === "object") {
             this.fetchedOptions = res.data[key]; // wird später konvertiert
           } else {
-            console.warn(`[${field.name}] Keine passenden Daten im Response:`, res.data);
+            console.error(`[${field.name}] Keine passenden Daten im Response:`, res.data);
           }
         } catch (error) {
           console.error(`[${field.name}] Fehler beim Abrufen der Daten:`, error);
@@ -1035,7 +1034,7 @@ export default defineComponent({
         },
             handleImageUpload(imageUrl) {
                 imageUrl = imageUrl.replace("images/blogs/big/",'').replace("images/images/big/",'').replace("undefined",'');
-            console.log("Bild-URL:", imageUrl);
+            // console.log("Bild-URL:", imageUrl);
             this.uploadedImageUrl = imageUrl;
             this.nf2 = imageUrl;
             const ima_new = this.nf2;

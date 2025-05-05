@@ -38,7 +38,7 @@ class RightsController extends Controller
             $userId = Auth::id();
         }
 
-        \Log::info("uid: ".json_encode($userId) );
+        // \Log::info("uid: ".json_encode($userId) );
         $columns = Schema::getColumnListing("users_rights");
         // Wenn der Benutzer nicht eingeloggt ist, gib einen Fehler zurück
         $tableid = DB::table("admin_table")->where("name",$table)->pluck("position")->first();
@@ -133,7 +133,7 @@ function GetRights_all()
     ->leftJoin("users_rights", "users.users_rights_id", "=", "users_rights.id")
     ->select("users_rights.view_table","users_rights.add_table","users_rights.edit_table","users_rights.publish_table","users_rights.date_table","users_rights.delete_table")
     ->first();
-    \Log::info("RFE:".json_encode($rightfe));
+    // \Log::info("RFE:".json_encode($rightfe));
     return response()->json(["userRights",$rightfe]);
 }
 }

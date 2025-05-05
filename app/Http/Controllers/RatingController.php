@@ -136,7 +136,7 @@ class RatingController extends Controller
             ->keyBy('image_id');
         $queries = DB::getQueryLog();
 
-        \Log::info(json_encode([$rating,$queries,$table]));
+        // \Log::info(json_encode([$rating,$queries,$table]));
         return response()->json($rating);
     }
 }

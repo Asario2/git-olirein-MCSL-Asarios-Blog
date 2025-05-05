@@ -51,10 +51,10 @@
         let opts = [];
 
         if (Array.isArray(this.options)) {
-          console.log(`[${this.name}] Props-Optionen erkannt:`, this.options);
+          // console.log(`[${this.name}] Props-Optionen erkannt:`, this.options);
           opts = this.options;
         } else if (Array.isArray(this.fetchedOptions)) {
-          console.log(`[${this.name}] FetchedOptions als Array:`, this.fetchedOptions);
+          // console.log(`[${this.name}] FetchedOptions als Array:`, this.fetchedOptions);
           opts = this.fetchedOptions;
         } else if (typeof this.fetchedOptions === "object") {
           console.warn(`[${this.name}] FetchedOptions ist Objekt – versuche in Array umzuwandeln`, this.fetchedOptions);
@@ -67,7 +67,7 @@
             return { id: key, name: value };
           });
 
-          console.log(`[${this.name}] Umgewandelte Objekt-Optionen:`, opts);
+          // console.log(`[${this.name}] Umgewandelte Objekt-Optionen:`, opts);
         }
 
         return opts.map(opt => {
@@ -100,7 +100,7 @@
           const res = await axios.get(`/tables/sort-data/${this.name}`);
           const key = `${this.name}.sortedOptions`;
 
-          console.log(`[${this.name}] API-Rohdaten:`, res.data);
+          // console.log(`[${this.name}] API-Rohdaten:`, res.data);
 
           if (Array.isArray(res.data)) {
             this.fetchedOptions = res.data;
@@ -109,7 +109,7 @@
           } else if (res.data && typeof res.data[key] === "object") {
             this.fetchedOptions = res.data[key]; // wird später konvertiert
           } else {
-            console.log(`[${this.name}] Keine passenden Daten im Response:`, res.data);
+            // console.log(`[${this.name}] Keine passenden Daten im Response:`, res.data);
           }
         } catch (error) {
           console.error(`[${this.name}] Fehler beim Abrufen der Daten:`, error);
@@ -119,10 +119,10 @@
 
     mounted() {
       if (!(Array.isArray(this.options) && this.options.length < 1)) {
-        console.log(`[${this.name}] Hole Optionen per API`);
+        // console.log(`[${this.name}] Hole Optionen per API`);
         this.getOptions();
       } else {
-        console.log(`[${this.name}] Lokale Optionen vorhanden`);
+        // console.log(`[${this.name}] Lokale Optionen vorhanden`);
       }
     },
   };

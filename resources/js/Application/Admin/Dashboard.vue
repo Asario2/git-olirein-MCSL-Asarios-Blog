@@ -114,7 +114,7 @@ export default defineComponent({
   async mounted() {
     this.modulRights = await loadRights();
 
-    console.log("Geladene Rechte:", this.modulRights);
+    // console.log("Geladene Rechte:", this.modulRights);
   },
   computed: {
         routeCreate() {

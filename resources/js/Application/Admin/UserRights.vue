@@ -242,18 +242,18 @@ saveRights() {
       payload[key] = value.map(v => (v ? "1" : "0")).join("");
     }
     }
-    console.log("BJ:" + JSON.stringify(this.lf2,null,2));
+    // console.log("BJ:" + JSON.stringify(this.lf2,null,2));
     for (const [key, value] of Object.entries(this.lf2)) {
           console.log(key, value);  // Hier arbeitest du mit den Werten und Schlüsseln
           payload[key] = value;
 
     }
 
-  console.log("🚀 Finales Payload:", payload);
+//   console.log("🚀 Finales Payload:", payload);
 
   axios.post('/api/admin/user-rights/save?urid=' + this.selected, payload)
     .then(response => {
-      console.log('✅ Rechte gespeichert!', response.data);
+    //   console.log('✅ Rechte gespeichert!', response.data);
     })
     .catch(error => {
       console.error('❌ Fehler beim Speichern:', error);
@@ -297,7 +297,7 @@ saveRights() {
       async loadFunctions(urid) {
   try {
     const response = await axios.get(`/admin/user-rights/get?urid=${urid}`);
-    console.log('Funktionen geladen:', response.data);  // Debugging
+    // console.log('Funktionen geladen:', response.data);  // Debugging
     Object.entries(response.data).forEach(([key, value]) => {
       if (key.includes("xkis_")) {
         this.lf[key] = value;
@@ -319,7 +319,7 @@ saveRights() {
     },
 },
     async mounted() {
-        console.log("urid im mounted:", this.urid);  // Verwende 'this.urid' hier direkt
+        // console.log("urid im mounted:", this.urid);  // Verwende 'this.urid' hier direkt
         this.settings = await GetSettings();
         this.fetchRights(this.urid);  // Statt this.selected, direkt this.urid verwenden
         this.loadFunctions(this.urid);

@@ -84,7 +84,7 @@ class HomeController extends Controller
         //     $blog->addRights = CheckRights(Auth::id(), $table, "add");
         //     $blog->date_tableRights = CheckRights(Auth::id(), $table, "date_table");
         // }
-            \Log::info(json_encode($blogs, JSON_PRETTY_PRINT));
+            // \Log::info(json_encode($blogs, JSON_PRETTY_PRINT));
             // \Log::info("Test-Log-Eintrag");
 
         return Inertia::render('Homepage/BlogList', [
@@ -126,9 +126,9 @@ class HomeController extends Controller
         ->paginate(20);             // ← dann paginieren
 
 
-        \Log::info("cr:".CheckRights(Auth::id(),"images","date"));
+        // \Log::info("cr:".CheckRights(Auth::id(),"images","date"));
         $rat = RatingController::getTotalRating("images");
-        \Log::info("en:" . json_encode([$rat]));
+        // \Log::info("en:" . json_encode([$rat]));
         $ocont = DB::table("image_categories")->where("slug",$slug)->first();
         return Inertia::render('Homepage/Pictures', [
             'entries' => $entries,
@@ -142,7 +142,7 @@ class HomeController extends Controller
     {
         $rat = RatingController::getTotalRating("shortpoems");
         $values = DB::table("shortpoems")->orderBy("created_at","DESC")->get();
-        \Log::info("VALS:".json_encode($values));
+        // \Log::info("VALS:".json_encode($values));
         // $values = DB::table("shortpoems")->select('id', 'headline', 'story')->get();
         // return Inertia::render('Homepage/Shortpoems', [
         //     // 'items' => $values,
@@ -163,7 +163,7 @@ class HomeController extends Controller
     {
         $values = DB::table("didyouknow")->orderBy("created_at","DESC")->get();
         $rat = RatingController::getTotalRating("didyouknow");
-        \Log::info("VALS:".json_encode($values));
+        // \Log::info("VALS:".json_encode($values));
         // $values = DB::table("shortpoems")->select('id', 'headline', 'story')->get();
         // return Inertia::render('Homepage/Shortpoems', [
         //     // 'items' => $values,
@@ -223,7 +223,7 @@ class HomeController extends Controller
     public function no_rights()
     {
         $text = DB::table("texts")->where("type", "no-rights")->select('headline', 'text')->first();
-        \Log::info("TT:".json_encode($text));
+        // \Log::info("TT:".json_encode($text));
 
         return Inertia::render('Homepage/No-Rights', [
             "texts" => $text  // Übergebe das Objekt direkt, nicht als JSON-String

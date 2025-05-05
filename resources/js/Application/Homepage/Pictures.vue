@@ -435,10 +435,8 @@ methods: {
 
     editDataRow(id) {
        const table = CleanTable();
-
-        var rt = `/admin/tables/edit/${id}/images`;
-
-        location.href = rt;
+       var rt = `/admin/tables/edit/${id}/images`;
+       location.href = rt;
     },
 
 onClick() {

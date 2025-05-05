@@ -1678,7 +1678,7 @@ class TablesController extends Controller
             $sql = preg_replace('/\?/', $value, $sql, 1);
         }
 
-        \Log::info("SQL:".$sql);
+        // \Log::info("SQL:".$sql);
     }
 
 
@@ -1750,7 +1750,7 @@ foreach ($xkisColumns as $col) {
 foreach ($xkisColumns as $col) {
     unset($user->$col);
 }
-    \Log::info("ur__".json_encode($rights));
+    // \Log::info("ur__".json_encode($rights));
 // Füge Rechte als Objekt hinzu
 $user->rights = $rights;
 

@@ -804,7 +804,7 @@ function dpicker_hide(id, val = "") {
     $datetimepicker2.on("input", function () {
         // Hier wird der eingegebene Wert des DateTimePickers erfasst
         let selectedDate = $(this).val();
-        console.log("te" + selectedDate);
+        // console.log("te" + selectedDate);
     });
     const datetimeField = document.getElementById("datetimepicker2_" + id);
 

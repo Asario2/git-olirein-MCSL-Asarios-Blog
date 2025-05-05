@@ -59,7 +59,7 @@ export function hasRight(right, table) {
   }
 
   const result = rightsString.charAt(position) === '1';
-  console.log(`🔍 hasRight(${right}, ${table}) = ${result}`);
+//   console.log(`🔍 hasRight(${right}, ${table}) = ${result}`);
   return result;
 }
 export function hasRightSync(right, table) {
@@ -89,7 +89,7 @@ export function hasRightSync(right, table) {
   }
 
   const result = rightsString.charAt(position) === '1';
-  console.log(`🔍 ${rightKey} @${table} = ${result}`);
+//   console.log(`🔍 ${rightKey} @${table} = ${result}`);
   return result;
 }
 

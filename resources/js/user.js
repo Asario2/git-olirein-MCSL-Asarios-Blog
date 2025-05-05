@@ -47,7 +47,8 @@ async function loadDarkMode() {
 
     // Setze den Wert im localStorage nur, wenn er sich geändert hat
     if (localStorage.getItem("theme") !== mode) {
-        console.log("Ändere Theme von", localStorage.getItem("theme"), "auf", mode);
+
+        //console.log("Ändere Theme von", localStorage.getItem("theme"), "auf", mode);
         localStorage.setItem("theme", mode);
     }
 

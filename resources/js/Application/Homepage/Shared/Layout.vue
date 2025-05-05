@@ -248,7 +248,7 @@ export default {
       },
       (error) => {
         this.pendingRequests -= 1;
-        console.log('Error response received, pendingRequests:', this.pendingRequests);
+        // console.log('Error response received, pendingRequests:', this.pendingRequests);
         this.checkLoadingState();
         return Promise.reject(error);
       }
@@ -287,7 +287,7 @@ export default {
       images.forEach((img, index) => {
         if (img.complete) {
           imagesLoadedCount++;
-          console.log(`Image ${index + 1} already loaded`);
+        //   console.log(`Image ${index + 1} already loaded`);
         } else {
           img.addEventListener('load', () => {
             imagesLoadedCount++;

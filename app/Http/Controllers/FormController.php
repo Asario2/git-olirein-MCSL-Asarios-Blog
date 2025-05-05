@@ -238,6 +238,9 @@ class FormController extends Controller
             case "admin_table_id":
                 return "select_id";
             break;
+            case "answer":
+                return "textarea_short";
+            break;
             case "autoslug":
                 return "autoSlug";
             break;

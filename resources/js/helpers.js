@@ -285,7 +285,7 @@ export async function GetAuth()
         const response = await fetch('/GETUserID');
         const data = await response.json();
         // console.log("DATA: " + data);
-        return !!data?.id;
+        return !!data;
     } catch (error){
         console.error("Fehler bei der Authentifizierung",error);
     }

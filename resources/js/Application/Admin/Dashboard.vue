@@ -40,6 +40,35 @@
                     Hier findest du eine Liste aller Bilder.
                 </template>
             </navigation-card>
+            <!-- Didyouknow -->
+            <navigation-card v-if="canView('didyouknow')"
+                class="navigation_card"
+                title="DidYouKnow"
+                :routeName="route('admin.tables.show','didyouknow')"
+                linkName="Liste der Wussten Sie Schon Sektion"
+                :routeName2="route('admin.tables.create', 'didyouknow')"
+                linkName2="Neue Frage"
+                :withIcon="true"
+                icon="IconDidyou"
+            >
+                <template #description>
+                                Hier findest du eine Liste aller DidYouKnow-artikel.
+                </template>
+            </navigation-card>
+            <navigation-card v-if="canView('shortpoems')"
+                class="navigation_card"
+                title="Shortpoems"
+                :routeName="route('admin.tables.show','shortpoems')"
+                linkName="Liste der Shortpoems"
+                :routeName2="route('admin.tables.create', 'shortpoems')"
+                linkName2="Neues Gedicht"
+                :withIcon="true"
+                icon="IconStory"
+            >
+                <template #description>
+                                Hier findest du eine Liste aller DidYouKnow-artikel.
+                </template>
+            </navigation-card>
             <!-- Tabellen Overview -->
             <navigation-card v-if="modulRights?.DataBases"
                 class="navigation_card"
@@ -140,7 +169,9 @@ export default defineComponent({
             return this.rightsData[`${right}_${table}`] === 1;
         },
         canView(table) {
-            return this.$hasRight('view', table); // Globale Methode
+        const result = this.hasRight('view', table);
+        // console.log(`canView(${table}) →`, result);
+        return result;
         },
     },
 });

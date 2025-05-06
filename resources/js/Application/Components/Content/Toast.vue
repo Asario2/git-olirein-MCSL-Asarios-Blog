@@ -7,25 +7,25 @@
             role="alert"
         >
             <div
-                v-if="type == 'success'"
+                v-if="type === 'success'"
                 class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 rounded-lg text-layout-sun-900 bg-layout-sun-0 dark:text-layout-night-900 dark:bg-layout-night-0"
             >
                 <icon-done class="w-5 h-5"></icon-done>
             </div>
             <div
-                v-if="type == 'info'"
+                v-if="type === 'info'"
                 class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 rounded-lg text-layout-sun-900 bg-layout-sun-0 dark:text-layout-night-900 dark:bg-layout-night-0"
             >
                 <icon-done class="w-5 h-5"></icon-done>
             </div>
             <div
-                v-if="type == 'warning'"
+                v-if="type === 'warning'"
                 class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 rounded-lg text-layout-sun-900 bg-orange-500 dark:text-layout-night-900 dark:bg-orange-500"
             >
                 <icon-exclamation class="w-5 h-5"></icon-exclamation>
             </div>
             <div
-                v-if="type == 'error'"
+                v-if="type === 'error'"
                 class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 rounded-lg text-layout-sun-900 bg-red-500 dark:text-layout-night-900 dark:bg-red-500"
             >
                 <icon-exclamation class="w-5 h-5"></icon-exclamation>
@@ -45,8 +45,11 @@
     </div>
     <!-- ENDS Toast -->
 </template>
+
 <script>
+
 import IconDone from "@/Application/Components/Icons/Done.vue";
+import { toastBus } from '@/utils/toastBus';
 import IconExclamation from "@/Application/Components/Icons/Exclamation.vue";
 import IconClose from "@/Application/Components/Icons/Close.vue";
 
@@ -57,57 +60,36 @@ export default {
         IconDone,
         IconExclamation,
         IconClose,
+        toastBus,
     },
 
     data() {
         return {
-            show: true,
+            show: false,
             type: "success",
             message: null,
             alertClass: "",
         };
     },
-    //
-    created() {
-        this.getMessage();
-    },
-    //
-    watch: {
-        "$page.props.toast": {
-            handler() {
-                this.getMessage();
-            },
-            deep: true,
-            immediate: true,
-        },
-    },
-    //
-    methods: {
-        getMessage() {
-            if (this.$page.props.toast.error) {
-                this.type = "error";
-                this.message = this.$page.props.toast.error;
-            }
-            //
-            if (this.$page.props.toast.warning) {
-                this.type = "warning";
-                this.message = this.$page.props.toast.warning;
-            }
-            //
-            if (this.$page.props.toast.info) {
-                this.type = "info";
-                this.message = this.$page.props.toast.info;
-            }
-            //
-            if (this.$page.props.toast.success) {
-                this.type = "success";
-                this.message = this.$page.props.toast.success;
-            }
-            //
-            this.show = true;
 
+    mounted() {
+        toastBus.on('toast', this.showToast);
+    },
+    beforeUnmount() {
+        toastBus.off('toast', this.showToast);
+    },
+
+    methods: {
+        showToast(payload) {
+            console.log('Toast payload:', payload);  // Prüfe, ob die Daten hier ankommen
+            this.type = payload.status || 'info';
+            this.message = payload.message;
             this.alertClass = this.determineAlertClass(this.type);
+            this.show = true;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            setTimeout(() => this.show = false, 400000); // auto-hide nach 4 Sekunden
         },
+
         determineAlertClass(type) {
             switch (type) {
                 case "success":

@@ -11,6 +11,7 @@
 </template>
 <script>
 import IconPencil from "@/Application/Components/Icons/Pencil.vue";
+import { toastBus } from '@/utils/toastBus';
 import IconTrash from "@/Application/Components/Icons/Trash.vue";
 import { hasRight,loadAllRights,isRightsReady,hasRightSync } from '@/utils/rights';
 import { CleanTable, CleanId } from '@/helpers';
@@ -21,6 +22,7 @@ export default {
         IconPencil,
         CleanTable,
         CleanId,
+        toastBus,
     },
     props: {
         Redit: {
@@ -88,12 +90,13 @@ export default {
             }
             // console.log(`aad: admin/tables/delete/${this.table}/${this.id}`);
             // DELETE-Anfrage mit Parametern in der URL
-            await axios.delete(`/admin/tables/delete/${this.table}/${this.id}`, {
+            const response = await axios.delete(`/admin/tables/delete/${this.table}/${this.id}`, {
                 params: {
                     edit: "blogposts.index",
                 }
             });
-
+            console.log(response.data);
+            toastBus.emit('toast', response.data); // ← erwartet { status: "...", message: "..." }
             this.$inertia.reload();
             // Optional: Seite neu laden oder Liste aktualisieren
         } catch (error) {

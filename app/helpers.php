@@ -37,7 +37,7 @@ if(!function_exists("RUMLAUT"))
 {
     function RUMLAUT($string)
     {
-        return str_replace(array("---",'Ãœ',"Ã","Ã¶",'Ã"Y','Ã¼','Ã¤','ÃŸ',"âEUR¦"),array("<hr>","&Uuml;","&szlig;","&ouml;","&szlig;","&uuml;","&auml;","&szlig;",''),$string);
+        return str_replace(array("---",'Ãœ',"Ã","Ã¶",'Ã"Y','Ã¼','Ã¤','ÃŸ',"âEUR¦",'Ã?'),array("<hr>","&Uuml;","&szlig;","&ouml;","&szlig;","&uuml;","&auml;","&szlig;",'',"&szlig;"),$string);
     }
 }
 if(!function_exists("shorter"))

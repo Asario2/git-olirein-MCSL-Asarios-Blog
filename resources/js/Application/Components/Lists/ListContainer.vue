@@ -80,6 +80,7 @@
 
 <script>
 import { Link } from "@inertiajs/vue3";
+import { toastBus } from '@/utils/toastBus';
 import SearchFilter from "@/Application/Components/Lists/SearchFilter.vue";
 import Pagination from "@/Application/Components/Lists/Pagination.vue";
 import ButtonGroup from "@/Application/Components/Form/ButtonGroup.vue";
@@ -99,6 +100,7 @@ export default {
     name: "Contents_Lists_ListContainer",
     components: {
         Link,
+        toastBus,
         SearchFilter,
         Pagination,
         ButtonGroup,
@@ -214,9 +216,11 @@ export default {
         deleteDataRow(id) {
             if (confirm("Wollen Sie diesen Beitrag wirklich löschen?")) {
                 axios.delete(this.routeDelete + id)
-                    .then(() => {
-                        this.$emit("deleted");
-                        this.$inertia.reload();
+                .then(response => {
+                    toastBus.emit('toast', response.data); // ← erwartet { status: "...", message: "..." }
+                    this.$emit("deleted");
+
+                         this.$inertia.reload();
                     })
                     .catch(error => console.error("Fehler beim Löschen:", error));
             }

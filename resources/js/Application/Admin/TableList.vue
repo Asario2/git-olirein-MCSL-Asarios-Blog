@@ -56,6 +56,7 @@ import Layout from "@/Application/Admin/Shared/Layout.vue";
 import Breadcrumb from "@/Application/Components/Content/Breadcrumb.vue";
 import ListContainer from "@/Application/Components/Lists/ListContainer.vue";
 import { CleanTable } from '@/helpers';
+import { toastBus } from '@/utils/toastBus';
 import { data } from "jquery";
 import { hasRight,loadAllRights,isRightsReady } from '@/utils/rights';
 export default defineComponent({
@@ -65,6 +66,7 @@ export default defineComponent({
         Layout,
         Breadcrumb,
         ListContainer,
+        toastBus,
     },
 
     props: {

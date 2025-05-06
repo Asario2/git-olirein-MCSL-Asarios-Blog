@@ -448,6 +448,7 @@ import InputError from "@/Application/Components/Form/InputError.vue";
 import { throttle } from "lodash";
 import DialogModal from "@/Application/Components/DialogModal.vue";
 import { hasRight,loadAllRights,isRightsReady } from '@/utils/rights';
+import { toastBus } from '@/utils/toastBus';
 import { reactive } from "vue";
 import Alert from "@/Application/Components/Content/Alert.vue";
 // import { console } from "inspector/promises";
@@ -463,6 +464,7 @@ export default defineComponent({
         Breadcrumb,
         SmoothScroll,
         // PageTitle,
+        toastBus,
         InputFormDateTime,
         InputFormText,
         SectionForm,
@@ -1524,7 +1526,10 @@ async submitForm() {
             {
                 response = await axios.post(`/admin/tables/store/${this.tablex}`, {
                 formData: this.formData
+
+
             });
+            toastBus.emit('toast', response.data);      
             }
 
             else{
@@ -1535,6 +1540,7 @@ async submitForm() {
                 response = await axios.post(`/admin/tables/update/${tablex}/${xid}`, {
                 formData : this.formData,
             });
+            toastBus.emit('toast', response.data);
 
         }
 

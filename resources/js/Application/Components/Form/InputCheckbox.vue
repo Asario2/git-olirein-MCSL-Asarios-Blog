@@ -31,7 +31,7 @@ export default {
     emits: ["update:modelValue"],
     props: {
         name: { type: String },
-        modelValue: { type: [Number, Boolean, String], default: false },
+        modelValue: { type: [Number], default: 0 },
         label: { type: String, default: "" },
         helptext: { type: String, default: "" },
     },

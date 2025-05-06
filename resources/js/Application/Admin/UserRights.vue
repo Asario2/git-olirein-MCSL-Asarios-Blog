@@ -106,13 +106,14 @@
 </template>
 
 <script>
+import { toastBus } from '@/utils/toastBus';
 import { GetSettings } from "@/helpers";
 import InputSelect from "@/Application/Components/Form/InputSelect.vue";
 import InputCheckbox from "@/Application/Components/Form/InputCheckbox.vue";
 import IconRight from "@/Application/Components/Icons/IconRight.vue"; // Assuming this is the correct import
 export default {
   name: "Rightstable",
-  components: { InputSelect , InputCheckbox,IconRight},
+  components: { InputSelect , InputCheckbox,IconRight,toastBus},
   props: {
     adminTables: Array,
     urid: [String, Number],
@@ -254,6 +255,7 @@ saveRights() {
   axios.post('/api/admin/user-rights/save?urid=' + this.selected, payload)
     .then(response => {
     //   console.log('✅ Rechte gespeichert!', response.data);
+    toastBus.emit('toast', response.data);
     })
     .catch(error => {
       console.error('❌ Fehler beim Speichern:', error);

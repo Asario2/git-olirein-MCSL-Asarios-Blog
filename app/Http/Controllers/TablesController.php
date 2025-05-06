@@ -1532,7 +1532,7 @@ class TablesController extends Controller
     ]);
         }
 
-       return response()->json(['success' => false, 'message' => 'Ungültige Tabelle oder Spalte'], 404);
+       return response()->json(['status' => 'error', 'message' => 'Ungültige Tabelle oder Spalte'], 404);
     }
     public function StoreTable(Request $request,$table)
     {
@@ -1546,6 +1546,18 @@ class TablesController extends Controller
         if (isset($formData['image_path']) && empty($formData['image_path'])) {
             $formData['image_path'] = "008.jpg";
         }
+        $columns = Schema::getColumnListing($table);
+        $hasOnColumn = collect($columns)->contains(function ($column) {
+            return str_contains($column, '_on');
+        });
+        if(is_array($hasOnColumn))
+        {
+            foreach($hasOnColumn as $key=>$val)
+            {
+                $formData[$key] = (int)$val;
+            }
+        }
+
         // \Log::info(public_path()."/images/".$table."/big/".$formData['image_path']);
         if(Schema::hasColumn($table, 'img_x'))
         {
@@ -1559,12 +1571,13 @@ class TablesController extends Controller
         {
             $formData['preis'] = str_replace(",",".",$formData['preis']);
         }
+        //\Log::info($formData);
         $table_res = DB::table($table)->insert(
         $formData
         );
 
         // Rückgabe der Antwort, z.B. Weiterleitung oder JSON-Antwort
-        return response()->json(['message' => 'Daten erfolgreich gespeichert!']);
+        return response()->json(['status' => 'success','message' => 'Daten erfolgreich gespeichert!']);
     }
     public function getSlug($table,$id='')
     {
@@ -1628,11 +1641,11 @@ class TablesController extends Controller
         }
             // \Log::info("FD:".json_encode($formData));
         if (!Schema::hasTable($table)) {
-            return response()->json(['error' => 'Tabelle nicht gefunden'], 404);
+            return response()->json(['status'=>'error', 'message' => 'Tabelle nicht gefunden'], 404);
         }
         $record = DB::table($table)->where('id', $id)->first();
             if (!$record) {
-                return response()->json(['error' => 'Eintrag nicht gefunden'], 404);
+                return response()->json(['status'=>'error', 'message' => 'Eintrag nicht gefunden'], 404);
             }
         // Beispiel: Dynamische Tabelle anhand des Parameters "table"
         // if (in_array($table, ['valid_table_1', 'valid_table_2'])) {  // Überprüfe, ob die Tabelle gültig ist
@@ -1654,7 +1667,7 @@ class TablesController extends Controller
 
             // $this->debugUpdateQuery($table,$id,$formData);
             // if ($updated) {
-                return response()->json(['message' => 'Daten erfolgreich aktualisiert!']);
+                return response()->json(['status' => 'success','message' => 'Daten erfolgreich aktualisiert!']);
             // } else {
 
             //     return response()->json(['error' => implode("|",$formData)], 507);
@@ -1725,6 +1738,7 @@ class TablesController extends Controller
 
         }
         DB::table($table)->where('id', $id)->delete();
+        return response()->json(["status"=>"success","message"=>"Eintrag erfolgreich gelöscht"]);
 
     }
     function GetSRights()
@@ -1865,7 +1879,7 @@ return response()->json($user);
     $userRight = UsersRight::find($urid);
 
     if (!$userRight) {
-        return response()->json(['message' => 'Benutzerrechte nicht gefunden.'], 404);
+        return response()->json(['status' => 'error','message' => 'Benutzerrechte nicht gefunden.'], 404);
     }
 
     // Werte setzen
@@ -1881,7 +1895,7 @@ return response()->json($user);
 
     $userRight->save();
 
-    return response()->json(['message' => 'Rechte erfolgreich gespeichert.']);
+    return response()->json(['status' => 'success','message' => 'Rechte erfolgreich gespeichert.']);
     }
     public function GetAdmins($urid)
     {

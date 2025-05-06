@@ -181,6 +181,7 @@ import IconTrash from "@/Application/Components/Icons/Trash.vue";
 import DisplayDate from "@/Application/Components/Content/DisplayDate.vue";
 //import PhotoSwipeLightbox from "photoswipe/dist/photoswipe-lightbox.esm.js";
 // import PhotoSwipeLightbox from "photoswipe/dist/photoswipe-lightbox.esm.js";
+import { toastBus } from '@/utils/toastBus';
 import PhotoSwipeLightbox from 'photoswipe/lightbox';
 import 'photoswipe/style.css';
 import { CleanTable, CleanId } from '@/helpers';
@@ -211,6 +212,7 @@ components: {
     SocialButtons,
     ZoomImage,
     MetaHeader,
+    toastBus,
 },
 data() {
     return {
@@ -423,8 +425,9 @@ methods: {
         if (confirm("Wollen Sie diesen Beitrag wirklich löschen?")) {
             axios
                 .delete(this.routeDelete + id)
-                .then(() => {
+                .then((response) => {
                     this.$emit("deleted");
+                    toastBus.emit('toast', response.data); // ← erwartet { status: "...", message: "..." }
                     this.$inertia.reload();
                 })
                 .catch((error) => {

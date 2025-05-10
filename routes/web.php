@@ -85,6 +85,8 @@ Route::get('/get-rating/{table}/{postId}', [RatingController::class, 'getStars']
 Route::get('/get-average-rating/{table}/{postId}', [RatingController::class, 'getAverageRating']);
 Route::get('/tables/form-data/{table}/{id}', [TablesController::class, 'ExportFields'])
 ->name("GetTableForm");
+Route::get('/pb', [RatingController::class, 'pb'])
+->name("pb");
 // ========
 // Homepage
 // ========

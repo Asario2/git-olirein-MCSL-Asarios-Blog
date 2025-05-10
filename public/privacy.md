@@ -1,0 +1,1 @@
+Diese Datenschutzerklärung wurde durch den <a href="https://dsgvo-muster-datenschutzerklaerung.dg-datenschutz.de/">Datenschutzerklärungs-Generator</a> der Deutschen Gesellschaft für Datenschutz, in Kooperation mit den <a href="https://www.wbs-law.de/taetigkeitsgebiete/medienrecht/">Medienrecht</a> Anwälten WILDE BEUGER SOLMECKE | Rechtsanwälte erstellt.

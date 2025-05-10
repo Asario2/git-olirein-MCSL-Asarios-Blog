@@ -139,4 +139,7 @@ class RatingController extends Controller
         // \Log::info(json_encode([$rating,$queries,$table]));
         return response()->json($rating);
     }
+    public static function pb(){
+        buildPrivacyText();
+    }
 }

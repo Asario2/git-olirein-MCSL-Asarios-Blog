@@ -597,9 +597,9 @@ if(!function_exists("Import_Dump"))
         echo "<script>location.href=history.back();</script>";
     }
 }
-if(!function_exists('rinfo_code'))
+if(!function_exists('rinfo_code2'))
 {
-    function rinfo_code($txt)
+    function rinfo_code2($txt)
     {
             global $ln,$pref,$cfg;
         if(!defined("_frutel_new"))

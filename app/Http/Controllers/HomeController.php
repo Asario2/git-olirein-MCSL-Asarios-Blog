@@ -68,7 +68,7 @@ class HomeController extends Controller
             ->filterBlog(Request::only('search'))
             ->orderBy('blogs.blog_date', 'desc')
             ->orderBy('blogs.id', 'desc')
-            ->paginate(22)
+            ->paginate(19)
             ->withQueryString();
         //
         $blogs->getCollection()->transform(function ($blog) {

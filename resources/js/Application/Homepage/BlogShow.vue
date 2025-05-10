@@ -1,6 +1,6 @@
 <template>
     <layout
-        :header-title="blog.title"
+        header-title="Asarios Blog"
         :header-description="blog.description"
         :header-url="$page.props.saas_url + 'blogs/show/' + blog.autoPpslug"
         :header-image="$page.props.saas_url + 'big/' + blog.blog_images?.url"

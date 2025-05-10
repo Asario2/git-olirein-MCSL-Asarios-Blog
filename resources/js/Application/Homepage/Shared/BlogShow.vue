@@ -1,5 +1,5 @@
 <template>
-<MetaHeader title="Meine Bilder Übersicht" />
+
 <div
         class="p-5 mx-auto sm:p-2 md:p-10 bg-layout-sun-0 text-layout-sun-800 dark:bg-layout-night-0 dark:text-layout-night-800"
     >

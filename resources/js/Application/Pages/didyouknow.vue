@@ -1,5 +1,6 @@
     <template>
         <Layout>
+            <MetaHeader title="Wussten Sie Schon ?" />
         <section class="max-w-3xl mx-auto mt-10 px-4">
             <h1 class="text-3xl font-bold mb-6 text-layout-title">Wussten Sie schon...</h1>
             <div class="p-2 md:p-4" v-if="Array.isArray(items.data) && items.data.length === 0 && form.search">
@@ -81,6 +82,7 @@
 
     <script>
     import Layout from '@/Application/Homepage/Shared/Layout.vue';
+    import MetaHeader from "@/Application/Homepage/Shared/MetaHeader.vue";
     import editbtns from '@/Application/Components/Form/editbtns.vue';
     import SocialButtons from "@/Application/Components/Social/socialButtons.vue";
     import averageRating from "@/Application/Components/Social/averageratings.vue";
@@ -90,7 +92,7 @@
     import mapValues from "lodash/mapValues";
     import { throttle } from "lodash";
     export default {
-        components: { Layout, editbtns,SocialButtons, averageRating,SearchFilter,  },
+        components: { Layout, editbtns,SocialButtons, averageRating,SearchFilter,MetaHeader  },
         props: {
         items: {
             type: [Array,Object],

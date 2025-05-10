@@ -175,7 +175,7 @@
                         :name="field.name"
                         :ref="field.name"
                         v-model="field.value"
-                        :value="field.value"
+
                         :placeholder="field.placeholder || ''"
                         :disabled="field.class !== 'datetime'"
                         :required="isRequired(field.required)"
@@ -846,7 +846,10 @@ export default defineComponent({
         }
         if(!$_GET['rl'])
             {
-            //location.href = location.href + "?rl=2";
+                location.href = location.href + "?rl=2";
+            //    $inertia.reload();
+            //    this.isLoading = false;
+
             }
             if($_GET['rl']  == "2")
             {
@@ -1529,7 +1532,7 @@ async submitForm() {
 
 
             });
-            toastBus.emit('toast', response.data);      
+            toastBus.emit('toast', response.data);
             }
 
             else{

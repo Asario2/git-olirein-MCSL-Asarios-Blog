@@ -1,7 +1,7 @@
 <template>
     <Head :title="title"></Head>
     <div
-        class="bg-layout-sun-0 text-layout-sun-900 dark:bg-layout-night-0 dark:text-layout-night-900"   
+        class="bg-layout-sun-0 text-layout-sun-900 dark:bg-layout-night-0 dark:text-layout-night-900"
     >
         <div class="flex flex-col">
             <!-- Header -->
@@ -25,7 +25,7 @@
 
                         <div class="flex flex-col items-center justify-center">
                             <link-header
-                                name="Home"
+                                name="Asarios BLog"
                                 :route-name="route('home.index')"
                             ></link-header>
                         </div>

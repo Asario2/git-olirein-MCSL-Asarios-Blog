@@ -41,6 +41,10 @@ Route::get('/no-rights', [HomeController::class, 'no_rights'])->name('tables.nov
 
 
 Route::get('/api/settings', [SettingsController::class, 'all']);
+Route::get('/api/GetLastAct', function (){
+
+    return response($_SERVER['HTTP_REFERER']);
+});
 Route::get('/GetAuth', function () {
     if (Auth::check()) {
         // \Log::info("✅ Eingeloggt, User-ID: " . Auth::id());
@@ -85,7 +89,7 @@ Route::get('/tables/form-data/{table}/{id}', [TablesController::class, 'ExportFi
 // Homepage
 // ========
 // Startseite
-Route::get('/', [HomeController::class, 'home_index'])->name('home.index');
+Route::get('/', [HomeController::class, 'home_blog_index'])->name('home.index');
 // Get Started
 Route::get('/home/get_started', [HomeController::class, 'home_get_started'])->name('home.get_started');
 // Pricing

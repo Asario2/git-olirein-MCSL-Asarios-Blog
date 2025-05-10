@@ -45,12 +45,14 @@ class FormController extends Controller
             }
             elseif((substr_count($name,"_at") || $name == "blog_date") && !empty($create))
             {
-                $value = date('Y-m-d H:i:s');
+                $value = now();
+                \Log::info("VAL: $name :".$value);
             }
             elseif((substr_count($name,"_at") || $name == "blog_date"))
             {
-                $value = $value;
+               // $value = $value;
             }
+
             $value = html_entity_decode($value);
 
 
@@ -1333,88 +1335,7 @@ var $j = jQuery.noConflict(); // Weist jQuery einer anderen Variable zu, um Konf
 
 
 
-$scr = "
-    <script>
-            var \$k = jQuery.noConflict(); // Weist jQuery einer anderen Variable zu, um Konflikte zu vermeiden
-        </script>
-<script>
 
-        \$k(function() {
-
-    // DateTimePicker initialisieren
-    \$k('#datetimepicker_".$id."').datetimepicker({
-    dateFormat: 'dd.mm.yy', // Deutsches Datumsformat: Tag.Monat.Jahr
-    timeFormat: 'HH:mm:ss',    // Deutsches Zeitformat: Stunden:Minuten
-    currentText: 'Jetzt',   // Button für aktuelle Uhrzeit
-    closeText: 'Schließen', // Schließen-Button
-    timeOnlyTitle: 'Zeit auswählen',
-    timeText: 'Zeit',
-    hourText: 'Stunde',
-    minuteText: 'Minute',
-    secondText: 'Sekunde',
-    showButtonPanel: true,
-     separator: ' ',   // Zeigt den Button-Panel (Heute/Schließen)
-  });
-
-    \$k('#datetimepicker_".$id."').on('change',function() {
-    // Hole das ausgewählte Datum
-    // alert('ASD');
-    var selectedDate = \$k('#datetimepicker_".$id."').val();
-    var csrfToken = \$k('#csrf').val();
-    var ch_dt = '/change-date'; //\$k('#ch_dt').val();
-    // alert(ch_dt);
-    // Sende das Datum über AJAX
-    \$k.ajax({
-      url: ch_dt, // Laravel-Route
-      type: 'POST',                   // Methode POST
-      data: {
-        date: selectedDate,
-        table: '$t'     ,
-        id: '$id',
-        column: '$n',
-        _token: csrfToken  // CSRF-Token für Sicherheit
-      },
-      success: function(response) {
-        // alert('Datum erfolgreich gespeichert!');
-        if(document.getElementById('desc_".$id."'))
-        {
-        \$k('#desc_".$id."').text(selectedDate);
-        }
-      },
-      error: function(xhr, status, error) {
-       console.log('Fehler: ' + xhr.responseText);
-      }
-
-    });
-  });
-
-            \$k('#openPicker_".$id."').click(function() {
-                \$k('#datetimepicker_".$id."').datetimepicker('show');
-            });
-        });
-        \$k('#desc_".$id."').on('dblclick', function() {
-            \$k('#datetimepicker_".$id."').datetimepicker('show'); // DateTimePicker öffnen
-        });
-         let lastTap_".$id." = 0;
-let isPickerOpen_".$id." = false;
-
-\$k('#desc_".$id."').on('touchstart', function(event) {
-    const currentTime = new Date().getTime();
-    const tapLength = currentTime - lastTap_".$id.";
-
-    if (tapLength < 500 && tapLength > 200 && !isPickerOpen_".$id.") { // Doppeltap erkannt
-        \$k('#datetimepicker_".$id."').datetimepicker('show'); // DateTimePicker öffnen
-        isPickerOpen_".$id." = true; // Setze den Flag
-    }
-    lastTap_".$id." = currentTime;
-});
-
-// Event, um den Flag zurückzusetzen, wenn der Picker geschlossen wird
-\$k('#datetimepicker_".$id."').on('close', function() {
-    isPickerOpen_".$id." = false; // Setze den Flag zurück, wenn der Picker geschlossen wird
-});
-
-    </script>";
     $scr = CheckRights(Auth::id(),$t,"date") ? $scr : '';
     if($scr)
     {

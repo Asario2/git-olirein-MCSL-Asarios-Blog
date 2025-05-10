@@ -98,6 +98,21 @@
                 <b><IconHyperLink/></b>
             </button>
             <tippy>Hyperlink</tippy>
+
+        <button type="button" @mousedown.prevent
+                @click="toggleFormat('list')"
+                class="px-2.5 py-1 rounded-full hover:bg-layout-sun-0 hover:dark:bg-layout-night-0 cursor-pointer"
+            v-tippy>
+                <b><IconList/></b>
+            </button>
+            <tippy>Ungeordnete Liste</tippy>
+            <button type="button" @mousedown.prevent
+                @click="toggleFormat('ordlist')"
+                class="px-2.5 py-1 rounded-full hover:bg-layout-sun-0 hover:dark:bg-layout-night-0 cursor-pointer"
+            v-tippy>
+                <b><IconOrdList/></b>
+            </button>
+            <tippy>Geordnete Liste</tippy>
         </div>
 
         <!-- Textfeld -->
@@ -139,6 +154,8 @@ import 'tippy.js/dist/tippy.css';
 import ImageUploadModal from '@/Application/Components/ImageUploadModal.vue';
 import { GetSettings } from "@/helpers";
 import IconPictures from "@/Application/Components/Icons/IconPictures.vue";
+import IconList from "@/Application/Components/Icons/IconList.vue";
+import IconOrdList from "@/Application/Components/Icons/IconOrdList.vue";
 import IconCode from "@/Application/Components/Icons/IconCode.vue";
 import IconHyperLink from "@/Application/Components/Icons/IconHyperLink.vue";
 import { Tippy } from 'tippy.vue';
@@ -150,6 +167,8 @@ export default {
     IconCode,
     IconHyperLink,
     ImageUploadModal,
+    IconList,
+    IconOrdList,
   },
   props: {
     imageId: [String, Number],
@@ -422,5 +441,14 @@ export default {
     border-radius:4px;
     color:#999;
     border-color:#999;
+}
+.editor ul {
+  list-style-type: disc; /* oder 'outside disc' */
+  padding-left: 1.5rem; /* Abstand für Bullet */
+}
+
+.editor li {
+  margin-bottom: 1rem;
+  color: var(--text-color); /* Sicherstellen, dass Text und Marker sichtbar sind */
 }
 </style>

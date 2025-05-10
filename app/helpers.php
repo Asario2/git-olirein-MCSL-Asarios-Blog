@@ -37,7 +37,17 @@ if(!function_exists("RUMLAUT"))
 {
     function RUMLAUT($string)
     {
-        return str_replace(array("---",'Ãœ',"Ã","Ã¶",'Ã"Y','Ã¼','Ã¤','ÃŸ',"âEUR¦",'Ã?'),array("<hr>","&Uuml;","&szlig;","&ouml;","&szlig;","&uuml;","&auml;","&szlig;",'',"&szlig;"),$string);
+        $string = preg_replace('/<\/li>\s*<br\s*\/?>/i', '</li>', $string);
+        $string = preg_replace('/<li>\s*<br\s*\/?>/i', '<li>', $string);
+        $string = preg_replace([
+            '/<br\s*\/?>\s*(<(h2|h3|p)[^>]*>)/i',   // <br> VOR <h2>/<h3>/<p>
+            '/(<\/(h2|h3|p)>)\s*<br\s*\/?>/i'       // <br> NACH </h2></h3></p>
+        ], [
+            '$1',
+            '$1'
+        ], $string);
+        $string = str_replace("â€“","-",$string);
+        return str_replace(array("---","ÃƒÅ“","ÃƒÂ¼",'ÃƒÅ¸','Ãƒ?','ÃƒÂ¤','â€™',"Ã„",'Ãœ',"Ã","Ã¶",'Ã"Y','Ã¼','Ã¤','ÃŸ',"âEUR¦",'Ã?'),array("<hr>","&Uuml;",'&uuml;',"&szlig;","&szlig;","&auml;","'","&Auml;","&Uuml;","&szlig;","&ouml;","&szlig;","&uuml;","&auml;","&szlig;",'',"&szlig;"),$string);
     }
 }
 if(!function_exists("shorter"))
@@ -137,7 +147,7 @@ if(!function_exists("renderText"))
                     $table = session('table');
 
                     foreach ($whvals as $whn) {
-                                            $this->orWhereRaw("LOWER(`$table` . `$whn`) LIKE ?", ['%' . htmlentities(strtolower($filters['search'])) . '%']);
+                                            $this->orWhereRaw("LOWER(`$table` . `$whn`) LIKE ?", ['%' . html_entity_decode(strtolower($filters['search'])) . '%']);
                     }
 
 

@@ -360,7 +360,9 @@ class TablesController extends Controller
             $ord[1] = "DESC";
         }
         $id = (int)$id;
-
+        if(!Schema::hastable($table)){
+            return;
+        }
         $id = $id == 0 ? null : $id;
         $columns = Schema::getColumnListing($table);
         $columns = array_diff($columns, ['id']);
@@ -1546,6 +1548,7 @@ class TablesController extends Controller
         if (isset($formData['image_path']) && empty($formData['image_path'])) {
             $formData['image_path'] = "008.jpg";
         }
+
         $columns = Schema::getColumnListing($table);
         $hasOnColumn = collect($columns)->contains(function ($column) {
             return str_contains($column, '_on');
@@ -1567,6 +1570,7 @@ class TablesController extends Controller
         $formData['img_y'] = $height;
         // Erstelle einen neuen Datensatz mit den validierten Eingabedaten
         }
+        $formData['preis'] = $formData['preis'] ?? "0.0";
         if(Schema::hasColumn($table, 'preis')|| isset($formData['preis']))
         {
             $formData['preis'] = str_replace(",",".",$formData['preis']);

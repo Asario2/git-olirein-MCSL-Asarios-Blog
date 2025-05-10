@@ -5,7 +5,8 @@
         :header-url="$page.props.saas_url + 'blogs/show/' + blog.autoPpslug"
         :header-image="$page.props.saas_url + 'big/' + blog.blog_images?.url"
     >
-        <blog-show :blog="blog" :blogarticle="blogarticle"></blog-show>
+    <MetaHeader title="Asarios BLog" />
+    <blog-show :blog="blog" :blogarticle="blogarticle"></blog-show>
     </layout>
 </template>
 <script>
@@ -14,7 +15,7 @@ import { Link } from "@inertiajs/vue3";
 import Layout from "@/Application/Homepage/Shared/Layout.vue";
 
 import BlogShow from "@/Application/Homepage/Shared/BlogShow.vue";
-
+import MetaHeader from "@/Application/Homepage/Shared/MetaHeader.vue";
 export default defineComponent({
     name: "Homepage_BlogShow",
 
@@ -22,6 +23,7 @@ export default defineComponent({
         Link,
         Layout,
         BlogShow,
+        MetaHeader,
     },
 
     props: {

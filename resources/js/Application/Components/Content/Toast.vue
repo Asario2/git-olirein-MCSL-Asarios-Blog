@@ -81,7 +81,7 @@ export default {
 
     methods: {
         showToast(payload) {
-            console.log('Toast payload:', payload);  // Prüfe, ob die Daten hier ankommen
+            // console.log('Toast payload:', payload);  // Prüfe, ob die Daten hier ankommen
             this.type = payload.status || 'info';
             this.message = payload.message;
             this.alertClass = this.determineAlertClass(this.type);

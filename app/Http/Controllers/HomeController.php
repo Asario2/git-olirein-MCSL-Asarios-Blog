@@ -59,6 +59,8 @@ class HomeController extends Controller
             ->join('blog_categories', 'blog_categories.id', '=', 'blogs.blog_categories_id')
             //
             ->whereDate('blog_date', '<=', $zeitpunkt)
+            ->where("blogs.pub","1")
+            ->orWhere("blogs.pub","2")
             //
             ->filterBlog(Request::only('search'))
             ->orderBy('blogs.blog_date', 'desc')
@@ -232,8 +234,13 @@ class HomeController extends Controller
     //
     public function home_blog_show($autoslug)
     {
-        $blog = Blog::where('autoslug', $autoslug)->first();
+        $blog = Blog::where('autoslug', $autoslug)->where("pub","1")
+        ->orWhere("pub","2")->first();
         //
+        if(empty($blog)){
+            header("Location: /blogs");
+            exit;
+        }
         $blog->madewithai = $blog->xis_aiImage;
         $blog->blog_author;
         // $blog->blog_images;

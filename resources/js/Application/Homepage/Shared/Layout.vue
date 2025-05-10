@@ -39,10 +39,10 @@
             <!-- Mobile Menu open: "block", Menu closed: "hidden" -->
             <div :class="[isOpen_Menu ? 'translate-x-0 opacity-100 ' : 'opacity-0 -translate-x-full']" style='z-index:10000000;' class="absolute inset-x-0 mt-6 w-full px-6 py-4 shadow-md transition-all duration-300 ease-in-out bg-primary-sun-200 dark:bg-primary-night-200 lg:relative lg:top-0 lg:mt-0 lg:flex lg:w-auto lg:translate-x-0 lg:items-center lg:bg-transparent lg:p-0 lg:opacity-100 lg:shadow-none lg:dark:bg-transparent">
               <div class="flex flex-col items-center space-y-4 lg:mt-0 lg:flex-row lg:space-y-0 lg:space-x-8" style='z-index:10000000;'>
-                <link-header :route-name="route('home.index')" name="Home"></link-header>
+                <link-header :route-name="route('home.index')" name="Asarios Blog"></link-header>
                 <link-header :route-name="route('home.images.index')" name="Bilder"></link-header>
                 <!--<link-header :route-name="route('home.pricing')" name="Preise"></link-header>-->
-                <link-header :route-name="route('home.blog.index')" name="Blog"></link-header>
+                <!-- <link-header :route-name="route('home.blog.index')" name="Blog"></link-header> -->
                 <link-header :route-name="route('home.shortpoems')" name="Shortpoems"></link-header>
                 <link-header :route-name="route('home.didyouknow')" name="DidYouKnow"></link-header>
 
@@ -214,9 +214,15 @@ export default {
     };
   },
 
-  mounted() {
+ mounted() {
     // Debugging: Prüfen, ob die Seite zum ersten Mal geladen wird
+    const shouldReload = localStorage.getItem('reload_dashboard');
 
+    if (shouldReload) {
+        localStorage.removeItem('reload_dashboard'); // Wichtig: Sonst Endlosschleife
+        location.reload();
+        alert("WEEEEEEQ");
+    }
 
     // Den 'search' Parameter prüfen
     const urlParams = new URLSearchParams(window.location.search);
@@ -260,7 +266,7 @@ export default {
 
   methods: {
     setLoadingState(state) {
-    //   console.log('Setting loading state to:', state);
+      console.log('Setting loading state to:', state);
       this.isLoading = state;
     },
 

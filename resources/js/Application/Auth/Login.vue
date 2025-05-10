@@ -35,6 +35,7 @@
                             name="email"
                             v-model="form.email"
                             placeholder="Mailadresse"
+                            autofocus
                             ref="email"
                         ></input-element>
                         <input-error :message="errors.email" />
@@ -48,6 +49,7 @@
                         <input-element
                             type="password"
                             name="password"
+                            autocomplete="current-password"
                             v-model="form.password"
                             ref="password"
                         ></input-element>
@@ -162,6 +164,10 @@ export default defineComponent({
 
     methods: {
         loginUser() {
+            if (!this.form.email || !this.form.password) {
+                alert("Bitte fülle alle Felder aus.");
+                return;
+            }
             let routeLogin = "login";
             // Vorbereitung der Daten, einschließlich der Transformation des `remember`-Feldes
             const formData = {
@@ -169,13 +175,15 @@ export default defineComponent({
                 remember: this.form.remember ? "on" : "",
             };
             //
+            localStorage.setItem('reload_dashboard', '1');
             this.loading = true;
             this.loadingText = "Die Anmeldung wird durchgeführt!";
-            //
+            //s
             this.$inertia.post(this.route(routeLogin), formData, {
                 onFinish: () => {
                     this.loading = false;
                     this.form.password = ""; // Passwort zurücksetzen nach dem Absenden
+
                 },
             });
         },

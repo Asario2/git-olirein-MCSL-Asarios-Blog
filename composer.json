@@ -24,7 +24,7 @@
         "laravel/jetstream": "^5.0",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
-        "league/commonmark": "^2.6",
+        "league/commonmark": "^2.7",
         "nextqs/bacon-qr-code": "^2.0",
         "qsfx/bacon-qr-code": "^1.0",
         "rap2hpoutre/laravel-log-viewer": "^2.4",
@@ -49,6 +49,7 @@
     "autoload": {
         "psr-4": {
             "App\\": "app/",
+            "App\\Helper\\":"App/Helper/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
         },

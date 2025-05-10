@@ -1,5 +1,6 @@
 <template>
-    <div
+<MetaHeader title="Meine Bilder Übersicht" />
+<div
         class="p-5 mx-auto sm:p-2 md:p-10 bg-layout-sun-0 text-layout-sun-800 dark:bg-layout-night-0 dark:text-layout-night-800"
     >
     <div class="relative w-full flex flex-col max-w-6xl mx-auto overflow-hidden rounded">
@@ -154,7 +155,7 @@ import DisplayDate from "@/Application/Components/Content/DisplayDate.vue";
 import DisplayNumber from "@/Application/Components/Content/DisplayNumber.vue";
 import editbtns from "@/Application/Components/Form/editbtns.vue";
 import Markdown from "@/Application/Components/Content/Markdown.vue";
-
+import MetaHeader from "@/Application/Homepage/Shared/MetaHeader.vue";
 export default {
     name: "Shared_BlogShow",
     //
@@ -168,6 +169,7 @@ export default {
         DisplayNumber,
         Markdown,
         editbtns,
+        MetaHeader,
     },
 
     props: {

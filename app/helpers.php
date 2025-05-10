@@ -35,7 +35,7 @@ use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
 }
 if(!function_exists("RUMLAUT"))
 {
-    function RUMLAUT($string)
+    function RUMLAUT($string,$table='')
     {
         $string = preg_replace('/<\/li>\s*<br\s*\/?>/i', '</li>', $string);
         $string = preg_replace('/<li>\s*<br\s*\/?>/i', '<li>', $string);
@@ -46,7 +46,12 @@ if(!function_exists("RUMLAUT"))
             '$1',
             '$1'
         ], $string);
+        if($table == "shortpoems" || $table == "didyouknow")
+        {
+            $string = str_replace(["<p>","</p>","<br />"],'',$string);
+        }
         $string = str_replace("â€“","-",$string);
+        $string = html_entity_decode($string);
         return str_replace(array("---","ÃƒÅ“","ÃƒÂ¼",'ÃƒÅ¸','Ãƒ?','ÃƒÂ¤','â€™',"Ã„",'Ãœ',"Ã","Ã¶",'Ã"Y','Ã¼','Ã¤','ÃŸ',"âEUR¦",'Ã?'),array("<hr>","&Uuml;",'&uuml;',"&szlig;","&szlig;","&auml;","'","&Auml;","&Uuml;","&szlig;","&ouml;","&szlig;","&uuml;","&auml;","&szlig;",'',"&szlig;"),$string);
     }
 }

@@ -60,7 +60,7 @@ class ConvertTextFields extends Command
                         continue;
                     }
 
-                    $converted = RUMLAUT($value);
+                    $converted = RUMLAUT($value,$tableName);
 
                     if ($converted !== $value) {
                         $update[$field] = $converted;

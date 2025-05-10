@@ -7,6 +7,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Models\Blog;
 use Inertia\Inertia;
+use App\Models\DidYouKnow;
+use App\Models\ShortPoem;
+
 use Illuminate\Support\Str;
 use Laravel\Jetstream\Jetstream;
 use Illuminate\Support\Facades\Request;
@@ -140,10 +143,54 @@ class HomeController extends Controller
         ]);
     }
     //
-    public function home_shortpoems()
+    public function home_shortpoems(Request $request)
     {
         $rat = RatingController::getTotalRating("shortpoems");
-        $values = DB::table("shortpoems")->orderBy("created_at","DESC")->get();
+        $perPage = 25;
+
+        $query = ShortPoem::published()
+            ->when(request('search'), function ($query) {
+                $query->where(function ($q) {
+                    $q->filterdefault(['search' => request('search')]);
+                });
+            })
+            ->orderBy('created_at', 'desc');
+
+        $paginated = $query->paginate($perPage);
+
+        $data = [
+            'data' => $paginated->items(), // die aktuellen Items
+            'links' => $paginated->linkCollection(), // automatisch generierte Links
+            'meta' => [
+                'current_page' => $paginated->currentPage(),
+                'last_page' => $paginated->lastPage(),
+                'per_page' => $paginated->perPage(),
+                'from' => $paginated->firstItem(),
+                'to' => $paginated->lastItem(),
+                'total' => $paginated->total(),
+            ],
+        ];
+        $rat = RatingController::getTotalRating("shortpoems");
+        // $data = $data->map(function ($item) {
+        //     $item->story = html_entity_decode(html_entity_decode($item->story));
+        //     $item->headline = html_entity_decode(html_entity_decode($item->headline));
+        //     return $item;
+        // });
+        // $data = $paginated->toArray()['data'];
+        // $data = collect($data)->map(function ($item) {
+        //     $item['story'] = html_entity_decode(html_entity_decode($item['story']));
+        //     $item['headline'] = html_entity_decode(html_entity_decode($item['headline']));
+        //     return $item;
+        // });
+        $data = $paginated->through(function ($item) {
+            $item->story = html_entity_decode(html_entity_decode($item->story));
+            $item->headline = html_entity_decode(html_entity_decode($item->headline));
+            return $item;
+        });
+        return Inertia::render('Pages/shortpoems', [
+            'items' => $data,
+            'ratings' => $rat, // falls du Bewertungen dazupackst
+        ]);          // ← dann paginierenp
         // \Log::info("VALS:".json_encode($values));
         // $values = DB::table("shortpoems")->select('id', 'headline', 'story')->get();
         // return Inertia::render('Homepage/Shortpoems', [
@@ -151,11 +198,8 @@ class HomeController extends Controller
         //     'entries' => [['headline' => 'Test', 'story' => 'Nur ein Test']],
         // ]);
 
-        $values = $values->map(function ($item) {
-            $item->story = html_entity_decode($item->story);
-            $item->headline = html_entity_decode($item->headline);
-            return $item;
-        });
+
+
         return Inertia::render('Pages/Shortpoems', [
             'items' => $values,
             'ratings' => $rat,
@@ -163,8 +207,60 @@ class HomeController extends Controller
     }
     public function home_didyouknow()
     {
-        $values = DB::table("didyouknow")->orderBy("created_at","DESC")->get();
+        // $ord[0] = "created_at";
+        // $ord[1] = "DESC";
+        // $values = DB::table("didyouknow")->orderBy("created_at","DESC")->where(function ($query) {
+        //     $query->where("didyouknow.pub", 1)
+        //           ->orWhere("didyouknow.pub", 2);
+        // })->when(request("search"), function ($query){
+        //     $query->where(function ($subquery) {
+        //         $subquery->filterdefault(['search' => request('search')]);
+        //     });
+        // })
+        // ->orderBy($ord[0], $ord[1])
+        // ->paginate(25);
+
+
+        // $values = DidYouKnow::published()
+        // ->when(request('search'), function ($query) {
+        //     $query->where(function ($q) {
+        //         $q->filterdefault(['search' => request('search')]);
+        //     });
+        // })
+        // ->orderBy('created_at', 'desc')
+        // ->paginate(25);
+        $perPage = 25;
+
+        $query = DidYouKnow::published()
+            ->when(request('search'), function ($query) {
+                $query->where(function ($q) {
+                    $q->filterdefault(['search' => request('search')]);
+                });
+            })
+            ->orderBy('created_at', 'desc');
+
+        $paginated = $query->paginate($perPage);
+
+        $data = [
+            'data' => $paginated->items(), // die aktuellen Items
+            'links' => $paginated->linkCollection(), // automatisch generierte Links
+            'meta' => [
+                'current_page' => $paginated->currentPage(),
+                'last_page' => $paginated->lastPage(),
+                'per_page' => $paginated->perPage(),
+                'from' => $paginated->firstItem(),
+                'to' => $paginated->lastItem(),
+                'total' => $paginated->total(),
+            ],
+        ];
         $rat = RatingController::getTotalRating("didyouknow");
+        return Inertia::render('Pages/didyouknow', [
+            'items' => $data,
+            'ratings' => $rat, // falls du Bewertungen dazupackst
+        ]);
+
+        // ← dann paginierenp
+
         // \Log::info("VALS:".json_encode($values));
         // $values = DB::table("shortpoems")->select('id', 'headline', 'story')->get();
         // return Inertia::render('Homepage/Shortpoems', [
@@ -177,9 +273,10 @@ class HomeController extends Controller
             $item->headline = html_entity_decode($item->headline);
             return $item;
         });
+        \Log::info("SQL:".json_encode($values));
         return Inertia::render('Pages/didyouknow', [
             'items' => $values,
-            'ratings' => $rat,
+                'ratings' => $rat,
         ]);
     }
     public function home_images_search(Request $request,$slug)

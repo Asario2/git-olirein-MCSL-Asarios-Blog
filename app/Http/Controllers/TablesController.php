@@ -1570,9 +1570,10 @@ class TablesController extends Controller
         $formData['img_y'] = $height;
         // Erstelle einen neuen Datensatz mit den validierten Eingabedaten
         }
-        $formData['preis'] = $formData['preis'] ?? "0.0";
+
         if(Schema::hasColumn($table, 'preis')|| isset($formData['preis']))
         {
+            $formData['preis'] = $formData['preis'] ?? "0.0";
             $formData['preis'] = str_replace(",",".",$formData['preis']);
         }
         //\Log::info($formData);

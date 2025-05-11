@@ -30,77 +30,68 @@
     </div>
   </template>
 
-  <script>
-  import axios from "axios";
-
-  export default {
-    data() {
-      return {
-        selectedCategory: null,
-        selectedMedium: null,
-        categories: []
-      };
-    },
-    props: {
-      table: String,
-      id: [String, Number]
-    },
-    computed: {
-
-  sortedCategories() {
-    return [...this.categories].sort((a, b) => a.name.localeCompare(b.name));
-  },
-  formattedMediums() {
-    return (categoryId) => {
-
-
-      // Stelle sicher, dass categoryId als Number vorliegt
-      const catId = Number(categoryId);
-
-      const category = this.categories.find(cat => Number(cat.id) === catId);
-
-
-      if (!category) {
-
-        return [];
-      }
-
-
-
-      return category.types.length > 0
-        ? [...category.types].sort((a, b) => a.name.localeCompare(b.name))
-        : [];
+<script>
+import axios from "axios";
+import { CleanId,CleanTable } from '@/helpers';
+export default {
+  data() {
+    return {
+      selectedCategory: null,
+      selectedMedium: null,
+      categories: [],
+      table: CleanTable(),
+      id: CleanId(),
     };
-  }
-},
-    async created() {
-      try {
-        const response = await axios.get(route("ArtAct", [this.table, this.id]));
+  },
+  props: {
 
 
-        if (response.data.categories) {
-          this.categories = response.data.categories;
-        } else {
-          this.categories = [];
-        }
-
-
-
-        // Falls die API eine gespeicherte Kategorie/Medium zurückgibt, setzen
-        this.selectedCategory = response.data.selected_category_id || (this.categories.length > 0 ? this.categories[0].id : null);
-
-
-        const availableMediums = this.formattedMediums(this.selectedCategory);
-
-
-        this.selectedMedium = response.data.selected_medium_id || (availableMediums.length > 0 ? availableMediums[0].id : null);
-
-      } catch (error) {
-        console.error("❌ Fehler beim Laden der Kategorien:", error);
-      }
+  },
+  computed: {
+    sortedCategories() {
+      return [...this.categories].sort((a, b) => a.name.localeCompare(b.name));
+    },
+    formattedMediums() {
+      return (categoryId) => {
+        const catId = Number(categoryId);
+        const category = this.categories.find(cat => Number(cat.id) === catId);
+        return category?.types?.length
+          ? [...category.types].sort((a, b) => a.name.localeCompare(b.name))
+          : [];
+      };
     }
-  };
-  </script>
+  },
+  async created() {
+    try {
+        console.log(`/api/GetCat/${this.table}/${this.id}`);
+      // 1. Lade alle Kategorien mit ihren Types
+      const response = await axios.get(route("ArtAct", [this.table, this.id]));
+      this.categories = response.data.categories || [];
+
+      // 2. Lade gespeicherte Werte (type_id & categorie_id)
+      const defaultResponse = await axios.get(`/api/GetCat/${this.table}/${this.id}`);
+      const defaultData = defaultResponse.data;
+
+      // 3. Setze defaults, wenn möglich
+      if (defaultData.categorie_id) {
+        this.selectedCategory = defaultData.categorie_id;
+      } else if (this.categories.length > 0) {
+        this.selectedCategory = this.categories[0].id;
+      }
+
+      const availableMediums = this.formattedMediums(this.selectedCategory);
+
+      if (defaultData.type_id && availableMediums.find(m => m.id == defaultData.type_id)) {
+        this.selectedMedium = defaultData.type_id;
+      } else if (availableMediums.length > 0) {
+        this.selectedMedium = availableMediums[0].id;
+      }
+    } catch (error) {
+      console.error("❌ Fehler beim Laden der Daten:", error);
+    }
+  }
+};
+</script>
 
   <style scoped>
 @media (min-width: 1024px) {

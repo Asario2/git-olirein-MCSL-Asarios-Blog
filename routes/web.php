@@ -121,7 +121,7 @@ Route::get('/blogs/show/{autoslug}', [HomeController::class, 'home_blog_show'])-
 // Anwendung konnte nicht gefunden werden
 Route::get('/home/no_application_found', [HomeController::class, 'home_no_application_found'])
     ->name('home.no_application_found');
-
+    Route::get("/api/GetCat/{table}/{id}",[TablesController::class,'GetCats'])->name("GetCats");
 // Anwender ist kein Administrator
 Route::get('/home/user_is_no_admin', [HomeController::class, 'home_user_is_no_admin'])->name('home.user_is_no_admin');
 // Anwender ist kein Mitarbeiter
@@ -138,7 +138,8 @@ Route::get('/pictures/{pic}/',[App\Http\Controllers\PagesController::class, 'ab_
 Route::get('/devmod', function () {
     // ShowRepo();
     //IMULController::smpix();
-     DevMod();
+    //  DevMod();
+    ConvertTypes();
     //  small_images(public_path()."/images/_ab/users");
      // Hauptprogramm
     // $viewsPath = resource_path('views/layouts'); // Pfad zu den Blade-Dateien
@@ -148,6 +149,7 @@ Route::get('/devmod', function () {
 
 
     })->name('devmod');
+
     // Route::post('/toggle-darkmode', [App\Http\Controllers\DarkModeController::class, 'toggle'])->name('toggle.darkmode');
     Route::get('tables/{table}/create', [TablesController::class, 'createEntryForm'])->name('tables.create-table');
     Route::post('/comments/store/{table}/{postId}', [CommentController::class, 'store_alt'])->name('comments.store_alt');
@@ -236,7 +238,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
             ->name("admin.tables.edit");
         // Tables Delete
         Route::delete("/admin/tables/delete/{table}/{id}",[TablesController::class,"DeleteTables"])
-        ->name("admin.tables.delete");  
+        ->name("admin.tables.delete");
         // Tables UPDATE
         Route::post("admin/tables/update/{table}/{id?}",[TablesController::class,"UpdateTable"])
             ->name("admin.table.update");

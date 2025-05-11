@@ -1825,6 +1825,11 @@ class TablesController extends Controller
         // \Log::info("res: ".json_encode([$table,$id,$res2]));
         return response()->json($res);
     }
+    public function GetCats($table,$id){
+        $res = DB::table($table)->where("id",$id)->select("type_id","categorie_id")->first();
+        \Log::info("GC".json_encode($res));
+        return response()->json($res);
+    }
     public function DeleteTables(Request $request, $table, $id)
     {
         if (!Schema::hasTable($table)) {

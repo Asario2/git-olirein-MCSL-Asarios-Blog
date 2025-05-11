@@ -923,6 +923,36 @@ if(!function_exists("shariff_old"))
 
 
 }
+if(!function_exists("ConvertTypes"))
+{
+    function ConvertTypes()
+    {
+
+    $images = DB::table('images')->get();
+
+    foreach ($images as $image) {
+        if (!$image->image_categories_id) {
+            continue; // überspringe, wenn keine ID vorhanden
+        }
+
+        $cat = DB::table('image_categories')
+                ->where('id', $image->image_categories_id)
+                ->first();
+
+        if ($cat) {
+            DB::table('images')
+              ->where('id', $image->id)
+              ->update([
+                  'type_id' => $cat->type_id,
+                  'categorie_id' => $cat->categorie_id,
+              ]);
+        }
+    }
+
+    echo "Images-Tabelle erfolgreich aktualisiert.\n";
+
+    }
+}
 if(!function_exists("CheckZRights"))
 {
     function CheckZRights($right)

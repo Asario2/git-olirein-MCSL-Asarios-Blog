@@ -261,7 +261,7 @@ class FormController extends Controller
             case "camera_id":
                 return "select_id";
             break;
-            case "category_id":
+            case "categorie_id":
                 return "artselect";
             break;
             case "content":

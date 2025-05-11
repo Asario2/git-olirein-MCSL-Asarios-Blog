@@ -9,6 +9,7 @@ use Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\IMULController;
 use App\Http\Controllers\GlobalController;
 use App\Models\Settings;
@@ -16,6 +17,7 @@ use App\Models\Table;
 use App\Models\AdminTable;
 use App\Models\UsersRight;
 use App\Services\Inkrementierer;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -286,7 +288,7 @@ class TablesController extends Controller
         $tablez = [];
         if(!empty($id))
         {
-            if(!DB::table($table)->where("id",$id)->exists())
+            if($table == "undefined" || !DB::table($table)->where("id",$id)->exists())
             {
                 return redirect()->route("admin.tables.show",$table)->with('error', 'Kein Eintrag mit dieser ID vorhanden');
             }
@@ -1536,54 +1538,146 @@ class TablesController extends Controller
 
        return response()->json(['status' => 'error', 'message' => 'Ungültige Tabelle oder Spalte'], 404);
     }
-    public function StoreTable(Request $request,$table)
+ // Log::info("Vergleiche '{$row->name}' mit users_rights");
+
+                        // if (trim(strtolower($row->name)) === "users_rights") {
+                        //     $insertedPosition = $i;
+                        //     Log::info("Treffer! Neue Position: $i");
+                        // }
+
+    public function StoreTable(Request $request, $table)
     {
+        $formData = $request->input('formData');
 
-
-        $formData = ($request->input('formData'));
-        // \Log::info("path: ".public_path()."/images/".$table."/big/".$formData['image_path']);
-        if((isset($formData['pub']) || Schema::hasColumn($table, 'pub')) && (empty($formData['pub']) || @is_null($formData['pub']))){
+        if ((isset($formData['pub']) || Schema::hasColumn($table, 'pub')) && (empty($formData['pub']) || is_null($formData['pub']))) {
             $formData['pub'] = "1";
         }
+
         if (isset($formData['image_path']) && empty($formData['image_path'])) {
             $formData['image_path'] = "008.jpg";
         }
 
         $columns = Schema::getColumnListing($table);
-        $hasOnColumn = collect($columns)->contains(function ($column) {
-            return str_contains($column, '_on');
-        });
-        if(is_array($hasOnColumn))
-        {
-            foreach($hasOnColumn as $key=>$val)
-            {
+        $hasOnColumn = collect($columns)->contains(fn($column) => str_contains($column, '_on'));
+
+        if (is_array($hasOnColumn)) {
+            foreach ($hasOnColumn as $key => $val) {
                 $formData[$key] = (int)$val;
             }
         }
 
-        // \Log::info(public_path()."/images/".$table."/big/".$formData['image_path']);
-        if(Schema::hasColumn($table, 'img_x'))
-        {
-        list($width,$height) = getimagesize(public_path()."/images/".$table."/big/".$formData['image_path']);
-
-        $formData['img_x'] = $width;
-        $formData['img_y'] = $height;
-        // Erstelle einen neuen Datensatz mit den validierten Eingabedaten
+        if (Schema::hasColumn($table, 'img_x')) {
+            $imgPath = public_path("/images/{$table}/big/{$formData['image_path']}");
+            if (file_exists($imgPath)) {
+                list($width, $height) = getimagesize($imgPath);
+                $formData['img_x'] = $width;
+                $formData['img_y'] = $height;
+            }
         }
 
-        if(Schema::hasColumn($table, 'preis')|| isset($formData['preis']))
-        {
+        if (Schema::hasColumn($table, 'preis') || isset($formData['preis'])) {
             $formData['preis'] = $formData['preis'] ?? "0.0";
-            $formData['preis'] = str_replace(",",".",$formData['preis']);
+            $formData['preis'] = str_replace(",", ".", $formData['preis']);
         }
-        //\Log::info($formData);
-        $table_res = DB::table($table)->insert(
-        $formData
-        );
 
-        // Rückgabe der Antwort, z.B. Weiterleitung oder JSON-Antwort
-        return response()->json(['status' => 'success','message' => 'Daten erfolgreich gespeichert!']);
+        $formData['position'] = -1;
+        $newId = DB::table($table)->insertGetId($formData);
+
+        // === SPEZIALBEHANDLUNG für admin_table ===
+        if ($table === "admin_table") {
+            $formData['position'] = -1;
+
+            // Temporäre Spalte für Neupositionierung
+            if (!Schema::hasColumn('admin_table', 'position_alt')) {
+                Schema::table('admin_table', function (Blueprint $table) {
+                    $table->unsignedInteger('position_alt')->nullable()->after('position');
+                });
+            }
+
+            $tables = DB::table('admin_table')->orderBy('name')->get();
+            $insertedPosition = null;
+
+            foreach ($tables as $i => $row) {
+                DB::table('admin_table')->where('id', $row->id)->update(['position_alt' => $i]);
+
+                \Log::info("Vergleiche '{$row->name}' mit neuer ID $newId");
+                if ($row->id === $newId) {
+                    $insertedPosition = $i;
+                    \Log::info("Treffer! Neue Position für ID $newId ist $i");
+                }
+            }
+
+            DB::table('admin_table')->update(['position' => DB::raw('position_alt')]);
+
+            Schema::table('admin_table', function (Blueprint $table) {
+                $table->dropColumn('position_alt');
+            });
+
+            // Rechte aktualisieren für ID 1
+            $user = DB::table('users_rights')->where('id', 1)->first();
+
+            if ($user && $insertedPosition !== null) {
+                $columns = Schema::getColumnListing('users_rights');
+                $tableColumns = array_filter($columns, fn($col) => str_ends_with($col, '_table'));
+
+                // === Für ID 1: '1' einfügen ===
+                $updates = [];
+
+                foreach ($tableColumns as $col) {
+                    $current = (string)($user->{$col} ?? '');
+                    $chars = str_split($current);
+                    $chars = array_pad($chars, max(strlen($current), $insertedPosition), '0');
+
+                    array_splice($chars, $insertedPosition, 0, ['1']);
+                    $new = implode('', $chars);
+                    $updates[$col] = $new;
+
+                    \Log::info("User ID 1 Update [$col] → $new (1 eingefügt bei Index $insertedPosition)");
+                }
+
+                if (!empty($updates)) {
+                    DB::table('users_rights')->where('id', 1)->update($updates);
+                    \Log::info("users_rights erfolgreich aktualisiert", $updates);
+                } else {
+                    \Log::warning("Keine Updates für users_rights ID 1 durchgeführt.");
+                }
+
+                // === Für alle anderen: '0' einfügen ===
+                $otherUsers = DB::table('users_rights')->where('id', '!=', 1)->get();
+
+                foreach ($otherUsers as $otherUser) {
+                    $otherUpdates = [];
+
+                    foreach ($tableColumns as $col) {
+                        $current = (string)($otherUser->{$col} ?? '');
+                        $chars = str_split($current);
+                        $chars = array_pad($chars, max(strlen($current), $insertedPosition), '0');
+
+                        array_splice($chars, $insertedPosition, 0, ['0']);
+                        $new = implode('', $chars);
+                        $otherUpdates[$col] = $new;
+
+                        \Log::info("User ID {$otherUser->id} Update [$col] → $new (0 eingefügt bei Index $insertedPosition)");
+                    }
+
+                    if (!empty($otherUpdates)) {
+                        DB::table('users_rights')->where('id', $otherUser->id)->update($otherUpdates);
+                    }
+                }
+            } else {
+                \Log::warning("Benutzer mit ID 1 nicht gefunden oder insertedPosition ist null.");
+            }
+        }
+
+        if (CheckZRights("UserRights") && $table == "admin_table") {
+            return response()->json(["status" => "success", "message" => "Gespeichert, Bitte <a href='/admin/User_Rights'>Benutzerrechte</a> aktualisieren"]);
+        }
+
+        return response()->json(['status' => 'success', 'message' => 'Daten erfolgreich gespeichert!']);
     }
+
+
+
     public function getSlug($table,$id='')
     {
         if(!Schema::hasColumn($table, 'autoslug'))
@@ -1731,21 +1825,94 @@ class TablesController extends Controller
         // \Log::info("res: ".json_encode([$table,$id,$res2]));
         return response()->json($res);
     }
-    public function DeleteTables(Request $request,$table,$id)
+    public function DeleteTables(Request $request, $table, $id)
     {
-        if(!Schema::hasTable($table)) {
-            return redirect()->back()->withErrors(['error' => 'Tabelle existiert nich5t']);
+        if (!Schema::hasTable($table)) {
+            return redirect()->back()->withErrors(['error' => 'Tabelle existiert nicht']);
         }
-        if(!CheckRights(Auth::id(),$table,"delete"))
-        {
-            \Log::warning("no rights to delete in table ".$table." with UID ".Auth::id());
+
+        if (!CheckRights(Auth::id(), $table, "delete")) {
+            \Log::warning("No rights to delete in table $table with UID " . Auth::id());
             return redirect()->back()->withErrors(['error' => 'Sie haben nicht die benötigten Rechte']);
-
         }
-        DB::table($table)->where('id', $id)->delete();
-        return response()->json(["status"=>"success","message"=>"Eintrag erfolgreich gelöscht"]);
 
+        if ($table === "admin_table") {
+            // 1. Position des zu löschenden Eintrags ermitteln
+            $tables = DB::table('admin_table')->orderBy('name')->get();
+            $deletedRow = $tables->firstWhere('id', $id);
+            $deletedPosition = null;
+
+            foreach ($tables as $i => $row) {
+                if ($row->id == $id) {
+                    $deletedPosition = $i;
+                    \Log::info("Treffer! Zu löschende Position für ID $id ist $i");
+                    break;
+                }
+            }
+
+            // 2. Rechte in users_rights aktualisieren (alle User)
+            if ($deletedPosition !== null) {
+                $columns = Schema::getColumnListing('users_rights');
+                $tableColumns = array_filter($columns, fn($col) => str_ends_with($col, '_table'));
+
+                $allUsers = DB::table('users_rights')->get();
+
+                foreach ($allUsers as $user) {
+                    $updates = [];
+
+                    foreach ($tableColumns as $col) {
+                        $current = (string)($user->{$col} ?? '');
+                        $chars = str_split($current);
+
+                        if ($deletedPosition < count($chars)) {
+                            array_splice($chars, $deletedPosition, 1);
+                            $new = implode('', $chars);
+                            $updates[$col] = $new;
+                            \Log::info("User ID {$user->id} Update [$col] → $new (Position $deletedPosition entfernt)");
+                        }
+                    }
+
+                    if (!empty($updates)) {
+                        DB::table('users_rights')->where('id', $user->id)->update($updates);
+                    }
+                }
+            } else {
+                \Log::warning("Position für zu löschenden Eintrag nicht gefunden.");
+            }
+
+            // 3. Neue Positionierung vorbereiten → position_alt
+            if (!Schema::hasColumn('admin_table', 'position_alt')) {
+                Schema::table('admin_table', function (Blueprint $table) {
+                    $table->unsignedInteger('position_alt')->nullable()->after('position');
+                });
+            }
+
+            // 4. Alphabetisch sortieren und neue Positionen setzen (ohne den zu löschenden)
+            $sorted = DB::table('admin_table')->where('id', '!=', $id)->orderBy('name')->get();
+            foreach ($sorted as $i => $row) {
+                DB::table('admin_table')->where('id', $row->id)->update([
+                    'position_alt' => $i,
+                ]);
+            }
+
+            // 5. Position überschreiben
+            DB::table('admin_table')->where('id', '!=', $id)->update([
+                'position' => DB::raw('position_alt'),
+            ]);
+
+            // 6. Temporäre Spalte entfernen
+            Schema::table('admin_table', function (Blueprint $table) {
+                $table->dropColumn('position_alt');
+            });
+        }
+
+        // 7. Datensatz löschen
+        DB::table($table)->where('id', $id)->delete();
+
+        return response()->json(["status" => "success", "message" => "Eintrag erfolgreich gelöscht"]);
     }
+
+
     function GetSRights()
     {
         $userId = Auth::id();

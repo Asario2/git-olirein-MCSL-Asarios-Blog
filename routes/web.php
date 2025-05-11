@@ -235,8 +235,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::get("/admin/tables/edit/{id}/{table}",[TablesController::class,"EditTables"])
             ->name("admin.tables.edit");
         // Tables Delete
-        Route::delete("admin/tables/delete/{table}/{id}",[TablesController::class,"DeleteTables"])
-            ->name("admin.tables.delete");
+        Route::delete("/admin/tables/delete/{table}/{id}",[TablesController::class,"DeleteTables"])
+        ->name("admin.tables.delete");  
         // Tables UPDATE
         Route::post("admin/tables/update/{table}/{id?}",[TablesController::class,"UpdateTable"])
             ->name("admin.table.update");

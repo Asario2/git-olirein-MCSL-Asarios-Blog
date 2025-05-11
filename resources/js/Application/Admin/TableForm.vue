@@ -844,7 +844,10 @@ export default defineComponent({
             $_GET[aux[0]] = aux[1];
             }
         }
-        if(!$_GET['rl'])
+        const path = window.location.pathname; // Gibt "/admin/tables/show/Example" zurück
+        const segments = path.split("/"); // Teilt den Pfad in Segmente auf
+        let seg = segments[segments.length - 2];
+        if(!$_GET['rl'] && seg != "create")
             {
                 location.href = location.href + "?rl=2";
             //    $inertia.reload();
@@ -1527,6 +1530,7 @@ async submitForm() {
             console.log("Daten, die gesendet werden:",this.formData);
             if(segments[segments.length - 2] == "create")
             {
+
                 response = await axios.post(`/admin/tables/store/${this.tablex}`, {
                 formData: this.formData
 

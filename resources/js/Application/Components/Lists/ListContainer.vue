@@ -48,7 +48,7 @@
                                     hour: '2-digit', minute: '2-digit', second: '2-digit'
                                 }) }}
                             </td>
-                            <td v-if="hasRight('edit', datarow.full_name) && hasRight('view', datarow.full_name)"
+                            <td v-if="hasRight('edit', datarow.full_name) && hasRight('view', datarow.full_name) && tableClean"
                                 class="np-dl-td-edit"
                                 @click.prevent="editDataRow(datarow[rowId])">
                                 <icon-pencil class="w-6 h-6" v-tippy />
@@ -56,7 +56,7 @@
                             </td>
                             <td v-else-if="hasRight('view',datarow.full_name)"
                             class="np-dl-td-edit"></td>
-                            <td v-if="hasRight('delete', datarow.full_name) && hasRight('view', datarow.full_name)"
+                            <td v-if="hasRight('delete', datarow.full_name) && hasRight('view', datarow.full_name && tableClean)"
                                 class="np-dl-td-edit"
                                 @click="deleteDataRow(datarow[rowId])">
                                 <icon-trash class="w-6 h-6" v-tippy />
@@ -110,6 +110,7 @@ export default {
         IconPencil,
         IconTrash,
         Alert,
+        CleanTable,
     },
     props: {
         items: {},
@@ -137,6 +138,7 @@ export default {
         editDescription: { type: String, default: "Daten ändern" },
         errors: { type: Object, default: () => ({}) },
         tableq: { type: String },
+
     },
     async mounted() {
   if (!this.datarow?.full_name) {
@@ -149,7 +151,8 @@ export default {
             rightsData: {},
             rightsReady: false,
             routeCreate: "/admin/tables/create/" + this.tableq,
-            routeDelete: "/admin/tables/delete/" + this.tableq + "/",
+            routeDelete: "/admin/tables/delete/" + this.tableq + "/" + this.id,
+            table: '',
         };
     },
     created() {
@@ -171,6 +174,9 @@ export default {
         hasRight() {
       return this.$hasRight; // Zugriff auf globale Methode
     },
+    tableClean(){
+        return CleanTable();
+    }
     },
     watch: {
         form: {
@@ -214,15 +220,21 @@ export default {
 
         },
         deleteDataRow(id) {
+            this.table = CleanTable();
+            this.table = this.table ? this.table : "admin_table";
             if (confirm("Wollen Sie diesen Beitrag wirklich löschen?")) {
-                axios.delete(this.routeDelete + id)
+                    axios.delete("/admin/tables/delete/" + this.table + "/" + id, {
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                }
+                })
                 .then(response => {
                     toastBus.emit('toast', response.data); // ← erwartet { status: "...", message: "..." }
                     this.$emit("deleted");
 
                          this.$inertia.reload();
                     })
-                    .catch(error => console.error("Fehler beim Löschen:", error));
+                    .catch(error => console.error("Fehler beim Löschen2:", error));
             }
         },
         editDataRow(id) {

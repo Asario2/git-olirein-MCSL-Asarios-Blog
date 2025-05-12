@@ -1,34 +1,37 @@
-
 import { defineConfig } from "vite";
 import laravel from "laravel-vite-plugin";
 import vue from '@vitejs/plugin-vue';
 
-// Exportiere die Vite-Konfiguration korrekt
 export default defineConfig({
-define: {
-    'process.env': {} // Verhindert den Fehler
+  define: {
+    'process.env': {} // Verhindert Fehler bei process.env
+  },
+  server: {
+    host: '127.0.0.1', // IPv4 verwenden statt [::1]
+    hmr: {
+      host: '127.0.0.1', // HMR über IPv4
+    }
   },
   plugins: [
     laravel({
       input: [
         'resources/js/app.js',
-        
       ],
-      refresh: true,  // Optional: Aktiviert das automatische Neu Laden bei Änderungen
+      refresh: true,
     }),
-        vue({
-            template: {
-                transformAssetUrls: {
-                    base: null,
-                    includeAbsolute: false,
-                },
-            },
-        }),
-    ],
-	 css: {
+    vue({
+      template: {
+        transformAssetUrls: {
+          base: null,
+          includeAbsolute: false,
+        },
+      },
+    }),
+  ],
+  css: {
     postcss: './postcss.config.js',
   },
-   optimizeDeps: {
-     include: ['photoswipe']
+  optimizeDeps: {
+    include: ['photoswipe']
   }
 });

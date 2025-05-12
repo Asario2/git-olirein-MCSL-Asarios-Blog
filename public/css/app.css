@@ -8,7 +8,9 @@ code{
 select {
   max-width: 300px; /* Oder eine andere sinnvolle Breite */
 }
-
+.ai-icon{
+    border-bottom-right-radius:70px !important;
+}
 article {
   font-family: Arial, sans-serif;
   width: 90%;

@@ -12,6 +12,8 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\IMULController;
 use App\Http\Controllers\GlobalController;
+use App\Http\Controllers\FormController;
+use App\Helper\CustomHelpers;
 use App\Models\Settings;
 use App\Models\Table;
 use App\Models\AdminTable;
@@ -1548,7 +1550,16 @@ class TablesController extends Controller
     public function StoreTable(Request $request, $table)
     {
         $formData = $request->input('formData');
+        foreach($formData as $key=>$val)
+        {
+            $fi = FormController::getClass($key,'','');
+            if(substr_count($fi,"textarea"))
+            {
+                $formData[$key] = CustomHelpers::sanitizeHtmlInput($val);
 
+            }
+
+        }
         if ((isset($formData['pub']) || Schema::hasColumn($table, 'pub')) && (empty($formData['pub']) || is_null($formData['pub']))) {
             $formData['pub'] = "1";
         }
@@ -1579,8 +1590,11 @@ class TablesController extends Controller
             $formData['preis'] = $formData['preis'] ?? "0.0";
             $formData['preis'] = str_replace(",", ".", $formData['preis']);
         }
+        if (Schema::hasColumn($table, 'position'))
+        {
+            $formData['position'] = -1;
+        }
 
-        $formData['position'] = -1;
         $newId = DB::table($table)->insertGetId($formData);
 
         // === SPEZIALBEHANDLUNG für admin_table ===
@@ -1715,6 +1729,16 @@ class TablesController extends Controller
     {
             // Zugriff auf die übergebenen Daten
             $formData = ($request->input('formData')    );
+            foreach($formData as $key=>$val)
+            {
+                $fi = FormController::getClass($key,'','');
+                if(substr_count($fi,"textarea"))
+                {
+                    $formData[$key] = CustomHelpers::sanitizeHtmlInput($val);
+
+                }
+
+            }
 
         if((Schema::hasColumn($table, 'image_path')) && (empty($formData['image_path']) || is_null($formData['image_path'])))
         {

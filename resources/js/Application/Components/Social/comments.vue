@@ -1,7 +1,7 @@
 <template>
             <div v-if="showComments" class="w-full" :style="{ display: showComments ? 'block' : 'none' }"
             @click.stop.prevent="dummy">
-            <div v-if="comments.length > 0" class="space-y-4">
+            <div v-if="comments && comments.length > 0" class="space-y-4">
                 <div v-for="comment in comments" :key="comment.id"
                 class="flex items-start p-2 pra mt-4 rounded-lg bg-layout-sun-200 dark:bg-layout-night-200 border border-layout-sun-300 dark:border-layout-night-300"  style="word-wrap: break-word;"
             >
@@ -10,18 +10,18 @@
             <img
                 :src="'/images/' + comment.profile_photo_path ?? defaultAvatar"
                 alt="Profilbild"
-                class="w-[50px] h-[50px] object-cover rounded-full bg-gray-300 dark:bg-gray-600"
+                class="w-[50px] h-[50px] object-cover mxy rounded-full bg-gray-300 dark:bg-gray-600"
             />
 
             <!-- Kommentarinhalt -->
             <div class="flex-1 pr-14">
-                <p class="text-sm flex items-center gap-2">
+                <p class="text-sm flex items-center gap-2 mxy">
                     {{ comment.author }}
                     <span @click="confirmDelete(comment.id)" class="text-red-500 cursor-pointer hover:text-red-700">
                         <IconTrash class="w-4 h-4" />
                     </span>
                 </p>
-                <p class="text-layout-sun-700 dark:text-layout-night-600 w-[190px] max-w-[190px]">
+                <p class="text-layout-sun-700 dark:text-layout-night-600 w-[190px] max-w-[190px] mxy">
                     {{ comment.content }}
                 </p>
                 <small class="text-xs text-layout-sun-600 dark:text-layout-night-500">
@@ -157,7 +157,7 @@
 
                 async fetchComments() {
                     try {
-                        var table = CleanTable();
+                        var table = CleanTable() || "blogs";
                         const response = await axios.get(`/comments/${table}/${this.postId}`);
 
                         this.comments = Array.isArray(response.data) ? response.data : []; // Sicherstellen, dass es ein Array ist
@@ -174,7 +174,8 @@
         if (!this.newComment.trim()) return; // Leere Kommentare verhindern
 
         try {
-            var table = CleanTable();
+            let table = CleanTable();
+            table  = table ? table : "blogs";
             const response = await axios.post(`/comments/store/${table}/${this.postId}`, {
             post_id: this.postId,
             comment: this.newComment,
@@ -210,5 +211,11 @@
 .shariff {
     display: block; /* Stellt sicher, dass die Buttons untereinander erscheinen */
     margin-top: 10px; /* Abstand nach oben */
+}
+.h-fully{
+    height:30px;
+}
+.mxy{
+    margin:0 !important;
 }
 </style>

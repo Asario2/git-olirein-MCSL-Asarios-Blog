@@ -13,14 +13,15 @@
             width="480"
             height="360"
             style="max-height:390px"
-            class="object-cover w-full rounded lg:col-span-7 object-cover rounded bg-layout-sun-500 dark:bg-layout-night-500"
+            :class="['object-cover w-full rounded lg:col-span-7 object-cover rounded bg-layout-sun-500 dark:bg-layout-night-500', blog.madewithai ? 'ai-icon' : '']"
+
         />
 
         </Link>
         <div class="relative">
         <!-- Der AI-Button wird hier angezeigt -->
         <div v-if="blog.madewithai">
-            <AiButton :big="true"></AiButton>
+            <AiButton :dma="dmaa" :big="true"></AiButton>
         </div>
     </div>
         </div>

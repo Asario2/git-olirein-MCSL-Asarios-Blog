@@ -90,6 +90,7 @@ class CommentController extends Controller
         }
         $comment = new Comment();
         $comment->content = $request->input('comment2') ?? $request->comment;
+        $comment->content = strip_tags($comment->content);
         $comment->users_id = auth()->id(); // Beispiel für Benutzer-ID
         $comment->created_at = now();
         $comment->updated_at = now();
@@ -122,6 +123,7 @@ class CommentController extends Controller
         // Kommentar erstellen und in der Datenbank speichern
         $comment = new Comment();
         $comment->content = $request->input('comment2') ?? $request->comment;
+        $comment->content = strip_tags($comment->content);
         $comment->users_id = auth()->id(); // Beispiel für Benutzer-ID
         $comment->created_at = now();
         $comment->updated_at = now();

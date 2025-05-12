@@ -5,23 +5,24 @@
     >
     <div class="relative w-full flex flex-col max-w-6xl mx-auto overflow-hidden rounded">
     <!-- Blog-Bild -->
-    <div class="relative" style="z-index:0;">
+    <div class="relative bg-layout-sun-100 dark:bg-layout-night-100" style="z-index:0;">
         <img
             :src="`/images/blogs/${blog.url}`"
             :alt="blog.name"
+
             style='min-width:480px;min-height:360px;width:100%'
-            class="object-cover w-full  rounded lg:col-span-7 object-cover rounded bg-layout-sun-500 dark:bg-layout-night-500 coverclass"
-        />
+            :class="['object-cover w-full lg:col-span-7 object-cover bg-layout-sun-500 dark:bg-layout-night-500 coverclass', blog.madewithai ? 'ai-icon' : '']"
+            />
 
         <!-- AI-Button in der rechten unteren Ecke des Bildes -->
         <div v-if="blog.madewithai" class="ai-overlay">
-            <AiButton :big="true" :bigger="true"></AiButton>
+            <AiButton :big="true" :dma="dmaa" :bigger="true"></AiButton>
         </div>
     </div>
 
     <!-- **Neuer Container für den H1-Text unterhalb des Bildes** -->
 <div
-                class="p-2 pb-12 m-2 mx-auto w-full mt-0 space-y-6 lg:max-w-5xl sm:px-10 sm:mx-12 lg:rounded-md bg-layout-sun-100 dark:bg-layout-night-100 prose dark:prose-invert md:prose-lg lg:prose-xl"
+                class="him p-2 pb-12 m-2 mx-auto w-full mt-0 space-y-6 lg:max-w-5xl sm:px-10 sm:mx-12 lg:rounded-md bg-layout-sun-100 dark:bg-layout-night-100 prose dark:prose-invert md:prose-lg lg:prose-xl"
             >
 
                 <div class="space-y-2" style="z-index:100 !important;">
@@ -132,7 +133,9 @@
                     </div>
 
                     <div v-else v-html="decodedContent"></div>
-
+                    <div>
+                        <socialButtons :postId="blog.id" :nostars="true" />
+                    </div>
                     <h2 id="author_info">
                         Informationen zu {{ blog.blog_author.name }}
                     </h2>
@@ -156,11 +159,13 @@ import DisplayNumber from "@/Application/Components/Content/DisplayNumber.vue";
 import editbtns from "@/Application/Components/Form/editbtns.vue";
 import Markdown from "@/Application/Components/Content/Markdown.vue";
 import MetaHeader from "@/Application/Homepage/Shared/MetaHeader.vue";
+import SocialButtons from "@/Application/Components/Social/socialButtons.vue";
 export default {
     name: "Shared_BlogShow",
     //
     components: {
         AiButton,
+        SocialButtons,
         IconPause,
         IconPlay,
         IconSpeakerWave,
@@ -231,7 +236,7 @@ export default {
     bottom: 10px;  /* Abstand von unten */
     right: 10px;   /* Abstand von rechts */
     z-index: 20;   /* Höher als andere Elemente */
-    background: rgba(0, 0, 0, 0.3); /* Leichte Transparenz für bessere Lesbarkeit */
+    /*background: rgba(0, 0, 0, 0.3); /* Leichte Transparenz für bessere Lesbarkeit */
     padding: 5px;
     border-radius: 4px;
 }
@@ -254,9 +259,16 @@ margin:0 px auto;
         min-width: 950px;
     }
     .coverclass{
-margin-left:52px;
+/* margin-left:52px; */
+margin-right:-52px;
+width:90%;
 }
-
+}
+.him{
+    margin-left:-5px !important;
+    margin-right:-40px !important;
+    min-width:101% !important;
+    border-radius:0px !important;
 }
 /* .w-full{
 

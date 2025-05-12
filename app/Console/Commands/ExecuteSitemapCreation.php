@@ -32,12 +32,87 @@ class ExecuteSitemapCreation extends Command
     {
         $sitemap = Sitemap::create();
         //
-        $sitemap->add(Url::create('/home')
+        $sitemap->add(Url::create('/home/pictures')
                 ->setLastModificationDate(Carbon::yesterday())
                 ->setChangeFrequency(Url::CHANGE_FREQUENCY_YEARLY)
-                ->setPriority(0.6));
+                ->setPriority(0.9));
         //
-        $sitemap->add(Url::create('/get_started')
+        $sitemap->add(Url::create('/didyouknow')
+                ->setLastModificationDate(Carbon::yesterday())
+                ->setChangeFrequency(Url::CHANGE_FREQUENCY_YEARLY)
+                ->setPriority(0.7));
+        //
+        $sitemap->add(Url::create('home/show/pictures/Acryl')
+                ->setLastModificationDate(Carbon::yesterday())
+                ->setChangeFrequency(Url::CHANGE_FREQUENCY_MONTHLY)
+                ->setPriority(0.8));
+        //
+        $sitemap->add(Url::create('home/show/pictures/3DPrinter')
+                ->setLastModificationDate(Carbon::yesterday())
+                ->setChangeFrequency(Url::CHANGE_FREQUENCY_MONTHLY)
+                ->setPriority(0.8));
+        //
+        $sitemap->add(Url::create('home/show/pictures/Alphabet')
+                ->setLastModificationDate(Carbon::yesterday())
+                ->setChangeFrequency(Url::CHANGE_FREQUENCY_MONTHLY)
+                ->setPriority(0.8));
+        //
+        $sitemap->add(Url::create('home/show/pictures/Ausgemaltes')
+                ->setLastModificationDate(Carbon::yesterday())
+                ->setChangeFrequency(Url::CHANGE_FREQUENCY_MONTHLY)
+                ->setPriority(0.8));
+        //
+        $sitemap->add(Url::create('home/show/pictures/Digital')
+                ->setLastModificationDate(Carbon::yesterday())
+                ->setChangeFrequency(Url::CHANGE_FREQUENCY_MONTHLY)
+                ->setPriority(0.8));
+        //
+        $sitemap->add(Url::create('home/show/pictures/Fasermaler')
+                ->setLastModificationDate(Carbon::yesterday())
+                ->setChangeFrequency(Url::CHANGE_FREQUENCY_MONTHLY)
+                ->setPriority(0.8));
+        //
+        $sitemap->add(Url::create('home/show/pictures/Fineliner')
+                ->setLastModificationDate(Carbon::yesterday())
+                ->setChangeFrequency(Url::CHANGE_FREQUENCY_MONTHLY)
+                ->setPriority(0.8));
+        //
+        $sitemap->add(Url::create('home/show/pictures/Keramik')
+                ->setLastModificationDate(Carbon::yesterday())
+                ->setChangeFrequency(Url::CHANGE_FREQUENCY_MONTHLY)
+                ->setPriority(0.8));
+        //
+        $sitemap->add(Url::create('home/show/pictures/Lampen')
+                ->setLastModificationDate(Carbon::yesterday())
+                ->setChangeFrequency(Url::CHANGE_FREQUENCY_MONTHLY)
+                ->setPriority(0.8));
+        //
+        $sitemap->add(Url::create('home/show/pictures/Monstarz')
+                ->setLastModificationDate(Carbon::yesterday())
+                ->setChangeFrequency(Url::CHANGE_FREQUENCY_MONTHLY)
+                ->setPriority(0.8));
+        //
+        $sitemap->add(Url::create('home/show/pictures/Photos')
+                ->setLastModificationDate(Carbon::yesterday())
+                ->setChangeFrequency(Url::CHANGE_FREQUENCY_MONTHLY)
+                ->setPriority(0.8));
+        //
+        $sitemap->add(Url::create('home/show/pictures/Sketches')
+                ->setLastModificationDate(Carbon::yesterday())
+                ->setChangeFrequency(Url::CHANGE_FREQUENCY_MONTHLY)
+                ->setPriority(0.8));
+        //
+        $sitemap->add(Url::create('home/show/pictures/Zentangle')
+                ->setLastModificationDate(Carbon::yesterday())
+                ->setChangeFrequency(Url::CHANGE_FREQUENCY_MONTHLY)
+                ->setPriority(0.8));
+        //
+        $sitemap->add(Url::create('home/users')
+                ->setLastModificationDate(Carbon::yesterday())
+                ->setChangeFrequency(Url::CHANGE_FREQUENCY_MONTHLY)
+                ->setPriority(0.8));
+        //
+        $sitemap->add(Url::create('/shortpoems')
                 ->setLastModificationDate(Carbon::yesterday())
                 ->setChangeFrequency(Url::CHANGE_FREQUENCY_YEARLY)
                 ->setPriority(0.7));

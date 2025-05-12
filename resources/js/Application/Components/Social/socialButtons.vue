@@ -32,7 +32,7 @@
                     <!-- Kommentarbox -->
 
                     <tr v-if="showComments == postId">
-                        <td colspan="3" class="p-4" style="z-index:49;"  :id="'commentBox_' + postId">
+                        <td colspan="3" class="p-4 h-auto align-top" style="z-index:49;"  :id="'commentBox_' + postId">
 
                             <div style="z-index:49;" class="w300 relative border border-gray-300 p-4 rounded-lg shadow-sm bg-white dark:bg-gray-800">
                                 <button @click.stop.prevent="closeComments(this.postId)" class="absolute top-2 right-2 text-red-500 text-xl bold">

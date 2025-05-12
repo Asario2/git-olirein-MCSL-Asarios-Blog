@@ -9,7 +9,7 @@
             <div class="relative">
                 <img
                     role="presentation"
-                    class="object-cover w-full rounded h-44 bg-layout-sun-500 dark:bg-layout-night-500"
+                    :class="['object-cover w-full rounded h-44 bg-layout-sun-500 dark:bg-layout-night-500', blog.madewithai ? 'ai-icon' : '']"
                     :src="`/images/blogs/thumbs/${blog.url}` || '/images/blogs/008.jpg'"
                     :alt="blog.name"
 
@@ -17,7 +17,7 @@
                     height="360"
                 />
                 <div v-if="blog.madewithai">
-                    <AiButton :overlayImage="images/icons/blog?.aiOverlayImage || 'images/icons/ai-light.png'"></AiButton>
+                    <AiButton :dma="dmaa"></AiButton>
                 </div>
             </div>
 

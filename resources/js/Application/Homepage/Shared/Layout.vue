@@ -337,7 +337,7 @@ export default {
 
   data() {
     return {
-      mode: localStorage.theme ? localStorage.theme : "",
+      mode: localStorage.theme ? localStorage.theme : "light",
       isOpen_Menu: false,
       year: new Date().getFullYear(),
       pendingRequests: 0, // Wird bei jeder Anfrage erhöht

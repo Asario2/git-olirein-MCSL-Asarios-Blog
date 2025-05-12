@@ -1,7 +1,7 @@
 <template>
     <div :class="['ai-button', big ? 'big' : 'small', bigger ? 'bigger' : '']" @click.stop>
         <a href="/home/ai">
-            <img :src="'/images/icons/ai-' + (dma || 'dark') + '.png'"
+            <img :key="localDma" :src="'/images/icons/ai-' + (localDma || 'dark') + '.png'"
                  alt="Made with AI"
                  title="Made with AI"
                  class="ai-button-image"
@@ -15,12 +15,13 @@ export default {
     name: "AiButton",
     props: {
         big: Boolean,
-        bigger: Boolean, // Unterscheidung zwischen Big & Small
+        bigger: Boolean,
+        dma: String
     },
-    data() {
-        return {
-            dma: localStorage.getItem('theme') || 'dark',
-        };
+    computed: {
+        localDma() {
+            return this.dma || 'dark';
+        }
     },
     methods: {
         handleImageError(event) {
@@ -43,6 +44,8 @@ export default {
     width: 64px;
     height: 64px;
     z-index:39;
+    background-color: transparent;
+
 }
 
 .big .ai-button {

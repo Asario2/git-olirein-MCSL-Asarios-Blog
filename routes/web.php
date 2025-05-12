@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\BlogPostController;
 use App\Http\Controllers\RatingController;
+use App\Http\Controllers\DarkModeController;
 use App\Http\Controllers\NameBindingsController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\HandbookController;
@@ -91,7 +92,9 @@ Route::get('/pb', [RatingController::class, 'pb'])
 // Homepage
 // ========
 // Startseite
-Route::get('/', [HomeController::class, 'home_blog_index'])->name('home.index');
+Route::get('/', function () {
+    return redirect('/blogs');
+})->name('home.index');
 // Get Started
 Route::get('/home/get_started', [HomeController::class, 'home_get_started'])->name('home.get_started');
 // Pricing
@@ -300,7 +303,7 @@ Route::delete('/comments/delete/{comment_id}', [CommentController::class,'destro
 
 
 // Darkmode Route
-// Route::post('/toggle-dark-mode', [ApplicationController::class, 'toggleDarkMode'])->name('toggle-dark-mode');
+Route::post('/toggle-dark-mode', [DarkModeController::class, 'toggle'])->name('toggle-dark-mode');
 // Route::post('/get-dark-mode', [ApplicationController::class, 'session_dm'])->name('get-dark-mode');
 // Route::get('/api/dark-mode-status', function (Request $request) {
 //     return response()->json(['dark_mode' => Session::get('dark_mode', false)]);

@@ -828,8 +828,7 @@ export default defineComponent({
                 const ffo = ref(localStorage.getItem("ffo") || "Standardwert");
 
         watch(ffo, (newValue) => {
-            localStorage.setItem("ffo", newValue);
-            var $_GET = {};
+        var $_GET = {};
         if(document.location.toString().indexOf('?') !== -1) {
             var query = document.location
                         .toString()
@@ -1561,7 +1560,7 @@ async submitForm() {
             this.confirmingTableDeletion = false;
             //
             this.loading = true;
-            this.loadingText = "Der {{ItemName}} wird gelöscht!";
+            this.loadingText = "Der Beitrag wird gelöscht!";
             //
             this.$inertia.delete(
                 this.route("admin.table.delete", this.table.id),

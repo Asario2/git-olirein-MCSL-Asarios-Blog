@@ -5,7 +5,7 @@
         :header-image="$page.props.saas_url + '/images/blogimages/Blog_Idee_480x360.jpg'"
     >
         <section class="bg-layout-sun-0 text-layout-sun-800 dark:bg-layout-night-0 dark:text-layout-night-800">
-            <div class="w-full3 max-w-7xl mx-auto mt-5">
+            <div class="w-full max-w-7xl mx-auto mt-5">
                 <div v-if="data.length">
                     <div v-for="(item, index) in data" :key="index"
                         class="group hover:no-underline focus:no-underline lg:grid lg:grid-cols-12 lg:gap-6 bg-layout-sun-100 dark:bg-layout-night-100"
@@ -15,10 +15,10 @@
                             <img
                                 :src="`/images/_ab/ai-teaser-light.jpg`"
                                 :alt="`Bild von ${item.headline}`"
-                                class="object-cover w-full3 h-64 sm:h-96 rounded"
+                                class="object-cover w-full h-64 sm:h-96 rounded"
                             />
                             <!-- AI-Button -->
-                            <AiButton  :dma="dmaa"></AiButton>
+                            <AiButton :dma="dmaa"></AiButton>
                         </div>
 
                         <!-- Text-Bereich -->

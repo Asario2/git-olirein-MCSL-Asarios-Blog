@@ -53,7 +53,7 @@
         </Link>
 
         <!-- **Tabelle direkt unterhalb des Blog-Containers (fixiert)** -->
-        <SocialButtons :postId="blog.id" sm="Sm"  :nostars="true"       />
+        <SocialButtons :postId="blog.id" sm="Sm" :slug="blog.autoslug"  :nostars="true"       />
 
     </div>
 </template>

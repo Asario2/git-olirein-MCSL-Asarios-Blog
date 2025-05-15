@@ -4,9 +4,9 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "docs:dev": "vitepress dev vitepress",
-    "docs:build": "vitepress build vitepress",
-    "docs:preview": "vitepress preview vitepress"
+    "docs:dev": "vitepress dev handbook_new",
+    "docs:build": "vitepress build handbook_new",
+    "docs:preview": "vitepress preview handbook_new"
   },
   "devDependencies": {
     "@babel/plugin-proposal-decorators": "^7.25.9",

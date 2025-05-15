@@ -57,7 +57,7 @@
 
                 <button-change-mode :mode="mode" @changeMode="changeMode"></button-change-mode>
                 <div class="ms-3 relative">
-                                <Dropdown align="right" width="72">
+                                <Dropdown align="right" width="72" v-if="$page.props.auth.user">
                                     <template #trigger>
                                         <button
                                             v-if="
@@ -67,14 +67,16 @@
                                             class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-layout-sun-300 dark:focus:border-layout-night-300 transition"
                                         >
                                             <img
-                                                class="h-8 w-8 rounded-full object-cover"
+                                            id="prof_pic"
+                                            class="h-8 w-8 rounded-full object-cover"
                                                 :src="
-                                               $page.props.auth.user.profile_photo_url.replace('public','').replace('images/images/','images/')
+                                               $page.props.auth.user?.profile_photo_url.replace('public','').replace('images/images/','images/') || '/images/profile-photos/008.jpg'
                                                 "
                                                 :alt="
                                                     $page.props.userdata
                                                         .full_name
                                                 "
+
                                             />
                                             {{  }}
                                         </button>
@@ -396,8 +398,7 @@ export default {
     // Bilder laden überwachen
     this.waitForImagesToLoad();
   },
-
-  methods: {
+methods: {
     setLoadingState(state) {
       console.log('Setting loading state to:', state);
       this.isLoading = state;
@@ -460,6 +461,11 @@ export default {
 };
 </script>
 
-<style scoped>
+<style  >
+#prof_pic{
+    width:32px !important;
+    height:32px !important;
+    object-fit: cover;
+}
 /* Deine Styles hier */
 </style>

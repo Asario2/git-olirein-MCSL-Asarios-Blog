@@ -26,7 +26,7 @@ export default {
     },
     props: {
         Redit: {
-            type: [String],
+            type: [String,Number],
             default:0
         },
         Rdelete: {String, default: 0,},

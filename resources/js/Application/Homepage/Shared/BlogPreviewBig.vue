@@ -72,7 +72,7 @@
                 ></display-number>
             </div>
         </Link>
-            <socialButtons :postId="blog.id" :nostars="true" />
+            <socialButtons :postId="blog.id" :slug="blog.autoslug" :nostars="true" />
         </div>
     </div>
 </template>

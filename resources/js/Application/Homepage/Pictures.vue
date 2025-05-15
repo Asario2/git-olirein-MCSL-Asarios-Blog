@@ -92,8 +92,8 @@
         <b>Format:</b> {{ item.Format }}
         </div>
         <averageRating :postId="item.id" :av="parseFloat(ratings['original'][item.id]?.average) || 0" :tot="ratings['original'][item.id]?.total || 0"/>
-        <span v-if="hasRight('delete', 'images') || hasRight('edit', 'images') " class="flex space-x-2">
-        <!-- Edit Icon -->
+        <!-- <span v-if="hasRight('delete', 'images') || hasRight('edit', 'images') " class="flex space-x-2">
+        Edit Icon
         <span v-if="hasRight('edit', 'images') "
                 class="inl"
                 @click.prevent="editDataRow(item.id)">
@@ -101,15 +101,14 @@
             <tippy>{{ editDescription }}</tippy>
         </span>
 
-        <!-- Delete Icon -->
         <span v-if="hasRight('delete', 'images') "
                 class="inl"
                 @click="deleteDataRow(item.id)">
             <icon-trash class="w-6 h-6 cursor-pointer" v-tippy />
             <tippy>{{ deleteDescription }}</tippy>
         </span>
-        </span>
-
+        </span> -->
+        <editbtns :id="item.id" table="images" />
         <div class="text-xs text-layout-sun-600 dark:text-layout-night-600">
         <display-date :value="item.created_at" :time-on="false" />
         </div>
@@ -160,6 +159,7 @@
 
 <script>
 import Layout from "@/Application/Homepage/Shared/Layout.vue";
+import editbtns from '@/Application/Components/Form/editbtns.vue';
 import IconPlusCircle from "@/Application/Components/Icons/PlusCircle.vue";
 import averageRating from "@/Application/Components/Social/averageratings.vue";
 import IconPencil from "@/Application/Components/Icons/Pencil.vue";
@@ -202,6 +202,7 @@ components: {
     IconCamera,
     SearchFilter,
     Share,
+    editbtns,
     // PhotoSwipeLightbox,
     AddRating,
     IconComment,
@@ -560,4 +561,3 @@ gap: 5px;
 }
 /* Optional: Füge hier benutzerdefinierte Styles hinzu */
 </style>
-        

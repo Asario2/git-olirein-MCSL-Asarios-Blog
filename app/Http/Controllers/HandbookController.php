@@ -11,7 +11,7 @@ class HandbookController extends Controller
     public function admin_handbook(Request $request)
     {
         //
-        return File::get(public_path() . '/handbook_admin/index.html');
+        return File::get(public_path() . '/handbook_new/index.html');
     }
 
 }

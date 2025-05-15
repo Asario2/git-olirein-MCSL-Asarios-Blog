@@ -24,39 +24,44 @@
         showShareBox: false,
       };
     },
+    props:{
+        added:{
+            type:String,
+        },
+    },
     methods: {
         toggleShareBox() {
+            console.log("toggleShareBox aufgerufen");
+
             this.showShareBox = !this.showShareBox;
             if (this.showShareBox) {
             this.initShariff();
             }
         },
-        initShariff() {
-      nextTick(() => {
-        if (this.$refs.shariff) {
-            // console.log('Shariff Element:', this.$refs.shariff);
-            const shariffElement =  this.$refs.shariff;
+        initShariff()
+        {
+            console.log("initShariff aufgerufen");
 
-        if (shariffElement) {
-        new Shariff(shariffElement, {
-            services: ['facebook', 'twitter', 'xing', 'whatsapp'],  // Deine gewünschten Dienste
-            theme: 'classic', // Oder ein anderes Thema
-            orientation: 'horizontal', // Oder 'vertical'
-        });
-        }
-    }
-        else {
-          console.error('Shariff Element nicht gefunden');
-        }
+  nextTick(() => {
+    const shariffElement = this.$refs.shariff;
+    if (shariffElement) {
+    const url = `${window.location.origin}${window.location.pathname}${this.added || ''}`;
+      console.log("Shariff-URL:", url);
+
+      shariffElement.setAttribute('data-url', url);
+
+      new Shariff(shariffElement, {
+        services: ['facebook', 'twitter', 'xing', 'whatsapp'],
+        theme: 'classic',
+        orientation: 'horizontal',
       });
-    },
+    }
+  });
+},
 
-    toggleShareBox() {
-      this.showShareBox = !this.showShareBox;
-      if (this.showShareBox) {
-        this.initShariff();
-      }
-    },
+
+
   },
-  };
+
+};
   </script>

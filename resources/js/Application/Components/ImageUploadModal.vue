@@ -281,9 +281,7 @@
     width: auto;
     height: auto;
   }
-  .w-full3{
-    width:400px;
-  }
+
   /* .w-full{
     min-width:320px;
     max-width:400px;

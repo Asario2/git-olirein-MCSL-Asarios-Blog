@@ -48,7 +48,7 @@
                     <!-- Teilen -->
                     <tr v-if="showShareBox[postId]">
                         <td colspan="3" class="p-4">
-                            <div align="center" :ref="'shariff_' + postId" id="shariff-container" class="shariff w-full w300 relative border border-gray-300 p-4 pb-2 rounded-lg shadow-sm bg-white dark:bg-gray-800" data-button-style="icon"></div>
+                            <div align="center" :ref="'shariff_' + postId" :added="urlAdded" id="shariff-container" class="shariff w-full w300 relative border border-gray-300 p-4 pb-2 rounded-lg shadow-sm bg-white dark:bg-gray-800" data-button-style="icon"></div>
                         </td>
                     </tr>
 
@@ -65,86 +65,6 @@
 </template>
 
 <script>
-// document.addEventListener('DOMContentLoaded', () => {
-//   const buttons = document.getElementsByClassName('tog-tab');
-//   if (buttons.length > 0) {
-//     Array.from(buttons).forEach(button => {
-//       button.addEventListener('click', function() {
-//         const table = document.getElementById('toggle-table');
-//         const aiImage = document.querySelector('.ai-button-image');
-
-//         // Stelle sicher, dass das Bild immer sichtbar bleibt
-//         aiImage.style.position = 'relative';
-//         if(this.showCommments)
-//         {
-//             aiImage.style.marginBottom = '236px';
-//             aiImage.style.right = '-16px';
-//         }
-
-
-//         // Toggle die Tabelle sichtbar
-//         //table.style.display = table.style.display === 'none' ? 'block' : 'none';
-
-//         // Optional: Überprüfen, ob das 'ai-dark' Bild verwendet werden soll
-//         const theme = localStorage.getItem('theme') || 'dark';
-//         aiImage.src = `images/icons/ai-${theme}.png`;
-//       });
-//     });
-//   } else {
-//     console.error('Element not found!');
-//   }
-// });
-
-// document.addEventListener('DOMContentLoaded', () => {
-//      const buttons = document.getElementsByClassName('tog-tab');
-//   if (buttons.length > 0) {
-//     Array.from(buttons).forEach(button => {
-//       button.addEventListener('click', function() {
-//         const postxId = this.dataset.postId;     // Hole die ID aus data-post-id
-//         const commentBox = document.getElementById(`commentBox_${postxId}`);
-//         const aiImage = document.querySelector('.ai-button-image');
-
-//         if (!commentBox) {
-//           console.error(`commentBox_${postxId} nicht gefunden!`);
-//           return;
-//         }
-
-//         // Sichtbarkeit der Comment-Box toggeln
-//         if (commentBox.style.display === 'none' || commentBox.style.display === '') {
-//         //   commentBox.style.display = 'block';
-//         //   aiImage.style.marginBottom = '236px';
-//         //   aiImage.style.right = '-16px';
-//         } else {
-//         //   commentBox.style.display = 'none';
-//         //   aiImage.style.marginBottom = '0';
-//         //   aiImage.style.right = '0';
-//         }
-
-//         // Optional: Ändere das AI-Bild basierend auf dem Theme
-//         const theme = localStorage.getItem('theme') || 'dark';
-//         aiImage.src = `/images/icons/ai-${theme}.png`;
-//       });
-//     });
-//   } else {
-//     console.error('Buttons nicht gefunden!');
-//   }
-// });
-
-
-
-
-// document.getElementById('toggle-table').addEventListener('click', function() {
-//   const table = document.getElementById('toggle-table');
-//   const aiImage = document.querySelector('.ai-button-image');
-
-//   // Stelle sicher, dass das Bild immer sichtbar bleibt
-//   aiImage.style.position = 'fixed';
-//   aiImage.style.bottom = '16px';
-//   aiImage.style.right = '16px';
-
-//   // Toggle die Tabelle sichtbar
-//   table.style.display = table.style.display === 'none' ? 'block' : 'none';
-// });
 import { Link } from "@inertiajs/vue3";
 import IconPlusCircle from "@/Application/Components/Icons/PlusCircle.vue";
 import averageRating from "@/Application/Components/Social/averageratings.vue";
@@ -207,10 +127,18 @@ export default {
             type: Boolean,
             default: false,
         },
+        slug:{
+            type:String,
+        },
+        empty:{
+            type:Boolean,
+            default:false,
+        },
     },
     data() {
     return {
         dma: localStorage.getItem('theme'),
+        urlAdded:  this.urlAdder(this.postId),
         showShareBox: {} ,
         showStarBox: {}, // Wert aus localStorage speichern
         showComments: null, // Zustand für die Anzeige der Kommentarfunktion
@@ -280,6 +208,20 @@ methods:{
     }
 
     },
+    urlAdder(id){
+        if(this.empty)
+        {
+            return "";
+        }
+        else if(CleanTable() != "blogs")
+        {
+            return "#st"+id;
+        }
+        else{
+            return "/show/"+this.slug;
+        }
+
+    },
     toggleShareBox(id) {
 
     // console.log(`toggleShareBox wurde für ID ${id} aufgerufen`);
@@ -332,6 +274,9 @@ methods:{
             console.error(`Shariff-Element für ID ${id} nicht gefunden`);
             return;
         }
+        const url = `${window.location.origin}${window.location.pathname}${this.urlAdded || ''}`;
+        shariffRef.setAttribute('data-url', url);
+        console.log(url);
 
         // console.log(`Shariff wird für ID ${id} initialisiert`, shariffRef);
         new Shariff(shariffRef, {
@@ -382,8 +327,9 @@ methods:{
     },
 },
 mounted(){
-
+this.urlAdded = this.urlAdder(this.postId);
 this.imageRemove(this.postId);
+
 },
 showComments(newVal, oldVal) {
         if (newVal !== oldVal) {

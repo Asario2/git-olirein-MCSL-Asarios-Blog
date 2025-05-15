@@ -2,11 +2,8 @@ import { defineConfig } from 'vitepress'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
-  title: "Asarios Blog",
-  description: "Asarios personal Blog",
-  lang:'de',
-  outDir: './../public/handbook_new',
-  base: './handbook_new/',
+  title: "MCSL",
+  description: "MCSL & Starter Eleven",
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [

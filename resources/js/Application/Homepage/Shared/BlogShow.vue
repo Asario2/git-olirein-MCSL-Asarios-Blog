@@ -134,7 +134,7 @@
 
                     <div v-else v-html="decodedContent"></div>
                     <div>
-                        <socialButtons :postId="blog.id" :nostars="true" />
+                        <socialButtons :postId="blog.id" :empty="true" :nostars="true" />
                     </div>
                     <h2 id="author_info">
                         Informationen zu {{ blog.blog_author.name }}

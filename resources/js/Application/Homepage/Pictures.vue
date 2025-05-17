@@ -154,410 +154,147 @@
     </layout>
 </template>
 
-
-
-
 <script>
 import Layout from "@/Application/Homepage/Shared/Layout.vue";
-import editbtns from '@/Application/Components/Form/editbtns.vue';
-import IconPlusCircle from "@/Application/Components/Icons/PlusCircle.vue";
-import averageRating from "@/Application/Components/Social/averageratings.vue";
-import IconPencil from "@/Application/Components/Icons/Pencil.vue";
-import InputIconHyperlink from "@/Application/Components/Form/InputIconHyperlink.vue";
-import SocialButtons from "@/Application/Components/Social/socialButtons.vue";
-import ZoomImage from "@/Application/Components/Content/ZoomImage.vue";
-import Share from "@/Application/Components/Social/share.vue";
-//import PswpTemplate from "@/Application/Components/Content/pswptemplate.vue";
-import AddRating from "@/Application/Components/Social/addrating.vue";
-import SearchFilter from "@/Application/Components/Lists/SearchFilter.vue";
-import IconCamera from "@/Application/Components/Icons/Camera.vue";
-import IconComment from "@/Application/Components/Icons/IconComment.vue";
-import { throttle } from "lodash";
-import mapValues from "lodash/mapValues";
-import pickBy from "lodash/pickBy";
 import MetaHeader from "@/Application/Homepage/Shared/MetaHeader.vue";
-import IconEye from "@/Application/Components/Icons/Eye.vue";
-import IconTrash from "@/Application/Components/Icons/Trash.vue";
+import ZoomImage from "@/Application/Components/Content/ZoomImage.vue";
+import SocialButtons from "@/Application/Components/Social/socialButtons.vue";
+import averageRating from "@/Application/Components/Social/averageratings.vue";
+import editbtns from "@/Application/Components/Form/editbtns.vue";
 import DisplayDate from "@/Application/Components/Content/DisplayDate.vue";
-//import PhotoSwipeLightbox from "photoswipe/dist/photoswipe-lightbox.esm.js";
-// import PhotoSwipeLightbox from "photoswipe/dist/photoswipe-lightbox.esm.js";
-import { toastBus } from '@/utils/toastBus';
-import PhotoSwipeLightbox from 'photoswipe/lightbox';
-import 'photoswipe/style.css';
-import { CleanTable, CleanId } from '@/helpers';
-// import 'photoswipe/src/photoswipe.css';
+import IconCamera from "@/Application/Components/Icons/Camera.vue";
+import PhotoSwipeLightbox from "photoswipe/lightbox";
+import "photoswipe/style.css";
 import he from "he";
-import { nextTick } from "vue";
-import { route } from "ziggy-js";
-import IconShare from "@/Application/Components/Icons/IconShare.vue";
-import IconStar from "@/Application/Components/Icons/IconStar.vue";
-import { hasRight,loadAllRights,isRightsReady } from '@/utils/rights';
-export default {
-components: {
-    Layout,
-    DisplayDate,
-    IconPencil,
-    IconPlusCircle,
-    IconTrash,
-    IconCamera,
-    SearchFilter,
-    Share,
-    editbtns,
-    // PhotoSwipeLightbox,
-    AddRating,
-    IconComment,
-    IconShare,
-    IconStar,
-    InputIconHyperlink,
-    averageRating,
-    SocialButtons,
-    ZoomImage,
-    MetaHeader,
-    toastBus,
-},
-data() {
-    return {
-        form: {
-            search: this.filters.search,
-        },
-        routeCreate: "/admin/tables/create/images",
-        routeDelete: "/admin/tables/delete/images/",
-        routeEdit: "admin.tables.edit",
-        showShareBox: {},
-        showStarBox: {},
-        showComments: {}, // Zustand für die Anzeige der Kommentarfunktion
-        item: { id: null },
-        lightbox: null,
-        rightsData: {},
-        rightsReady: false,
-        editOn: false,
-        deleteOn: false,
-    };
-},
-watch: {
-    form: {
-        handler: throttle(function () {
-            let query = pickBy(this.form);
-            var tablezz = CleanTable();
-            this.$inertia.get(
-                this.route("home.images.gallery.search", { slug: tablezz }),
-                Object.keys(query).length ? query : { remember: "forget" },
-                {
-                    preserveState: true,
-                }
-            );
-        }, 150),
-        deep: true,
-    },
-},
-computed:{
 
-        isRightsReady() {
-      return this.$isRightsReady; // Zugriff auf globale Methode
-    },
-    hasRight() {
-      return this.$hasRight; // Zugriff auf globale Methode
-    },
-},
-props: {
-    filters: {
-        type: Object,
-        default: () => ({}),
-    },
-    ratings:{
-        type:Object,
-    },
-    searchFilter: {
-        type: Boolean,
-        default: true,
-    },
-    searchText: {
-        type: String,
-        default: "Hier kannst du den Suchbegriff eingeben",
-    },
-    searchValue: {
-        type: String,
-        default: null,
-    },
+export default {
+  components: {
+    Layout,
+    MetaHeader,
+    ZoomImage,
+    SocialButtons,
+    averageRating,
+    editbtns,
+    DisplayDate,
+    IconCamera,
+  },
+  props: {
     entries: {
-        type: [Array, Object],
-        default: () => [],
+      type: [Array, Object],
+      default: () => [],
     },
     ocont: {
-        type: [Array, Object],
-        default: () => [],
+      type: [Array, Object],
+      default: () => [],
     },
-
+    ratings: {
+      type: Object,
+      default: () => ({}),
+    },
     createOn: {
-        default: true,
+      default: true,
     },
-    deleteDescription: {
-        default: "Eintrag Löschen",
+    searchFilter: {
+      type: Boolean,
+      default: true,
     },
-    editDescription: {
-        default: "Eintrag bearbeiten",
+    routeCreate: {
+      type: String,
+      default: '',
     },
-    data: Object,
-
-},
-methods: {
-    async hasRight(right, table) {
-    if (!this.rightsData[`${right}_${table}`] && table) {
-      await this.checkRight(right, table);
-    }
-    return this.rightsData[`${right}_${table}`] === 1;
-},
-
-  async checkRight(right, table) {
-    // Lade die Rechte für den User
-    const value = await GetRights(right, table);
-    // Speichere die geladenen Rechte im rightsData-Objekt
-    this.rightsData[`${right}_${table}`] = value;
-
+    form: {
+      type: Object,
+      default: () => ({
+        search: '',
+      }),
+    },
   },
-
-
-    handleBodyClick(event) {
-        this.$nextTick(() => {
-            const box = document.getElementById("commentBox");
-            if (box && !box.contains(event.target)) {
-                this.showComments = null;
-            }
-        });
-    },
-    // openComments(id) {
-    //     this.showComments = this.showComments === id ? null : id;
-    //     console.log("showComments:", this.showComments);
-    //     const ti = document.getElementById('teaser-img');
-    //     if(ti.style.overflow !== "hidden")
-    //     {
-
-    //         ti.style.overflow = "clip";
-    //     }
-    //     else
-    //     {
-    //         ti.style.overflow = "hidden";
-    //     }
-    // },
-    closeComments() {
-        this.showComments = null;
-    },
-
-    reset() {
-        this.form = mapValues(this.form, () => null);
-    },
-    toggleStarBox(id) {
-    // console.log(`toggleStarBox wurde für ID ${id} aufgerufen`);
-
-    // Sicherstellen, dass showShareBox existiert
-    if (!this.showStarBox) {
-        this.showStarBox = {};
-    }
-
-    this.showStarBox[id] = !this.showStarBox[id];
-
-    },
-    toggleShareBox(id) {
-    // console.log(`toggleShareBox wurde für ID ${id} aufgerufen`);
-
-    // Sicherstellen, dass showShareBox existiert
-    if (!this.showShareBox) {
-        this.showShareBox = {};
-    }
-
-    this.showShareBox[id] = !this.showShareBox[id];
-
-    // console.log("showShareBox:", this.showShareBox);
-
-    if (this.showShareBox[id]) {
-        this.$nextTick(() => {
-            const shariffRef = this.$refs['shariff_' + id];
-            if (!shariffRef) {
-                console.error(`Shariff-Element für ID ${id} nicht gefunden.`);
-                return;
-            }
-            // console.log(`Shariff für ID ${id} wird initialisiert...`);
-            this.initShariff(id);
-        });
-    } else {
-        this.$nextTick(() => {
-            const shariffRef = this.$refs['shariff_' + id];
-            if (shariffRef) {
-                // console.log(`Shariff-Inhalt für ID ${id} wird geleert.`);
-                shariffRef.innerHTML = "";
-            }
-        });
-    }
-},
-
-        initShariff(id) {
-    nextTick(() => {
-        const shariffRef = this.$refs['shariff_' + id];
-        if (!shariffRef) {
-            console.error(`Shariff-Element für ID ${id} nicht gefunden`);
-            return;
-        }
-
-        // console.log(`Shariff wird für ID ${id} initialisiert`, shariffRef);
-        new Shariff(shariffRef, {
-            services: ["facebook", "telegram", "whatsapp", "xing", "twitter"],
-            theme: "classic",
-            orientation: "horizontal",
-        });
-    });
-
-
-    },
-
-    toggleCommentBox(postId) {
-        this.showComments = this.showComments === postId ? null : postId;
-    },
-
+  data() {
+    return {
+      lightbox: null,
+      openIndex: null,
+    };
+  },
+  methods: {
     decodeEntities(text) {
-        if (text) {
-            text = text?.replace(/<br\s*\/?>/g, "\n");
-            return he.decode(text);
-        } else {
-            return "";
-        }
+      if (text) {
+        text = text.replace(/<br\s*\/?>/g, "\n");
+        return he.decode(text);
+      }
+      return "";
     },
-
-    deleteDataRow(id) {
-        if (confirm("Wollen Sie diesen Beitrag wirklich löschen?")) {
-            axios
-                .delete(this.routeDelete + id)
-                .then((response) => {
-                    this.$emit("deleted");
-                    toastBus.emit('toast', response.data); // ← erwartet { status: "...", message: "..." }
-                    this.$inertia.reload();
-                })
-                .catch((error) => {
-                    console.error("Fehler beim Löschen:", error);
-                });
-        }
+    handleBodyClick(event) {
+      // Hier evtl. Kommentare schließen o.Ä.
     },
-
-    editDataRow(id) {
-       const table = CleanTable();
-       var rt = `/admin/tables/edit/${id}/images`;
-       location.href = rt;
+    /**
+     * Prüft, ob der Link ein Admin/Tables-Link ist.
+     * @param {string} href
+     * @returns {boolean}
+     */
+    isAdminLink(href) {
+      return href.startsWith("/admin/tables");
     },
+    reset() {
+      this.form.search = "";
+    },
+  },
+  mounted() {
+    const hash = window.location.hash;
+    if (hash && hash.startsWith("#st")) {
+      const id = hash.replace("#st", "");
+      const index = this.entries.data.findIndex((item) => String(item.id) === id);
 
-onClick() {
-      if (this.lightbox) {
-        this.lightbox.open(0); // 0 = Erstes Bild
-      } else {
-        console.error('PhotoSwipeLightbox wurde nicht initialisiert!');
+      if (index !== -1) {
+        this.openIndex = index;
+
+        this.$nextTick(() => {
+          const el = document.getElementById(`st${id}`);
+          if (el) {
+            const y = el.getBoundingClientRect().top + window.pageYOffset - 134;
+            window.scrollTo({ top: y, behavior: 'smooth' });
+          }
+        });
       }
     }
-},
-async mounted() {
-    const hash = window.location.hash;
-            if (hash && hash.startsWith("#st")) {
-                const id = hash.replace("#st", "");
-                const index = this.entries.data.findIndex((item) => String(item.id) === id);
 
-                if (index !== -1) {
-                this.openIndex = index;
-
-                // Warten, bis das Element sichtbar gerendert ist
-                this.$nextTick(() => {
-                    const el = document.getElementById(`st${id}`);
-                    if (el) {
-                    const y = el.getBoundingClientRect().top + window.pageYOffset - 130;
-                    window.scrollTo({ top: y, behavior: 'smooth' });
-                    }
-                });
-                }
-            }
-
-    document.body.addEventListener("click", this.handleBodyClick);
     this.lightbox = new PhotoSwipeLightbox({
-        gallery: '#gallery',
-        children: 'a',
-        zoom: true, // Zoom aktivieren
-        secondaryZoomLevel: 2, // Maximale Zoom-Stufe
-        maxZoomLevel: 4, // Manuell festlegen
-        initialZoomLevel: "fit", // Standard-Zoom-Ansicht
-        wheelToZoom: true, // Zoomen per Mausrad aktivieren
-        barsSize: { top: 50, bottom: 50 },
-        padding: { top: 20, bottom: 20, left: 20, right: 20 },
-        zoomButton: true, // Zoom-Button aktivieren
-        shareButton: true, // Share-Button aktivieren
-        fullscreenButton: true, // Fullscreen aktivieren
-        bgOpacity: 0.8, // Hintergrundtransparenz
-      pswpModule: () => import('photoswipe')
+      gallery: "#gallery",
+      children: "a:not([href^='/admin/tables'])", // Admin-Links ausschließen
+      pswpModule: () => import("photoswipe"),
+      zoom: true,
+      secondaryZoomLevel: 2,
+      maxZoomLevel: 4,
+      initialZoomLevel: "fit",
+      wheelToZoom: true,
+      barsSize: { top: 50, bottom: 50 },
+      padding: { top: 30, bottom: 30, left: 30, right: 30 },
+      showHideAnimationType: "zoom",
+      galleryUID: "photoswipe-gallery",
     });
 
     this.lightbox.init();
-
-
-    const waitUntilReady = () => new Promise((resolve) => {
-    const check = () => {
-      if (window.isRightsReady && window.isRightsReady()) {
-        resolve();
-      } else {
-        setTimeout(check, 50);
-      }
-    };
-    check();
-  });
-
-  await waitUntilReady();
-
-  // Rechte prüfen
-  this.editOn = hasRight("edit", "images");
-  this.deleteOn =
-  //console.log(this.deleteOn,this.editOn);
-
-    await loadAllRights(); // aus utils/rights.js
-    this.rightsReady = true;
-},
-beforeUnmount() {
+  },
+  beforeUnmount() {
     if (this.lightbox) {
       this.lightbox.destroy();
+      this.lightbox = null;
     }
   },
-beforeDestroy() {
-    document.body.removeEventListener("click", this.handleBodyClick);
-},
 };
 </script>
 
-<style scoped>
-.imgprev{
 
-height:260px;
-object-fit:cover;
-width:auto;
-
-}
-.inline{
-    /* display:inline-block; */
-    margin-right: 8px;
-}
-.icon{
-max-width:50px;
-max-height:50px;
-}
-.pra{
-    padding-right:25px;
-}
-
-.shariff {
+  <style scoped>
+  .gallery-container {
     display: flex;
-flex-direction: column; /* Macht die Buttons untereinander */
-gap: 5px;
-}
-@media (max-width: 760px) {
-.leftpad{
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
 
-    margin-left:-42px !important;
-    text-align:center !important;
-}
-}
-.we300{
-    max-width:350px !important;
-}
-/* Optional: Füge hier benutzerdefinierte Styles hinzu */
-</style>
+  .imgprev {
+    cursor: zoom-in;
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+  }
+  </style>

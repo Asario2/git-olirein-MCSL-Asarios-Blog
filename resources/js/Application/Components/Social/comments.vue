@@ -22,7 +22,7 @@
                     </span>
                 </p>
                 <p class="text-layout-sun-700 dark:text-layout-night-600 w-[190px] max-w-[190px] mxy">
-                    {{ comment.content }}
+                    <div v-html="nl2br(comment.content)"></div>
                 </p>
                 <small class="text-xs text-layout-sun-600 dark:text-layout-night-500">
                     <display-date :value="comment.created_at" :time-on="false" />
@@ -102,7 +102,9 @@
             });
             },
             methods: {
-
+nl2br(text){
+    return text.replace(/\n/g,"<br />");
+},
         insertNewline(event) {
             // Erlaubt Zeilenumbruch bei Shift+Enter
             const textarea = event.target;

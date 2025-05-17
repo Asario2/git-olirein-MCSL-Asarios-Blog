@@ -47,6 +47,7 @@
                         :placeholder="field.placeholder || ''"
                         readonly
                         :disabled="true"
+                        class="cursor-not-allowed"
                         :required="isRequired(field.required)"
 
                         @input="handleInput"
@@ -63,6 +64,7 @@
                         :placeholder="field.placeholder || ''"
                         readonly
                         :disabled="true"
+                        class="cursor-not-allowed"
                         :value="aslug"
                         :required="isRequired(field.required)"
 
@@ -143,6 +145,7 @@
                         @update:fileName="handleFileNameUpdate"
                         @imageUploaded="handleImageUpload"
                 />
+                {{ console.log(table_alter) }}
                 <button type="button" @click="openModal_alt">
                     <p v-if="this.nf2 && typeof this.nf2 !== 'object' && this.nf2 != '[]' && this.nf2 != '008.jpg' ">Hochgeladenes Bild:
 
@@ -178,6 +181,7 @@
 
                         :placeholder="field.placeholder || ''"
                         :disabled="field.class !== 'datetime'"
+                        :class="field.class !== 'datetime' ? 'cursor-not-allowed' : ''"
                         :required="isRequired(field.required)"
                         >
                         <template #label>{{ field.label }}</template>
@@ -1488,27 +1492,27 @@ async submitForm() {
                 if (element_alt?.value) {
                     this.formData[name] = element_alt.value
                         .replace(/\[/g, '%5B')
-                        .replace(/\]/g, '%5D');
+                        .replace(/\]/g, '%5D').replace(/\n/g,"<br />");
 
                 }
 
                 else if (element?.value) {
                     this.formData[name] = element.value
                         .replace(/\[/g, '%5B')
-                        .replace(/\]/g, '%5D');
+                        .replace(/\]/g, '%5D').replace(/\n/g,"<br />");
                 }
                 else if(element_alt?.innerHTML)
                 {
                     this.formData[name] = element.innerHTML
                         .replace(/\[/g, '%5B')
-                        .replace(/\]/g, '%5D');
+                        .replace(/\]/g, '%5D').replace(/\n/g,"<br />");
 
                 }
                 else if(element?.innerHTML)
                 {
                     this.formData[name] = element.innerHTML
                         .replace(/\[/g, '%5B')
-                        .replace(/\]/g, '%5D');
+                        .replace(/\]/g, '%5D').replace(/\n/g,"<br />");
 
 
                 }
@@ -1672,6 +1676,7 @@ async submitForm() {
 
         // console.log("col:" + this.column);
         this.table_alter = this.settings.impath?.[this.xtable] ? '' : "/images/"+this.tablex+"/thumbs/";
+        // this.table_alter = this.settings.impath?.[this.xtable] && tablex === "users" ? '' : "/images/"+this.tablex+"/thumbs/";
         this.table_older = this.settings.impath?.[this.xtable] ? "" : "/images/"+this.tablex+"/thumbs/";
          this.getImageUrl();
 

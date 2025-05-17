@@ -8,15 +8,9 @@ use Illuminate\Http\Request;
 use Laravel\Jetstream\Agent;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-if(!session_id())
-{
-    session_start();
-}
 
 class ApplicationController extends Controller
 {
-
-
   //
   public function index(Request $request)
   {
@@ -85,30 +79,9 @@ class ApplicationController extends Controller
       $agent->setUserAgent($session->user_agent);
     });
   }
-    //   public function Dmode(Request $request)
-    //   {
-
-    //        // Dark Mode-Status aus der Anfrage holen
-    //        $isDarkMode = $request->input('darkMode', false);
-
-    //        // Den Status in der Session speichern
-    //        session(['darkMode' => $isDarkMode]);
-
-    //        // Erfolgsantwort zurückgeben
-    //        return response()->json(['success' => true]);
-    //   }
-    public function toggleDarkMode(Request $request)
-    {
-        $darkMode = $request->input('dark_mode', false);
-        session(['dark_mode' => $darkMode]);
-        $_SESSION['dm'] = $darkMode ?? "dark"; // Präferenz in der Session speichern
-        //\Log::info("dm: ".$darkMode);
-        return response()->json(['dark_mode' => $darkMode]);
-    }
-    public function session_dm() {
-
-        echo json_encode(['dm' => $_SESSION['dm']]);
-    }
-
-
+  public static function blog_categories($blog)
+  {
+    $res = DB::table("blogs")->where("id",$blog->id)->leftJoin("blog_categories","blogs.blog_categories_id","=","blog_categories.id")->select("name")->first();
+  \Log::info("RES:".json_encode($res));
+  }
 }

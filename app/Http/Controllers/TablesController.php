@@ -434,157 +434,148 @@ class TablesController extends Controller
                }';
             return response()->json($formFields);
     }
-    public function ShowTable(Request $request,$table_alt=NULL)
+    public function ShowTable(Request $request, $table_alt = null)
     {
-
-
-        $table = $table_alt ??  'images'; // Standardwert: "images"
-        $path = request()->path(); // Gibt "home/show/images/search/Fasermaler"
+        $table = $table_alt ?? 'images';
+        $path = request()->path();
         $parts = explode("/", $path);
 
-        foreach(gettables() as $ta)
-        {
-            if(in_array($ta,$parts))
-            {
+        foreach (gettables() as $ta) {
+            if (in_array($ta, $parts)) {
                 $table = $ta;
                 $_GET['table'] = $ta;
             }
         }
-        // **Falls keine Tabelle gefunden wurde, beende die Anfrage**
+        \Log::info("tb: ".$table);
         if (!$table || !Schema::hasTable($table)) {
-            abort(404, "Tabelle existiert nicht.1");
-        }
-        if(!CheckRights(Auth::id(),$table,"view"))
-        {
-            header("Location: /no-rights");
-            exit;
+            abort(404, "Tabelle existiert nicht.");
         }
 
-
-        $tablez = [];
+        if (!CheckRights(Auth::id(), $table, "view")) {
+            return redirect("/no-rights");
+        }
 
         if ($table == "blogs" || $table == "mindblog") {
-            $ord[0] = "created_at";
-            $ord[1] = "DESC";
+            $ord = ["created_at", "DESC"];
+        } elseif (in_array($table, ["admin_table", "image_categories", "camera"])) {
+            $ord = ["name", "ASC"];
+        } elseif ($table == "images") {
+            $ord = ["id", "DESC"];
+        } elseif($table == "privacy") {
+            $ord = ["ordering", "DESC"];
         }
-        elseif($table == "admin_table" || $table == "image_categories")
-        {
-            $ord[0] = "name";
-            $ord[1] = "ASC";
-        }
-        elseif($table == "images")
-        {
-            $ord[0] = "id";
-            $ord[1] = "DESC";
-        }
-/*      elseif (Schema::hasColumn($table, "position")) {
-            $ord[0] = 'position';
-            $ord[1] = 'ASC';
-        }*/
-        elseif($table == "camera"){
-            $ord[0] = "name";
-            $ord[1] = "ASC";
-        }
-        else {
-            $ord[0] = "id";
-            $ord[1] = "DESC";
-        }
-        $headline = Settings::$headline[$table] ?? '';
-        $otherField = "".$table.".*";
-        $otherField = $headline;
+     else{
+        $ord = ["id", "DESC"];
+    }
 
-        if(@Settings::$otherField[$table])
-        {
-        $otherField =    Settings::$otherField[$table]." as description";
-        }$table_alt = $table;
-        $of = $otherField;
-        if(substr_count($otherField,"_idd"))
-        {
-            $otherField = str_replace(["_idd","_id"],"",Settings::$otherField[$table]);
-            $oa = true;
-            $col = str_replace("_idd","_id",$otherField);
-            $name = $otherField;
-            $table_alt = $col;
-            $of = Settings::$underCals[$table];
-           // $qryadd  = join($name ON $table.$table."_id" = $name."id");
-           //\Log::info($otherField);
+        $columns = Schema::getColumnListing($table);
+        $joins = [];
+        $selects = ["{$table}.*"];
+
+        $headline = Settings::$headline[$table] ?? 'id';
+        $otherField = Settings::$otherField[$table] ?? null;
+        $of = $otherField ?? 'id';
+
+        // Hauptname-Feld
+        $selects[] = "{$table}.{$headline} AS name";
+
+        // Beschreibung (optional)
+        if ($otherField != "users_id") {
+            $selects[] = "{$table}.{$otherField} AS description";
         }
-        else{
-            $oa = false;
-            $name = '';
-            $col = '';
+        elseif (in_array('users_id', $columns)) {
+            $joins['users'] = [
+                'from' => 'users.id',
+                'to'   => "{$table}.users_id",
+            ];
+            $selects[] = "users.name AS description"; // oder users.email, je nach Bedarf
+            $selects[] = "{$table}.users_id";
+
         }
 
+        // LEFT JOINs für *_id-Felder
+        foreach ($columns as $col) {
+            if (Str::endsWith($col, '_id') && !in_array($col, ['post_id'])) {
+                $relatedTable = Str::plural(Str::beforeLast($col, '_id'));
 
-        $otherField = $otherField ?? '';
-        $search = trim(request('search', ''));
-        //$qryadd  = join($name ON $table.$table."_id" = $name."id");
-        $tables = DB::table($table)
-            ->select("{$table}.*", "{$table}.$headline as name","{$table_alt}.$of as description")
-            ->when($oa === true, function ($query) use ($name, $table,$col) {
-                return $query->join($name, "{$table }.{$name}_id", "=", "{$name}.id"); // JOIN nur wenn $otherField 'users_idd' ist
-            })
+                if (Schema::hasTable($relatedTable) && !isset($joins[$relatedTable])) {
+                    $joins[$relatedTable] = [
+                        'from' => "{$relatedTable}.id",
+                        'to' => "{$table}.{$col}",
+                    ];
+                    $selects[] = "{$relatedTable}.name AS {$relatedTable}_name";
+                }
+            }
+        }
+
+        // Query aufbauen
+        $query = DB::table($table)->select($selects);
+
+        // JOINs anwenden
+        foreach ($joins as $relatedTable => $join) {
+            $query->leftJoin($relatedTable, $join['to'], '=', $join['from']);
+        }
+
+        // Suche und Sortierung
+        $tables = $query
             ->filterdefault(['search' => request('search')])
-            ->orderby($ord[0], $ord[1])
+            ->orderBy($ord[0], $ord[1])
             ->paginate(20)
             ->withQueryString();
 
-        $of = @Settings::$otherField[$table];  // Das Feld, das du kürzen möchtest
+        // Beschreibung kürzen
+        if ($otherField) {
+            $tables->getCollection()->transform(function ($item) use ($otherField) {
+                if (isset($item->$otherField)) {
+                    $item->description = html_entity_decode(KILLMD($item->$otherField, 18, 3));
+                }
+                return $item;
+            });
+        }
 
-        $tables->getCollection()->transform(function ($item) use ($of) {
-            // Stelle sicher, dass das Feld existiert, bevor du versuchst, es zu kürzen
-            if (isset($item->$of)) {
-                // Wende die shorten-Funktion an, die die Länge auf 25 Zeichen begrenzt und 3 Zeichen für die Ellipse verwendet
-                $item->description = html_entity_decode(KILLMD($item->$of, 18, 3));
+        // Hauptname-Text decodieren
+        $tables->getCollection()->transform(function ($item) use ($table) {
+            $nameField = "{$table}_name";
+            if (isset($item->$nameField)) {
+                $item->$nameField = html_entity_decode($item->$nameField);
             }
             return $item;
         });
-        $n = 'name';
-        $tables->getCollection()->transform(function ($item) use ($n) {
-            // Stelle sicher, dass das Feld existiert, bevor du versuchst, es zu kürzen
-            if (isset($item->$n)) {
-                // Wende die shorten-Funktion an, die die Länge auf 25 Zeichen begrenzt und 3 Zeichen für die Ellipse verwendet
-                $item->name = html_entity_decode($item->$n);
-            }
-            return $item;
-        });
 
-        $breadcrumbs = [
-            'Home' => route('admin.dashboard'),
-            'Liste der Tabellen' => route('admin.tables.index'),
-            'Tabelle test' => null
+        $result = $tables->items();
+        $userIds = collect($result)->pluck('users_id')->unique()->filter()->values();
+
+        // Bildpfade aus users-Tabelle holen
+        $users_img = DB::table('users')
+            ->whereIn('id', $userIds)
+            ->pluck('profile_photo_path', 'id'); // gibt [id => profile_photo_path]
+
+        // Als Array übertragen
+        $usersArray = [
+            'img' => $users_img,
         ];
-
-        // Oder wie bei deinem Beispiel
-        $breadcrumbs = collect($tablez)->mapWithKeys(function ($item) {
-            return [$item->title => route('admin.tables.show', $item->id)];
-        });
-
-        $breadcrumbs = $breadcrumbs->put('Liste der Tabellen', route('admin.tables.index'));
-        $dd = (array)$tables;
-
-        $result = array_values($dd);
-
-        // $result = stripslashes($result);
-        // Ausgabe als JSON ohne Indizes
-        // echo json_encode($result, JSON_PRETTY_PRINT);
-        $qq = json_encode($result, JSON_PRETTY_PRINT);
-        $qq = $this->stripslashes_recursive($qq);
         return Inertia::render('Admin/TableShow', [
-            'filters' => Request()->all('search'),
-            'breadcrumbs'=>$breadcrumbs,
-            'datarows' => $qq,
-            "rows" => $tables,
-            "table" => ucf($table),
-            "table_alt" => $table,
-            "ItemName" => "Beiträge",
-            "itemName_des" => "Beitrags",
-            "formData"  => "test",
-            "tablez" => ucf($table),
-            "table_q" => ucf($table),
-            "namealias" => ucf(Settings::$namealias[$table] ?? 'name')
+            'filters'       => request()->all('search'),
+            'breadcrumbs'   => [
+                'Home' => route('admin.dashboard'),
+                'Liste der Tabellen' => route('admin.tables.index'),
+                "Tabelle {$table}" => null
+            ],
+            'datarows'      => $result,
+            'rows'          => $tables,
+            'table'         => ucf($table),
+            'table_alt'     => $table,
+            'ItemName'      => 'Beiträge',
+            'itemName_des'  => 'Beitrags',
+            'formData'      => 'test',
+            'tablez'        => ucf($table),
+            'table_q'       => ucf($table),
+            'namealias'     => "{$table}_name",
+            'users'         => $usersArray,
         ]);
     }
+
+
     function stripslashes_recursive($data) {
         if (is_array($data)) {
             return array_map('stripslashes_recursive', $data); // Rekursive Anwendung
@@ -1731,6 +1722,7 @@ class TablesController extends Controller
             $formData = ($request->input('formData')    );
             foreach($formData as $key=>$val)
             {
+
                 $fi = FormController::getClass($key,'','');
                 if(substr_count($fi,"textarea"))
                 {

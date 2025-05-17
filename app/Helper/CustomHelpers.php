@@ -13,7 +13,7 @@ class CustomHelpers
     {
         $cleanHtml = null;
         //
-        $config = ['HTML.Allowed' => 'div,p,h1,h2,h3,h4,h5,h5,strong,em,b,i,img[src],code,a[href],ul,ol'];
+        $config = ['HTML.Allowed' => 'br,div,p,h1,h2,h3,h4,h5,h5,strong,em,b,i,img[src],code,a[href],ul,ol'];
         //
         if ($input) {
             $cleanHtml = Purify::config($config)->clean($input);

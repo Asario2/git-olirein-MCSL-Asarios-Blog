@@ -199,7 +199,7 @@ export default {
     },
     methods: {
         decodeHtml(html) {
-            return html.replace(/%5B/g, '[').replace(/%5D/g, ']');
+            return html.replace(/%5B/g, '[').replace(/%5D/g, ']').replace("\n","<br />");
         },
         play() {
             this.$refs.audioPlayer.play();

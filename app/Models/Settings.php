@@ -93,6 +93,8 @@
             "camera"=>"name",
             "testfield"=>"title",
             "shortpoems"=>"headline",
+            "privacy"=>"headline",
+            "texts"=>"headline"
 
     ];
     public static array $searchable = ["images","blogs","didyouknow","shortpoems"];
@@ -119,13 +121,20 @@
         "comments"=>"Kommentar"
     ];
     public static array $descalias = [
-        "comments"=>"Autor"
+        "comments"=>"Autor",
+        "users"=>"E-Mail",
     ];
     public static array $underCals=[
     'comments' => "name",
     ];
-    public static array $othafieldz = [
-        // "blogs"=>
+    public static array $presetting = [
+        "blogs"=>"blog_categories",
+        "images"=>"image_categories",
+        "comments"=>"users",
+
+    ];
+    public static array $aftsetting = [
+        "blogs"=>"author",
     ];
     public static array $otherField = [
     'admin_table'=> "description",
@@ -137,7 +146,10 @@
     "didyouknow"=>"answer",
     "camera"=> "Longname",
     'testfield' => "content",
-    'comments'      => 'users_idd',
+    'comments'      => 'users_id',
+    "privacy" => 'message',
     "shortpoems"    => "story",
+    "texts"=>"text",
+    "users"=>"email"
     ];
     }

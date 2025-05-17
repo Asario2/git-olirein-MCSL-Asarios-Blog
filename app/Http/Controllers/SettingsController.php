@@ -28,11 +28,12 @@ class SettingsController extends Controller
             'statusvals' => Settings::$statusvals,
             'searchFields' => Settings::$searchFields,
             'underCals' => Settings::$underCals,
-            'othafieldz' => Settings::$othafieldz,
             'otherField' => Settings::$otherField,
             'impath' => Settings::$impath,
             'namealias' => Settings::$namealias,
             'descalias' => Settings::$descalias,
+            "presetting"=> Settings::$presetting,
+            "aftsetting"=> Settings::$aftsetting,
 
         ]);
     }

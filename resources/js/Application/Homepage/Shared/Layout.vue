@@ -356,7 +356,6 @@ export default {
     if (shouldReload) {
         localStorage.removeItem('reload_dashboard'); // Wichtig: Sonst Endlosschleife
         location.reload();
-        alert("WEEEEEEQ");
     }
 
     // Den 'search' Parameter prüfen

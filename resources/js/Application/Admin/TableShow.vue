@@ -28,16 +28,28 @@
           <template #header>
             <tr>
               <th class="np-dl-th-normal">ID</th>
+              <th v-if="cat_on_head" class="np-dl-ht-normal">{{ cat_on_head }}</th>
               <th class="np-dl-th-normal">{{ prename }}</th>
               <th class="np-dl-th-normal">{{ predesc }}</th>
+              <th v-if="aftsetting" class="np-dl-ht-normal">{{ aftsettingshead }}</th>
               <th class="np-dl-th-normal" v-if="hasCreated">Datum</th>
               <th class="np-dl-th-normal" colspan="2"></th>
             </tr>
           </template>
           <template v-slot:datarow="data" :items="items" @update-list="removeItem">
               <td class="np-dl-td-normal">{{ data.datarow.id }}</td>
-              <td class="np-dl-td-normal">{{ data.datarow.name }}</td>
-              <td class="np-dl-td-normal">{{ data.datarow.description }}</td>
+              <td v-if="data.datarow.image_categories" class="np-dl-td-normal"><img :src="'/images/_ab/images_categories/sm/' + data.datarow.image_categories + '.jpg'" class="icon"></td>
+              <td v-if="data.datarow.blog_categories" class="np-dl-td-normal"><span class="text-sm min-w-fit min-h-fit bg-primary-sun-500 text-primary-sun-900 dark:bg-primary-night-500 dark:text-primary-night-900 font-semibold px-2.5 py-0.5 rounded-lg whitespace-nowrap">{{ data.datarow.blog_categories }}</span></td>
+                <td class="np-dl-td-normal">{{ data.datarow.name }}{{  }}</td>
+              <td class="np-dl-td-normal" v-if="table == 'comments'"><img
+                v-if="data.datarow?.users_id && users?.img?.[data.datarow.users_id]"
+                :src="'/images/' + users.img[data.datarow.users_id]" style="max-width:24px;border-radius:50%;object-fit:cover;max-height:24px"
+                />
+                <img
+                v-else
+                src="/images/profile-photos/008.jpg" style="max-width:24px;border-radius:50%;object-fit:cover;max-height:24px"
+                /></td>
+              <td class="np-dl-td-normal" v-if="table != 'comments'">{{ data.datarow.description }}</td>
           </template>
         </list-container>
        </section>
@@ -70,6 +82,7 @@ let table = table_z.toLowerCase();
     required: true,
     default: "Administrator-Anwendung",
   },
+  users: Object,
   table_alt: {
     type: String,
     required: false,
@@ -155,6 +168,23 @@ let table = table_z.toLowerCase();
         this.checkhasCreated();
         this.settings = await GetSettings();
         window.settings = this.settings;
+
+        // this.datarows = Object.values(this.datarows);
+
+
+        // if(this.datarows['image_categories'] || this.datarows["blog_categories"])
+        // {
+        //   this.cat_on_head = "Kategorie";
+        // }
+           // console.log("WR:" + this.datarows);
+                    // console.log("WS:", this.settings);
+
+        // korrekt:
+        if (this.settings.aftsetting && this.settings.aftsetting[table]) {
+            // const aftsettingshead = "test";
+            // const aftsetting = true;
+            // const aftsettingvalue = GetFunc(table);
+        }
         if (window.settings?.namealias) {
             this.namealias = window.settings.namealias;
         }
@@ -177,6 +207,7 @@ let table = table_z.toLowerCase();
         namealias: '',
         descalias: '',
         hasCreated: false,
+        cat_on_head: this.checkCat(),
     };
   },
 
@@ -210,6 +241,52 @@ let table = table_z.toLowerCase();
 },
 
     methods: {
+        checkCat() {
+    let rows;
+
+    // 1. Falls datarows ein JSON-String ist, versuche es zu parsen
+    if (typeof this.datarows === 'string') {
+        try {
+            rows = JSON.parse(this.datarows);
+        } catch (e) {
+            console.error('Ungültiger JSON-String in datarows:', this.datarows);
+            return null;
+        }
+    } else if (Array.isArray(this.datarows)) {
+        rows = this.datarows;
+    } else if (typeof this.datarows === 'object') {
+        rows = Object.values(this.datarows);
+    } else {
+        return null;
+    }
+
+    // 2. Keine Daten? Sofort raus
+    if (!rows.length) return null;
+
+    // 3. Prüfen, ob mindestens ein Element eine Kategorie enthält
+    const hasCategory = rows.some(row => {
+        return row && typeof row === 'object' && !Array.isArray(row) &&
+            ('image_categories' in row || 'blog_categories' in row);
+    });
+    rows.forEach((row, i) => {
+        console.log(`Row ${i}:`, row);
+        console.log('image_categories:', row?.image_categories);
+        console.log('blog_categories:', row?.blog_categories);
+    });
+    console.log("HSC:"  + hasCategory);
+
+    // 4. Debug-Logging
+    // rows.forEach(row => {
+    //     console.log('Row:', row, 'Type:', typeof row, 'isArray:', Array.isArray(row));
+    // });
+
+    // 5. Ergebnis
+    return hasCategory ? 'Kategorie' : null;
+},
+
+
+
+
         checkhasCreated(){
     axios.get(`/hasCreated/${this.table}`)
   .then(response => {

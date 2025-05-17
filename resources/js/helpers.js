@@ -312,6 +312,7 @@ export async function GetSettings() {
         Object.keys(data).forEach((key) => {
             settings[key] = data[key];
         });
+        console.log("SET:" + settings);
         return settings;
     } catch (error) {
         console.error("Fehler beim Laden der Settings:", error);

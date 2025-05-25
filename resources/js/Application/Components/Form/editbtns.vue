@@ -95,7 +95,7 @@ export default {
                     edit: "blogposts.index",
                 }
             });
-            console.log(response.data);
+            // console.log(response.data);
             toastBus.emit('toast', response.data); // ← erwartet { status: "...", message: "..." }
             this.$inertia.reload();
             // Optional: Seite neu laden oder Liste aktualisieren

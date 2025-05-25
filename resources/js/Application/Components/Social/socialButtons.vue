@@ -1,7 +1,7 @@
 <template>
         <!-- **Tabelle direkt unterhalb des Blog-Containers (fixiert)** -->
         <div class="w-full mt-2">
-            <table :class="['w-full border-collapse mx-auto justify-center rounded-lg shadow-sm table-class',nostars ? 'NSMaTable' : 'MaTable']" style="max-width:300px;" @click.stop>
+            <table :class="['w-full border-collapse mx-auto justify-center rounded-lg shadow-sm table-class',nostars ? 'NSMaTable' : 'MaTable']" style="max-width:300px;margin-bottom:18px;" @click.stop>
                 <tbody>
                     <tr>
                         <td class=" text-center" width="60%">
@@ -235,7 +235,7 @@ methods:{
             let p = ''
             if($_GET['page'])
             {
-                p = "?page=" + $_GET['page']
+                p = "?page=" + $_GET['page'] + "&search=".$_GET['search'];
             }
 
             return p + "#st"+id;
@@ -299,7 +299,7 @@ methods:{
         }
         const url = `${window.location.origin}${window.location.pathname}${this.urlAdded || ''}`;
         shariffRef.setAttribute('data-url', url);
-        console.log(url);
+        // console.log(url);
 
         // console.log(`Shariff wird für ID ${id} initialisiert`, shariffRef);
         new Shariff(shariffRef, {

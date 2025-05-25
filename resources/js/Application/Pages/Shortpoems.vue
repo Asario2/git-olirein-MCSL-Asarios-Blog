@@ -164,6 +164,7 @@
             Object.keys(query).length ? query : { remember: "forget" },
             {
               preserveState: true,
+              replace: true,
             }
           );
         }, 150),

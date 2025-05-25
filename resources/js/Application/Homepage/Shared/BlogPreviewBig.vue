@@ -85,6 +85,7 @@ import DisplayNumber from "@/Application/Components/Content/DisplayNumber.vue";
 import AiButton from "@/Application/Components/Content/AiButton.vue";
 import editbtns from "@/Application/Components/Form/editbtns.vue";
 import SocialButtons from "@/Application/Components/Social/socialButtons.vue";
+
 export default {
     name: "Homepage_Shared_BlogPreviewBig",
     components: {

@@ -9,6 +9,9 @@ use Auth;
 use App\Helpers\MailHelper;
 use Illuminate\Support\Facades\DB;
 use App\Models\Rating;
+use App\Models\User;
+use App\Models\UsersRight;
+
 class CommentController extends Controller
 {
     public $ofst;
@@ -88,9 +91,16 @@ class CommentController extends Controller
         if (!auth()->check()) {
             return response()->json(['redirect' => route('login')]);
         }
+        if($table == "pictures")
+        {
+            $table = "images";
+        }
+
+        $adtabid = DB::table("admin_table")->where("name",$table)->pluck("id")->first();
         $comment = new Comment();
         $comment->content = $request->input('comment2') ?? $request->comment;
         $comment->content = strip_tags($comment->content, '<br>');
+        $comment->admin_table_id = $adtabid;
         $comment->users_id = auth()->id(); // Beispiel für Benutzer-ID
         $comment->created_at = now();
         $comment->updated_at = now();
@@ -103,7 +113,7 @@ class CommentController extends Controller
         // return redirect(url()->previous() . '#comment_' . $request->postid)
         //     ->with('success', 'Kommentar erfolgreich gepostet!');
         $url = url()->previous() . "#comment_{$request->post_id}";
-
+        \Log::info("TABLE: ".$table);
         return response()->json([
             'status' => 'success',
             'message' => 'Kommentar erfolgreich gespeichert',
@@ -118,12 +128,18 @@ class CommentController extends Controller
 
         ]);
 
+        if($table == "pictures")
+        {
+            $table = "images";
+        }
 
         $user = DB::table("users")->where("id",Auth()->id())->select("email",'name')->first();
+        $adtabid = DB::table("admin_table")->where("name",$table)->pluck("id")->first();
         // Kommentar erstellen und in der Datenbank speichern
         $comment = new Comment();
         $comment->content = $request->input('comment2') ?? $request->comment;
         $comment->content = strip_tags($comment->content, '<br>');
+        $comment->admin_table_id = $adtabid;
         $comment->users_id = auth()->id(); // Beispiel für Benutzer-ID
         $comment->created_at = now();
         $comment->updated_at = now();
@@ -136,6 +152,192 @@ class CommentController extends Controller
         $MailHelper = NEW MailHelper();
         $MailHelper->SendMailer("parie@gmx.de","Neuer Kommentar auf www.asario.net","",'','','','newcomment',["name"=>$nick,"table"=>$table,"comment"=>$comment]);
         return redirect()->back()->with('success', 'Kommentar erfolgreich gepostet!');
+    }
+    // public function checkComment(Request $request){
+    //     $id = $request->id;
+
+    //     $res = DB::table("users_rights")->leftJoin("users","users.users_rights_id","=","users_rights.id")->where("users.id",Auth::id())->select("users_rights.unique_id")->get();
+
+    //     $userRight = DB::table("users_rights")
+    //         ->join("users", "users.users_rights_id", "=", "users_rights.id")
+    //         ->where("users.id", Auth::id())
+    //         ->value("users_rights.unique_id");
+
+    //     $commentSeen = DB::table('comments')
+    //         ->where("comments.id",$id)
+    //         ->whereRaw('ischecked & ? > 0', [$userRight])
+    //         ->exists();
+    //         \Log::info("cs:".json_encode($commentSeen)) ;
+    //         if(!$commentSeen){
+    //             DB::table("comments")->update([
+    //                 'ischecked' => DB::raw("ischecked + " . $res->unique_id)
+    //             ]);
+    //         }
+
+    //         \Log::info("aff:".json_encode($res,JSON_PRETTY_PRINT));
+    //     return true;
+    // }
+    // public function checkComment(Request $request)
+    // {
+    //     $id = $request->id;
+
+    //     // Rechte-ID des aktuellen Users holen
+    //     $userRight = DB::table("users_rights")
+    //         ->join("users", "users.users_rights_id", "=", "users_rights.id")
+    //         ->where("users.id", Auth::id())
+    //         ->value("users_rights.unique_id");
+
+    //     if (!$userRight) {
+    //         \Log::warning("Keine Rechte für User ".Auth::id());
+    //         return response()->json(['error' => 'Keine Rechte vorhanden'], 403);
+    //     }
+    //     $ids = DB::table("comments")->pluck("id");
+    //     foreach($ids as $id){
+    //     // Prüfen, ob das Kommentarfeld schon als gelesen markiert wurde
+    //     $commentSeen = DB::table('comments')
+    //         ->where("comments.id", $id)
+    //         ->whereRaw('ischecked & ? > 0', [$userRight])
+    //         ->exists();
+
+    //     \Log::info("Kommentar $id schon gesehen? " . ($commentSeen ? 'ja' : 'nein'));
+    //     \Log::info("UR:".json_encode($request->input('ids')));
+
+    //     if (!$commentSeen) {
+    //         // Kommentar aktualisieren (nur EINEN!)
+    //         DB::table("comments")
+    //             ->where("id", $id)
+    //             ->update([
+    //                 'ischecked' => DB::raw("ischecked + " . $userRight)
+    //             ]);
+    //     }
+    // }
+    //     return response()->json(['success' => true]);
+    // }
+    public function checkComment_old()
+{
+    try {
+        $this->updateComments();
+        return response()->json(['success' => 'Kommentare aktualisiert']);
+    } catch (\Exception $e) {
+        return response()->json(['error' => $e->getMessage()], 504);
+    }
+}
+    public function checkComment()
+    {
+        $userId = Auth::id();
+
+    if (!$userId) {
+        // throw new \Exception('User not authenticated');
+    }
+
+    // // 1. Hole alle unique_id Werte aus users_rights, die zum angemeldeten User gehören
+    // $newFlags = DB::table('users')
+    //     ->leftJoin('users_rights', 'users.users_rights_id', '=', 'users_rights.id')
+    //     ->where('users.id', $userId)
+    //     ->pluck('unique_id')
+    //     ->map(fn($v) => (int)$v)
+    //     ->toArray();
+    // // \Log::info("NF:".json_encode($newFlags,JSON_PRETTY_PRINT));
+    // if (empty($newFlags)) {
+    //     // Keine Rechte gefunden, ggf. Abbruch oder nichts machen
+    //     return;
+    // }
+
+    // 2. Hole alle Kommentare
+    $comments = DB::table('comments')->select('id', 'ischecked')->get();
+    // \Log::info("com:".json_encode($comments,JSON_PRETTY_PRINT));
+    // 3. Für jeden Kommentar prüfen und ischecked aktualisieren
+    foreach ($comments as $comment) {
+        // $currentIschecked = (int)$comment->ischecked;
+
+        // foreach ($newFlags as $flag) {
+        //     // Prüfen ob flag schon komplett gesetzt ist
+        //     if ((($currentIschecked & $flag) === $flag) && $currentIschecked != 0) {
+        //         continue;
+
+        //     }
+        //     \Log::info("cic:".json_encode($currentIschecked,JSON_PRETTY_PRINT));
+        //     // Flag hinzufügen (Bitwise OR)
+        //     $currentIschecked = $flag+$currentIschecked;
+            $com[$comment->id] = $comment->ischecked;
+
+        // // Update, falls Wert sich geändert hat
+        DB::table('comments')
+                ->where('ischecked', '0')
+                ->update([
+                    'ischecked' =>"1",
+                    'updated_at' => now(),
+                ]);
+
+        }
+        return response()->json(["success"=>$com]);
+    }
+
+
+
+    //     $userId = Auth::id();
+    //     $user = User::with('rights')->findOrFail($userId); // load users_rights relation
+    //     $userRights = $user->rights; // users_rights record
+
+    //     if (!$userRights) {
+    //         return 'User has no rights assigned.';
+    //     }
+
+    //     // Wenn unique_id bereits 41 (Developer) ist → nichts tun
+    //     if ($userRights->unique_id == 41) {
+    //         return 'User already has Developer rights.';
+    //     }
+
+    //     // Wenn unique_id == 42 (Admin) → Developer-Rechte dazunehmen
+    //     if ($userRights->unique_id == 42) {
+    //         $adminRights = $userRights;
+    //         $developerRights = UsersRight::where('unique_id', 41)->first();
+
+    //         if (!$developerRights) {
+    //             return 'Developer rights (unique_id=41) not found.';
+    //         }
+
+    //         // Nehmen wir an, rights sind als Bitstring oder Integer gespeichert
+    //         // Beispiel mit Integer-Rechten:
+    //         $mergedRights = $adminRights->rights | $developerRights->rights;
+
+    //         // Jetzt: entweder neues Rights-Profil speichern oder User überschreiben
+    //         // Beispiel: override direkt beim User (wenn du ein Feld z. B. `effective_rights` hast)
+    //         $user->effective_rights = $mergedRights;
+    //         $user->save();
+
+    //         return 'Admin rights merged with Developer rights.';
+    //     }
+
+    //     return 'No action required.';
+    // }
+
+    function CheckCommentsDone(Request $request){
+        $ids = $request->input('ids', []);
+
+        // Rechte des eingeloggten Nutzers holen
+        $userRight = DB::table('users_rights')
+            ->join('users', 'users.users_rights_id', '=', 'users_rights.id')
+            ->where('users.id', Auth::id())
+            ->value('users_rights.unique_id');
+
+        if (!$userRight) {
+            return response()->json([]);
+        }
+
+        // Alle Kommentare abrufen, bei denen das Recht gesetzt ist
+        $checkedComments = DB::table('comments')
+            ->whereIn('id', $ids)
+            ->whereRaw('ischecked & ? > 0', [$userRight])
+            ->pluck('id')
+            ->toArray();
+
+        // Ergebnis als Map zurückgeben: id => true/false
+        $result = [];
+        foreach ($ids as $id) {
+            $result[$id] = in_array($id, $checkedComments);
+        }
+        return response()->json($result);
     }
     public function fetchComments(Request $request,$table,$postId='')
     {
@@ -161,9 +363,10 @@ class CommentController extends Controller
                 //     }
 
                 // }
-
+        $adtabid = DB::table("admin_table")->where("name",$table)->pluck("id")->first();
         DB::enableQueryLog();
             $comments = Comment::where('post_id', $postId)
+            ->where("admin_table_id",$adtabid)
             ->leftJoin('users', 'comments.users_id', '=', 'users.id')
             ->select("comments.*", "users.profile_photo_path", "users.name as author")
             ->where("admin_table_id",$this->GetTid($table_alt))

@@ -25,6 +25,9 @@
                         link.active,
                 }"
                 :href="link.url"
+                preserve-query
+                preserve-state
+                preserve-scroll
             >
                 <span v-if="link.label === 'pagination.previous'"
                     >&laquo; Zurück</span

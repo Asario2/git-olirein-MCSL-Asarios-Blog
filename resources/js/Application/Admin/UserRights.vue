@@ -245,7 +245,7 @@ saveRights() {
     }
     // console.log("BJ:" + JSON.stringify(this.lf2,null,2));
     for (const [key, value] of Object.entries(this.lf2)) {
-          console.log(key, value);  // Hier arbeitest du mit den Werten und Schlüsseln
+        //   console.log(key, value);  // Hier arbeitest du mit den Werten und Schlüsseln
           payload[key] = value;
 
     }

@@ -52,7 +52,7 @@ if(!function_exists("RUMLAUT"))
         }
         $string = str_replace("â€“","-",$string);
         $string = html_entity_decode($string);
-        return str_replace(array("---","ÃƒÅ“","ÃƒÂ¼",'ÃƒÅ¸','Ãƒ?','ÃƒÂ¤','â€™',"Ã„",'Ãœ',"Ã","Ã¶",'Ã"Y','Ã¼','Ã¤','ÃŸ',"âEUR¦",'Ã?'),array("<hr>","&Uuml;",'&uuml;',"&szlig;","&szlig;","&auml;","'","&Auml;","&Uuml;","&szlig;","&ouml;","&szlig;","&uuml;","&auml;","&szlig;",'',"&szlig;"),$string);
+        return str_replace(array("---","ÃƒÅ“","ÃƒÂ¼",'ÃƒÅ¸','Ãƒ?','ÃƒÂ¤','â€™',"Ã„",'Ãœ',"Ã","Ã¶",'Ã"Y','Ã¼','Ã¤','ÃŸ',"âEUR¦",'Ã?','ÃƒÂ¶'),array("<hr>","&Uuml;",'&uuml;',"&szlig;","&szlig;","&auml;","'","&Auml;","&Uuml;","&szlig;","&ouml;","&szlig;","&uuml;","&auml;","&szlig;",'',"&szlig;","&ouml;"),$string);
     }
 }
 if(!function_exists("shorter"))
@@ -121,20 +121,27 @@ if(!function_exists("renderText"))
         if (!Builder::hasMacro('filterdefault')) {
             Builder::macro('filterdefault', function ($filters) {
                 $path = request()->path(); // Gibt "home/show/images/search/Fasermaler"
+                $path = strtolower($path);
                 $parts = explode("/", $path);
 
                 foreach(gettables() as $ta)
                 {
                     if(in_array($ta,$parts))
                     {
+
                         $table = $ta;
                         $_GET['table'] = $ta;
+
                     }
                 }
-                if($table == "pictures")
+                if(@$table == "pictures")
                     {
                         $table = "images";
                         $_GET['table'] = $table;
+                    }
+                    if(empty($table)){
+                        // $table = "comments";
+                        dd($parts);
                     }
                 // dd($parts,$_GET['table']);
 
@@ -143,16 +150,35 @@ if(!function_exists("renderText"))
 
 
 
-                    // $_GET['table'] = "images";
-                    $whvals = @Settings::$searchFields[$_GET['table']] ?? []; // Rufe `whvals` korrekt auf
+                    $whvals = @Settings::$searchFields[$table] ?? []; // Rufe `whvals` korrekt auf
+                    $subvals = @Settings::$searchFields[$table];
+                    foreach($subvals as $key=>$val)
+                    {
+                        if(substr_count($val,"."))
+                        {
+                            $whh[$table][$key] = explode(".",Settings::$searchFields[$table][$key])[0];
+                            $whvals[] = $whh[$table][$key];
+                        }
+                    }
 
-                    session(['table' => @$_GET['table']]);
-
-                    // Abrufen des Wertes aus der Session
-                    $table = session('table');
+                    // dd($whvals);
 
                     foreach ($whvals as $whn) {
-                                            $this->orWhereRaw("LOWER(`$table` . `$whn`) LIKE ?", ['%' . html_entity_decode(strtolower($filters['search'])) . '%']);
+                        if(@is_array($whh[$table]))
+                        {
+                            foreach($whh[$table] as $skey=>$sval){
+
+                                $this->orWhereRaw("LOWER(`$sval` . `name`) LIKE ?", ['%' . html_entity_decode(strtolower($filters['search'])) . '%']);
+                            }
+                        }
+
+                        if(!substr_count($whn,".") && Schema::hasColumn($table, $whn))
+                        {
+                            $this->orWhereRaw("LOWER(`$table` . `$whn`) LIKE ?", ['%' . html_entity_decode(strtolower($filters['search'])) . '%']);
+                        }
+
+                        // dd($whn);
+
                     }
 
 
@@ -165,7 +191,7 @@ if(!function_exists("renderText"))
                 // \Log::info("GT:".$table);
                 $this->orWhere("{$table}.id","like",'%'.$filters['search'].'%');
                 // dd($this->toSql(), $this->getBindings());
-
+                // \Log::info("this:".json_encode($this,JSON_PRETTY_PRINT));
                 return $this;
             });
         }
@@ -176,7 +202,7 @@ if(!function_exists("gettables"))
     {
         $tables = DB::table("admin_table")->pluck("name");
         $tables[] = "pictures";
-        //\Log::info("asd:".json_encode($tables));
+        // \Log::info("asd:".json_encode($tables));
         return $tables;
     }
 }

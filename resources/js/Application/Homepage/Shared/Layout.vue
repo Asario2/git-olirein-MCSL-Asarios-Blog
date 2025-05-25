@@ -399,8 +399,14 @@ export default {
   },
 methods: {
     setLoadingState(state) {
-      console.log('Setting loading state to:', state);
-      this.isLoading = state;
+    //   console.log('Setting loading state to:', state);
+
+    //
+    //
+    // STATE
+    //
+    //
+      this.isLoading = false; // state;
     },
 
     checkLoadingState() {

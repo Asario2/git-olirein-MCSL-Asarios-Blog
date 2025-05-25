@@ -37,6 +37,9 @@ Route::get('/db-check', function () {
     }
 });
 Route::get("/api/user/rights/des/{table}/{right}",[RightsController::class,"GetRights"])->name("GetRights");
+Route::get('/api/chkcom/{id?}', [CommentController::class, 'checkComment'])->name("comments.check");
+Route::post('/api/getCheckedBatch', [CommentController::class, 'CheckCommentsDone'])->name("comments.check.done");
+
 Route::get("/api/user/rights",[RightsController::class,"GetRights_all"])->name("GetRights_all");
 Route::get('/no-rights', [HomeController::class, 'no_rights'])->name('tables.noview');
 
@@ -134,7 +137,12 @@ Route::get('/home/user_is_no_customer', [HomeController::class, 'home_user_is_no
 
 // Mail-Verifizierungs-Signatur ist abgelaufen
 Route::get('/home/invalid_signature', [HomeController::class, 'home_invalid_signature'])->name('home.invalid_signature');
+// User Liste
+Route::get('/home/users', [HomeController::class, 'home_userlist'])->name('home.userlist');
+// User Liste
+Route::get('/home/usershow', [HomeController::class, 'home_usershow'])->name('home.user.show');
 
+// PICTURES
 Route::get('/pictures', [App\Http\Controllers\PagesController::class, 'ab_images'])->name('images');
 Route::get('/pictures/{pic}/',[App\Http\Controllers\PagesController::class, 'ab_images_cat'])->name('pictures');
 // Route::get('/blogposts', [BlogPostController::class, 'index'])->name('blogposts.index');

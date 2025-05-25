@@ -247,9 +247,9 @@ function text_form() {
                         $span.text(shorter(newText)).show();
                     },
                     error: function () {
-                        console.log(
-                            "Fehler beim Speichern des Wertes." + newText
-                        );
+                        // console.log(
+                        //     "Fehler beim Speichern des Wertes." + newText
+                        // );
                     },
                 });
             }

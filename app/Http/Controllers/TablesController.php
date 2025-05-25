@@ -438,6 +438,7 @@ class TablesController extends Controller
     {
         $table = $table_alt ?? 'images';
         $path = request()->path();
+        $path = strtolower($path);
         $parts = explode("/", $path);
 
         foreach (gettables() as $ta) {
@@ -446,7 +447,9 @@ class TablesController extends Controller
                 $_GET['table'] = $ta;
             }
         }
-        \Log::info("tb: ".$table);
+
+        // \Log::info("tb: " . $table);
+
         if (!$table || !Schema::hasTable($table)) {
             abort(404, "Tabelle existiert nicht.");
         }
@@ -455,18 +458,18 @@ class TablesController extends Controller
             return redirect("/no-rights");
         }
 
+        // Sortierung
         if ($table == "blogs" || $table == "mindblog") {
             $ord = ["created_at", "DESC"];
         } elseif (in_array($table, ["admin_table", "image_categories", "camera"])) {
             $ord = ["name", "ASC"];
         } elseif ($table == "images") {
             $ord = ["id", "DESC"];
-        } elseif($table == "privacy") {
+        } elseif ($table == "privacy") {
             $ord = ["ordering", "DESC"];
+        } else {
+            $ord = ["id", "DESC"];
         }
-     else{
-        $ord = ["id", "DESC"];
-    }
 
         $columns = Schema::getColumnListing($table);
         $joins = [];
@@ -476,51 +479,73 @@ class TablesController extends Controller
         $otherField = Settings::$otherField[$table] ?? null;
         $of = $otherField ?? 'id';
 
-        // Hauptname-Feld
+        // Name alias
         $selects[] = "{$table}.{$headline} AS name";
 
-        // Beschreibung (optional)
+        // Beschreibung
         if ($otherField != "users_id") {
             $selects[] = "{$table}.{$otherField} AS description";
-        }
-        elseif (in_array('users_id', $columns)) {
+        } elseif (in_array('users_id', $columns)) {
             $joins['users'] = [
                 'from' => 'users.id',
                 'to'   => "{$table}.users_id",
             ];
-            $selects[] = "users.name AS description"; // oder users.email, je nach Bedarf
+            $selects[] = "users.name AS users"; // wichtig!
             $selects[] = "{$table}.users_id";
-
         }
 
-        // LEFT JOINs für *_id-Felder
         foreach ($columns as $col) {
-            if (Str::endsWith($col, '_id') && !in_array($col, ['post_id'])) {
-                $relatedTable = Str::plural(Str::beforeLast($col, '_id'));
+            if (Str::endsWith($col, '_id')) {
+                $baseName = Str::beforeLast($col, '_id'); // z. B. admin_table_id → admin_table
+                $relatedTable = $baseName;   // admin_table → admin_tables
 
                 if (Schema::hasTable($relatedTable) && !isset($joins[$relatedTable])) {
                     $joins[$relatedTable] = [
                         'from' => "{$relatedTable}.id",
-                        'to' => "{$table}.{$col}",
+                        'to'   => "{$table}.{$col}",
                     ];
-                    $selects[] = "{$relatedTable}.name AS {$relatedTable}_name";
+
+                    // 🎯 NAME-Wert als "admin_table", "users", etc. hinzufügen
+                    $selects[] = "{$relatedTable}.name AS {$baseName}";
                 }
+
+                // Damit der Wert (z. B. users_id) im Ergebnis bleibt
+                $selects[] = "{$table}.{$col}";
             }
         }
+        // JOINs für *_id-Felder
+        // foreach ($columns as $col) {
+        //     if (Str::endsWith($col, '_id') && $col != "post_id") {
+        //         $baseName = Str::beforeLast($col, '_id'); // z. B. admin_table_id → admin_table
+        //         $relatedTable = Str::plural($baseName);   // admin_table → admin_tables
+
+        //         if (Schema::hasTable($relatedTable) && !isset($joins[$relatedTable])) {
+        //             $joins[$relatedTable] = [
+        //                 'from' => "{$relatedTable}.id",
+        //                 'to'   => "{$table}.{$col}",
+        //             ];
+        //             // → Alias als Singular: "users", "admin_table"
+        //             $selects[] = "{$relatedTable}.name AS {$baseName}";
+        //         }
+        //     }
+        // }
 
         // Query aufbauen
         $query = DB::table($table)->select($selects);
 
-        // JOINs anwenden
         foreach ($joins as $relatedTable => $join) {
             $query->leftJoin($relatedTable, $join['to'], '=', $join['from']);
         }
 
-        // Suche und Sortierung
+        // Filter & Sortierung
+        $pag = 20;
+       if(@$request->search){
+        $pag = 20;
+       }
         $tables = $query
             ->filterdefault(['search' => request('search')])
             ->orderBy($ord[0], $ord[1])
-            ->paginate(20)
+            ->paginate($pag)
             ->withQueryString();
 
         // Beschreibung kürzen
@@ -542,24 +567,29 @@ class TablesController extends Controller
             return $item;
         });
 
+        // Nutzerbilder laden (nur wenn users_id vorhanden)
         $result = $tables->items();
         $userIds = collect($result)->pluck('users_id')->unique()->filter()->values();
 
-        // Bildpfade aus users-Tabelle holen
         $users_img = DB::table('users')
             ->whereIn('id', $userIds)
-            ->pluck('profile_photo_path', 'id'); // gibt [id => profile_photo_path]
+            ->select('id', 'profile_photo_path', 'name')
+            ->get()
+            ->keyBy('id')
+            ->map(function ($user) {
+                return [
+                    'img' => $user->profile_photo_path,
+                    'name' => $user->name,
+                ];
+            });
 
-        // Als Array übertragen
-        $usersArray = [
-            'img' => $users_img,
-        ];
         return Inertia::render('Admin/TableShow', [
-            'filters'       => request()->all('search'),
+            'filters' => array_filter(request()->only(['search'])),
+            'searchValue' => request('search'),
             'breadcrumbs'   => [
                 'Home' => route('admin.dashboard'),
                 'Liste der Tabellen' => route('admin.tables.index'),
-                "Tabelle {$table}" => null
+                "Tabelle ".ucf($table)."" => null
             ],
             'datarows'      => $result,
             'rows'          => $tables,
@@ -569,11 +599,13 @@ class TablesController extends Controller
             'itemName_des'  => 'Beitrags',
             'formData'      => 'test',
             'tablez'        => ucf($table),
-            'table_q'       => ucf($table),
+            'table_q'       => strtolower($table),
             'namealias'     => "{$table}_name",
-            'users'         => $usersArray,
+            'users'         => $users_img,
         ]);
     }
+
+
 
 
     function stripslashes_recursive($data) {

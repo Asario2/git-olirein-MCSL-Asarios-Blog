@@ -63,7 +63,7 @@ export default {
   },
   async created() {
     try {
-        console.log(`/api/GetCat/${this.table}/${this.id}`);
+        // console.log(`/api/GetCat/${this.table}/${this.id}`);
       // 1. Lade alle Kategorien mit ihren Types
       const response = await axios.get(route("ArtAct", [this.table, this.id]));
       this.categories = response.data.categories || [];

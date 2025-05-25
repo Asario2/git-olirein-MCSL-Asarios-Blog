@@ -9,6 +9,7 @@ use App\Models\Blog;
 use Inertia\Inertia;
 use App\Models\DidYouKnow;
 use App\Models\ShortPoem;
+use App\Models\User;
 
 use Illuminate\Support\Str;
 use Laravel\Jetstream\Jetstream;
@@ -361,6 +362,13 @@ class HomeController extends Controller
         return Inertia::render('Homepage/BlogShow', [
             'blog' => $blog,
             'blogarticle' => $blogarticle
+        ]);
+    }
+    public function home_userlist()
+    {
+        $users = DB::table("users")->select("users.*")->paginate(19);
+        return Inertia::render('Homepage/Users', [
+            'users' => $users, // statt 'data'
         ]);
     }
     //

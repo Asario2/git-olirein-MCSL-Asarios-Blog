@@ -22,10 +22,12 @@
     "Benutzergruppen Zugriff","xkis_SendMail" => "Email Senden","xkis_SandMail" => "Email Senden","xkis_CommentsCenter" => "Commentscenter","author_id" => "Autor","chg_date" => "Geändert am:","name" => "Name","description" => "Beschreibung","modul" => "Modul","published_at" => "Veröffentlicht am:","name_en" =>
     "Name Englisch","heading_alt" => "Überschrift","heading_alt_en" => "Überschrift Englisch","img_icon" => "Icon","AscName" => "AscName","AscName_en" => "AscName Englisch","description_en" => "Beschreibung Englisch","itemscope" => "Objekttyp","xis_shopable" => "Verkäuflich","image_categories_id" => "Bilder Kategorie","status" =>
     "Status","message" => "Text","message_en" => "Text Englisch","camera_id" => "Kamera","link" => "Link","Format" => "Format","Format_en" => "Format Englisch","preis" => "Preis","tablename" => "Tabelle","xis_checked" => "checked","ordering" => "Position","Longname" => "Langer Name","Mpixel" =>
-    "Megapixel","view_table"=>"Anzeigen",'add_table'=>"Hinzufügen",'story_en'=>"Geschichte Englisch",'story'=>"Geschichte","edit_table"=>"Bearbeiten","publish_table"=>"Veröffentlichen","date_table"=>"Datum Ändern","delete_table"=>"Löschen","short_tag" => "Tag","exif_copyright" => "Exif copy",'autoslug'=>"Url der Seite","admin_table_id"=>"Tabelle","exif_comp" => "exif Comp","exif_model" => "Exif Model","AdminPanel"=>"Admin Dashboard","UserRights"=>"BenutzerRechte",'LogViewer'=>"Log Viewer","SendMail"=>"Emails verschicken","ChangePassword"=>"Passwort Ändern","CommentsCenter"=>"Kommentar Admin Center","DataBases"=>"Datenbank Admin"];
+    "Megapixel","view_table"=>"Anzeigen",'add_table'=>"Hinzufügen",'story_en'=>"Geschichte Englisch",'story'=>"Geschichte","edit_table"=>"Bearbeiten","publish_table"=>"Veröffentlichen","date_table"=>"Datum Ändern","delete_table"=>"Löschen","short_tag" => "Tag","exif_copyright" => "Exif copy",
+    'autoslug'=>"Url der Seite","admin_table_id"=>"Tabelle","exif_comp" => "exif Comp","exif_model" => "Exif Model","AdminPanel"=>"Admin Dashboard","UserRights"=>"BenutzerRechte",'LogViewer'=>"Log Viewer","SendMail"=>"Emails verschicken","ChangePassword"=>"Passwort Ändern","CommentsCenter"=>"Kommentar Admin Center","DataBases"=>"Datenbank Admin"
+    ,"about"=>"Über dich"];
 
         public static array $no_req = ['modul','is_admin','is_customer','is_employee','customer_id','admin_id','company_id',
-                                       'profile_photo_path',"category_id","type_id",'message','message_en','camera_id','position','image_path','link','format','preis','format_en','music','interests','occupation','birthday','prename','xis_ai','id_new','exif_comp','exif_model'];
+                                       'profile_photo_path',"category_id","type_id",'message','message_en','camera_id','position','image_path','link','format','preis','format_en','music','interest',"about",'occupation','birthday','prename','xis_ai','id_new','exif_comp','exif_model'];
         public static array $big_thumb = ["users","blog_posts","images"];
         public static array $int_date_tables = ["didyouknow"];
         public static array $textfield = ["Mdown"]; // Mdown / HTML
@@ -102,12 +104,12 @@
     public static array $searchFields =
         [
             "admin_table" => ['name'],
-            "blogs" => ['title','content'/*'content_en','title_en'*/],
+            "blogs" => ['title','content'/*'content_en','title_en'*/,"blog_categories.name"],
             "blog_authors" => ['name'],
             "blog_categories" => ['name',"summary"],
             "blog_images" => ['name'],
             "images"=> ['headline',"message"],
-            "comments" => ['content',"email"],
+            "comments" => ['users.name','content',"email","admin_table.name"],
             "didyouknow" => ['headline',"answer"],
             "image_categories"=>['heading_alt'],
             "users" => ['name'],

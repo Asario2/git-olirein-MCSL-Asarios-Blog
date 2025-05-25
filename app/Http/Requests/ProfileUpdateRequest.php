@@ -29,6 +29,7 @@ class ProfileUpdateRequest extends FormRequest
             "music" => ['string'],
             "interests" => ['string'],
             "occupation" => ['string'],
+            "about" => ['string'],
 
         ];
     }

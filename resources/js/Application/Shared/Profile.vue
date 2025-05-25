@@ -7,7 +7,6 @@
                 />
                 <section-border />
             </div>
-
             <div v-if="$page.props.jetstream.canUpdatePassword">
                 <update-password-form class="mt-10 sm:mt-0" />
 
@@ -22,6 +21,7 @@
 
                 <section-border />
             </div>
+
 
             <logout-other-browser-sessions-form
                 :sessions="sessions"
@@ -45,6 +45,7 @@ import LogoutOtherBrowserSessionsForm from "@/Application/Shared/LogoutOtherBrow
 import TwoFactorAuthenticationForm from "@/Application/Shared/TwoFactorAuthenticationForm.vue";
 import UpdatePasswordForm from "@/Application/Shared/UpdatePasswordForm.vue";
 import UpdateProfileInformationForm from "@/Application/Shared/UpdateProfileInformationForm.vue";
+import ProfileTextfield from "@/Application/Shared/ProfileTextfield.vue";
 
 import SectionBorder from "@/Application/Components/Content/SectionBorder.vue";
 
@@ -58,6 +59,7 @@ export default defineComponent({
         UpdatePasswordForm,
         UpdateProfileInformationForm,
         SectionBorder,
+        ProfileTextfield,
     },
 
     props: {

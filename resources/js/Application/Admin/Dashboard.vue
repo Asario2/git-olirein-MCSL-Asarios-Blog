@@ -55,6 +55,7 @@
                                 Hier findest du eine Liste aller DidYouKnow-artikel.
                 </template>
             </navigation-card>
+            <!-- Shortpoems Overview -->
             <navigation-card v-if="canView('shortpoems')"
                 class="navigation_card"
                 title="Shortpoems"
@@ -67,6 +68,19 @@
             >
                 <template #description>
                                 Hier findest du eine Liste aller DidYouKnow-artikel.
+                </template>
+            </navigation-card>
+            <!-- Comments Overview-->
+            <navigation-card v-if="canView('comments')"
+                class="navigation_card"
+                title="Kommentare"
+                :routeName="route('admin.tables.show','comments')"
+                linkName="Liste der Kommentare"
+                :withIcon="true"
+                icon="IconComment_bl"
+            >
+                <template #description>
+                                Hier findest du eine Liste aller Kommentare.
                 </template>
             </navigation-card>
             <!-- Tabellen Overview -->

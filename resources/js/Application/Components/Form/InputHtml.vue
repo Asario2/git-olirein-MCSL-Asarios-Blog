@@ -451,4 +451,8 @@ export default {
   margin-bottom: 1rem;
   color: var(--text-color); /* Sicherstellen, dass Text und Marker sichtbar sind */
 }
+.editor{
+    max-height:300px;
+    overflow-y:auto;
+}
 </style>

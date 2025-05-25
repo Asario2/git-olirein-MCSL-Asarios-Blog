@@ -5,11 +5,8 @@
       >
         <slot name="label"></slot>
       </label>
-      <InputHtml
-      :id="name"
-        :name="name"
-        ></InputHtml>
-    <!-- <textarea
+
+    <textarea
         :id="id"
         :cols="20"
         :name="name"
@@ -20,7 +17,7 @@
         :value="modelValue"
         @input="$emit('update:modelValue', $event.target.value)"
     >
-    </textarea> -->
+    </textarea>
 </template>
 
 
@@ -28,7 +25,7 @@
 import InputHtml from "@/Application/Components/Form/InputHtml.vue";
 
 export default {
-    name: "InputFormTextArea",
+    name: "InputFormTextAreaOne",
     components: {
 
 InputHtml,

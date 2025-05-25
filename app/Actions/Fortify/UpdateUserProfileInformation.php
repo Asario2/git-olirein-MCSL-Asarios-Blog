@@ -32,6 +32,7 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
             'birthday' => ['nullable', 'string', 'before:today'],
             'music' => ['nullable', 'string', 'max:255'],
             'occupation' => ['nullable', 'string', 'max:255'],
+            'about' => ['nullable', 'string'],
             'interests' => ['nullable', 'string', 'max:255'], // Korrigierte Schreibweise von 'interests'
             'email' => ['required', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
             'photo' => ['nullable', 'mimes:jpg,jpeg,png', 'max:1024'],
@@ -52,8 +53,10 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
                 'music' => $input['music'],
                 'interests' => $input['interests'],
                 'occupation' => $input['occupation'],
+                'about' => $input['about'] ?? null,
                 'birthday' => $input['birthday'],
                 'email' => $input['email'],
+                "updated_at"=>NOW(),    
             ])->save();
         }
     }
@@ -71,9 +74,11 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
             'birthday' => $input['birthday'],
             'interests' => $input['interests'],
             'occupation' => $input['occupation'],
+            'about' => $input['about'] ?? null,
             'music' => $input['music'],
             'email' => $input['email'],
             'email_verified_at' => null,
+            "updated_at"=>NOW(),
         ])->save();
 
         $user->sendEmailVerificationNotification();

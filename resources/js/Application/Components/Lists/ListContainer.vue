@@ -90,7 +90,7 @@ import IconPlusCircle from "@/Application/Components/Icons/PlusCircle.vue";
 import IconPencil from "@/Application/Components/Icons/Pencil.vue";
 import IconTrash from "@/Application/Components/Icons/Trash.vue";
 import Alert from "@/Application/Components/Content/Alert.vue";
-import { GetRights,CleanTable } from '@/helpers';
+import { GetRights,CleanTable,CleanId } from '@/helpers';
 import mapValues from "lodash/mapValues";
 import pickBy from "lodash/pickBy";
 import throttle from "lodash/throttle";
@@ -144,7 +144,10 @@ export default {
   if (!this.datarow?.full_name) {
     this.datarow.full_name = CleanTable();
   }
-},
+ this.pstate();
+//  this.$emit('status-changed', this.checkedStatus);
+ this.fetchCheckedStatus();
+  },
     data() {
         return {
             form: { search: this.filters.search },
@@ -153,10 +156,13 @@ export default {
             routeCreate: "/admin/tables/create/" + this.tableq,
             routeDelete: "/admin/tables/delete/" + this.tableq + "/" + this.id,
             table: '',
+            checkedStatus: {}, // z. B. { 100: true, 101: false }
         };
     },
     created() {
-        this.form.search = this.searchValue;
+        this.form.search = this.filters.search;
+        // console.log(this.form.search);
+
     },
     computed: {
         numberOfRows() {
@@ -203,6 +209,85 @@ export default {
         },
     },
     methods: {
+        updateCheckedStatus(newStatus) {
+      this.checkedStatus = newStatus
+      this.$emit('update-checked-status', this.checkedStatus)
+    },
+
+    async fetchCheckedStatus() {
+      const response = await axios.get('/api/chkcom/')
+      this.checkedStatus = response.data.success
+      this.$emit('update-checked-status', this.checkedStatus)
+    },
+
+async pstate(){
+            let url = location.href;
+
+            if (this.filters.search) {
+                // Prüfen, ob URL bereits ein ? enthält (also schon Parameter hat)
+                const separator = url.includes('?') ? '&' : '?';
+                url = url + separator + 'search=' + encodeURIComponent(this.filters.search);
+            }
+            // console.log(this.filters.search);
+            history.pushState(null, "", url);
+
+        },
+        async chkcom(){
+            await this.$nextTick();
+
+            if (!this.datarows || this.datarows.length === 0) {
+                console.error("Daten noch nicht verfügbar");
+                return;
+            }
+
+
+
+            try {
+
+        const response = await axios.get('/api/chkcom/');
+        this.checkedStatus = response.data.success; // { [id]: true/false }
+        console.log("CS:" + JSON.stringify(this.checkedStatus,null,2));
+        } catch (error) {
+        console.error("Fehler beim Batch-Status laden:", error);
+        }
+        location.reload();
+
+        },
+        // async chkcom(){
+        //     alert(route('comments.check'));
+        //     try {
+        //         const response = await axios.get(route('comments.check'), {
+        //             params: { id: CleanId() }
+        //         });
+
+        //         if(response.data.success) {
+        //             console.log('Kommentarstatus aktualisiert');
+        //             const coms = response.data.success;
+        //             location.reload();// oder Kommentar neu laden
+        //         }
+        //     } catch (error) {
+        //         console.error('Fehler beim Prüfen:', error);
+        //     }
+        // },
+        // async fetchStatus(){
+        //     if (!this.datarows || this.datarows.length === 0) {
+        //         console.warn("Daten noch nicht verfügbar");
+        //         return;
+        //     }
+
+
+        //     if (this.datarows && this.datarows.length > 0) {
+        // const ids = this.datarows.map(r => r.id);
+        // try {
+
+        // const response = await axios.post('/api/getCheckedBatch', { ids });
+        // this.checkedStatus = response.data; // { [id]: true/false }
+        // // console.log("CS:" + JSON.stringify(this.checkedStatus,null,2));
+        // } catch (error) {
+        // console.error("Fehler beim Batch-Status laden:", error);
+        // }
+        //     }
+        // },
         reset() {
             this.form = mapValues(this.form, () => null);
             this.$emit("list-container-search-reset");

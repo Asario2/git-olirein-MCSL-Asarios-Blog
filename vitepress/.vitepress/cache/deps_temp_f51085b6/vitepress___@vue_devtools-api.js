@@ -3064,7 +3064,7 @@ function openInEditor(options = {}) {
       fetch(`${_baseUrl}__open-in-editor?file=${encodeURI(file)}`).then((response) => {
         if (!response.ok) {
           const msg = `Opening component ${fileName} failed`;
-          console.log(`%c${msg}`, "color:red");
+        //   console.log(`%c${msg}`, "color:red");
         }
       });
     } else if (devtoolsState.vitePluginDetected) {

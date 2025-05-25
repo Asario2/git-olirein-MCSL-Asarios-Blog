@@ -145,7 +145,7 @@
                         @update:fileName="handleFileNameUpdate"
                         @imageUploaded="handleImageUpload"
                 />
-                {{ console.log(table_alter) }}
+                <!-- {{ console.log(table_alter) }} -->
                 <button type="button" @click="openModal_alt">
                     <p v-if="this.nf2 && typeof this.nf2 !== 'object' && this.nf2 != '[]' && this.nf2 != '008.jpg' ">Hochgeladenes Bild:
 
@@ -795,6 +795,7 @@ export default defineComponent({
                                     },
                                     {
                                         preserveState: true,
+                                        replace: true,
                                     },
                                 );
                             }
@@ -813,6 +814,7 @@ export default defineComponent({
                                     },
                                     {
                                         preserveState: true,
+                                        replace: true,
                                     },
                                 );
                             }

@@ -26,7 +26,7 @@
                     <!-- Current Profile Photo -->
                     <div v-show="!photoPreview" class="mt-4">
                         <img
-                            :src="user.profile_photo_url.replace('public','')"
+                            :src="user.profile_photo_url.replace('public','').replace('images/images/','images/')"
                             :alt="user.name"
                             class="rounded-full h-20 w-20 object-cover"
                         />
@@ -112,15 +112,21 @@
 
 
                 <input-container :full-width="true">
+                    <div class="relative mb-4">
                     <input-label name="birthday" label="Geburtstag"></input-label>
                     <input-element
                         type="date"
                         name="birthday"
                         v-model="form.birthday"
                         placeholder="Geburtstag"
-                        ref="birthday"
+                        ref="birthday" class="dt"
                     ></input-element>
+                    <IconCal v-if="!disabled" class="
+                        pointer-events-none absolute DateIcon hidden dark:block       "
+                        alt="calendar icon (white)"
+                    ></IconCal>
                     <input-error :message="form.errors.birthday" />
+                </div>
                 </input-container>
 
 
@@ -168,6 +174,19 @@
                         ref="interests"
                     ></input-element>
                     <input-error :message="form.errors.interests" />
+                </input-container>
+                <input-container :full-width="true">
+                    <!-- <input-label
+                        name="text"
+                        label="Über dich"
+                    ></input-label> -->
+                    <InputHtml
+                        name="about"
+                        v-model="form.about"
+                        placeholder="Über dich"
+                        ref="about"
+                    ></InputHtml>
+                    <input-error :message="form.errors.about" />
                 </input-container>
                 <input-container
                     :full-width="true"
@@ -228,6 +247,8 @@ import InputGroup from "@/Application/Components/Form/InputGroup.vue";
 import InputContainer from "@/Application/Components/Form/InputContainer.vue";
 import InputLabel from "@/Application/Components/Form/InputLabel.vue";
 import InputElement from "@/Application/Components/Form/InputElement.vue";
+import InputFormTextArea from "@/Application/Components/Form/InputHtml.vue";
+import IconCal from "@/Application/Components/Icons/IconCal.vue";
 import InputError from "@/Application/Components/Form/InputError.vue";
 import InputActionMessage from "@/Application/Components/Form/InputActionMessage.vue";
 
@@ -236,6 +257,7 @@ import InputButton from "@/Application/Components/Form/InputButton.vue";
 import InputWhiteButton from "@/Application/Components/Form/InputWhiteButton.vue";
 
 import Alert from "@/Application/Components/Content/Alert.vue";
+import InputHtml from "../Components/Form/InputHtml.vue";
 
 export default {
     name: "Shared_UpdateProfileInformationForm",
@@ -253,6 +275,8 @@ export default {
         InputButton,
         InputWhiteButton,
         Alert,
+        InputHtml,
+        IconCal,
     },
 
     props: {
@@ -274,6 +298,7 @@ export default {
                 occupation: this.user.occupation,
                 email: this.user.email,
                 photo: null,
+                about: this.user.about,
             }),
             verificationLinkSent: false,
             photoPreview: null,
@@ -328,3 +353,16 @@ export default {
     },
 };
 </script>
+<style>
+.DateIcon{
+    right:10px;
+    top:35px;
+    max-height:24px;
+    max-width:24px;
+}
+.left{
+top:30px;
+right:74px;
+color:white;
+}
+</style>

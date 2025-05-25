@@ -35,6 +35,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'admin_id',
         'employee_id',
         'customer_id',
+        'about',
+        "updated_at",
     ];
 
     protected $hidden = [
@@ -90,6 +92,7 @@ class User extends Authenticatable implements MustVerifyEmail
     }
     public function rights()
     {
-        return $this->belongsTo(UsersRights::class, 'users_rights_id');
+        return $this->belongsTo(UsersRight::class, 'users_rights_id');
     }
+
 }

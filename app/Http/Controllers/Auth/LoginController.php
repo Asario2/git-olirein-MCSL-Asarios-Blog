@@ -47,12 +47,12 @@ class LoginController extends Controller
             return redirect()->route('login')->withErrors(['message' => 'User not found.']);
         }
         $otp = $request->input('token');
-
+        $user->updated_at = now();
         // Verify the OTP code
         if (GoogleAuthenticatorHelper::verifyCode($user->google2fa_secret, $otp)) {
             $user->is_two_factor_authenticated = true;
             $user->two_factor_authenticated = true;
-            $user->updated_at = now();
+
             $user->save();
             Auth::login($user);
 

@@ -8,7 +8,7 @@
             <div :id="'commentBox_' + comment.id" class="flex items-start space-x-4">
             <!-- Profilbild -->
             <img
-                :src="'/images/' + comment.profile_photo_path ?? defaultAvatar"
+                :src="comment.profile_photo_path != null ? '/images/' + comment.profile_photo_path : defaultAvatar"
                 alt="Profilbild"
                 class="w-[50px] h-[50px] object-cover mxy rounded-full bg-gray-300 dark:bg-gray-600"
             />
@@ -63,7 +63,7 @@
         import IconComment from "@/Application/Components/Icons/IconComment.vue";
         import DisplayDate from "@/Application/Components/Content/DisplayDate.vue";
         import IconTrash from "@/Application/Components/Icons/Trash.vue";
-        import { CleanTable, CleanId } from '@/helpers';
+        import { CleanTable_alt, CleanId } from '@/helpers';
         export default {
 
             components: {
@@ -76,6 +76,7 @@
             props: {
                 showComments: Number,
             postId: Number,
+            table: String,
              // Die ID des Posts, zu dem Kommentare geladen werden
             },
             data() {
@@ -159,7 +160,7 @@ nl2br(text){
 
                 async fetchComments() {
                     try {
-                        var table = CleanTable() || "blogs";
+                        var table = CleanTable_alt() || "blogs";
                         const response = await axios.get(`/comments/${table}/${this.postId}`);
 
                         this.comments = Array.isArray(response.data) ? response.data : []; // Sicherstellen, dass es ein Array ist
@@ -176,7 +177,7 @@ nl2br(text){
         if (!this.newComment.trim()) return; // Leere Kommentare verhindern
 
         try {
-            let table = CleanTable();
+            let table = CleanTable_alt();
             table  = table ? table : "blogs";
             const response = await axios.post(`/comments/store/${table}/${this.postId}`, {
             post_id: this.postId,

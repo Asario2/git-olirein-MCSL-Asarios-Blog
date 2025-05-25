@@ -31,7 +31,7 @@
     },
     methods: {
         toggleShareBox() {
-            console.log("toggleShareBox aufgerufen");
+            // console.log("toggleShareBox aufgerufen");
 
             this.showShareBox = !this.showShareBox;
             if (this.showShareBox) {
@@ -40,13 +40,13 @@
         },
         initShariff()
         {
-            console.log("initShariff aufgerufen");
+            // console.log("initShariff aufgerufen");
 
   nextTick(() => {
     const shariffElement = this.$refs.shariff;
     if (shariffElement) {
     const url = `${window.location.origin}${window.location.pathname}${this.added || ''}`;
-      console.log("Shariff-URL:", url);
+    //   console.log("Shariff-URL:", url);
 
       shariffElement.setAttribute('data-url', url);
 

@@ -267,6 +267,44 @@ segments = segments.join('').replace(/[\[\]']/g, '');
     return segments;
 
 }
+export function ucf(str) {
+    // Teilt den String an den Unterstrichen
+    const arr = str.split("_");
+
+    // Wandelt jedes Element des Arrays um, falls es mehr als ein Wort gibt
+    const na = arr.map(
+        (val) => val.charAt(0).toUpperCase() + val.slice(1).toLowerCase(),
+    );
+
+    // Setzt die W�rter mit einem Leerzeichen zusammen
+    return na.join(" ");
+}
+
+export function CleanTable_alt() {
+    const path = window.location.pathname; // Gibt "/admin/tables/show/Example" zur�ck
+    let segments = path.split('/');
+    const fo_vals = ["admin", "tables", "edit", "delete", "create", "show","search","home"];
+
+    // Gehe alle Segmente durch und entferne die nicht gew�nschten
+    for (let i = 0; i < segments.length; i++) {
+        if (fo_vals.includes(segments[i])) {
+            segments.splice(i, 1); // Entfernt das Element an Index i
+            i--; // Reduziere den Index, da das Array nun verkleinert wurde
+        } else if (!isNaN(segments[i])) { // �berpr�ft, ob es eine Zahl ist
+            segments.splice(i, 1);
+            i--; // Reduziere den Index
+        }
+        else if (segments[i] == "pictures")
+        {
+            return "images";
+        }
+    }
+segments = segments.join('').replace(/[\[\]']/g, '');
+
+    // Die bereinigte URL (optional)
+    return segments;
+
+}
 export async function Authy(){
     GetAuth().then(authenticated => {
         if (authenticated === "false") {
@@ -312,7 +350,7 @@ export async function GetSettings() {
         Object.keys(data).forEach((key) => {
             settings[key] = data[key];
         });
-        console.log("SET:" + settings);
+        // console.log("SET:" + settings);
         return settings;
     } catch (error) {
         console.error("Fehler beim Laden der Settings:", error);

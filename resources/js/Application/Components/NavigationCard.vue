@@ -56,6 +56,7 @@ import IconDB from "@/Application/Components/Icons/db.vue";
 import IconLogs from "@/Application/Components/Icons/IconLogs.vue";
 import IconStory from "@/Application/Components/Icons/IconStory.vue";
 import IconDidyou from "@/Application/Components/Icons/IconDidyou.vue";
+import IconComment_bl from "@/Application/Components/Icons/IconComment_bl.vue";
 
 export default {
     name: "Components_NavigationCard",
@@ -69,6 +70,7 @@ export default {
         IconLogs,
         IconDidyou,
         IconStory,
+        IconComment_bl,
     },
 
     props: {
@@ -116,6 +118,7 @@ export default {
                 IconLogs,
                 IconDidyou,
                 IconStory,
+                IconComment_bl,
             };
             //
             return icons[this.icon];

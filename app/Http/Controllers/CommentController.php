@@ -6,6 +6,8 @@ use App\Models\Settings;
 use App\Models\Comment;
 use App\Models\Post;
 use Auth;
+use App\Mail\CommentMail;
+use Illuminate\Support\Facades\Mail;
 use App\Helpers\MailHelper;
 use Illuminate\Support\Facades\DB;
 use App\Models\Rating;
@@ -95,6 +97,10 @@ class CommentController extends Controller
         {
             $table = "images";
         }
+        if(substr_count($table,"users"))
+        {
+            $table = "users";
+        }
 
         $adtabid = DB::table("admin_table")->where("name",$table)->pluck("id")->first();
         $comment = new Comment();
@@ -113,7 +119,8 @@ class CommentController extends Controller
         // return redirect(url()->previous() . '#comment_' . $request->postid)
         //     ->with('success', 'Kommentar erfolgreich gepostet!');
         $url = url()->previous() . "#comment_{$request->post_id}";
-        \Log::info("TABLE: ".$table);
+        \Log::info("TABLE: ".$table.auth()->user()->name);
+        Mail::to('parie@gmx.de')->send(new CommentMail('Asario.de', 'http://localhost:8081/admin/tables/comments/show',auth()->user()->name,$comment->content));
         return response()->json([
             'status' => 'success',
             'message' => 'Kommentar erfolgreich gespeichert',
@@ -132,7 +139,10 @@ class CommentController extends Controller
         {
             $table = "images";
         }
-
+        if(substr_count($table,"users"))
+        {
+            $table = "users";
+        }
         $user = DB::table("users")->where("id",Auth()->id())->select("email",'name')->first();
         $adtabid = DB::table("admin_table")->where("name",$table)->pluck("id")->first();
         // Kommentar erstellen und in der Datenbank speichern
@@ -150,7 +160,10 @@ class CommentController extends Controller
         $nick = $user->name;
         $comment = $comment->content;
         $MailHelper = NEW MailHelper();
-        $MailHelper->SendMailer("parie@gmx.de","Neuer Kommentar auf www.asario.net","",'','','','newcomment',["name"=>$nick,"table"=>$table,"comment"=>$comment]);
+        // $MailHelper->SendMailer("parie@gmx.de","Neuer Kommentar auf www.asario.net","",'','','','newcomment',["name"=>$nick,"table"=>$table,"comment"=>$comment]);
+
+
+
         return redirect()->back()->with('success', 'Kommentar erfolgreich gepostet!');
     }
     // public function checkComment(Request $request){
@@ -345,6 +358,11 @@ class CommentController extends Controller
         $table = $request->table;
         $path = request()->path(); // Gibt "home/show/images/search/Fasermaler"
                 $parts = explode("/", $path);
+
+                if(substr_count($table,"users"))
+                {
+                    $table = "users";
+                }
                 $table_alt = $table;
                 // $sa = Settings::$searchable;
                 // \Log::info($parts);

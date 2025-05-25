@@ -371,6 +371,14 @@ class HomeController extends Controller
             'users' => $users, // statt 'data'
         ]);
     }
+    public function home_usershow($username)
+    {
+        $users = DB::table("users")->where("name",$username)->select("users.*")->first();
+        \Log::info("HU:".json_encode($users,JSON_PRETTY_PRINT));
+        return Inertia::render('Homepage/Usershow', [
+            'users' => $users, // statt 'data'
+        ]);
+    }
     //
     public function renderMarkdown(CommonMarkConverter $converter,$markdown)
     {

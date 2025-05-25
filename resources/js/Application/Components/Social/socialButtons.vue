@@ -134,6 +134,9 @@ export default {
             type:Boolean,
             default:false,
         },
+        ublock:{
+            type: String,
+        },
     },
     data() {
     return {
@@ -226,6 +229,11 @@ methods:{
 
     },
     urlAdder(id){
+        if(this.ublock)
+        {
+            const uname = this.ublock;
+            return "/show/" + uname + "/" + this.postId
+        }
         if(this.empty)
         {
             return "";

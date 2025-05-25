@@ -25,7 +25,36 @@ width: 100% !important;
 </style>
 </head>
 <body>
-
+    <style>BODY{
+        font-family:Tahoma;
+        line-height:30px;
+        font-size:20px;
+        margin:0px;
+        padding:0px;
+    }.content{
+        padding:5px !important;
+        margin:5px !important;
+    }.button-primary{
+        background-color:#222;
+        padding:0px;
+        border-radius:6px;
+        border:2px solid #ffc600;
+        line-height:20px;
+        font-size:20px;
+        color:#ffc600;
+        font-family:Tahoma;
+        margin:3px;
+        text-decoration:none;
+    }.button-primary:hover,a.button-primary:visited:hover{
+    background-color:#ffc600 !important;
+    color:#222 !important;
+    border:3px solid #ffc600 !important;
+    padding:5px 7px !important;
+    }</style>
+    <div style="background-color:#000;background-position:right;height:52px;background-repeat:no-repeat;background-image:url('https://www.marblefx.de/_images/mailheader/mcs_grad.png');">
+        <div style="float:left;position:relative;margin-top:0px;margin-left:0px;">
+        <img src="https://www.marblefx.de/_images/mailheader/mcsl_mail_system2.png" alt="MCS Mail System" title="MCS Mail System">
+    </div><br>
 <table class="wrapper" width="100%" cellpadding="0" cellspacing="0" role="presentation">
 <tr>
 <td align="center">

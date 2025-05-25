@@ -240,8 +240,12 @@ img {
     border-left: 18px solid #2d3748;
     border-right: 18px solid #2d3748;
     border-top: 8px solid #2d3748;
+    color:#ffc600;
 }
-
+    a.button-primary:hover, a.button-primary:visited:hover{
+    color:#fff !important;
+    background-color:#ffc600 !important;
+}
 .button-green,
 .button-success {
     background-color: #48bb78;

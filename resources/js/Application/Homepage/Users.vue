@@ -7,7 +7,7 @@
         <section class="bg-layout-sun-0 text-layout-sun-800 dark:bg-layout-night-0 dark:text-layout-night-800">
             <div class="p-2 md:p-4" v-if="users.data?.length === 0 && !form.search">
                 <alert type="warning">
-                    Zurzeit liegen keine Blogartikel vor!
+                    Zurzeit liegen keine Benutzer vor!
                 </alert>
             </div>
 
@@ -25,7 +25,7 @@
     </div>
     <div v-if="users.data?.length === 0 && form.search">
         <alert type="warning">
-            Für den vorgegebenen Suchbegriff wurden keine Blogartikel gefunden.
+            Für den vorgegebenen Suchbegriff wurden keine Benutzer gefunden.
         </alert>
     </div>
 

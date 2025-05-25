@@ -226,7 +226,7 @@ let table = table_z.toLowerCase();
         this.checkhasCreated();
         this.settings = await GetSettings();
         window.settings = this.settings;
-            console.log(this.datarows);
+            // console.log(this.datarows);
         // this.datarows = Object.values(this.datarows);
         this.$nextTick(() => {
         // this.fetchStatus();
@@ -292,7 +292,7 @@ let table = table_z.toLowerCase();
       return this.$isRightsReady; // Zugriff auf globale Methode
     },
     table_head() {
-        return Array.isArray(this.datarows) && this.datarows[0]?.admin_table_id ? "Tabelle" : "";
+        return Array.isArray(this.datarows) && this.datarows[0]?.admin_table_id || this.datarows[0]?.admin_table_id == null ? "Tabelle" : "";
       },
     hasRight() {
       return this.$hasRight; // Zugriff auf globale Methode
@@ -384,7 +384,7 @@ let table = table_z.toLowerCase();
         // console.log('image_categories:', row?.image_categories);
         // console.log('blog_categories:', row?.blog_categories);
     });
-    // console.log("HSC:"  + hasCategory);
+    console.log("HSC:"  + hasCategory);
 
     // 4. Debug-Logging
     // rows.forEach(row => {
@@ -451,7 +451,7 @@ async getChecked(id) {
         return `admin/tables/${table}/edit`;
     },
     ucf(str) {
-      const arr = str.split("_");
+      const arr = str?.split("_") || [];
       const na = arr.map(val => val.charAt(0).toUpperCase() + val.slice(1).toLowerCase());
       return na.join(" ");
     },

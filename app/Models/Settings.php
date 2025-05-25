@@ -99,7 +99,7 @@
             "texts"=>"headline"
 
     ];
-    public static array $searchable = ["images","blogs","didyouknow","shortpoems"];
+    public static array $searchable = ["images","blogs","didyouknow","shortpoems","users"];
     public static array $statusvals  = ["empty"=>"keine Angabe","forsale"=>"Zu Verkaufen","givenaway"=>"Verschenkt","sold"=>"Verkauft","unsaleable"=>"Unverkäuflich","lost"=>"Verloren","inwork"=>"In Arbeit"];
     public static array $searchFields =
         [

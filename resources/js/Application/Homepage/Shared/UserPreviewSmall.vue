@@ -2,7 +2,7 @@
 
     <div class="blog-container w-full max-w-sm mx-auto group rounded hover:no-underline focus:no-underline bg-layout-sun-100 dark:bg-layout-night-100">
         <Link
-            :href="route('home.user.show', user.name)"
+            :href="route('home.user.show', [user.name,user.id])"
             class="block"
         >
 
@@ -16,37 +16,27 @@
                     width="480"
                     height="360"
                 />
-                <div v-if="user.madewithai">
-                    <AiButton :dma="dmaa"></AiButton>
-                </div>
+
             </div>
 
             <div class="p-6 space-y-2">
-                <div class="flex justify-end items-start">
-                    <div v-if="user.category_name"
-                        class="text-sm min-w-fit min-h-fit bg-primary-sun-500 text-primary-sun-900 dark:bg-primary-night-500 dark:text-primary-night-900 font-semibold px-2.5 py-0.5 rounded-lg whitespace-nowrap">
-                        {{ user.category_name }}
-                    </div>
-                </div>
 
                 <h2 class="text-2xl font-semibold font-title group-hover:underline group-focus:underline">
                     {{ user.title }}
                 </h2>
 
-                <div class="flex justify-between items-center">
-                    <div class="text-xs text-layout-sun-600 dark:text-layout-night-600 py-2">
-                        <display-date :value="user.blog_date" :time-on="false" />
-                        von <span>{{ user.author_name }}</span>
-                    </div>
-                    <div class="rl">
-                        <editbtns  :id="user.id" table="users"></editbtns>
-                    </div>
-                </div>
+
 
                 <p>
                     Nickname: {{user.name}}<br />
-                    Registriert seit {{ formatDate(user.created_at) }}
+                    Vorname: {{ user.first_name }}<br />
+                    Registriert seit {{ formatDate(user.created_at) }}&nbsp;&nbsp;<editbtns  :id="user.id" table="users"></editbtns>
                 </p>
+                <div class="flex justify-between items-center">
+                    <div class="rl">
+
+                    </div>
+                </div>
                 <p>
                     <display-number :value="user.reading_time" :after-digits="0"
                         value-unit="Minuten Lesezeit"
@@ -56,7 +46,7 @@
         </Link>
 
         <!-- **Tabelle direkt unterhalb des Blog-Containers (fixiert)** -->
-        <SocialButtons :postId="user.id" sm="Sm" :nostars="true"       />
+        <SocialButtons :postId="user.id" sm="Sm" :nostars="true" :ublock="user.name"      />
 
     </div>
 </template>

@@ -25,6 +25,9 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\RightsController;
 use App\Helpers\Settings;
+use App\Mail\CommentMail;
+use Illuminate\Support\Facades\Mail;
+
 GlobalController::SetDomain();
 // include __DIR__."/extraroutes.php";
 Route::get('/copyleft/images', [ImageUploadController::class, 'CopyLeft'])->name('images.copyleft');
@@ -36,8 +39,13 @@ Route::get('/db-check', function () {
         return 'Fehler: ' . $e->getMessage();
     }
 });
+Route::get('/mail-test', function () {
+    Mail::to('test@example.com')->send(new CommentMail('Asario.de', 'http://localhost:8081/admin/tables/comments/show'));
+    return 'Mail gesendet!';
+});
 Route::get("/api/user/rights/des/{table}/{right}",[RightsController::class,"GetRights"])->name("GetRights");
 Route::get('/api/chkcom/{id?}', [CommentController::class, 'checkComment'])->name("comments.check");
+
 Route::post('/api/getCheckedBatch', [CommentController::class, 'CheckCommentsDone'])->name("comments.check.done");
 
 Route::get("/api/user/rights",[RightsController::class,"GetRights_all"])->name("GetRights_all");
@@ -140,7 +148,7 @@ Route::get('/home/invalid_signature', [HomeController::class, 'home_invalid_sign
 // User Liste
 Route::get('/home/users', [HomeController::class, 'home_userlist'])->name('home.userlist');
 // User Liste
-Route::get('/home/usershow', [HomeController::class, 'home_usershow'])->name('home.user.show');
+Route::get('/home/users/show/{user}/{id}', [HomeController::class, 'home_usershow'])->name('home.user.show');
 
 // PICTURES
 Route::get('/pictures', [App\Http\Controllers\PagesController::class, 'ab_images'])->name('images');

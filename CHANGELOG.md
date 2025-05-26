@@ -43,8 +43,6 @@
 ![Version](https://img.shields.io/badge/version-2.54.9-green) Search Filter & Pagination on Shortpoems & Didyouknow (#36)  
 ![Version](https://img.shields.io/badge/version-2.55.7-green) Add Content to privacy Page (#37)  
 ![Version](https://img.shields.io/badge/version-2.56.3-green) Images Categories select and Actualized by images_categories (#39)  
-
-
-
-
-
+![Version](https://img.shields.io/badge/version-2.57.7-green) [BUG] in darkmode saving & Purify working (#40)  
+![Version](https://img.shields.io/badge/version-2.58.4-green) User & User Details vues have to be done (#41)  
+![Version](https://img.shields.io/badge/version-2.59.4-green) Add Comments Center (#43)  

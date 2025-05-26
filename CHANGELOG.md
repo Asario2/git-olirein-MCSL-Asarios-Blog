@@ -38,7 +38,7 @@
 ![Version](https://img.shields.io/badge/version-2.49.1-green) Include Pagination on Blogs/Images (#27)  
 ![Version](https://img.shields.io/badge/version-2.49.8-green) Fixed evil bug in TableForm Select handling (#28)  
 ![Version](https://img.shields.io/badge/version-2.51.1-green) Add navigation cards on admin dashboard (#33)  
-![Version](https://img.shields.io/badge/version-2.52.1-green) Auto Toaster messages (#34)
+![Version](https://img.shields.io/badge/version-2.52.1-green) Auto Toaster messages (#34)  
 ![Version](https://img.shields.io/badge/version-2.53.5-green) Fix bugs in Search & entity decoding (#35)  
 ![Version](https://img.shields.io/badge/version-2.54.9-green) Search Filter & Pagination on Shortpoems & Didyouknow (#36)  
 ![Version](https://img.shields.io/badge/version-2.55.7-green) Add Content to privacy Page (#37)  

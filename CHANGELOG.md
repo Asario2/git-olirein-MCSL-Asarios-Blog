@@ -46,3 +46,5 @@
 ![Version](https://img.shields.io/badge/version-2.57.7-green) [BUG] in darkmode saving & Purify working (#40)  
 ![Version](https://img.shields.io/badge/version-2.58.4-green) User & User Details vues have to be done (#41)  
 ![Version](https://img.shields.io/badge/version-2.59.4-green) Add Comments Center (#43)  
+![Version](https://img.shields.io/badge/version-2.60.4-green) fixed Bugs in HTML Editor  
+

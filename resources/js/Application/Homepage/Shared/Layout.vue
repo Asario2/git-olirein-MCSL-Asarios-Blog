@@ -192,7 +192,7 @@
         </nav>
 
         <!-- Loading -->
-        <div v-if="isLoading" id="loader" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm transition-all" style='z-index:999999999'>
+        <div v-if="isLoading || loadingStore.isLoading" id="loader" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm transition-all" style='z-index:999999999'>
         <div class="text-center">
             <svg class="animate-spin h-10 w-10 text-primary-sun-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -308,6 +308,8 @@
   </template>
 <script>
 import axios from "axios";
+import { router } from '@inertiajs/vue3';
+import { useLoadingStore } from '@/loading';
 import MetaHeader from "@/Application/Homepage/Shared/MetaHeader.vue";
 import BrandHeader from "@/Application/Shared/BrandHeader.vue";
 import Dropdown from "@/Application/Components/Content/Dropdown.vue";
@@ -336,20 +338,24 @@ export default {
 
     ButtonChangeMode
   },
-
+  setup() {
+    const loadingStore = useLoadingStore();
+    return { loadingStore };
+  },
   data() {
     return {
       mode: localStorage.theme ? localStorage.theme : "light",
       isOpen_Menu: false,
       year: new Date().getFullYear(),
       pendingRequests: 0, // Wird bei jeder Anfrage erhöht
-      isLoading: true, // Spinner anzeigen, wenn Ladeprozess läuft
+      isLoading: localStorage.getItem('loading') === 'true',
       search: '',
       imagesLoaded: false,
     };
   },
 
  mounted() {
+
     // Debugging: Prüfen, ob die Seite zum ersten Mal geladen wird
     const shouldReload = localStorage.getItem('reload_dashboard');
 
@@ -396,6 +402,9 @@ export default {
 
     // Bilder laden überwachen
     this.waitForImagesToLoad();
+    if (this.isLoading) {
+    localStorage.setItem('loading', 'true');
+    }
   },
 methods: {
     setLoadingState(state) {
@@ -406,7 +415,8 @@ methods: {
     // STATE
     //
     //
-      this.isLoading = false; // state;
+      this.isLoading = state; // state;
+      localStorage.setItem('loading', state.toString());
     },
 
     checkLoadingState() {
@@ -461,8 +471,14 @@ methods: {
     changeMode() {
       this.mode = this.mode === "dark" ? "light" : "dark";
       localStorage.theme = this.mode;
-    }
-  }
+    },
+    logoutUser() {
+            let routeLogout = "logout";
+            //
+            this.$inertia.post(this.route(routeLogout));
+        },
+
+  },
 };
 </script>
 

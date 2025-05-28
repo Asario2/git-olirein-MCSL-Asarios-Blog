@@ -112,9 +112,12 @@ let table = table_z.toLowerCase();
     props: {
     applicationName: {
     type: String,
-    required: true,
+    required: false,
     default: "Administrator-Anwendung",
   },
+//   cat_on_head:{
+//     type: String,
+//   },
   users: Object,
   table_alt: {
     type: String,
@@ -221,8 +224,8 @@ let table = table_z.toLowerCase();
         // {
         //     location.href="/no-rights";
         // }
-
-        const cat_on_head = this.checkCat();
+            let cat_on_head = '';
+        this.cat_on_head = this.checkCat();
         this.checkhasCreated();
         this.settings = await GetSettings();
         window.settings = this.settings;
@@ -277,6 +280,8 @@ let table = table_z.toLowerCase();
         namealias: '',
         descalias: '',
         hasCreated: false,
+        cat_on_head: '', // <-- hier definieren!
+
 
     };
   },
@@ -292,7 +297,7 @@ let table = table_z.toLowerCase();
       return this.$isRightsReady; // Zugriff auf globale Methode
     },
     table_head() {
-        return Array.isArray(this.datarows) && this.datarows[0]?.admin_table_id || this.datarows[0]?.admin_table_id == null ? "Tabelle" : "";
+        return Array.isArray(this.datarows) && this.datarows[0]?.admin_table_id ? "Tabelle" : "";
       },
     hasRight() {
       return this.$hasRight; // Zugriff auf globale Methode

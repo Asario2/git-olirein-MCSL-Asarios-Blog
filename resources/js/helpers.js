@@ -390,6 +390,27 @@ export async function loadRights() {
 export function GetSRights(modul) {
     return cachedRights?.[modul] === true;
 }
+export const selectionHelper = {
+//   savedRange: null,
 
+  save() {
+    const sel = window.getSelection();
+    if (sel && sel.rangeCount > 0) {
+      this.savedRange = sel.getRangeAt(0).cloneRange();
+      console.log(this.savedRange);
+    }
+  },
+
+  restore() {
+    const sel = window.getSelection();
+    sel.removeAllRanges();
+    if (this.savedRange) {
+      sel.addRange(this.savedRange);
+    }
+	else{
+	console.log(this);
+	}
+  },
+};
 
 

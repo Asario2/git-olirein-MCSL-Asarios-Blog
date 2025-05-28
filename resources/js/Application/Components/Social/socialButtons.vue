@@ -3,7 +3,8 @@
         <div class="w-full mt-2">
             <table :class="['w-full border-collapse mx-auto justify-center rounded-lg shadow-sm table-class',nostars ? 'NSMaTable' : 'MaTable']" style="max-width:300px;margin-bottom:18px;" @click.stop>
                 <tbody>
-                    <tr>
+                    <tr class="border-0"> <!-- Entfernt alle Ränder -->
+
                         <td class=" text-center" width="60%">
                             <button  @click.stop.prevent="openComments(postId)"
                                 class="flex items-center gap-2 px-2 py-1 rounded-lg font-semibold bg-blue-500 text-white hover:bg-blue-600

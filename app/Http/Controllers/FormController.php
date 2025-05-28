@@ -240,13 +240,19 @@ class FormController extends Controller
             case "admin_table_id":
                 return "select_id";
             break;
+            case "about":
+                return "textarea";
+            break;
             case "answer":
                 return "textarea_short";
             break;
             case "autoslug":
                 return "autoSlug";
             break;
-                   case "blog_authors_id":
+            case "birthday":
+                return "date";
+            break;
+            case "blog_authors_id":
                 return "select_id";
             break;
             case "blog_categories_id":
@@ -297,6 +303,12 @@ class FormController extends Controller
             case "itemscope":
                 return "select";
             break;
+            case "last_login_at":
+                if($cl){
+                    return "disabled";
+                }
+                return "datetime";
+            break;
             case "markdown_on":
                 if ($cl) {
                     return "xis";
@@ -311,6 +323,9 @@ class FormController extends Controller
             break;
             case "name":
                 return "text";
+            break;
+            case "password":
+                return "password";
             break;
             case "preis":
                 return "price";

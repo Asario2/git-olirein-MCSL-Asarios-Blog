@@ -374,7 +374,7 @@ class HomeController extends Controller
     public function home_usershow($username)
     {
         $users = DB::table("users")->where("name",$username)->select("users.*")->first();
-        \Log::info("HU:".json_encode($users,JSON_PRETTY_PRINT));
+        // \Log::info("HU:".json_encode($users,JSON_PRETTY_PRINT));
         return Inertia::render('Homepage/Usershow', [
             'users' => $users, // statt 'data'
         ]);

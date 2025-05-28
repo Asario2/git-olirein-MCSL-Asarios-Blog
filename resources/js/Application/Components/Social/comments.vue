@@ -2,13 +2,13 @@
             <div v-if="showComments" class="w-full" :style="{ display: showComments ? 'block' : 'none' }"
             @click.stop.prevent="dummy">
             <div v-if="comments && comments.length > 0" class="space-y-4">
-                <div v-for="comment in comments" :key="comment.id"
+                <div v-for="comment in comments" :key="comment?.id"
                 class="flex items-start p-2 pra mt-4 rounded-lg bg-layout-sun-200 dark:bg-layout-night-200 border border-layout-sun-300 dark:border-layout-night-300"  style="word-wrap: break-word;"
             >
-            <div :id="'commentBox_' + comment.id" class="flex items-start space-x-4">
+            <div :id="'commentBox_' + comment?.id" class="flex items-start space-x-4">
             <!-- Profilbild -->
             <img
-                :src="comment.profile_photo_path != null ? '/images/' + comment.profile_photo_path : defaultAvatar"
+                :src="comment?.profile_photo_path != null ? '/images/' + comment?.profile_photo_path : defaultAvatar"
                 alt="Profilbild"
                 class="w-[50px] h-[50px] object-cover mxy rounded-full bg-gray-300 dark:bg-gray-600"
             />
@@ -16,16 +16,16 @@
             <!-- Kommentarinhalt -->
             <div class="flex-1 pr-14">
                 <p class="text-sm flex items-center gap-2 mxy">
-                    {{ comment.author }}
-                    <span @click="confirmDelete(comment.id)" class="text-red-500 cursor-pointer hover:text-red-700">
+                    {{ comment?.author }}
+                    <span @click="confirmDelete(comment?.id)" class="text-red-500 cursor-pointer hover:text-red-700">
                         <IconTrash class="w-4 h-4" />
                     </span>
                 </p>
                 <p class="text-layout-sun-700 dark:text-layout-night-600 w-[190px] max-w-[190px] mxy">
-                    <div v-html="nl2br(comment.content)"></div>
+                    <div v-html="nl2br(comment?.content)"></div>
                 </p>
                 <small class="text-xs text-layout-sun-600 dark:text-layout-night-500">
-                    <display-date :value="comment.created_at" :time-on="false" />
+                    <display-date :value="comment?.created_at" :time-on="false" />
                 </small>
             </div>
         </div>
@@ -60,6 +60,8 @@
 
         <script>
         import axios from "axios";
+        import { useLoadingStore } from '@/loading';
+
         import IconComment from "@/Application/Components/Icons/IconComment.vue";
         import DisplayDate from "@/Application/Components/Content/DisplayDate.vue";
         import IconTrash from "@/Application/Components/Icons/Trash.vue";
@@ -79,6 +81,21 @@
             table: String,
              // Die ID des Posts, zu dem Kommentare geladen werden
             },
+            setup() {
+                const loadingStore = useLoadingStore();
+
+                async function loadComments() {
+                loadingStore.setLoading(true);
+                // Simuliere Ladevorgang
+                await new Promise(resolve => setTimeout(resolve, 0));
+                loadingStore.setLoading(false);
+                }
+
+                return {
+                loadComments,
+                };
+            },
+
             data() {
             return {
                 comments: [],
@@ -88,6 +105,7 @@
             };
             },
             async mounted() {
+                this.LoadCom();
             await this.fetchComments();
             document.querySelectorAll("textarea").forEach((textarea) => {
             textarea.addEventListener("click", function(event) {
@@ -103,9 +121,12 @@
             });
             },
             methods: {
-nl2br(text){
-    return text.replace(/\n/g,"<br />");
-},
+            nl2br(text){
+                return text?.replace(/\n/g,"<br />");
+            },
+            LoadCom(){
+                localStorage.setItem("loading", "true");
+            },
         insertNewline(event) {
             // Erlaubt Zeilenumbruch bei Shift+Enter
             const textarea = event.target;

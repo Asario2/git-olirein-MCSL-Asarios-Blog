@@ -7,7 +7,7 @@
 
 
         <img
-        :src="users.profile_photo_path ? `/images/${users.profile_photo_path}` : '/images/profile-photos/008.jpg'"
+        :src="users.profile_photo_path ? `/images/${users.profile_photo_path.replace('/images/','/')}` : '/images/profile-photos/008.jpg'"
         :alt="users.name"
         width="480"
         height="360"

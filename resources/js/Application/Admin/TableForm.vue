@@ -187,6 +187,36 @@
                         <template #label>{{ field.label }}</template>
                     </InputFormDateTime>
                 </input-container>
+                <input-container v-else-if="field.type === 'date'">
+                    <InputFormDate
+                        :id="field.name"
+                        :name="field.name"
+                        :ref="field.name"
+                        v-model="field.value"
+
+                        :placeholder="field.placeholder || ''"
+                        :disabled="field.class !== 'date'"
+                        :class="field.class !== 'date' ? 'cursor-not-allowed' : ''"
+                        :required="isRequired(field.required)"
+                        >
+                        <template #label>{{ field.label }}</template>
+                    </InputFormDate>
+                </input-container>
+                <input-container v-else-if="field.type === 'password'">
+                    <InputPWD
+                        :id="field.name"
+                        :name="field.name"
+                        :ref="field.name"
+                        v-model="field.value"
+
+                        :placeholder="field.placeholder || ''"
+                        :disabled="field.class !== 'password'"
+                        :class="field.class !== 'password' ? 'cursor-not-allowed' : ''"
+                        :required="isRequired(field.required)"
+                        >
+                        <template #label>{{ field.label }}</template>
+                    </InputPWD>
+                </input-container>
                 <input-container
                 v-else-if="field.type === 'checkbox'" :full-width="true"
                 >
@@ -423,12 +453,13 @@ import PageTitle from "@/Application/Components/Content/PageTitle.vue";
 
 import SectionForm from "@/Application/Components/Content/SectionForm.vue";
 import SectionBorder from "@/Application/Components/Content/SectionBorder.vue";
-
+import InputPWD from "@/Application/Components/Form/InputPWD.vue";
 import ButtonGroup from "@/Application/Components/Form/ButtonGroup.vue";
 import InputButton from "@/Application/Components/Form/InputButton.vue";
 import ArtSelect from "@/Application/Components/Form/ArtSelect.vue";
 import InputFormText from "@/Application/Components/Form/InputFormText.vue";
 import InputFormDateTime from "@/Application/Components/Form/InputFormDateTime.vue";
+import InputFormDate from "@/Application/Components/Form/InputFormDate.vue";
 import InputFormTextArea from "@/Application/Components/Form/InputFormTextArea.vue";
 
 import InputDangerButton from "@/Application/Components/Form/InputDangerButton.vue";
@@ -487,8 +518,10 @@ export default defineComponent({
          InputSelect,
          InputSelectEnum,
          InputTextarea,
+         InputPWD,
          Editor,
         InputFormTextArea,
+        InputFormDate,
         InputFormPrice,
         InputFormSelect,
         InputError,

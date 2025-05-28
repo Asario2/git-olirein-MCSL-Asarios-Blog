@@ -7,6 +7,7 @@ import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
 import { ZiggyVue } from "../../vendor/tightenco/ziggy";
 import { i18nVue } from "laravel-vue-i18n";
 import { route } from "ziggy-js";
+import { createPinia } from "pinia";  // <--- Pinia importieren
 
 // Schriftarten
 import "@fontsource/open-sans/index.css";
@@ -41,6 +42,10 @@ loadAllRights()
         // App erstellen
         const app = createApp({ render: () => h(App, props) });
 
+        // Pinia verwenden
+        const pinia = createPinia();
+        app.use(pinia); // <--- Pinia als Plugin registrieren
+
         // Globale Rechtefunktionen registrieren
         app.config.globalProperties.$hasRight = hasRight;
         app.config.globalProperties.$isRightsReady = isRightsReady;
@@ -56,7 +61,7 @@ loadAllRights()
             },
           })
           .use(TippyPlugin, {
-            tippyDefaults: {} // Tooltip-Einstellungen
+            tippyDefaults: {}, // Tooltip-Einstellungen
           });
 
         // Globale Komponenten
@@ -72,7 +77,7 @@ loadAllRights()
   })
   .catch((error) => {
     // Fehlerbehandlung
-return "";
+    return "";
     // const fallback = document.createElement("div");
     // fallback.innerHTML = `
     //   <div style="padding:2rem;text-align:center;font-family:sans-serif">

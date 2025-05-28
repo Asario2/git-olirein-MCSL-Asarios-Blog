@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Hash;
 use Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\DB;
@@ -1586,6 +1587,11 @@ class TablesController extends Controller
         if ((isset($formData['pub']) || Schema::hasColumn($table, 'pub')) && (empty($formData['pub']) || is_null($formData['pub']))) {
             $formData['pub'] = "1";
         }
+        if(Schema::hasColumn($table, 'password'))
+        {
+            $formData['password'] = Hash::make($formData['password']);
+        }
+
 
         if (isset($formData['image_path']) && empty($formData['image_path'])) {
             $formData['image_path'] = "008.jpg";

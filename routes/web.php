@@ -2,10 +2,12 @@
 
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\BlogPostController;
 use App\Http\Controllers\RatingController;
 use App\Http\Controllers\DarkModeController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\NameBindingsController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\HandbookController;
@@ -288,7 +290,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         });
 
 
-
+        Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
+        //Route::get('logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout_sfa');
     // ====================
     // APPLICATION EMPLOYEE
     // ====================
@@ -307,11 +310,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
             ->name('customer.dashboard');
 
         });
-        Route::get("/customer/logout",function(){
-            Auth::logout();
-            session()->flush();
-            return redirect("/");
-        })->name("customer.logout")->withoutMiddleware(["auth"]);
 
 });
 // Comments

@@ -7,7 +7,7 @@
     class Settings extends Model
     {
         // Definiere hier deine Konstanten oder statischen Variablen
-        public static array $excl_cols = ['updated_at', 'published_at','password','remember_token','email_verified_at','google2fa_secret','is_two_factor_authenticated','two_factor_authenticated',
+        public static array $excl_cols = ['updated_at', 'published_at','remember_token','email_verified_at','google2fa_secret','is_two_factor_authenticated','two_factor_authenticated',
                         'two_factor_enabled','reserved_at','available_at','is_two_factor_enabled','temp_google2fa_secret','new_email','email_change_token','email_verification_token','two_factor_token',"author_name","users_rights_id","chg_date","xico_doms",'xkis_IsFeed','xis_mailed','users_rights_id','two_factor_secret','two_factor_recovery_codes','two_factor_confirmed_at','two_factor_enabled','remember_token'];
         public static array $excl_heads = ["date_begin"];
         public static array $excl_disabled = ['id'];
@@ -27,7 +27,9 @@
     ,"about"=>"Über dich"];
 
         public static array $no_req = ['modul','is_admin','is_customer','is_employee','customer_id','admin_id','company_id',
-                                       'profile_photo_path',"category_id","type_id",'message','message_en','camera_id','position','image_path','link','format','preis','format_en','music','interest',"about",'occupation','birthday','prename','xis_ai','id_new','exif_comp','exif_model'];
+                                       'profile_photo_path',"category_id","type_id",'message','message_en','camera_id',
+                                       'position','image_path','link','format','preis','format_en','music','interest',"about",
+                                       'occupation','birthday','prename','xis_ai','id_new','exif_comp','exif_model',"interests","occupation"];
         public static array $big_thumb = ["users","blog_posts","images"];
         public static array $int_date_tables = ["didyouknow"];
         public static array $textfield = ["Mdown"]; // Mdown / HTML

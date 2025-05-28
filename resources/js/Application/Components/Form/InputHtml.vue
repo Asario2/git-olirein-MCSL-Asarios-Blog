@@ -1,458 +1,462 @@
-<template>
-    <div>
-        <!-- Verstecktes Eingabefeld für Form-Validation -->
-
-
+    <template>
+        <div>
         <!-- Menü -->
-        <div
-            class="mb-4 h-14 p-4 flex items-center bg-layout-sun-300 dark:bg-layout-night-300 rounded-lg edit0R"
+        <div class="mb-4 h-14 p-4 flex items-center bg-layout-sun-300 dark:bg-layout-night-300 rounded-lg edit0R">
+            <p class='border rounded label p-1'><nobr>{{getLabel(name)}}</nobr></p>
 
-        ><p class='border rounded label p-1'><nobr>{{getLabel(name)}}</nobr></p>
-            <!-- Bold Button -->
-
-            <button type="button" @mousedown.prevent @click="toggleFormat('bold')" class="px-2.5 py-1 rounded-full hover:bg-layout-sun-0 hover:dark:bg-layout-night-0 cursor-pointer"
-            v-tippy>
-                <b>B</b>
-
+            <!-- Formatierungsbuttons -->
+            <button type="button" @click="toggleBold()" class="icon-btn" v-tippy aria-label="Fett">
+            <b>B</b>
             </button>
-            <tippy>
-            Fett
-            </tippy>
-            <!-- Italic Button -->
-            <button type="button"
-                @mousedown.prevent
-                @click="toggleFormat('italic')"
-                 class="px-2.5 py-1 rounded-full hover:bg-layout-sun-0 hover:dark:bg-layout-night-0 cursor-pointer"
-                 v-tippy>
-                <b><i>I</i></b>
+            <tippy>Fett</tippy>
 
+            <button type="button" @click="toggleItalic()" class="icon-btn" v-tippy aria-label="Kursiv">
+            <b><i>I</i></b>
             </button>
             <tippy>Kursiv</tippy>
 
-            <!-- Heading Buttons H1 - H6 -->
             <template v-for="i in 6" :key="i">
-            <button
-            type="button"
-            @mousedown.prevent
-            @click="toggleFormat(`h${i}`)"
-            class="px-2.5 py-1 rounded-full hover:bg-layout-sun-0 hover:dark:bg-layout-night-0 cursor-pointer"
-            v-tippy
-            >
-            <b>H{{ i }}</b>
+            <button type="button" @click="toggleHeading(`${i}`)" class="icon-btn" v-tippy :aria-label="'Überschrift ' + i">
+                <b>H{{ i }}</b>
             </button>
             <tippy>Überschrift {{ i }}</tippy>
             </template>
-            <!-- <ImageUploadModal
-                    :isOpen="isModalOpen"
-                    :tablex="this.table_x"
-                    :column="name"
-                    :path="tablex"
-                    :ref="name"
-                    :value="imageId"
-                    :image="value"
-                    :namee="value"
-                    :namee2="name"
-                    :Message="true"
-                    @close="closeModal"
-                    @uploaded="insertImageIntoEditor"
 
-                /> -->
-<!-- @update:fileName="handleFileNameUpdate"
-                    @imageUploaded="handleImageUpload"
-                    @insertImage="handleImageUpload"-->
-            <!-- Image Button -->
-            <button type="button" @mousedown.prevent
-            @click="openModal_alt2" class="px-2.5 py-1 rounded-full hover:bg-layout-sun-0 hover:dark:bg-layout-night-0 cursor-pointer"
-           v-tippy>
-                <b><IconPictures stroke="white"/></b>
+            <button type="button" @click="openModal_alt2" class="icon-btn" v-tippy aria-label="Bildupload">
+            <b><IconPictures stroke="white"/></b>
             </button>
             <tippy>Bildupload</tippy>
-            <!-- Code Button -->
-            <button type="button" @mousedown.prevent
-                @click="toggleFormat('code')"
-                class="px-2.5 py-1 rounded-full hover:bg-layout-sun-0 hover:dark:bg-layout-night-0 cursor-pointer"
-                v-tippy>
-                <b><IconCode /></b>
+
+            <button type="button" @click="toggleCode()" class="icon-btn" v-tippy aria-label="Code">
+            <b><IconCode /></b>
             </button>
             <tippy>Code</tippy>
-            <!-- HR Button -->
-            <button type="button" @mousedown.prevent
-                @click="AddHr"
-                class="px-2.5 py-1 rounded-full hover:bg-layout-sun-0 hover:dark:bg-layout-night-0 cursor-pointer"
-                v-tippy>
-                <b><nobr>---</nobr></b>
+
+            <button type="button" @click="AddHr" class="icon-btn" v-tippy  aria-label="Trennlinie    ">
+            <b><nobr>---</nobr></b>
             </button>
             <tippy>Trennlinie</tippy>
-            <!-- HR Button -->
-            <button type="button" @mousedown.prevent
-                @click="toggleFormat('email')"
-                class="px-2.5 py-1 rounded-full hover:bg-layout-sun-0 hover:dark:bg-layout-night-0 cursor-pointer"
-            v-tippy>
-                <b>@</b>
+
+            <button type="button" @click="toggleFormat('email')" class="icon-btn" v-tippy  aria-label="Email">
+            <b>@</b>
             </button>
-            <tippy>Email Link</tippy>
-            <button type="button" @mousedown.prevent
-                @click="toggleFormat('link')"
-                class="px-2.5 py-1 rounded-full hover:bg-layout-sun-0 hover:dark:bg-layout-night-0 cursor-pointer"
-            v-tippy>
-                <b><IconHyperLink/></b>
+                <tippy>Email Link</tippy>
+
+            <button type="button" @click="toggleFormat('link')" class="icon-btn" v-tippy aria-label="Hyperlink">
+            <b><IconHyperLink/></b>
             </button>
             <tippy>Hyperlink</tippy>
 
-        <button type="button" @mousedown.prevent
-                @click="toggleFormat('list')"
-                class="px-2.5 py-1 rounded-full hover:bg-layout-sun-0 hover:dark:bg-layout-night-0 cursor-pointer"
-            v-tippy>
-                <b><IconList/></b>
+            <button type="button" @click="toggleList('ul')" class="icon-btn" v-tippy  aria-label="Ungeordnete Liste">
+            <b><IconList/></b>
             </button>
             <tippy>Ungeordnete Liste</tippy>
-            <button type="button" @mousedown.prevent
-                @click="toggleFormat('ordlist')"
-                class="px-2.5 py-1 rounded-full hover:bg-layout-sun-0 hover:dark:bg-layout-night-0 cursor-pointer"
-            v-tippy>
-                <b><IconOrdList/></b>
+
+            <button type="button" @click="toggleList('ol')" class="icon-btn" v-tippy aria-label="Geordnete Liste">
+            <b><IconOrdList/></b>
             </button>
             <tippy>Geordnete Liste</tippy>
         </div>
 
         <!-- Textfeld -->
-        <div class="mb-4 p-4 bg-layout-sun-0 dark:bg-layout-night-0 rounded-lg edit0R">
+        <div class="mb-4 p-4 bg-layout-sun-0 dark:bg-layout-night-0 rounded-lg edit0R editor">
+            <div ref="editor" :id="name" contenteditable="true" class="editor rounded p-3 min-h-[150px] focus:outline-none"
 
-            <div
-    ref="editor"
-    :id="name"
-    contenteditable="true"
-    class="editor rounded p-3 min-h-[150px] focus:outline-none"
-    @input="updateValue"
-    @focus="isFocused = true"
-    @blur="isFocused = false"
-    :placeholder="placeholder"
-
-  > </div>   <input type="hidden" :id="name + '_alt'">
+            @focus="isFocused = true"
+            @blur="isFocused = false"
+            :placeholder="placeholder"
+            @input="onInput"></div>
+            <input type="hidden" :id="name + '_alt'">
 
             <ImageUploadModal
-                         v-show="isModalOpen"
-                        :tablex="table_x"
-                        :column="name"
-                        :path="tablex"
-                        :ref="name"
-                        :value="imageId"
-                        :image="value"
-                        :namee="value"
-                        :namee2="name"
-                        :Message="true"
-                        @insertImage="insertImage"
-                        @close="closeModal"
-                        @uploaded="insertImageIntoEditor"></ImageUploadModal>
-                    </div>
-    </div>
-</template>
+            v-show="isModalOpen"
+            :tablex="table_x"
+            :column="name"
+            :path="tablex"
+            :ref="name"
+            :value="imageId"
+            :image="value"
+            :namee="value"
+            :namee2="name"
+            :Message="true"
 
-<script>
-import tippy from 'tippy.js';
-import 'tippy.js/dist/tippy.css';
-import ImageUploadModal from '@/Application/Components/ImageUploadModal.vue';
-import { GetSettings } from "@/helpers";
-import IconPictures from "@/Application/Components/Icons/IconPictures.vue";
-import IconList from "@/Application/Components/Icons/IconList.vue";
-import IconOrdList from "@/Application/Components/Icons/IconOrdList.vue";
-import IconCode from "@/Application/Components/Icons/IconCode.vue";
-import IconHyperLink from "@/Application/Components/Icons/IconHyperLink.vue";
-import { Tippy } from 'tippy.vue';
+            @insertImage="insertImage"
+            @close="closeModal"
+            @uploaded="insertImageIntoEditor"
+            />
+        </div>
+        </div>
+    </template>
 
-export default {
-  name: "Editor",
-  components: {
-    IconPictures,
-    IconCode,
-    IconHyperLink,
-    ImageUploadModal,
-    IconList,
-    IconOrdList,
-  },
-  props: {
-    imageId: [String, Number],
-    modelValue: [String, Number],
-    name: String,
-    id: [String, Number],
-    value: [String, Number],
-    tablex: String,
-    table_x: String,
-    placeholder: String,
-  },
-  data() {
-    return {
-      isFocused: false,
-      isModalOpen: false,
-      nf2: null,
-      settings: {},
-      savedRange: null,
-    };
-  },
-  async mounted() {
-    this.settings = await GetSettings();
-    this.$nextTick(() => {
-      tippy('[data-tippy-content]', {
-        placement: 'right',
-        animation: 'scale',
-      });
-    });
-    if (this.$refs.editor) {
-      this.$refs.editor.innerHTML = decodeHtml(this.modelValue) || "";
-    }
-    this.$nextTick(() => this.setCursorAtEnd());
-  },
-  computed: {
-    content: {
-      get() {
-        return this.modelValue;
-      },
-      set(value) {
-        this.$emit("update:modelValue", value);
-      },
-    },
-  },
-  watch: {
-    modelValue(newVal) {
-      if (this.$refs.editor && this.$refs.editor.innerHTML !== newVal) {
-        this.$refs.editor.innerHTML = newVal;
-      }
-    },
-  },
-  methods: {
-    getLabel(name) {
-      return this.settings?.exl?.[name] ?? name;
-    },
-    updateValue() {
-      const html = this.$refs.editor.innerHTML.replace('%5B', '[').replace('%5D', ']');
-      this.$emit("update:modelValue", html);
-      document.getElementById(this.name + "_alt").value = html;
-    },
-    setCursorAtEnd() {
-      const editor = this.$refs.editor;
-      const selection = window.getSelection();
-      const range = document.createRange();
-      if (editor) {
-        const lastChild = editor.lastChild;
-        if (lastChild) {
-          range.setStart(lastChild, lastChild.length);
-          range.setEnd(lastChild, lastChild.length);
-          selection.removeAllRanges();
-          selection.addRange(range);
-        }
-      }
-    },
-    insertImageIntoEditor(imageUrl) {
-  const editor = this.$refs.editor;
-  if (!editor) return alert("NO EDITOR");
+    <script>
+    import tippy from 'tippy.js';
+    import 'tippy.js/dist/tippy.css';
+    import ImageUploadModal from '@/Application/Components/ImageUploadModal.vue';
+    import { selectionHelper, GetSettings } from "@/helpers";
+    import IconPictures from "@/Application/Components/Icons/IconPictures.vue";
+    import IconList from "@/Application/Components/Icons/IconList.vue";
+    import IconOrdList from "@/Application/Components/Icons/IconOrdList.vue";
+    import IconCode from "@/Application/Components/Icons/IconCode.vue";
+    import IconHyperLink from "@/Application/Components/Icons/IconHyperLink.vue";
+    import { Tippy } from 'tippy.vue';
 
-  const img = document.createElement("img");
-  img.src = imageUrl;
-  img.alt = "Bild";
+    export default {
+        name: "Editor",
+        components: {
+        IconPictures,
+        IconCode,
+        IconHyperLink,
+        ImageUploadModal,
+        IconList,
+        IconOrdList,
+        selectionHelper,
+        GetSettings,
+        },
+        props: {
+        imageId: [String, Number],
+        modelValue: [String, Number],
+        name: String,
+        id: [String, Number],
+        value: [String, Number],
+        tablex: String,
+        table_x: String,
+        placeholder: String,
+        },
+        data() {
+        return {
+            isFocused: false,
+            isModalOpen: false,
+            nf2: null,
+            settings: {},
+            savedRange: null,
+            // selectionHelper: new SelectionHelper(),
+        };
+        },
+        emits: ['update:modelValue'],
 
-  const br = document.createElement("br");
+        async mounted() {
+            this.settings = await GetSettings();
+            // this.setInitialContent();
 
-  this.$nextTick(() => {
-    const selection = window.getSelection();
-    selection.removeAllRanges();
 
-    // Verwende gespeicherte Cursorposition
-    const range = this.savedRange ?? document.createRange();
-    range.collapse(false); // sicherheitshalber
-
-    // Einfügen
-    range.insertNode(br);
-    range.insertNode(img);
-
-    // Cursor hinter das <br> setzen
-    const newRange = document.createRange();
-    newRange.setStartAfter(br);
-    newRange.setEndAfter(br);
-    selection.addRange(newRange);
-
-    editor.focus();
-    this.updateValue();
-
-    // Range zurücksetzen
-    this.savedRange = null;
+            this.$nextTick(() => {
+    tippy('[data-tippy-content]', { placement: 'right', animation: 'scale' });
+    // this.setCursorAtEnd();
   });
-},
-    handleImageUpload(imageUrl) {
-      this.nf2 = imageUrl;
-      this.insertImageIntoEditor(this.nf2);
+        if (this.$refs.editor) {
+            this.$refs.editor.innerHTML = decodeHtml(this.modelValue) || "";
+        }
+        // this.$nextTick(() => this.setCursorAtEnd());
+        // this.setInitialContent();
+
     },
-    insertImage(imageUrl) {
-      this.insertImageIntoEditor(imageUrl);
-    },
-    // openModal_alt2() {
-    //   this.$nextTick(() => {
-    //     this.isModalOpen = !this.isModalOpen;
-    //     const editor = this.$refs.editor;
-    //     if (editor && typeof editor.focus === 'function') editor.focus();
+        computed: {
+        content: {
+            get() {
+            return this.modelValue;
+            },
+            set(value) {
+            this.$emit("update:modelValue", value);
+            },
+        },
+        },
+        watch: {
+        modelValue(newVal) {
+            if (this.$refs.editor && this.$refs.editor.innerHTML !== newVal) {
+            this.$refs.editor.innerHTML = newVal;
+            this.setCursorAtEnd();
 
-    //     const selection = window.getSelection();
-    //     const range = document.createRange();
-
-    //     if (selection.rangeCount > 0) {
-    //       const currentRange = selection.getRangeAt(0);
-    //       range.setStart(currentRange.endContainer, currentRange.endOffset);
-    //       range.setEnd(currentRange.endContainer, currentRange.endOffset);
-    //     } else {
-    //       range.setStart(editor, editor.childNodes.length);
-    //       range.setEnd(editor, editor.childNodes.length);
-    //     }
-
-    //     selection.removeAllRanges();
-    //     selection.addRange(range);
-    //   });
+            }
+        },
+        },
+        methods: {
+    //         onInput() {
+    //   this.content = this.$refs.editor.innerHTML;
     // },
-    openModal_alt2() {
-  const editor = this.$refs.editor;
-  if (editor && typeof editor.focus === 'function') editor.focus();
+    onInput() {
+  this.saveSelection();
+  this.$emit("update:modelValue", this.$refs.editor.innerHTML);
+},
+    setInitialContent() {
+      this.$refs.editor.innerHTML = this.content;
+    },
 
-  const selection = window.getSelection();
-  if (selection.rangeCount > 0) {
-    this.savedRange = selection.getRangeAt(0).cloneRange();
+            getLabel(name) {
+    return this.settings?.exl?.[name] ?? name;
+  },
+
+  updateValue() {
+    // this.cleanupEmptyTags();
+    const html = this.$refs.editor.innerHTML.replace('%5B', '[').replace('%5D', ']');
+    this.$emit('update:modelValue', html);
+
+        document.getElementById(this.name + "_alt").value = html;
+  },
+
+  setCursorAtEnd() {
+    const el = this.$refs.editor;
+    if (!el) return;
+    el.focus();
+    const range = document.createRange();
+    range.selectNodeContents(el);
+    range.collapse(false);
+    const sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+  },
+   getSelection() {
+    const sel = window.getSelection();
+    return sel.rangeCount > 0 ? sel.getRangeAt(0) : null;
+  },
+  cleanupEmptyTags() {
+    const editor = document.getElementById('content');
+    editor.querySelectorAll('b:empty, i:empty, code:empty, h1:empty, h2:empty, h3:empty, h4:empty, h5:empty, h6:empty, p:empty, div:empty')
+      .forEach(el => el.remove());
+    // alert("cleaned");
+    // Entferne doppelte <br>
+    editor.innerHTML = editor.innerHTML.replace(/(<br\s*\/?>\s*){2,}/g, '<br>');
+  },
+
+  toggleFormat(format) {
+  this.saveSelection();        // 1. Aktuelle Selektion speichern
+//   this.$refs.editor.focus();   // 2. Editor wieder aktivieren
+//   this.restoreSelection();     // 3. Selektion wiederherstellen
+
+
+requestAnimationFrame(() => {
+    this.restoreSelection();
+  const sel = window.getSelection(); // ⬅️ Jetzt ist Selektion korrekt
+  if (!sel || sel.rangeCount === 0) return;
+
+  const range = sel.getRangeAt(0);
+  if (range.collapsed && !['email', 'link'].includes(format)) return;
+
+  const selectedText = range.toString();
+
+  const parent = range.commonAncestorContainer.nodeType === 3
+    ? range.commonAncestorContainer.parentNode
+    : range.commonAncestorContainer;
+
+  // HEADINGS
+  if (/^h[1-6]$/.test(format)) {
+    if (parent.nodeName.toLowerCase() === format) {
+      const p = document.createElement('p');
+      p.innerHTML = parent.innerHTML;
+      parent.replaceWith(p);
+    } else {
+      const h = document.createElement(format);
+      h.textContent = selectedText;
+      range.deleteContents();
+      range.insertNode(h);
+
+      // Cursor setzen
+      const newRange = document.createRange();
+      newRange.setStartAfter(h);
+      newRange.collapse(true);
+      sel.removeAllRanges();
+      sel.addRange(newRange);
+    }
+    this.updateValue();
+    return;
   }
 
-  this.isModalOpen = true;
-},
-    closeModal() {
-      this.isModalOpen = false;
-      this.previewImage = null;
-    },
-    handleFileNameUpdate(fileName) {
-      this.fileName = fileName;
-    },
-    AddHr() {
-      const selection = window.getSelection();
-      if (!selection.rangeCount) return;
-      const range = selection.getRangeAt(0);
-      const hr = document.createElement("hr");
+  // EMAIL
+  if (format === 'email') {
+    const email = prompt("E-Mail-Adresse eingeben:");
+    if (email) {
+      const a = document.createElement("a");
+      a.href = `mailto:${email}`;
+      a.textContent = selectedText || email;
       range.deleteContents();
-      range.insertNode(hr);
+      range.insertNode(a);
+
       const newRange = document.createRange();
-      newRange.setStartAfter(hr);
-      newRange.setEndAfter(hr);
-      selection.removeAllRanges();
-      selection.addRange(newRange);
+      newRange.setStartAfter(a);
+      newRange.collapse(true);
+      sel.removeAllRanges();
+      sel.addRange(newRange);
+
       this.updateValue();
-    },
-    toggleFormat(format) {
-      const selection = window.getSelection();
-      if (!selection.rangeCount) return;
+    }
+    return;
+  }
 
-      const range = selection.getRangeAt(0);
-      const selectedText = range.toString();
-
-      if (!selectedText) return;
-
-      let element;
-
-      if (["h1", "h2", "h3", "h4", "h5", "h6"].includes(format)) {
-        element = document.createElement(format);
-      } else if (format === "bold") {
-        element = document.createElement("strong");
-      } else if (format === "italic") {
-        element = document.createElement("em");
-      } else if (format === "code") {
-        element = document.createElement("code");
-      } else if (format === "email") {
-        const email = prompt("E-Mail-Adresse eingeben:", "beispiel@example.com");
-        if (!email) return;
-        element = document.createElement("a");
-        element.href = `mailto:${email}`;
-        element.textContent = email;
-        range.deleteContents();
-        range.insertNode(element);
-        this.updateValue();
-        return;
-      } else if (format === "link") {
-        const url = prompt("URL eingeben:", "https://");
-        const text = selectedText || prompt("Anzeigetext:", url);
-        if (!url || !text) return;
-        element = document.createElement("a");
-        element.href = url;
-        element.textContent = text;
-        element.target = "_blank";
-        element.rel = "noopener noreferrer";
-        range.deleteContents();
-        range.insertNode(element);
-        this.updateValue();
-        return;
-      }
-
-      element.textContent = selectedText;
+  // LINK
+  if (format === 'link') {
+    const url = prompt("URL eingeben:", "https://");
+    if (url) {
+      const a = document.createElement("a");
+      a.href = url;
+      a.target = "_blank";
+      a.rel = "noopener noreferrer";
+      a.textContent = selectedText || url;
       range.deleteContents();
-      range.insertNode(element);
+      range.insertNode(a);
+
+      const newRange = document.createRange();
+      newRange.setStartAfter(a);
+      newRange.collapse(true);
+      sel.removeAllRanges();
+      sel.addRange(newRange);
+
       this.updateValue();
-    },
+    }
+}
+selectionHelper.restore();
+
+    });
+
   },
-};
-</script>
+  toggleBold() {
+    selectionHelper.save();
+    document.execCommand("bold");
+    selectionHelper.restore();
+    this.updateValue();
+  },
 
-<style scoped>
-.edit0R{
-    max-width:1177px;
-    overflow:auto;
-    height:auto;
-}
-.editor h1 {
-  font-size: 2.25rem; /* entspricht text-4xl */
-  font-weight: bold;
-  margin-top: 1rem;
-  margin-bottom: 0.5rem;
-}
-.editor h2 {
-  font-size: 1.875rem;
-  font-weight: 600;
-  margin-top: 1rem;
-  margin-bottom: 0.5rem;
-}
-.editor h3 {
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin-top: 0.75rem;
-  margin-bottom: 0.25rem;
-}
-.editor h4 {
-  font-size: 1.25rem; /* entspricht text-4xl */
-  font-weight: bold;
-  margin-top: 0.7rem;
-  margin-bottom: 0.22rem;
-}
-.editor h5 {
-  font-size: 1.15rem;
-  font-weight: 600;
-  margin-top: 0.6rem;
-  margin-bottom: 0.2rem;
-}
-.editor h6 {
-  font-size: 1.0rem;
-  font-weight: 600;
-  margin-top: 0.4rem;
-  margin-bottom: 0.15rem;
-}
-.editor a:link,.editor a:visited,.editor a:active,.editor a {
-  color: #2563eb !important; /* z. B. Tailwind blue-600 */
-  text-decoration: underline;
-}
-.label{
-    border-radius:4px;
-    color:#999;
-    border-color:#999;
-}
-.editor ul {
-  list-style-type: disc; /* oder 'outside disc' */
-  padding-left: 1.5rem; /* Abstand für Bullet */
-}
+  toggleItalic() {
+    selectionHelper.save();
+    document.execCommand("italic");
+    selectionHelper.restore();
+    this.updateValue();
+  },
 
-.editor li {
-  margin-bottom: 1rem;
-  color: var(--text-color); /* Sicherstellen, dass Text und Marker sichtbar sind */
-}
-.editor{
-    max-height:300px;
-    overflow-y:auto;
-}
-</style>
+  toggleHeading(level) {
+    selectionHelper.save();
+    this.toggleFormat("h" + level);
+    selectionHelper.restore();
+    this.updateValue();
+  },
+
+  toggleCode() {
+    selectionHelper.save();
+    this.toggleFormat('code');
+    selectionHelper.restore();
+
+  },
+  saveSelection() {
+  const sel = window.getSelection();
+  if (sel && sel.rangeCount > 0) {
+    this.savedRange = sel.getRangeAt(0).cloneRange();
+  }
+},
+restoreSelection() {
+  const sel = window.getSelection();
+  sel.removeAllRanges();
+  if (this.savedRange) {
+    sel.addRange(this.savedRange);
+  }
+},
+  AddHr() {
+    const hr = document.createElement("hr");
+    const range = this.getSelection();
+    if (range) {
+      range.collapse(false);
+      range.insertNode(hr);
+    } else {
+      this.$refs.editor.appendChild(hr);
+    }
+    this.updateValue();
+  },
+  toggleList(type) {
+    const cmd = type === "ul" ? "insertUnorderedList" : "insertOrderedList";
+    document.execCommand(cmd);
+    this.updateValue();
+  },
+
+  openModal_alt2() {
+    this.saveSelection();
+    this.isModalOpen = true;
+  },
+
+  closeModal() {
+    this.isModalOpen = false;
+  },
+  insertImageIntoEditor(imageUrl) {
+        const editor = this.$refs.editor;
+        if (!editor) return alert("NO EDITOR");
+        const img = document.createElement("img");
+        img.src = imageUrl;
+        img.alt = "Bild";
+        const br = document.createElement("br");
+        this.$nextTick(() => {
+          const selection = window.getSelection();
+          selection.removeAllRanges();
+          const range = this.savedRange ?? document.createRange();
+          range.collapse(false);
+          range.insertNode(br);
+          range.insertNode(img);
+          const newRange = document.createRange();
+          newRange.setStartAfter(br);
+          newRange.setEndAfter(br);
+          selection.addRange(newRange);
+          editor.focus();
+          this.updateValue();
+          this.savedRange = null;
+        });
+      },
+      handleImageUpload(imageUrl) {
+        this.nf2 = imageUrl;
+        this.insertImageIntoEditor(this.nf2);
+      },
+      insertImage(imageUrl) {
+        this.insertImageIntoEditor(imageUrl);
+      },
+            },
+
+    };
+    </script>
+
+    <style>
+    .edit0R {
+        max-width: 1177px;
+        overflow: auto;
+        height: auto;
+    }
+    .editor h1 {
+        font-weight: 800;
+        font-size: 2.25em;
+        margin-top: 0;
+        margin-bottom: 0.8888889em;
+        line-height: 1.1111111;
+
+    }
+    .editor h2 {
+        font-size: 1.875rem;
+        font-weight: 600;
+        margin-top: 1rem;
+        margin-bottom: 0.5rem;
+    }
+    .editor h3 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-top: 0.75rem;
+        margin-bottom: 0.25rem;
+    }
+    .editor h4{
+        font-weight: 600;
+        font-size: 1.25rem;
+    }
+    .editor h5{
+        font-weight: 600;
+        font-size: 1.1rem;
+    }
+    .editor h6{
+        font-weight: 500;
+        font-size: 1.05rem;
+    }
+    .icon-btn {
+        padding: 0.4rem 0.6rem;
+        border-radius: 9999px;
+        transition: background 0.2s;
+        cursor: pointer;
+        margin-right: 0.25rem;
+        background: transparent;
+    }
+    .icon-btn:hover {
+        background-color: var(--tw-bg-opacity);
+    }
+    .editor OL LI{
+        list-style-type: decimal;
+    }
+    </style>

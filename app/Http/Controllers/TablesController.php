@@ -264,7 +264,7 @@ class TablesController extends Controller
         // return "test";
         return $this->EditTables($request,0,$table);
     }
-    function EditTables(Request $request,$id = '',$table='blogs'){
+    function EditTables(Request $request,$id = '',$table='blogs',$kk=''){
 
         $path = request()->path(); // Gibt "home/show/images/search/Fasermaler"
         $parts = explode("/", $path);
@@ -280,6 +280,11 @@ class TablesController extends Controller
             continue;
         }
         if(!CheckRights(Auth::id(),$table,"edit"))
+        {
+            header("Location: /no-rights");
+            exit;
+        }
+        if($id == 0 && !CheckRights(Auth::id(),$table,"add"))
         {
             header("Location: /no-rights");
             exit;
@@ -308,19 +313,45 @@ class TablesController extends Controller
         $breadcrumbs = $breadcrumbs->toArray();
 
         $tables = DB::table($table)->get();
+
+        $tables->transform(function ($item) {
+            if (!empty($item->profile_photo_path)) {
+                $item->profile_photo_path = "/images/" . $item->profile_photo_path;
+            }
+            return $item;
+        });
+        // if(!substr_count($taxx[$id]->profile_photo_path, "images") && Schema::hasColumn("profile_photo_path",$taxx  ))
+        // {
+        //     $taxx->profile_photo_path = "/images/".$taxx->profile_photo_path;
+        // }
         $exf = $this->ExportFields($table,$id);
-        // \Log::info("ff:".$this->ExportFields($table,$id));
-        return Inertia::render('Admin/TableForm', [
-            'datarows' => $tables,
-            "rows" => $tables,
-            "editstate"=> $edstate,
-            "table" => $tables,
-            "ItemName" => "Beiträge",
-            "itemName_des" => "Beitrags",
-             "ffo"  => $exf,
-            "tablez" => $table,
-            'breadcrumbs' => $breadcrumbs,
-        ])->withViewData(['debug' => true]);
+        // \Log::info("item:".json_encode($exf,JSON_PRETTY_PRINT));
+        if(!@$kk){
+            $entry = DB::table($table)->find($id);
+            return Inertia::render('Admin/TableForm', [
+                'entry'=> $entry,
+                'datarows' => $tables,
+                "rows" => $tables,
+                "editstate"=> $edstate,
+                "table" => $tables,
+                "ItemName" => "Beiträge",
+                "itemName_des" => "Beitrags",
+                 "ffo"  => $exf,
+                "tablez" => $table,
+                'breadcrumbs' => $breadcrumbs,
+            ])->withViewData(['debug' => true]);
+        }
+        // return [
+        //     'datarows' => $tables,
+        //     "rows" => $tables,
+        //     "editstate"=> $edstate,
+        //     "table" => $tables,
+        //     "ItemName" => "Beiträge",
+        //     "itemName_des" => "Beitrags",
+        //     "ffo"  => $exf,
+        //     "tablez" => $table,
+        //     'breadcrumbs' => $breadcrumbs,
+        // ];
     }
     public function GetOptionz($column)
     {
@@ -341,7 +372,7 @@ class TablesController extends Controller
     public function ExportFields($table,$id)
     {
         $create = '';
-        if ($table == "blogs" || $table == "mindblog") {
+        if ($table == "blogs" || $table == "mindblog" || $table == "comments") {
             $ord[0] = "created_at";
             $ord[1] = "DESC";
         }
@@ -405,7 +436,17 @@ class TablesController extends Controller
               $fields[] = FormController::Fields($column,$tables->$column,$table,$id,$create);
             }
             $formFields = array_filter($fields);
+
+
+            $transformed = [];
+            foreach ($formFields as $item) {
+                if (is_array($item)) {
+                    $key = array_key_first($item); // z. B. 'pub'
+                    $transformed[$key] = $item[$key];
+                }
+            }
             // $formFields = json_decode(json_encode($formFields));
+            $formFields = $transformed;
             $ar = ['formFields' => ($formFields)];
             $ar2 = 'formFields: {
 
@@ -433,6 +474,7 @@ class TablesController extends Controller
                   "id": "2",
                   "class": "datetime"
                }';
+            //    \Log::info("item:".json_encode($formFields,JSON_PRETTY_PRINT));
             return response()->json($formFields);
     }
     public function ShowTable(Request $request, $table_alt = null)
@@ -459,18 +501,7 @@ class TablesController extends Controller
             return redirect("/no-rights");
         }
 
-        // Sortierung
-        if ($table == "blogs" || $table == "mindblog") {
-            $ord = ["created_at", "DESC"];
-        } elseif (in_array($table, ["admin_table", "image_categories", "camera"])) {
-            $ord = ["name", "ASC"];
-        } elseif ($table == "images") {
-            $ord = ["id", "DESC"];
-        } elseif ($table == "privacy") {
-            $ord = ["ordering", "DESC"];
-        } else {
-            $ord = ["id", "DESC"];
-        }
+
 
         $columns = Schema::getColumnListing($table);
         $joins = [];
@@ -537,15 +568,41 @@ class TablesController extends Controller
         foreach ($joins as $relatedTable => $join) {
             $query->leftJoin($relatedTable, $join['to'], '=', $join['from']);
         }
+              // Sortierung
+            if ($table == "blogs" || $table == "didyouknow" || $table == "images" || $table == "comments" || $table == "shortpoems") {
+                $ord = ["created_at", "DESC"];
+            } elseif (in_array($table, ["admin_table", "image_categories", "camera","users"])) {
+
+                $ord = ["name","ASC"];
+
+            } elseif ($table == "images") {
+                $ord = ["id", "DESC"];
+            } elseif ($table == "privacy") {
+                $ord = ["ordering", "DESC"];
+            } elseif($table == "texts"){
+                $ord = ["headline","ASC"];
+            }
+            else {
+                $ord = ["id", "DESC"];
+            }
 
         // Filter & Sortierung
         $pag = 20;
        if(@$request->search){
         $pag = 20;
        }
+       $xis = $table.".id";
+        $xisd = "-1";
+        if($table == "users")
+        {
+            $xis = "xis_disabled";
+            $xisd = "1";
+        }
+        \Log::info("NA:".json_encode([$ord[0],$ord[1]]));
         $tables = $query
             ->filterdefault(['search' => request('search')])
-            ->orderBy($ord[0], $ord[1])
+            ->whereNot($xis,$xisd)
+            ->orderByRaw("LOWER($table.$ord[0]) $ord[1]")
             ->paginate($pag)
             ->withQueryString();
 
@@ -574,6 +631,7 @@ class TablesController extends Controller
 
         $users_img = DB::table('users')
             ->whereIn('id', $userIds)
+
             ->select('id', 'profile_photo_path', 'name')
             ->get()
             ->keyBy('id')
@@ -1587,13 +1645,13 @@ class TablesController extends Controller
         if ((isset($formData['pub']) || Schema::hasColumn($table, 'pub')) && (empty($formData['pub']) || is_null($formData['pub']))) {
             $formData['pub'] = "1";
         }
+
         if(Schema::hasColumn($table, 'password'))
         {
             $formData['password'] = Hash::make($formData['password']);
         }
 
-
-        if (isset($formData['image_path']) && empty($formData['image_path'])) {
+        if (Schema::hasColumn($table, 'image_path') && empty($formData['image_path'])) {
             $formData['image_path'] = "008.jpg";
         }
 
@@ -1622,6 +1680,14 @@ class TablesController extends Controller
         if (Schema::hasColumn($table, 'position'))
         {
             $formData['position'] = -1;
+        }
+        foreach($columns as $key=>$val)
+        {
+            if(substr_count($val,"is_") || $val == "ischecked")
+            {
+
+                $formData[$val] = (int)@$formData[$val];
+            }
         }
 
         $newId = DB::table($table)->insertGetId($formData);
@@ -1767,8 +1833,24 @@ class TablesController extends Controller
                     $formData[$key] = CustomHelpers::sanitizeHtmlInput($val);
 
                 }
+                if($val == "on")
+                {
+                    $formData[$key] = "1";
+                }
+                elseif($val == "off"){
+                    $formData[$key] = "0";
+                }
+                elseif(substr_count($key,"is_") || $key == "ischecked")
+                {
+
+                    $formData[$key] = (int)$val;
+                }
 
             }
+
+        if(!FormController::CheckCreate()){
+            unset($formData['password']);
+        }
 
         if((Schema::hasColumn($table, 'image_path')) && (empty($formData['image_path']) || is_null($formData['image_path'])))
         {

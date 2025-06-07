@@ -37,7 +37,7 @@
                         </div>
                     </div>
                     <div class="bg-layout-sun-100 w-full dark:bg-layout-night-100 p-4 title" style="min-width:300px;">
-                    <h1 class="pb-12 block font-title w-full">
+                    <h1 class="pb-12 block w-full text-[2.78em]">
                             {{ blog.title }}
                             <editbtns :id="blog.id" table="blogs"></editbtns>
                         </h1>
@@ -153,6 +153,7 @@ import IconPause from "@/Application/Components/Icons/Pause.vue";
 import IconPlay from "@/Application/Components/Icons/Play.vue";
 import IconSpeakerWave from "@/Application/Components/Icons/SpeakerWave.vue";
 import IconStop from "@/Application/Components/Icons/Stop.vue";
+import { rumLaut } from '@/helpers';
 import AiButton from "@/Application/Components/Content/AiButton.vue";
 import DisplayDate from "@/Application/Components/Content/DisplayDate.vue";
 import DisplayNumber from "@/Application/Components/Content/DisplayNumber.vue";

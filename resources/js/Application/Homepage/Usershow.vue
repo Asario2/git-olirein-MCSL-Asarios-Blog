@@ -3,7 +3,7 @@
      <div id="teaser-img2" class="block max-w-sm gap-3 mx-auto mh_65 sm:max-w-full focus:no-underline lg:grid lg:grid-cols-12 bg-layout-sun-100 dark:bg-layout-night-100 overfl" style="z-index:0;margin-bottom:-0px;" :class="{ 'disable-link': isCommentActive }"
     >
         <!-- Das Bild des Blog-Posts -->
-        <div class="blog-container mh_65 lg:col-span-4" style="">
+        <div class="blog-container mh_65 lg:col-span-4 bg-layout-sun-100 dark:bg-layout-night-100" style="">
 
 
         <img
@@ -12,7 +12,7 @@
         width="480"
         height="360"
         style="max-height:380px;"
-        :class="['object-cover w-full rounded lg:col-span-4 object-cover rounded bg-layout-sun-500 dark:bg-layout-night-500', users.madewithai ? 'ai-icon' : '']"
+        :class="['object-cover w-full rounded lg:col-span-4 object-cover rounded bg-layout-sun-100 dark:bg-layout-night-100', users.madewithai ? 'ai-icon' : '']"
 
         />
 
@@ -57,6 +57,8 @@
                 <th class="pr-4">Beschäftigung:</th>
                 <td>{{ users.occupation }}</td>
                 </tr>
+                <th class="pr-4">Facebook:</th>
+                <td><a href='https://facebook.com/{{ users.fbd }}'>https://www.facebook.com/{{ users.fbd }}</a></td>
             </tbody>
             </table>
 

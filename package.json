@@ -35,6 +35,7 @@
     "@fortawesome/free-solid-svg-icons": "^6.7.2",
     "@fortawesome/vue-fontawesome": "^3.0.8",
     "@heroicons/vue": "^2.2.0",
+    "@hotwired/turbo": "^8.0.13",
     "blueimp-md5": "^2.19.0",
     "he": "^1.2.0",
     "jquery": "^3.7.1",

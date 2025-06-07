@@ -1,9 +1,9 @@
 <template>
     <div
       v-show="isModalOpen"
-      class="fixed inset-0 z-1000 flex items-center justify-center bg-black bg-opacity-50"
+      class="fixed inset-0 z-100 flex items-center justify-center bg-black bg-opacity-50" style="z-index: 100;"
     >
-      <div class="bg-layout-sun-100 dark:bg-layout-night-100 rounded-lg shadow-lg w-full max-w-lg p-6">
+      <div class="bg-layout-sun-100 dark:bg-layout-night-100 rounded-lg shadow-lg w-full max-w-lg p-6" style="z-index: 100;">
         <form @submit.prevent="uploadImage">
           <h3 class="text-2xl font-semibold text-center mb-4">Bild hochladen</h3>
           <CopyLeftSelect
@@ -168,7 +168,8 @@
         }
       },
       async uploadImage() {
-  if (!this.selectedImage) return;
+  if (!this.selectedImage && !this.value) return;
+  this.selectedImage = this.selectedImage ?? this.value;
 
   this.uploading = true;
   this.progress = 0;

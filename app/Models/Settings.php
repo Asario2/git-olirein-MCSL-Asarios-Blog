@@ -8,11 +8,11 @@
     {
         // Definiere hier deine Konstanten oder statischen Variablen
         public static array $excl_cols = ['updated_at', 'published_at','remember_token','email_verified_at','google2fa_secret','is_two_factor_authenticated','two_factor_authenticated',
-                        'two_factor_enabled','reserved_at','available_at','is_two_factor_enabled','temp_google2fa_secret','new_email','email_change_token','email_verification_token','two_factor_token',"author_name","users_rights_id","chg_date","xico_doms",'xkis_IsFeed','xis_mailed','users_rights_id','two_factor_secret','two_factor_recovery_codes','two_factor_confirmed_at','two_factor_enabled','remember_token'];
+                        'two_factor_enabled',"password_old",'reserved_at','available_at','is_two_factor_enabled','temp_google2fa_secret','new_email','email_change_token','email_verification_token','two_factor_token',"author_name","users_rights_id","chg_date","xico_doms",'xkis_IsFeed','xis_mailed','users_rights_id','two_factor_secret','two_factor_recovery_codes','two_factor_confirmed_at','two_factor_enabled','remember_token'];
         public static array $excl_heads = ["date_begin"];
         public static array $excl_disabled = ['id'];
         public static array $excl_datefields  = []; //['birthday','created_at'];
-        public static array $exl = ["title"=>"Titel","content_en"=>"Text Englisch","blog_categories_id"=>"Kategorie",'title_en'=>"Titel Englisch",'users_id'=>"Autor","moderator_id"=>"Moderator","image_categories_id"=>"Bildergruppe","to_address"=>'Empfängeradresse','subject'=>'Betreff','pub'=>"Öffentlich",
+        public static array $exl = ["text"=>"Text","title"=>"Titel","content_en"=>"Text Englisch","blog_categories_id"=>"Kategorie",'title_en'=>"Titel Englisch",'users_id'=>"Autor","moderator_id"=>"Moderator","image_categories_id"=>"Bildergruppe","to_address"=>'Empfängeradresse','subject'=>'Betreff','pub'=>"Öffentlich",
                     'view_table'=>'Sichtbar','add_table'=>'Hinzufügen','publish_table'=>'Veröffentlichen','date_table'=>"Datum Ändern",'delete_table'=>"Löschen",'edit_table'=>"Editieren","content"=>"Text","xis_ai"=>"KI Bild","summary"=>"Zusammenfassung",
                     "blog_authors_id"=>"Autor",'date_end'=>"Online Von/Bis",'post_id'=>"Post ID",'categories_id'=>"Kategorie",'xis_IsSaleable'=>"Verkäuflich",'xkis_Ticker'=>"Ticker Aktivieren","created_at"=>'Erstellt am:','headline'=>'Überschrift','headline_en'=>'Überschrift Englisch',
                     "answer"=>"Antwort","date"=>"Datum",'birthday' => 'Alter','occupation'=>'Beschäftigung',"interests"=>"Hobbys","music"=>'Musik','prename'=>"Vorname",'id'=>'ID','image_path'=>"Bild","email"=>'Email',
@@ -24,12 +24,15 @@
     "Status","message" => "Text","message_en" => "Text Englisch","camera_id" => "Kamera","link" => "Link","Format" => "Format","Format_en" => "Format Englisch","preis" => "Preis","tablename" => "Tabelle","xis_checked" => "checked","ordering" => "Position","Longname" => "Langer Name","Mpixel" =>
     "Megapixel","view_table"=>"Anzeigen",'add_table'=>"Hinzufügen",'story_en'=>"Geschichte Englisch",'story'=>"Geschichte","edit_table"=>"Bearbeiten","publish_table"=>"Veröffentlichen","date_table"=>"Datum Ändern","delete_table"=>"Löschen","short_tag" => "Tag","exif_copyright" => "Exif copy",
     'autoslug'=>"Url der Seite","admin_table_id"=>"Tabelle","exif_comp" => "exif Comp","exif_model" => "Exif Model","AdminPanel"=>"Admin Dashboard","UserRights"=>"BenutzerRechte",'LogViewer'=>"Log Viewer","SendMail"=>"Emails verschicken","ChangePassword"=>"Passwort Ändern","CommentsCenter"=>"Kommentar Admin Center","DataBases"=>"Datenbank Admin"
-    ,"about"=>"Über dich"];
+    ,"about"=>"Über dich","ischecked"=>"Überprüft","about_en"=>"Über dich Englisch","website" => "Website","fbd"=>"facebook Name","xis_disabled"=>"Benutzer deaktivieren"];
 
-        public static array $no_req = ['modul','is_admin','is_customer','is_employee','customer_id','admin_id','company_id',
-                                       'profile_photo_path',"category_id","type_id",'message','message_en','camera_id',
-                                       'position','image_path','link','format','preis','format_en','music','interest',"about",
-                                       'occupation','birthday','prename','xis_ai','id_new','exif_comp','exif_model',"interests","occupation"];
+        public static array $no_req = ['exif_copyright','exif_comp','exif_model','Mpixel','modul','is_admin','is_customer','is_employee','customer_id','admin_id','company_id',
+                                       'profile_photo_path',"category_id","type_id",'message','message_en',
+                                       'position','ordering','image_path','link','format','preis','format_en','music','interest',"about",'story_en',
+                                       'occupation','birthday','answer_en','prename','xis_ai','id_new','exif_comp','exif_model',"interests","occupation","fbd","website","about_en","about"];
+
+
+
         public static array $big_thumb = ["users","blog_posts","images"];
         public static array $int_date_tables = ["didyouknow"];
         public static array $textfield = ["Mdown"]; // Mdown / HTML
@@ -114,11 +117,12 @@
             "comments" => ['users.name','content',"email","admin_table.name"],
             "didyouknow" => ['headline',"answer"],
             "image_categories"=>['heading_alt'],
-            "users" => ['name'],
+            "users" => ['name',"email"],
             "users_rights" => ['name'],
-            "camera" => ['name'],
+            "camera" => ['name','Longname',"Mpixel"],
             "testfield" => ['title'.'content'],
-            "shortpoems" => ['headline','story']
+            "shortpoems" => ['headline','story'],
+            "texts"=>["headline","text"],
 
     ];
     public static array $namealias = [
@@ -153,6 +157,7 @@
     'comments'      => 'users_id',
     "privacy" => 'message',
     "shortpoems"    => "story",
+    "camera"=>"LongName",
     "texts"=>"text",
     "users"=>"email"
     ];

@@ -10,7 +10,7 @@
                 <img
                     role="presentation"
                     :class="['object-cover w-full rounded h-60 w-60 bg-layout-sun-500 dark:bg-layout-night-500 teaser']"
-                    :src="user.profile_photo_path != null ? '/images/' + user.profile_photo_path.replace('/images/','/') : '/images/profile-photos/008.jpg'"
+                    :src="user.profile_photo_path != null ? '/images/' + user.profile_photo_path.replace('/images/images/','/images/') : '/images/profile-photos/008.jpg'"
                     :alt="user.name"
 
                     width="480"

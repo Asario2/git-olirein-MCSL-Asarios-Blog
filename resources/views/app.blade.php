@@ -19,11 +19,12 @@
         <script src="/js/shariff.min.js"></script>
         <script>
         if (typeof global === 'undefined') {
-    window.global = window;
-    }
-
+            window.global = window;
+        }
+       window.Laravel = {
+                userId: {{ auth()->id() ?? 'null' }},
+            };
         </script>
-
         @routes
         @vite('resources/js/app.js')
         @inertiaHead

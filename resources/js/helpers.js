@@ -390,6 +390,50 @@ export async function loadRights() {
 export function GetSRights(modul) {
     return cachedRights?.[modul] === true;
 }
+export function rumLaut(input, table = '') {
+    let str = input;
+
+    // 1. Regex: Entferne <br> nach </li> und vor <li>
+    str = str.replace(/<\/li>\s*<br\s*\/?>/gi, '</li>');
+    str = str.replace(/<li>\s*<br\s*\/?>/gi, '<li>');
+
+    // 2. <br> vor <h2>/<h3>/<p> und danach entfernen
+    str = str.replace(/<br\s*\/?>\s*(<(h2|h3|p)[^>]*>)/gi, '$1');
+    str = str.replace(/(<\/(h2|h3|p)>)\s*<br\s*\/?>/gi, '$1');
+
+    // 3. Für bestimmte Tabellen: <p>, </p> und <br /> entfernen
+    if (table === 'shortpoems' || table === 'didyouknow') {
+        str = str.replace(/<p>/gi, '');
+        str = str.replace(/<\/p>/gi, '');
+        str = str.replace(/<br\s*\/?>/gi, '');
+    }
+
+    // 4. Zeichen ersetzen
+    str = str.replace(/â€“/g, '-');
+
+    // 5. HTML Entities dekodieren (basic)
+    const txt = document.createElement("textarea");
+    txt.innerHTML = str;
+    str = txt.value;
+
+    // 6. Weitere manuelle Zeichenersetzungen
+    const find = [
+        /---/g, /ÃƒÅ“/g, /ÃƒÂ¼/g, /ÃƒÅ¸/g, /Ãƒ\?/g, /ÃƒÂ¤/g, /â€™/g, /Ã„/g,
+        /Ãœ/gi, /Ã/g, /Ã¶/g, /Ã"Y/g, /Ã¼/g, /Ã¤/g, /ÃŸ/g, /âEUR¦/g, /Ã?/g, /ÃƒÂ¶/g
+    ];
+
+    const replace = [
+        '<hr>', '&Uuml;', '&uuml;', '&szlig;', '&szlig;', '&auml;', "'", '&Auml;',
+        '&Uuml;', '&szlig;', '&ouml;', '&Uuml;', '&uuml;', '&auml;', '&szlig;', '…', '&Auml;', '&ouml;'
+    ];
+
+    find.forEach((regex, i) => {
+        str = str.replace(regex, replace[i]);
+    });
+
+    return str;
+}
+
 export const selectionHelper = {
 //   savedRange: null,
 

@@ -57,16 +57,26 @@
             </button>
             <tippy>Geordnete Liste</tippy>
         </div>
-
+        <div v-if="hasError" class="text-red-500 text-sm mt-1">
+                Dieses Feld darf nicht leer sein.
+            </div>
         <!-- Textfeld -->
         <div class="mb-4 p-4 bg-layout-sun-0 dark:bg-layout-night-0 rounded-lg edit0R editor">
             <div ref="editor" :id="name" contenteditable="true" class="editor rounded p-3 min-h-[150px] focus:outline-none"
-
+            :required="required"
             @focus="isFocused = true"
             @blur="isFocused = false"
             :placeholder="placeholder"
-            @input="onInput"></div>
+            :class="{
+                'border-red-500 ring-2 ring-red-300': hasError,
+                'border-gray-300': !hasError
+            }"
+            @input="onInput"
+            ></div>
+
             <input type="hidden" :id="name + '_alt'">
+        </div>
+
 
             <ImageUploadModal
             v-show="isModalOpen"
@@ -84,7 +94,7 @@
             @close="closeModal"
             @uploaded="insertImageIntoEditor"
             />
-        </div>
+
         </div>
     </template>
 
@@ -121,6 +131,10 @@
         tablex: String,
         table_x: String,
         placeholder: String,
+        required: {
+            type:[Number,Boolean,String],
+            default:false
+        },
         },
         data() {
         return {
@@ -129,6 +143,8 @@
             nf2: null,
             settings: {},
             savedRange: null,
+            isRequiredError: false,
+            hasError: false,
             // selectionHelper: new SelectionHelper(),
         };
         },
@@ -170,13 +186,31 @@
         },
         },
         methods: {
-    //         onInput() {
-    //   this.content = this.$refs.editor.innerHTML;
+  isValid() {
+      if (!this.required) return true;
+
+      const html = this.$refs.editor?.innerHTML || '';
+      const plain = html.replace(/<[^>]*>/g, '').trim();
+
+      const isValid = plain.length > 0;
+      this.isRequiredError = !isValid;
+
+      return isValid;
+    },
+    //         onInput(event) {
+
+    //   const content = event.target.innerText.trim();
+    //   this.$emit('update:modelValue', content);
+
+    //   // Optional: lokale Validierung
+    //   if (this.required && !content) {
+    //     this.showError = true;
+    //     this.$emit('validationFailed', 'Field is required');
+    //   } else {
+    //     this.showError = false;
+    //     this.$emit('validationPassed');
+    //   }
     // },
-    onInput() {
-  this.saveSelection();
-  this.$emit("update:modelValue", this.$refs.editor.innerHTML);
-},
     setInitialContent() {
       this.$refs.editor.innerHTML = this.content;
     },
@@ -402,8 +436,16 @@ restoreSelection() {
       insertImage(imageUrl) {
         this.insertImageIntoEditor(imageUrl);
       },
-            },
 
+            onInput(e) {
+                const html = e.target.innerHTML.trim();
+                this.$emit('update:modelValue', html);
+                this.hasError = html.replace(/<[^>]*>/g, '').trim().length === 0;
+    },
+    get content() {
+      return this.modelValue;
+    },
+    },
     };
     </script>
 
@@ -456,7 +498,13 @@ restoreSelection() {
     .icon-btn:hover {
         background-color: var(--tw-bg-opacity);
     }
+    .editor a:link,a:visited,a:active{
+        text-decoration: underline;
+    }
     .editor OL LI{
         list-style-type: decimal;
+    }
+    .editor-error-message{
+        color:#a00;
     }
     </style>

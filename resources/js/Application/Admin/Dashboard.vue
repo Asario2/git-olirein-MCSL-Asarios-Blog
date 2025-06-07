@@ -31,7 +31,7 @@
                 title="Bilder"
                 :routeName="route('admin.tables.show','images')"
                 linkName="Überblick Bilder"
-                :routeName2="route('admin.tables.store', 'images')"
+                :routeName2="route('admin.tables.create', 'images')"
                 linkName2="Neues Bild"
                 :withIcon="true"
                 icon="IconPictures"

@@ -72,7 +72,7 @@
                 </div>
                 <div v-else>
                     <img src="/images/profile-photos/008.jpg" class="max-w-[24px] max-h-[24px] object-cover rounded-full inline" />
-                    <span>&nbsp;{{ users[data.datarow.users_id].name }}</span>
+                    <span>&nbsp;{{ data.datarow.nick  }}</span>
                 </div>
                 </td>
 
@@ -93,8 +93,7 @@
 let table_z = CleanTable();
 let table_alt = table_z;
 let table = table_z.toLowerCase();
-
-  import { defineComponent } from "vue";
+import { defineComponent } from "vue";
   import Layout from "@/Application/Admin/Shared/Layout.vue";
   import { CleanTable, CleanId } from '@/helpers';
   import { GetSettings } from "@/helpers";
@@ -225,6 +224,7 @@ let table = table_z.toLowerCase();
         //     location.href="/no-rights";
         // }
             let cat_on_head = '';
+
         this.cat_on_head = this.checkCat();
         this.checkhasCreated();
         this.settings = await GetSettings();
@@ -281,7 +281,7 @@ let table = table_z.toLowerCase();
         descalias: '',
         hasCreated: false,
         cat_on_head: '', // <-- hier definieren!
-
+        userName: '',
 
     };
   },
@@ -297,7 +297,7 @@ let table = table_z.toLowerCase();
       return this.$isRightsReady; // Zugriff auf globale Methode
     },
     table_head() {
-        return Array.isArray(this.datarows) && this.datarows[0]?.admin_table_id ? "Tabelle" : "";
+        return (Array.isArray(this.datarows) && this.datarows[0]?.admin_table_id) || typeof this.datarows[0]?.admin_table_id !== 'undefined' ? "Tabelle" : "";
       },
     hasRight() {
       return this.$hasRight; // Zugriff auf globale Methode
@@ -324,9 +324,7 @@ let table = table_z.toLowerCase();
       this.checkedStatus = status
       console.log('Aktualisierter checkedStatus:', this.checkedStatus)
     },
-
-
-        onSelectedChanged(value) {
+    onSelectedChanged(value) {
     this.checkedStatus = value;
   },
         async MatchMaker(){

@@ -21,6 +21,7 @@ use App\Http\Controllers\DashboardCustomerController;
 use App\Http\Controllers\DashboardEmployeeController;
 use App\Http\Controllers\ImageUploadController;
 use League\CommonMark\CommonMarkConverter;
+use Illuminate\Http\Request;
 use App\Http\Controllers\TablesController;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use App\Http\Controllers\CategoryController;
@@ -160,7 +161,8 @@ Route::get('/devmod', function () {
     // ShowRepo();
     //IMULController::smpix();
     //  DevMod();
-    ConvertTypes();
+    // ConvertTypes();
+    return date("Y-m-d H:i:s",'1501344360');
     //  small_images(public_path()."/images/_ab/users");
      // Hauptprogramm
     // $viewsPath = resource_path('views/layouts'); // Pfad zu den Blade-Dateien
@@ -170,7 +172,12 @@ Route::get('/devmod', function () {
 
 
     })->name('devmod');
-
+    Route::get('/get-nick-from-comments', function (Request $request) {
+        return DB::table('comments')
+            ->where('comments.id', $request->id)
+            ->select('comments.nick')
+            ->first(); // nur ein Eintrag
+    })->name('getnickfromcomments');
     // Route::post('/toggle-darkmode', [App\Http\Controllers\DarkModeController::class, 'toggle'])->name('toggle.darkmode');
     Route::get('tables/{table}/create', [TablesController::class, 'createEntryForm'])->name('tables.create-table');
     Route::post('/comments/store/{table}/{postId}', [CommentController::class, 'store_alt'])->name('comments.store_alt');
@@ -261,7 +268,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::delete("/admin/tables/delete/{table}/{id}",[TablesController::class,"DeleteTables"])
         ->name("admin.tables.delete");
         // Tables UPDATE
-        Route::post("admin/tables/update/{table}/{id?}",[TablesController::class,"UpdateTable"])
+        Route::post("/admin/tables/update/{table}/{id?}",[TablesController::class,"UpdateTable"])
             ->name("admin.table.update");
         // Blogartikel Delete
         Route::delete('/admin/blogs/{blog}', [BlogController::class, 'admin_blog_delete'])

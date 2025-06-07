@@ -45,7 +45,7 @@
         </template> -->
     </select>
 
-    <input type="hidden" :name="xname" id="hv" :value="selectedValue" />
+    <input type="hidden" :name="name" :id="name" :value="selectedValue" />
 </template>
 
 <script>
@@ -152,7 +152,7 @@ methods: {
     },
     getOptions() {
 
-    axios.get('/tables/sort-enum/'+ this.tablex + '/'  + this.name)
+    axios.get('/tables/sort-enum/'+ this.xtable + '/'  + this.name)
     .then(response => {
       //  console.log('http:///tables/enum-data/'+ this.tablex + '/'  + this.name);
 

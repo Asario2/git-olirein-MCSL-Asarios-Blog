@@ -52,7 +52,7 @@ if(!function_exists("RUMLAUT"))
         }
         $string = str_replace("â€“","-",$string);
         $string = html_entity_decode($string);
-        return str_replace(array("---","ÃƒÅ“","ÃƒÂ¼",'ÃƒÅ¸','Ãƒ?','ÃƒÂ¤','â€™',"Ã„",'Ãœ',"Ã","Ã¶",'Ã"Y','Ã¼','Ã¤','ÃŸ',"âEUR¦",'Ã?','ÃƒÂ¶'),array("<hr>","&Uuml;",'&uuml;',"&szlig;","&szlig;","&auml;","'","&Auml;","&Uuml;","&szlig;","&ouml;","&szlig;","&uuml;","&auml;","&szlig;",'',"&szlig;","&ouml;"),$string);
+        return str_replace(array("â€“","---","ÃƒÅ“","ÃƒÂ¼",'ÃƒÅ¸','Ãƒ?','ÃƒÂ¤','â€™',"Ã„",'Ãœ',"Ã","Ã¶",'Ã"Y','Ã¼','Ã¤','ÃŸ',"âEUR¦",'Ã?','ÃƒÂ¶'),array("-","<hr>","&Uuml;",'&uuml;',"&szlig;","&szlig;","&auml;","'","&Auml;","&Uuml;","&szlig;","&ouml;","&szlig;","&uuml;","&auml;","&szlig;",'',"&szlig;","&ouml;"),$string);
     }
 }
 if(!function_exists("shorter"))

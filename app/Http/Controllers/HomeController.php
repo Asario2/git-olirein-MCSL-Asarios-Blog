@@ -77,6 +77,11 @@ class HomeController extends Controller
             return $blog;
         });
         $blogs->getCollection()->transform(function ($blog) {
+            $blog->title = RUMLAUT($blog->title);
+            return $blog;
+        });
+
+        $blogs->getCollection()->transform(function ($blog) {
             $blog->title = html_entity_decode($blog->title);
             return $blog;
         });
@@ -357,6 +362,10 @@ class HomeController extends Controller
             // $blogarticleFile = Jetstream::localizedMarkdownPath($filePathName);
             // $blogarticle = Str::markdown(file_get_contents($blogarticleFile));
         }
+
+            $blog->content = RUMLAUT($blog->content);
+            $blog->title = RUMLAUT($blog->title);
+
         //
         // \Log::info("bl: ".json_encode($blog));
         return Inertia::render('Homepage/BlogShow', [
@@ -366,14 +375,14 @@ class HomeController extends Controller
     }
     public function home_userlist()
     {
-        $users = DB::table("users")->select("users.*")->paginate(19);
+        $users = DB::table("users")->where("xis_disabled","0")->where("pub","1")->select("users.*")->orderBy("name","ASC")->paginate(18);
         return Inertia::render('Homepage/Users', [
             'users' => $users, // statt 'data'
         ]);
     }
     public function home_usershow($username)
     {
-        $users = DB::table("users")->where("name",$username)->select("users.*")->first();
+        $users = DB::table("users")->where("name",$username)->where("pub","1")->andWhere("xis_disabled","0")->select("users.*")->first();
         // \Log::info("HU:".json_encode($users,JSON_PRETTY_PRINT));
         return Inertia::render('Homepage/Usershow', [
             'users' => $users, // statt 'data'

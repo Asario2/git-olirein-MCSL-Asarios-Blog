@@ -9,7 +9,7 @@
             <div class="relative">
                 <img
                     role="presentation"
-                    :class="['object-cover w-full rounded h-44 bg-layout-sun-500 dark:bg-layout-night-500', blog.madewithai ? 'ai-icon' : '']"
+                    :class="['object-cover w-full rounded h-44 bg-layout-sun-100 dark:bg-layout-night-100', blog.madewithai ? 'ai-icon' : '']"
                     :src="`/images/blogs/thumbs/${blog.url}` || '/images/blogs/008.jpg'"
                     :alt="blog.name"
 
@@ -61,7 +61,7 @@
 <script>
 import { Link } from "@inertiajs/vue3";
 import IconPlusCircle from "@/Application/Components/Icons/PlusCircle.vue";
-import { CleanTable, CleanId } from '@/helpers';
+import { CleanTable, rumLaut } from '@/helpers';
 import averageRating from "@/Application/Components/Social/averageratings.vue";
 import IconPencil from "@/Application/Components/Icons/Pencil.vue";
 import Comments from "@/Application/Components/Social/comments.vue";

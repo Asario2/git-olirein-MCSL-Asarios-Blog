@@ -101,17 +101,22 @@ class CommentController extends Controller
         {
             $table = "users";
         }
+        if(substr_count($table,"blogs"))
+        {
+            $table = "blogs";
+        }
+        $table_alt = $table;
 
         $adtabid = DB::table("admin_table")->where("name",$table)->pluck("id")->first();
         $comment = new Comment();
         $comment->content = $request->input('comment2') ?? $request->comment;
         $comment->content = strip_tags($comment->content, '<br>');
-        $comment->admin_table_id = $adtabid;
+        $comment->admin_table_id = $this->GetTid($table_alt);
         $comment->users_id = auth()->id(); // Beispiel für Benutzer-ID
         $comment->created_at = now();
         $comment->updated_at = now();
         $comment->email = @$user->email;
-        $comment->admin_table_id = $this->GetTid($table);
+        $comment->nick = Auth::user()->name;
         $comment->post_id = $request->post_id;
         $comment->save();
 
@@ -143,14 +148,19 @@ class CommentController extends Controller
         {
             $table = "users";
         }
+        if(substr_count($table,"blogs"))
+        {
+            $table = "blogs";
+        }
         $user = DB::table("users")->where("id",Auth()->id())->select("email",'name')->first();
         $adtabid = DB::table("admin_table")->where("name",$table)->pluck("id")->first();
         // Kommentar erstellen und in der Datenbank speichern
         $comment = new Comment();
         $comment->content = $request->input('comment2') ?? $request->comment;
         $comment->content = strip_tags($comment->content, '<br>');
-        $comment->admin_table_id = $adtabid;
+        $comment->admin_table_id = $this->GetTid($table);
         $comment->users_id = auth()->id(); // Beispiel für Benutzer-ID
+        $comment->nick = Auth::user()->name;
         $comment->created_at = now();
         $comment->updated_at = now();
         $comment->email = $user->email;
@@ -363,6 +373,15 @@ class CommentController extends Controller
                 {
                     $table = "users";
                 }
+                if(substr_count($table,"blogs"))
+                {
+                    $table = "blogs";
+                }
+
+                if($table == "pictures")
+                {
+                    $table = "images";
+                }
                 $table_alt = $table;
                 // $sa = Settings::$searchable;
                 // \Log::info($parts);
@@ -384,7 +403,6 @@ class CommentController extends Controller
         $adtabid = DB::table("admin_table")->where("name",$table)->pluck("id")->first();
         DB::enableQueryLog();
             $comments = Comment::where('post_id', $postId)
-            ->where("admin_table_id",$adtabid)
             ->leftJoin('users', 'comments.users_id', '=', 'users.id')
             ->select("comments.*", "users.profile_photo_path", "users.name as author")
             ->where("admin_table_id",$this->GetTid($table_alt))

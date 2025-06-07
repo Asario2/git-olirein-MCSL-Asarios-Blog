@@ -3,30 +3,30 @@
      <div id="teaser-img2" class="block max-w-sm gap-3 mx-auto mh_65 sm:max-w-full group hover:no-underline focus:no-underline lg:grid lg:grid-cols-12 bg-layout-sun-100 dark:bg-layout-night-100 overfl" style="z-index:0;margin-bottom:-0px;" :class="{ 'disable-link': isCommentActive }"
     >
         <!-- Das Bild des Blog-Posts -->
-        <div class="blog-container mh_65 lg:col-span-7" style="">
+        <div class="blog-container mh_64 lg:col-span-7" style="padding:0px;margin:0px;">
             <Link
         :href="route('home.blog.show', blog.autoslug)" class="block">
 
         <img
             :src="`/images/blogs/${blog.url}`"
             :alt="blog.name"
-            width="480"
-            height="360"
-            style="max-height:390px"
-            :class="['object-cover w-full rounded lg:col-span-7 object-cover rounded bg-layout-sun-500 dark:bg-layout-night-500', blog.madewithai ? 'ai-icon' : '']"
+            width="520"
+            height="390"
+            style="max-height:420px;margin-right:-10px;"
+            :class="['object-cover w-full rounded lg:col-span-7 object-cover rounded bg-layout-sun-100 dark:bg-layout-night-100', blog.madewithai ? 'ai-icon' : '']"
 
         />
 
         </Link>
-        <div class="relative">
+        <div class="relative my7">
         <!-- Der AI-Button wird hier angezeigt -->
-        <div v-if="blog.madewithai">
+        <div v-if="blog.madewithai" class="ai-icon-wrapper">
             <AiButton :dma="dmaa" :big="true"></AiButton>
         </div>
     </div>
         </div>
 
-        <div id="teaser-img" class="p-6 space-y-2 lg:col-span-5 overfl" style="">
+        <div id="teaser-img" class="p-6 space-y-1 lg:col-span-5 overfl" style="">
             <Link
         :href="route('home.blog.show', blog.autoslug)">
             <!-- Blog-Kategorie -->
@@ -60,11 +60,11 @@
 
 
             <!-- Blog-Zusammenfassung -->
-            <div v-html="blog.summary" class="pb-6"></div>
+            <div v-html="blog.summary" class="pb-2"></div>
 
             <!-- Lesezeit anzeigen -->
             <div>
-                <display-number
+                <display-number class="text-xs text-layout-sun-600 dark:text-layout-night-600 py-2"
                 :value="blog.reading_time"
                     :after-digits="0"
                     value-unit="Minuten Lesezeit"
@@ -117,20 +117,29 @@ export default {
 </script>
 
 <style scoped>
+.ai-icon {
+  display: block;
+  line-height: 0;   /* Verhindert Whitespace */
+  margin: 0;
+  padding: 0;
+}
 .rl{
-    display:inline;
-    margin-top:-5px;
+    display:block;
+    margin-top:5px;
 
 }
 .relative {
   position: relative;
 }
-
+.ai-icon-wrapper {
+  display: block;
+  line-height: 0; /* Verhindert Text-basierte Lücke */
+}
 
 @media screen and (min-width: 1024px) {
 .overfl{
     overflow:hidden;
-    max-height:385px;
+    max-height:420px;
 }
 .ai-button-image {
   position: fixed;  /* Fixiere das Bild auf dem Bildschirm */
@@ -143,7 +152,27 @@ export default {
 @media screen and (max-width: 1024px) {
 .overfl{
     overflow:visible;
+
 }
+}
+img {
+  display: block;
+  margin: 0;
+  padding: 0;
+}
+.mh_64{
+
+}
+/* img {
+  outline: 2px solid red;
+} */
+.blog-container img {
+  display: block;
+  margin: 0;
+  padding: 0;
+  line-height: 0;
+  border: none;
+  vertical-align: bottom;
 }
 /* Hier kannst du zusätzliche Anpassungen vornehmen, falls nötig */
 </style>

@@ -18,7 +18,7 @@
         </option>
       </select>
     </div>
-    <input type="hidden" :name="xname" :value="resolvedValue">
+    <input type="hidden" :name="name" :id="name" :value="VAXX">
  </template>
 
   <script>
@@ -34,18 +34,20 @@
       xname: { type: String, default: "select-field" },
       required: { type: [Boolean, String], default: false },
       options: { type: [Array, Object], default: null },
+    //   VAXX:[String,Number],
     },
 
     data() {
       return {
         internalValue: this.modelValue ?? "",
         fetchedOptions: [],
+        VAXX:'0',
       };
     },
 
     computed: {
         resolvedValue() {
-            return this.internalValue < 1 ? "dummy" : this.internalValue;
+            return this.internalValue < 1 ? "0" : this.internalValue;
         },
       optionsList() {
         let opts = [];

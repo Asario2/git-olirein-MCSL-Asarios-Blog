@@ -1,5 +1,5 @@
 <template>
-<div class="relative mb-4">
+<div class="relative mb-4 z-0">
   <label :for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
    <slot name="label"></slot>
   </label>

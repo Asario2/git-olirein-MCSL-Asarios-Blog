@@ -322,8 +322,18 @@ async pstate(){
                     .catch(error => console.error("Fehler beim Löschen2:", error));
             }
         },
+        resetForm() {
+  this.formData = {
+    id: null,
+    text: "",
+    // weitere Felder, die du brauchst
+  };
+},
         editDataRow(id) {
-            this.$inertia.visit(`/admin/tables/edit/${id}/${this.tableq}`);
+            this.$inertia.visit(`/admin/tables/edit/${id}/${this.tableq}`, {
+            preserveScroll: true,
+            preserveState: false, // <- Wichtig: sorgt für kompletten reload
+            });
         },
     },
 

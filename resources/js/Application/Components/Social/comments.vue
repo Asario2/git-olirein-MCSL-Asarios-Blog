@@ -16,14 +16,14 @@
             <!-- Kommentarinhalt -->
             <div class="flex-1 pr-14">
                 <p class="text-sm flex items-center gap-2 mxy">
-                    {{ comment?.author }}
+                    {{ comment?.author ?? comment.nick}}
                     <span @click="confirmDelete(comment?.id)" class="text-red-500 cursor-pointer hover:text-red-700">
                         <IconTrash class="w-4 h-4" />
                     </span>
                 </p>
-                <p class="text-layout-sun-700 dark:text-layout-night-600 w-[190px] max-w-[190px] mxy">
+                <div class="text-layout-sun-700 dark:text-layout-night-600 w-[190px] max-w-[190px] mxy">
                     <div v-html="nl2br(comment?.content)"></div>
-                </p>
+                </div>
                 <small class="text-xs text-layout-sun-600 dark:text-layout-night-500">
                     <display-date :value="comment?.created_at" :time-on="false" />
                 </small>

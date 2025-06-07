@@ -27,8 +27,8 @@
                 <template style="display: inline-block">
                     <div>
 
-                        <!-- <pre>{{ formData }}</pre> -->
-                        <!-- <pre>{{this.xsor_alt['admin_table_id'] }}</pre> -->
+
+                        <!-- <pre>{{localFfo.original }}</pre> -->
                         <a v-if="hasRight('add',tablex)" :href="'/admin/tables/create/' + tablex" target="" class="inline-flex items-center
                         px-1 py-1.5 md:px-2 md:py-2 h-6 md:h-8 rounded-md font-medium text-xs tracking-widest
                          disabled:opacity-25 transition cursor-pointer focus:ring focus:outline-none button_bg
@@ -37,7 +37,7 @@
 
     <form @submit.prevent="submitForm" enctype="multipart/form-data" >
         <div class="textar maxx grid grid-cols-1 lg:grid-cols-2 mb-2 gap-2 lg:gap-x-4 mt-2">
-            <template v-for="(field, key) in ffo" :key="key">
+            <template v-for="(field, key) in  localFfo.original" :key="key">
 
                 <input-container v-if="field.name === 'reading_time'">
                     <InputFormText
@@ -87,11 +87,13 @@
                         :placeholder="field.placeholder || ''"
                         :class="field.class"
                         @focus="isFocused = true"
+                        @validationFailed="() => handleValidationFailed(index, field.required)"
+                        @validationPassed="() => handleValidationPassed(index)"
                         :required="isRequired(field.required)"
                 >
                         <template #label>{{ field.label }}</template>
                     </Editor>
-
+                    <div v-if="fieldErrors && fieldErrors[key]" class="text-red-500 text-sm">Dieses Feld ist erforderlich</div>
 
                 </input-container>
                 <input-container v-else-if="field.type === 'textarea'">
@@ -145,29 +147,29 @@
                         @update:fileName="handleFileNameUpdate"
                         @imageUploaded="handleImageUpload"
                 />
-                <!-- {{ console.log(table_alter) }} -->
                 <button type="button" @click="openModal_alt">
                     <p v-if="this.nf2 && typeof this.nf2 !== 'object' && this.nf2 != '[]' && this.nf2 != '008.jpg' ">Hochgeladenes Bild:
 
                         <img :src="table_alter + this.nf2" width="100" alt="Vorschau1" title="Vorschau1"/></p>
                         <p
-                        v-else-if="ffo[this.column] && ffo[this.column].value && ffo[this.column].value !== '008.jpg'"
+                        v-else-if="localFfo.original[this.column] && localFfo.original[this.column].value && localFfo.original[this.column].value !== '008.jpg'"
                         >
                         Hochgeladenes Bild:
                         <img
-                            :src="`${table_older}${ffo[this.column].value}`"
+                            :src="`${table_older}${localFfo.original[this.column].value}`"
                             width="100"
                             alt="Vorschau2"
                             title="Vorschau2"
                         />
                         </p>
                     <span v-else><img src="/images/blogs/thumbs/009.jpg" alt="Jetzt Bild Hochladen" width="100"  title="Jetzt Bild Hochladen" ></span>
-                        <input type="hidden" :id="field.name" :value="this.nf2.replace('images//images/','images/')">
+
                 </button>
+                <input type="hidden" :id="field.name" :value="this.nf2">
                 <input
                 type="hidden"
                 :name="field.name"
-                :value="nf2.replace('images//images/','images/')"
+                :value="nf2?.replace('images//images3/','images/')"
                 :id="field.name"
                 />
 
@@ -223,13 +225,50 @@
                     <input-checkbox
                         :name="field.name"
                         v-model="field.value"
+                        :exValue.Number="field.value"
                         :value="field.value"
 
                         >
                         {{field.label}}</input-checkbox
                     >
                 </input-container>
+                <input-container
+                v-else-if="field.type === 'isbox'"
+                >
+                    <input-isbox
+                        :id="field.name"
+                        :exValue.Number="field.value"
+                        :name="field.name"
+                        v-model.number="field.value"
 
+
+                        >
+                        {{field.label}}</input-isbox>
+
+                </input-container>
+                <input-container
+                                        v-else-if="field.name === 'users_id'"
+
+                                    >
+                                        <!-- Weitere Inhalte für die select_id-Komponente -->
+
+                                        <InputLabel
+                                        :name="field.name"
+                                        :label="field.label">
+
+                                    </InputLabel>
+                                    <InputSelectU
+                                    @input-change="updateFormData"
+                                    :id="field.name"
+                                    :model-value="field.value"
+
+                                    :name="field.name"
+                                    :xname="field.name"
+                                    :required="isRequired(field.required)"
+                                    >
+
+                                </InputSelectU>
+                                </input-container>
 
                                     <input-container
                                         v-else-if="field.type === 'select_id'"
@@ -473,7 +512,9 @@ import InputContainer from "@/Application/Components/Form/InputContainer.vue";
 import InputLabel from "@/Application/Components/Form/InputLabel.vue";
 import InputElement from "@/Application/Components/Form/InputElement.vue";
 import InputCheckbox from "@/Application/Components/Form/InputCheckbox.vue";
+import InputIsbox from "@/Application/Components/Form/InputIsBox.vue";
 import InputSelect from "@/Application/Components/Form/InputSelect.vue";
+import InputSelectU from "@/Application/Components/Form/InputSelectU.vue";
 import InputSelectEnum from "@/Application/Components/Form/InputSelectEnum.vue";
 import InputFormPrice from "@/Application/Components/Form/InputFormPrice.vue";
 import InputFormSelect from "@/Application/Components/Form/InputFormSelect.vue";
@@ -499,6 +540,7 @@ export default defineComponent({
         Breadcrumb,
         SmoothScroll,
         // PageTitle,
+        InputSelectU,
         toastBus,
         InputFormDateTime,
         InputFormText,
@@ -506,6 +548,7 @@ export default defineComponent({
         // SectionBorder,
         ButtonGroup,
         InputButton,
+        InputIsbox,
         InputDangerButton,
         InputLoading,
         ErrorList,
@@ -536,6 +579,18 @@ export default defineComponent({
             type: Boolean,
             default: false,
         },
+        newField:{
+            type: String,
+        },
+        id: {
+            type: [String, Number],
+            required: true,
+        },
+        ffo: {
+           type: [String, Array, Object, Number],
+            default: () => ({}),
+        },
+        entry: Object,
         modelValue: {
         type: [String, Number],
     },
@@ -546,7 +601,10 @@ export default defineComponent({
         type: [String, Number],
         default: 1,
     },
+    ffo: {
+    type: [Object,Array],
 
+  },
         editstate: {
             type: String,
             default: "",
@@ -568,10 +626,6 @@ export default defineComponent({
             type: Object,
             default: () => ({}),
         },
-        tablex: {
-            type: String,
-            default:table_z,
-        },
         breadcrumbs: {
             type: Object,
             required: true,
@@ -585,6 +639,14 @@ export default defineComponent({
             type: [Number,String],
             default:0,
         },
+        tablex: {
+            type: String,
+            default: '', // oder: () => 'comments'
+            },
+            formData:{
+                type: [Array,Object],
+                default: {},
+            },
 
     },
     emit: ['update:isOpen', 'close'],
@@ -597,6 +659,8 @@ export default defineComponent({
             table: reactive({ id: "1" }),// Standardwert setzen, falls leer
         formDatas: {},
         oobj:{},
+        formData: {},
+        localFfo: JSON.parse(JSON.stringify(this.ffo)),
         sanitizedContent: '',
         uploadedIid: null,
         ItemName: "Beitrag",
@@ -617,9 +681,9 @@ export default defineComponent({
         uploadedImageUrl: null,
         csrfToken: document.getElementById('token').value,
         preview_image: {},
-            ffo: [],
+            // ffo: {},
             ulimage: null,
-
+            ffo: { ...this.entry },
 
 
             options:    {},
@@ -630,10 +694,19 @@ export default defineComponent({
             //
             confirmingTableDeletion: false,
             //
+            table_alter:'',
 
         };
     },
     computed: {
+        nf2(){
+
+            console.log("NF:" + this.nf2);
+            if(CleanTable == "pictures")
+            {
+                this.nf2 = "/images/" + this.nf2;
+            }
+        },
         xsor_alt(){
             try {
           const res = axios.get(`/tables/sort-data/${field.name}`);
@@ -681,7 +754,7 @@ export default defineComponent({
         return options_sel;
     },
     fieldValue() {
-        return this.field?.value || "";
+        // return this.field.value || "";
     },
         filters() {
             return this.$page.props.filters;
@@ -715,38 +788,47 @@ export default defineComponent({
             }, {});
         },
         readingTime() {
-            return this.field?.value || 1; // Falls field.value leer ist, dann 0 setzen
+            return this.field.value || 1; // Falls field.value leer ist, dann 0 setzen
         },
     },
             watch:{
-                modelValue(newVal) {
-            // console.log("modelValue wurde aktualisiert:", newVal);
+                entry(newVal) {
+        this.ffo = { ...newVal }; // falls props async oder bei reload
         },
-                ffo: {
-                    deep: true,
-                    handler(newFields) {
-                        const textareaField = Object.values(newFields).find(field =>
-                            ["textarea"].includes(field.type)
-                        );
-                        this.textareaField = textareaField;
-                        if (textareaField &&  document.getElementById("reading_time")) {
-
-                            this.readingTime = this.calculateReadingTime(textareaField.value);
-                            this.readingTime = this.readingTime  < 1 ? "1" : this.readingTime;
-                        // console.log("RT:"+this.readingTime);
-                        }
-                        let fod = {};
-
-                    }
-
-                },
-                'field.value': {
-            immediate: true, // Direkt beim Laden ausführen
-            handler(newId) {
-                if (newId) {
-                this.fetchImage(newId,this.tablex);
-                }
+        ffo: {
+            handler(newVal) {
+            if (newVal && Object.keys(newVal).length) {
+                this.localFfo = JSON.parse(JSON.stringify(newVal));
             }
+            },
+            immediate: true,
+        },
+
+               // ffo: {
+                //     deep: true,
+                //     handler(newFields) {
+                //         const textareaField = Object.values(newFields).find(field =>
+                //             ["textarea"].includes(field.type)
+                //         );
+                //         this.textareaField = textareaField;
+                //         if (textareaField &&  document.getElementById("reading_time")) {
+
+                //             this.readingTime = this.calculateReadingTime(textareaField.value);
+                //             this.readingTime = this.readingTime  < 1 ? "1" : this.readingTime;
+                //         // console.log("RT:"+this.readingTime);
+                //         }
+                //         let fod = {};
+
+                //     }
+
+                // },
+            'field.value': {
+                immediate: true,
+                handler(newId) {
+                    if (newId) {
+                    this.fetchImage(newId,this.tablex);
+                    }
+                }
             },
             field: {
                 handler(newField) {
@@ -771,12 +853,12 @@ export default defineComponent({
 
             if(this.readingTime == "0")
             {
-                // this.readingTime = 1;
+                this.readingTime = 1;
             }
             //console.log("Berechnete Lesezeit:", this.readingTime);
             },
                 updateData() {
-                    if (this.formData.length < 1) {
+                    if (Object.keys(this.formData).length < 1) {
                         this.formData = {};
                     }
                     if (
@@ -792,7 +874,7 @@ export default defineComponent({
                     }
                 },
                 formFields(newVal) {
-                    // console.log("formFields geändert:", newVal);
+                    console.log("formFields geändert:", newVal);
                 },
                 form: {
                     handler: throttle(function () {
@@ -861,12 +943,12 @@ export default defineComponent({
             }
             },
             defineProps() {
-                // ffo: [String, Array, Object, Number];
+                ffo: [String, Array, Object, Number];
             },
             setup() {
-                const ffo = ref(localStorage.getItem("ffo") || "Standardwert");
+                // const ffo = ref(localStorage.getItem("ffo") || "Standardwert");
 
-        watch(ffo, (newValue) => {
+
         var $_GET = {};
         if(document.location.toString().indexOf('?') !== -1) {
             var query = document.location
@@ -887,7 +969,7 @@ export default defineComponent({
         let seg = segments[segments.length - 2];
         if(!$_GET['rl'] && seg != "create")
             {
-                location.href = location.href + "?rl=2";
+                //location.href = location.href + "?rl=2";
             //    $inertia.reload();
             //    this.isLoading = false;
 
@@ -899,12 +981,11 @@ export default defineComponent({
             }
 
 
-        });
 
-        return { ffo };
+        // return { ffo };
 
 
-                return { ffor };
+        //         return { ffor };
 
                 const formFields = reactive({
                     idField: {
@@ -944,10 +1025,10 @@ export default defineComponent({
                         rows: "8",
                     },
                 });
-                //this.formData = reactive({});
+               // this.formData = reactive({});
 
-                // Instead of using $set, just update directly
-                // formData.field1 = 'newvalue';
+        //         // Instead of using $set, just update directly
+        //         // formData.field1 = 'newvalue';
 
                 onMounted(() => {
                     //   Object.keys(formFields).forEach((key) => {
@@ -955,10 +1036,10 @@ export default defineComponent({
                     //   });
                 });
 
-                return {
-                    formFields,
-                    // formData
-                };
+                // return {
+                //     formFields,
+                //     // formData
+                // };
             },
             methods: {
                 openModal_alt() {
@@ -1000,12 +1081,15 @@ export default defineComponent({
 
 
 
-                handleImageSelect(url) {
-            this.$refs.editor.insertImage(url)
-            },
-                handleFileNameUpdate(fileName) {
-            this.fileName = fileName;  // Setze den Wert von fileName
-            },
+
+        handleValidationFailed(index, isRequired) {
+            if (isRequired) {
+            this.$set(this.fieldErrors, index, true);
+            }
+        },
+        handleValidationPassed(index) {
+            this.$set(this.fieldErrors, index, false);
+        },
             sanitizeContent(content) {
                 if (content.includes('location') || content.includes('ancestorOrigins')) {
                     return ''; // Oder einen Standardwert
@@ -1054,6 +1138,9 @@ export default defineComponent({
             try {
                 if(!id){
                 id = this.imageId;
+                }
+                if(!id){
+                    return;
                 }
                 const response = await axios.get(`/api/images/${table}/${this.xid}`); // Laravel API-Route
                 //console.log(response);
@@ -1163,12 +1250,12 @@ export default defineComponent({
         setFormField(field,name) {
 
             // Directly setting the value in formData
-            // console.log(field);
-            // console.log(field.name);
-            // console.log(field.type);
+            // console.log("f:" + JSON.stringify(field,null,2));
+            // console.log("f.n:" + field.name);
+            // console.log("f.t:" + field.type);
             if(field.name == "reading_time")
             {
-                 this.formData['reading_time'] = this.readingTime;
+                this.formData['reading_time'] = this.readingTime;
             }
             if(field.type == "IID")
             {
@@ -1186,7 +1273,7 @@ export default defineComponent({
                // console.log("sso:" + JSON.stringify(this.options));
             }
 
-            if (field.name.includes("_id")) {
+            if (field?.name?.includes("_id")) {
                 this.formData[field.name] = this.formDatas[field.name];
             }
             else if(field.type === "IID")
@@ -1201,8 +1288,9 @@ export default defineComponent({
                 this.formData[field.name] = field.value;
             }
 
-            else{
-                this.formData[field.name] = field.value || "";
+            else if (field && field.name) {
+            if (!this.formData) this.formData = {}; // absichern, falls undefined
+              this.formData[field.name] = field.value || "";
             }
 
         },
@@ -1382,27 +1470,28 @@ obj = obj.replace(/"formFields": \[.*\]/, "")
 
         },
         fetchFormData() {
-    axios
-        .get(routes.getform(CleanTable(),CleanId()))
+            console.log("CID:" + CleanId());
+        axios.get(routes.getform(CleanTable(),CleanId()))
         .then((response) => {
             this.formFields = response.data;
             let formFields_old = response.data;
+            console.log(response.data);
             // JSON bereinigen
             //console.log("Rohdaten:", JSON.stringify(response.data,null,2));
+            this.formFields =  JSON.stringify(response.data,null,2);
+            let obj = this.formFields;
 
-            let obj = JSON.stringify(this.formFields,null,2)
-
-             obj = obj.replace(/"formFields": \[.*\]/, "")
-                .replace(/^\{|\}$/g, "")
-                .replace(/}\s*,\s*\n\s*}/g, "},")
-                .replace(/[[\]]/g, "")
-                .replace(/\[|\]$/, "")
-                .replace(/,\s*\n\s*{/g, ",")
-                .replace(/\s*\}(?!,)\s*/g, "}")
-                .replace(/}},/g, "\n   },")
-                .replace(/}}/g, "\n   }\n  }")
-                .replace(/"\d+"\s*:\s*{/g, '{')
-                .replace(/},\s*{/g, '},');
+            //  obj = obj.replace(/"formFields": \[.*\]/, "")
+            //     .replace(/^\{|\}$/g, "")
+            //     .replace(/}\s*,\s*\n\s*}/g, "},")
+            //     .replace(/[[\]]/g, "")
+            //     .replace(/\[|\]$/, "")
+            //     .replace(/,\s*\n\s*{/g, ",")
+            //     .replace(/\s*\}(?!,)\s*/g, "}")
+            //     .replace(/}},/g, "\n   },")
+            //     .replace(/}}/g, "\n   }\n  }")
+            //     .replace(/"\d+"\s*:\s*{/g, '{')
+            //     .replace(/},\s*{/g, '},');
             // obj = "[" + obj + "]";
             // console.log("OBJ: " + (obj));
             obj = obj.replace(/[\u0000-\u001F\u007F]/g, '');
@@ -1416,18 +1505,22 @@ obj = obj.replace(/"formFields": \[.*\]/, "")
             this.oobj = obj;
             this.obj2 = obj;
             // console.log(obj);
-            this.ffo = obj
-            //console.log("ffo: "+JSON.stringify(obj));
+            this.ffo = obj;
+            // console.log(JSON.stringify([obj],null,2));
+            // this.formData = obj;
+
             const ffo = this.ffo;
             // 💡 Konvertiere das Objekt in ein Array
-            const formFieldsArray = Object.values(formFields_old);
+            console.log("FFA: " + JSON.parse(JSON.stringify(formFields_old)));
+            const formFieldsArray = Object.values(this.formFields_old ?? {});
+;
 
             // console.log("FormFields als Array:", formFieldsArray);
 
             formFieldsArray.forEach((field) => {
                 if (typeof field === "object" && field !== null) {
                     Object.entries(field).forEach(([subKey, subValue]) => {
-                        this.setFormField(subValue, subValue.name);
+                        this.setFormField(subValue, subValue?.name ?? '');
                     });
                 }
 
@@ -1459,7 +1552,7 @@ str = Object.entries((str));
 str.forEach(([key, value]) => {
 
     if (!key.includes("_id")){
-    this.formData[value['name']] = value['value'];
+    //this.formData[value['name']] = value['value'];
     // console.log("NO ID@" + key);
     // console.log(`${key}: ${value['value']}`);
 
@@ -1494,11 +1587,52 @@ objectToCSVArray(obj) {
 
     return csvArray; // Gibt das CSV als Array zurück
 },
+isValid(editor) {
+  // Prüfe content oder modelValue als Textinhalt
+  const content = (editor.content ?? editor.modelValue ?? '').trim();
+  return content.length > 0;
+},
+
 async submitForm() {
 
 
+    console.log('submitForm wurde aufgerufen');
+
+
         try {
-            // console.log(this.formData['content']);
+
+            const editors = this.$refs.editor;
+            if(editors){
+
+
+            const editorList = Array.isArray(editors) ? editors : [editors];
+
+            for (const editor of editorList) {
+
+                const content = editor?.content ?? editor?.modelValue ?? '';
+                const valid = content?.trim()?.length > 0;
+                if (!editor.required) {
+                    editor.hasError = false;
+                    continue;
+                }
+                // Reset error state vorher
+                if (editor.hasError !== undefined) editor.hasError = false;
+
+                if (!valid) {
+                    // Fehlerzustand setzen
+                    if (editor.hasError !== undefined) editor.hasError = true;
+
+                    // Fokus auf Editor setzen (z. B. contenteditable oder input innerhalb)
+                    const el = editor.$el.querySelector('[contenteditable], textarea, input');
+                    if (el) el.focus();
+
+                    return;
+                }
+            }
+        }
+
+
+
 
 
 
@@ -1519,7 +1653,7 @@ async submitForm() {
 
             }
 
-            Object.keys(this.ffo).forEach(name => {
+            Object.keys(this.localFfo.original).forEach(name => {
 
                 const element = document.getElementById(name);
                 const element_alt = document.getElementById(name + "_alt");
@@ -1569,7 +1703,7 @@ async submitForm() {
             if(segments[segments.length - 2] == "create")
             {
 
-                response = await axios.post(`/admin/tables/store/${this.tablex}`, {
+                response = await axios.post(`/admin/tables/store/${CleanTable()}`, {
                 formData: this.formData
 
 
@@ -1660,7 +1794,7 @@ async submitForm() {
             ) {
                 const fieldsArray = Object.values(this.formFields);
                 fieldsArray.forEach((field) => {
-                    if (!field.name.includes("_id")) {
+                    if (!field.name?.includes("_id")) {
                         this.formData[field.name] = field.value || "";
                     }
                 });
@@ -1676,47 +1810,36 @@ async submitForm() {
                 alert("empty");
             }
         },
-        getImageUrl()
-        {
-            const id = CleanId();
-            let table = CleanTable();
-            this.ttable = table
-//console.log(`/api/get-image-id/${table}/${id}`);
-        // Axios Anfrage
-        axios.get(`/api/get-image-id/${table}/${id}`)
-             .then(response => {
-                // Die Antwort enthält die URL des Bildes
-                const imageId = response.data.iid;
-                this.imageId = imageId;
-                const imageUrle = response.data.url;
-                this.imageUrle = imageUrle;
-                //console.log(this.imageUrle);
-                return imageUrle;
-            })
-            .catch(error => {
-                console.error("Fehler beim Abrufen der URL:", error);
-            });
-
-    },
-
     },
     async mounted() {
          //this.fetchDataX();
+        //  console.log("Initial ffo:", JSON.stringify(this.ffo, null, 2));
+        for (const [key, value] of Object.entries(this.ffo)) {
+            console.log("Field:", key, "→", value);
+        }
 
          this.settings = await GetSettings();
          this.xid = CleanId();
         this.xtable = CleanTable();
         const path = window.location.pathname;
         this.column =  this.settings.impath?.[this.xtable] ?? this.settings.impath?.['default'];
+        this.ffo = this.fetchFormData();
 
-        // console.log("col:" + this.column);
-        this.table_alter = this.settings.impath?.[this.xtable] ? '' : "/images/"+this.tablex+"/thumbs/";
-        // this.table_alter = this.settings.impath?.[this.xtable] && tablex === "users" ? '' : "/images/"+this.tablex+"/thumbs/";
-        this.table_older = this.settings.impath?.[this.xtable] ? "" : "/images/"+this.tablex+"/thumbs/";
-         this.getImageUrl();
-
-        this.fetchFormData();
         this.updateData();
+        console.log("col:" + CleanTable());
+        this.table_alter = "/images/"+this.xtable+"/thumbs/";
+        this.table_alter = CleanTable() == "pictures" ? '/images/images/thumbs/' : "/images/"+CleanTable()+"/thumbs/";
+        // this.table_alter = this.settings.impath?.[this.xtable] && tablex === "users" ? '' : "/images/"+this.tablex+"/thumbs/";
+        this.table_older = "/images/"+this.xtable+"/thumbs/";
+        if(CleanTable() == "users")
+        {
+            this.table_older = "/images/";
+            this.table_alter = '';
+        }
+        //  this.getImageUrl();
+
+
+
         this.emptyChecker();
         this.updateReadingTime();
 
@@ -1726,13 +1849,16 @@ async submitForm() {
             this.nf = this.getdefnf();
         }
         this.table_image = "images";
-        this.fetchImage(this.ref3,this.table_image);
+        // this.fetchImage(this.ref3,this.table_image);
+        console.log("ffo" + JSON.stringify(this.localFfo,null,2));
+    //    this.localFfo = this.fetchFormData();
 
-    this.nf2 = this.ffo[this.column]?.value;
+    this.nf2 = this.localFfo.original[this.column]?.value;
+
     },
     created() {
         this.updateReadingTime();
-        // this.fetchFormData();
+
         // console.log("FIELD:", this.field); // 👀 Prüfen, ob es existiert
     },
 });
@@ -1749,5 +1875,14 @@ select,datetime-local   {
     /* .w-full {
         width: 100% !important;
     } */
+}
+.editor-error {
+  border: 2px solid red;
+  border-radius: 4px;
+}
+.editor-error-message {
+  color: red;
+  font-size: 0.9em;
+  margin-top: 4px;
 }
 </style>

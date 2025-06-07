@@ -46,13 +46,15 @@ class FormController extends Controller
             elseif((substr_count($name,"_at") || $name == "blog_date") && !empty($create))
             {
                 $value = now();
-                \Log::info("VAL: $name :".$value);
+                // \Log::info("VAL: $name :".$value);
             }
             elseif((substr_count($name,"_at") || $name == "blog_date"))
             {
                // $value = $value;
             }
-
+            if($name == "password" && !FormController::CheckCreate()){
+                $value = "XXXXXXXXXX";
+            }
             $value = html_entity_decode($value);
 
 
@@ -103,7 +105,7 @@ class FormController extends Controller
     public static function getReq($oname)
     {
         $req = Settings::$no_req;
-        if(!in_array(strtolower($oname),$req))
+        if(!in_array($oname,$req))
         {
             return "required";
         }
@@ -147,6 +149,12 @@ class FormController extends Controller
     $tabs = $query->select("id", "name")->get();
     if($table != "users"){
         $tabs = $query->select("id", "name")->get()->map(function ($tab) {
+            $tab->name = ucf($tab->name);
+            return $tab;
+        });
+    }
+    else{
+        $tabs = $query->where("xis_disabled","0")->get()->map(function ($tab) {
             $tab->name = ucf($tab->name);
             return $tab;
         });
@@ -215,7 +223,7 @@ class FormController extends Controller
 
         // Direkt als assoziatives Array aufbauen
         $result = $statusvals;
-
+        \Log::info("RESULT:".json_encode($result));
         return $result;
     }
     public static function getOptions_itemscope($table, $name)
@@ -243,8 +251,11 @@ class FormController extends Controller
             case "about":
                 return "textarea";
             break;
+            case "about_en":
+                return "textarea";
+            break;
             case "answer":
-                return "textarea_short";
+                return "textarea";
             break;
             case "autoslug":
                 return "autoSlug";
@@ -282,6 +293,12 @@ class FormController extends Controller
                 }
                 return "datetime";
             break;
+            case "date":
+                if($cl && !CheckRights(Auth::id(),$table,"date")){
+                    return "disabled";
+                }
+                return "datetime";
+            break;
             case "description":
                 return "textarea";
             break;
@@ -299,6 +316,18 @@ class FormController extends Controller
             break;
             case "img_y":
                 return "hidden";
+            break;
+            case "is_admin":
+                return "isbox";
+            break;
+            case "ischecked":
+                return "isbox";
+            break;
+            case "is_customer":
+                return "isbox";
+            break;
+            case "is_employee":
+                return "isbox";
             break;
             case "itemscope":
                 return "select";
@@ -325,6 +354,10 @@ class FormController extends Controller
                 return "text";
             break;
             case "password":
+                if($cl && !FormController::CheckCreate())
+                {
+                    return "disabled";
+                }
                 return "password";
             break;
             case "preis":
@@ -346,13 +379,16 @@ class FormController extends Controller
                 return "select";
             break;
             case "story":
-                return "textarea_short";
+                return "textarea";
             break;
             case "story_en":
-                return "textarea_short";
+                return "textarea";
             break;
             case "summary":
-                return "textarea_short";
+                return "textarea";
+            break;
+            case "text":
+                return "textarea";
             break;
             case "type_id":
                 return "hidden";
@@ -366,11 +402,18 @@ class FormController extends Controller
                 }
                 return "checkbox";
             break;
+            case "xis_disabled":
+                return "isbox";
+            break;
             case "xis_IsSaleable":
                 if ($cl) {
                     return "xis";
                 }
                 return "checkbox";
+
+            break;
+            case "xis_shopable":
+                return "isbox";
             break;
             case "xkis_Ticker":
                 if ($cl) {
@@ -383,6 +426,12 @@ class FormController extends Controller
             break;
         }
 
+    }
+    public static function CheckCreate(){
+        if(!substr_count($_SERVER['REQUEST_URI'],"create")){
+            return false;
+        }
+        return true;
     }
     // Methode, die das Formular anzeigt
     /**
@@ -1938,6 +1987,7 @@ upload_files($id);
         {
             $reqi = '';
         }
+        \Log::info("REQUI: ".$reqi);
         if(Settings::$textfield == "Mdown")
         {
             return TextArea_md($name,$reqi,$value);
@@ -1958,6 +2008,7 @@ upload_files($id);
         {
             $reqi = '';
         }
+
         $value = $name == "queue" ? "123" : $value;
         return "<input type='text' $reqi name='$name' class='form-control' value='".smilies($value)."' id='$name'>";
     }

@@ -291,7 +291,7 @@
 
                 <div class="w-full flex flex-col md:flex-row flex-1 items-center justify-between gap-4">
                   <div class="text-xs leading-6">
-                    {{ year }} Starter Eleven/MCSL. Ein Template von Oliver Reinking / Asario.
+                      {{ year }} Starter Eleven/MCSL. Ein Template von Oliver Reinking / Asario.
                   </div>
 
                   <div class="text-xs leading-6">

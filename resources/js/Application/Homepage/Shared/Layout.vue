@@ -232,7 +232,7 @@
                       <link-footer name="Get Started" :route-name="route('home.get_started')"></link-footer>
                     </li>
                     <li>
-                      <link-footer name="Preise" :route-name="route('home.pricing')"></link-footer>
+                      <link-footer name="Benutzer" :route-name="route('home.userlist')"></link-footer>
                     </li>
                     <li>
                       <link-footer name="Blog" :route-name="route('home.blog.index')"></link-footer>

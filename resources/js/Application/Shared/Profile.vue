@@ -6,6 +6,9 @@
                     :user="$page.props.auth.user"
                 />
                 <section-border />
+                <PersonalProfile :initialForm="$page.props.auth.user">
+                </PersonalProfile>
+                <section-border />
             </div>
             <div v-if="$page.props.jetstream.canUpdatePassword">
                 <update-password-form class="mt-10 sm:mt-0" />
@@ -43,6 +46,7 @@ import { defineComponent } from "vue";
 import DeleteUserForm from "@/Application/Shared/DeleteUserForm.vue";
 import LogoutOtherBrowserSessionsForm from "@/Application/Shared/LogoutOtherBrowserSessionsForm.vue";
 import TwoFactorAuthenticationForm from "@/Application/Shared/TwoFactorAuthenticationForm.vue";
+import PersonalProfile from "@/Application/Shared/PersonalProfile.vue";
 import UpdatePasswordForm from "@/Application/Shared/UpdatePasswordForm.vue";
 import UpdateProfileInformationForm from "@/Application/Shared/UpdateProfileInformationForm.vue";
 import ProfileTextfield from "@/Application/Shared/ProfileTextfield.vue";
@@ -60,6 +64,7 @@ export default defineComponent({
         UpdateProfileInformationForm,
         SectionBorder,
         ProfileTextfield,
+        PersonalProfile,
     },
 
     props: {

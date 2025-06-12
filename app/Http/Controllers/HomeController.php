@@ -37,7 +37,7 @@ class HomeController extends Controller
     }
     public function home_AI()
     {
-        $data = DB::table("texts")->select('texts.*','blog_authors.name as author_name')->leftJoin('blog_authors', 'blog_authors.id', '=', 'texts.author_id')->where("texts.id","9")->first();
+        $data = DB::table("texts")->select('texts.*','users.name as author_name')->leftJoin('users', 'users.id', '=', 'texts.users_id')->where("texts.id","9")->first();
         $data->text = Str::markdown($data->text);
         return Inertia::render('Homepage/AiContent', ["data" => [$data]]); // <-- in Array umwandeln
     }
@@ -382,7 +382,7 @@ class HomeController extends Controller
     }
     public function home_usershow($username)
     {
-        $users = DB::table("users")->where("name",$username)->where("pub","1")->andWhere("xis_disabled","0")->select("users.*")->first();
+        $users = DB::table("users")->where("name",$username)->where("pub","1")->where("xis_disabled","0")->select("users.*")->first();
         // \Log::info("HU:".json_encode($users,JSON_PRETTY_PRINT));
         return Inertia::render('Homepage/Usershow', [
             'users' => $users, // statt 'data'
@@ -424,8 +424,8 @@ class HomeController extends Controller
     public function home_privacy()
     {
         $privacyFile = Jetstream::localizedMarkdownPath('privacy.md');
-        $privacy = Str::markdown(file_get_contents($privacyFile));
-        //
+        $privacy = Str::markdown(file_get_contents($privacyFile)); // HTML erzeugt
+
         return Inertia::render('Homepage/Privacy', [
             'privacy' => $privacy,
         ]);

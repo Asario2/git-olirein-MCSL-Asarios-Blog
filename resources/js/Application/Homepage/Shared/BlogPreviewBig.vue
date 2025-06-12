@@ -160,9 +160,7 @@ img {
   margin: 0;
   padding: 0;
 }
-.mh_64{
 
-}
 /* img {
   outline: 2px solid red;
 } */

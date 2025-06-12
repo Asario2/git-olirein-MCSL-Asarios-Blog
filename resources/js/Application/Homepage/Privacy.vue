@@ -1,33 +1,40 @@
 <template>
-    <layout header-title="Datenschutzerklärung">
-        <page-content>
-            <template #content>
-                <markdown :markdown="privacy"></markdown>
-            </template>
-        </page-content>
-    </layout>
-</template>
-<script>
-import { defineComponent } from "vue";
-import Layout from "@/Application/Homepage/Shared/Layout.vue";
+    <Layout>
+        <div class="prose prose-layout dark:prose-invert max-w-none">
+            <div v-html="privacy" />
+        </div>
+    </Layout>
+  </template>
 
-import PageContent from "@/Application/Components/Content/PageContent.vue";
-import Markdown from "@/Application/Components/Content/Markdown.vue";
-
-export default defineComponent({
-    name: "Homepage_Privacy",
-
-    props: {
-        privacy: {
-            type: String,
-            required: true,
-        },
-    },
-
+  <script>
+  import Layout from "@/Application/Homepage/Shared/Layout.vue";
+  export default {
     components: {
-        Layout,
-        PageContent,
-        Markdown,
+    Layout,
     },
-});
-</script>
+    props: {
+      privacy: String,
+    },
+    mounted() {
+        this.scrollToHashAnchor();
+        window.addEventListener("hashchange", this.scrollToHashAnchor);
+        },
+        beforeUnmount() {
+        window.removeEventListener("hashchange", this.scrollToHashAnchor);
+        },
+  methods: {
+    scrollToHashAnchor() {
+    const hash = window.location.hash;
+    if (hash && hash.startsWith("#")) {
+      setTimeout(() => {
+        const el = document.getElementById(hash.substring(1));
+        if (el) {
+          const y = el.getBoundingClientRect().top + window.pageYOffset - 134;
+          window.scrollTo({ top: y, behavior: "smooth" });
+        }
+      }, 50); // etwas Delay, bis DOM fertig gerendert ist
+    }
+  }
+}
+};
+  </script>

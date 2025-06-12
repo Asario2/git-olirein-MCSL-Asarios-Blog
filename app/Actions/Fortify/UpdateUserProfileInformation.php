@@ -26,17 +26,14 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
         ]);
 
         // Validierung
-        Validator::make($inputData, [
-            'first_name' => ['required', 'string', 'max:255'],
-            'name' => ['required', 'string', 'max:255'],
-            'birthday' => ['nullable', 'string', 'before:today'],
-            'music' => ['nullable', 'string', 'max:255'],
-            'occupation' => ['nullable', 'string', 'max:255'],
-            'about' => ['nullable', 'string'],
-            'interests' => ['nullable', 'string', 'max:255'], // Korrigierte Schreibweise von 'interests'
-            'email' => ['required', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
-            'photo' => ['nullable', 'mimes:jpg,jpeg,png', 'max:1024'],
-        ])->validateWithBag('updateProfileInformation');
+
+            Validator::make($inputData, [
+                'first_name' => ['required', 'string', 'max:255'],
+                'name' => ['required', 'string', 'max:255'],
+                'email' => ['required', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
+                'photo' => ['nullable', 'mimes:jpg,jpeg,png', 'max:1024'],
+            ])->validateWithBag('updateProfileInformation');
+
         if (isset($input['photo'])) {
             $user->updateProfilePhoto($input['photo']);
         }
@@ -56,7 +53,7 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
                 'about' => $input['about'] ?? null,
                 'birthday' => $input['birthday'],
                 'email' => $input['email'],
-                "updated_at"=>NOW(),    
+                "updated_at"=>NOW(),
             ])->save();
         }
     }

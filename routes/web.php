@@ -3,6 +3,7 @@
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\PersonalController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\BlogPostController;
 use App\Http\Controllers\RatingController;
@@ -212,6 +213,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
             '/admin/dashboard',
             [DashboardAdminController::class, 'admin_index']
         )->name('admin.dashboard');
+        Route::post("/personal_update", [PersonalController::class, 'update'])->name("personal.update");
         // =================
         // Laravel-Log-Datei
         // =================

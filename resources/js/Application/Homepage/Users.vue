@@ -4,6 +4,7 @@
         :header-url="$page.props.saas_url + '/blogs'"
         :header-image="$page.props.saas_url + '/images/blogimages/Blog_Idee_480x360.jpg'"
     >
+    <MetaHeader title="Bneutzer" />
         <section class="bg-layout-sun-0 text-layout-sun-800 dark:bg-layout-night-0 dark:text-layout-night-800">
             <div class="p-2 md:p-4" v-if="users.data?.length === 0 && !form.search">
                 <alert type="warning">
@@ -90,7 +91,7 @@ import BlogPreviewBig from "@/Application/Homepage/Shared/BlogPreviewBig.vue";
 import UserPreviewSmall from "@/Application/Homepage/Shared/UserPreviewSmall.vue";
 import SearchFilter from "@/Application/Components/Lists/SearchFilter.vue";
 import Alert from "@/Application/Components/Content/Alert.vue";
-
+import MetaHeader from "@/Application/Homepage/Shared/MetaHeader.vue";
 import mapValues from "lodash/mapValues";
 import pickBy from "lodash/pickBy";
 import throttle from "lodash/throttle";
@@ -105,6 +106,7 @@ export default defineComponent({
         UserPreviewSmall,
         SearchFilter,
         Alert,
+        MetaHeader,
     },
 
     props: {

@@ -24,7 +24,7 @@
     "Status","message" => "Text","message_en" => "Text Englisch","camera_id" => "Kamera","link" => "Link","Format" => "Format","Format_en" => "Format Englisch","preis" => "Preis","tablename" => "Tabelle","xis_checked" => "checked","ordering" => "Position","Longname" => "Langer Name","Mpixel" =>
     "Megapixel","view_table"=>"Anzeigen",'add_table'=>"Hinzufügen",'story_en'=>"Geschichte Englisch",'story'=>"Geschichte","edit_table"=>"Bearbeiten","publish_table"=>"Veröffentlichen","date_table"=>"Datum Ändern","delete_table"=>"Löschen","short_tag" => "Tag","exif_copyright" => "Exif copy",
     'autoslug'=>"Url der Seite","admin_table_id"=>"Tabelle","exif_comp" => "exif Comp","exif_model" => "Exif Model","AdminPanel"=>"Admin Dashboard","UserRights"=>"BenutzerRechte",'LogViewer'=>"Log Viewer","SendMail"=>"Emails verschicken","ChangePassword"=>"Passwort Ändern","CommentsCenter"=>"Kommentar Admin Center","DataBases"=>"Datenbank Admin"
-    ,"about"=>"Über dich","ischecked"=>"Überprüft","about_en"=>"Über dich Englisch","website" => "Website","fbd"=>"facebook Name","xis_disabled"=>"Benutzer deaktivieren"];
+    ,"about"=>"Über dich","ischecked"=>"Überprüft","about_en"=>"Über dich Englisch","website" => "Website","fbd"=>"facebook ID","xis_disabled"=>"Benutzer deaktivieren"];
 
         public static array $no_req = ['exif_copyright','exif_comp','exif_model','Mpixel','modul','is_admin','is_customer','is_employee','customer_id','admin_id','company_id',
                                        'profile_photo_path',"category_id","type_id",'message','message_en',

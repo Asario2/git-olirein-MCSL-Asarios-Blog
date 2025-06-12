@@ -1,13 +1,13 @@
 <template>
     <Layout>
-     <div id="teaser-img2" class="block max-w-sm gap-3 mx-auto mh_65 sm:max-w-full focus:no-underline lg:grid lg:grid-cols-12 bg-layout-sun-100 dark:bg-layout-night-100 overfl" style="z-index:0;margin-bottom:-0px;" :class="{ 'disable-link': isCommentActive }"
+        <MetaHeader :title="'Benutzer - ' + users.name" />
+        <div id="teaser-img2" class="block max-w-sm gap-3 mx-auto mh_65 sm:max-w-full focus:no-underline lg:grid lg:grid-cols-12 bg-layout-sun-100 dark:bg-layout-night-100 overfl" style="z-index:0;margin-bottom:-0px;" :class="{ 'disable-link': isCommentActive }"
     >
         <!-- Das Bild des Blog-Posts -->
         <div class="blog-container mh_65 lg:col-span-4 bg-layout-sun-100 dark:bg-layout-night-100" style="">
 
-
-        <img
-        :src="users.profile_photo_path ? `/images/${users.profile_photo_path.replace('/images/','/')}` : '/images/profile-photos/008.jpg'"
+       <img
+        :src="users.profile_photo_path != null ?  '/images/' + users.profile_photo_path.replace('/images/','') : '/images/profile-photos/008.jpg'"
         :alt="users.name"
         width="480"
         height="360"
@@ -58,8 +58,11 @@
                 <td>{{ users.occupation }}</td>
                 </tr>
                 <th class="pr-4">Facebook:</th>
-                <td><a href='https://facebook.com/{{ users.fbd }}'>https://www.facebook.com/{{ users.fbd }}</a></td>
-            </tbody>
+                <td>
+                    <a :href="'https://facebook.com/profile.php?id=' + users.fbd" target="_blank">
+                    https://www.facebook.com/profile.php?id={{ users.fbd }}</a>
+                </td>
+                </tbody>
             </table>
 
 
@@ -74,7 +77,7 @@
     <br />
     <br />
     <div v-if="users.about" class="pb-6 bg-layout-sun-100 dark:bg-layout-night-100 p-4">
-    <h3 class='text-2xl'><b>Über {{users.name}}</b></h3>
+    <h1><b>Über {{users.name}}</b></h1>
     <div v-html="users.about"></div>
     </div>
 </Layout>
@@ -82,6 +85,7 @@
 
 <script>
 import { Link } from "@inertiajs/vue3";
+import MetaHeader from "@/Application/Homepage/Shared/MetaHeader.vue";
 import Layout from "@/Application/Homepage/Shared/Layout.vue";
 import DisplayDate from "@/Application/Components/Content/DisplayDate.vue";
 import DisplayNumber from "@/Application/Components/Content/DisplayNumber.vue";
@@ -99,6 +103,7 @@ export default {
         editbtns,
         SocialButtons,
         Layout,
+        MetaHeader,
     },
     props: {
         blog: {

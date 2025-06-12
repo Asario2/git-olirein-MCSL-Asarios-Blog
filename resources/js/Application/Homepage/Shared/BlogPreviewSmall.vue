@@ -44,11 +44,14 @@
                 </div>
 
                 <p v-html="blog.summary"></p>
-                <p>
-                    <display-number :value="blog.reading_time" :after-digits="0"
-                        value-unit="Minuten Lesezeit"
-                        value-single-unit="Minute Lesezeit"></display-number>
-                </p>
+                <div>
+                    <display-number class="text-xs text-layout-sun-600 dark:text-layout-night-600 py-2"
+                :value="blog.reading_time"
+                    :after-digits="0"
+                    value-unit="Minuten Lesezeit"
+                    value-single-unit="Minute Lesezeit"
+                ></display-number>
+            </div>
             </div>
         </Link>
 
@@ -77,6 +80,7 @@ import pickBy from "lodash/pickBy";
 import IconEye from "@/Application/Components/Icons/Eye.vue";
 import IconTrash from "@/Application/Components/Icons/Trash.vue";
 import DisplayDate from "@/Application/Components/Content/DisplayDate.vue";
+import DisplayNumber from "@/Application/Components/Content/DisplayNumber.vue";
 import he from "he";
 import AiButton from "@/Application/Components/Content/AiButton.vue";
 import { nextTick } from "vue";
@@ -90,6 +94,7 @@ export default {
         Link,
     DisplayDate,
     IconPencil,
+    DisplayNumber,
     IconPlusCircle,
     editbtns,
     IconTrash,

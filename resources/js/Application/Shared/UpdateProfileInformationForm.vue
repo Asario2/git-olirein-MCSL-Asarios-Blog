@@ -109,85 +109,85 @@
                     ></input-element>
                     <input-error :message="form.errors.email" />
                 </input-container>
-
-
-                <input-container :full-width="true">
-                    <div class="relative mb-4">
-                    <input-label name="birthday" label="Geburtstag"></input-label>
-                    <input-element
-                        type="date"
-                        name="birthday"
-                        v-model="form.birthday"
-                        placeholder="Geburtstag"
-                        ref="birthday" class="dt"
-                    ></input-element>
-                    <IconCal v-if="!disabled" class="
-                        pointer-events-none absolute DateIcon hidden dark:block       "
-                        alt="calendar icon (white)"
-                    ></IconCal>
-                    <input-error :message="form.errors.birthday" />
-                </div>
-                </input-container>
-
+<!--
 
                 <input-container :full-width="true">
-                    <input-label
-                        name="music"
-                        label="Musik"
-                    ></input-label>
-                    <input-element
-                        type="text"
-                        name="music"
-                        v-model="form.music"
-                        placeholder="Lieblingsmusik"
-                        ref="music"
-                    ></input-element>
-                    <input-error :message="form.errors.music" />
-                </input-container>
+                        <div class="relative mb-4">
+                        <input-label name="birthday" label="Geburtstag"></input-label>
+                        <input-element
+                            type="date"
+                            name="birthday"
+                            v-model="form.birthday"
+                            placeholder="Geburtstag"
+                            ref="birthday" class="dt"
+                        ></input-element>
+                        <IconCal v-if="!disabled" class="
+                            pointer-events-none absolute DateIcon hidden dark:block       "
+                            alt="calendar icon (white)"
+                        ></IconCal>
+                        <input-error :message="form.errors.birthday" />
+                    </div>
+                    </input-container>
 
 
-                <input-container :full-width="true">
-                    <input-label
-                        name="occupation"
-                        label="Beschäftigung"
-                    ></input-label>
-                    <input-element
-                        type="text"
-                        name="occupation"
-                        v-model="form.occupation"
-                        placeholder="Deine Beschäftigung"
-                        ref="occupation"
-                    ></input-element>
-                    <input-error :message="form.errors.occupation" />
-                </input-container>
+                    <input-container :full-width="true">
+                        <input-label
+                            name="music"
+                            label="Musik"
+                        ></input-label>
+                        <input-element
+                            type="text"
+                            name="music"
+                            v-model="form.music"
+                            placeholder="Lieblingsmusik"
+                            ref="music"
+                        ></input-element>
+                        <input-error :message="form.errors.music" />
+                    </input-container>
 
-                <input-container :full-width="true">
-                    <input-label
-                        name="interests"
-                        label="Interessen"
-                    ></input-label>
-                    <input-element
-                        type="text"
-                        name="interests"
-                        v-model="form.interests"
-                        placeholder="Deine Interessen"
-                        ref="interests"
-                    ></input-element>
-                    <input-error :message="form.errors.interests" />
-                </input-container>
-                <input-container :full-width="true">
-                    <!-- <input-label
-                        name="text"
-                        label="Über dich"
-                    ></input-label> -->
-                    <InputHtml
-                        name="about"
-                        v-model="form.about"
-                        placeholder="Über dich"
-                        ref="about"
-                    ></InputHtml>
-                    <input-error :message="form.errors.about" />
-                </input-container>
+
+                    <input-container :full-width="true">
+                        <input-label
+                            name="occupation"
+                            label="Beschäftigung"
+                        ></input-label>
+                        <input-element
+                            type="text"
+                            name="occupation"
+                            v-model="form.occupation"
+                            placeholder="Deine Beschäftigung"
+                            ref="occupation"
+                        ></input-element>
+                        <input-error :message="form.errors.occupation" />
+                    </input-container>
+
+                    <input-container :full-width="true">
+                        <input-label
+                            name="interests"
+                            label="Interessen"
+                        ></input-label>
+                        <input-element
+                            type="text"
+                            name="interests"
+                            v-model="form.interests"
+                            placeholder="Deine Interessen"
+                            ref="interests"
+                        ></input-element>
+                        <input-error :message="form.errors.interests" />
+                    </input-container>
+                    <input-container :full-width="true">
+                        <!-- <input-label
+                            name="text"
+                            label="Über dich"
+                        ></input-label>
+                        <InputHtml
+                            name="about"
+                            v-model="form.about"
+                            placeholder="Über dich"
+                            ref="about"
+                        ></InputHtml>
+                        <input-error :message="form.errors.about" />
+                    </input-container> -->
                 <input-container
                     :full-width="true"
                     v-if="
@@ -355,8 +355,8 @@ export default {
 </script>
 <style>
 .DateIcon{
-    right:10px;
-    top:35px;
+    right:-10px;
+    top:-35px;
     max-height:24px;
     max-width:24px;
 }

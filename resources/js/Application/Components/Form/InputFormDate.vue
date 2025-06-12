@@ -6,7 +6,7 @@
 
   <input
     type="date"
-    :id="id"
+    :id="name"
     :name="name"
     step="1"
     :disabled="disabled"
@@ -37,7 +37,7 @@
 import IconCal from "@/Application/Components/Icons/IconCal.vue"; // Assuming this is the correct import
 export default {
     components: { IconCal},
-    name: "InputFormDate",
+    name: "InputFormDateTime",
     props: {
         id: {
             type: String,

@@ -17,6 +17,10 @@ auth.json
 README.md
 CHANGELOG.md
 INSTALL.md
+backup.sql
+*.ps1
+*.yml
+copy_to_docker.ps1
 npm-debug.log
 yarn-error.log
 /.fleet

@@ -419,17 +419,17 @@ export default {
    mounted(){
 
     // console.log('ADMIN_LAYOUT mounted');
-    let shouldReload = localStorage.getItem('reload_dashboard');
-    // console.log('shouldReload?', shouldReload);
+    // let shouldReload = localStorage.getItem('reload_dashboard');
+    // // console.log('shouldReload?', shouldReload);
 
-    if (shouldReload) {
-        router.reload();
-        // console.log('RELOADING due to reload_dashboard...');
-        localStorage.removeItem('reload_dashboard');
-        window.location.reload();
-    } else {
-        // console.log("NO RELOAD1");
-    }
+    // if (shouldReload) {
+    //     router.reload();
+    //     // console.log('RELOADING due to reload_dashboard...');
+    //     localStorage.removeItem('reload_dashboard');
+    //     window.location.reload();
+    // } else {
+    //     // console.log("NO RELOAD1");
+    // }
 
 },
 beforeMount(){

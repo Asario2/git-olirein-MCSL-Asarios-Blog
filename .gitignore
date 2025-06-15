@@ -7,8 +7,6 @@
 /storage/*.key
 /vendor
 .env
-CHANGELOG
-INSTALL
 *.bat
 .env.backup
 .env.production

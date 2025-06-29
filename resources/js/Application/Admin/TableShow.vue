@@ -50,15 +50,30 @@
                 <span
                     class="text-sm min-w-fit min-h-fit bg-primary-sun-500 text-primary-sun-900 dark:bg-primary-night-500 dark:text-primary-night-900 font-semibold px-2.5 py-0.5 rounded-lg whitespace-nowrap"
                 >
+
                     {{ data.datarow.blog_categories }}
+
                 </span>
                 </td>
-                <td v-if="table_head" class="np-dl-td-normal">
+                <td v-if="table  == 'comments'" class="np-dl-td-normal">
+                    <!-- <pre>{{data.datarow}}</pre> -->
+                    <CreatedAt :post_id="data.datarow.post_id" :table="data.datarow.admin_table">
                 <span
                     class="text-sm min-w-fit min-h-fit bg-primary-sun-500 text-primary-sun-900 dark:bg-primary-night-500 dark:text-primary-night-900 font-semibold px-2.5 py-0.5 rounded-lg whitespace-nowrap"
                 >
                     {{ ucf(data.datarow.admin_table) }}
+
                 </span>
+            </CreatedAt>
+        </td>
+                <td v-else-if="table != 'comments' && table_head"class="np-dl-td-normal">
+                    <span
+                    class="text-sm min-w-fit min-h-fit bg-primary-sun-500 text-primary-sun-900 dark:bg-primary-night-500 dark:text-primary-night-900 font-semibold px-2.5 py-0.5 rounded-lg whitespace-nowrap"
+                >
+                    {{ ucf(data.datarow.admin_table) }}
+
+                </span>
+
                 </td>
 
                 <td class="np-dl-td-normal break-words whitespace-normal max-w-[600px]">{{ data.datarow.name }}</td>
@@ -95,6 +110,8 @@ let table_alt = table_z;
 let table = table_z.toLowerCase();
 import { defineComponent } from "vue";
   import Layout from "@/Application/Admin/Shared/Layout.vue";
+  import CreatedAt from "@/Application/Components/Form/CreatedAt.vue";
+
   import { CleanTable, CleanId } from '@/helpers';
   import { GetSettings } from "@/helpers";
 
@@ -106,6 +123,7 @@ import { defineComponent } from "vue";
     components: {
       Layout,
       Breadcrumb,
+      CreatedAt,
       ListContainer,
     },
     props: {

@@ -1,24 +1,59 @@
 <?php
-
+// app/Models/Image.php
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 
 class Image extends Model
 {
-    use HasFactory;
+    // falls du mehrere DB-Verbindungen hast, sonst weglassen
+    protected $connection = 'mysql';          // oder 'mariadb'
 
-    // Die Tabelle, die dieses Model repräsentiert
-    protected $table = 'images';
+    protected $table      = 'images';
 
-    // Die Felder, die massenweise zugewiesen werden können
-    protected $fillable = [
-        'image_path', // Der Pfad des Bildes
-        'img_x',      // Breite des Bildes
-        'img_y',      // Höhe des Bildes
+    // Füllbare Felder (optional)
+    protected $fillable   = [
+        'shortname',
+        'heading_alt',
+        'camera_id',
+        'image_categories_id',
+        'pub',
+        'created_at',
     ];
 
-    // Falls du Timestamps nicht benötigst, kannst du diese Zeilen entfernen
-    public $timestamps = false;
+    /* -------------------------------------------------
+     *  Beziehungen
+     * ------------------------------------------------- */
+    // public function camera()
+    // {
+    // //    return $this->belongsTo(Camera::class);
+    // }
+
+    public function category()
+    {
+        return $this->belongsTo(ImageCategory::class, 'image_categories_id');
+    }
+
+    /* -------------------------------------------------
+     *  Scope: Standard-Filter (z. B. Suchbegriff)
+     * ------------------------------------------------- */
+    public function scopeFilterDefault(Builder $query, array $filters): Builder
+    {
+        if (!empty($filters['search'])) {
+            $s = $filters['search'];
+
+            $query->where(function ($q) use ($s) {
+                $q->where('headline',      'like', "%{$s}%")
+                  ->orWhere('message',  'like', "%{$s}%")
+                  ->orWhere('images.created_at',  'like', "%{$s}%");
+            });
+        }
+
+        return $query;
+    }
+    public function scopePublished($query)
+    {
+        return $query->whereIn('pub', [1, 2]);
+    }
 }

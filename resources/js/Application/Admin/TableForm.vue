@@ -38,7 +38,6 @@
     <form @submit.prevent="submitForm" enctype="multipart/form-data" >
         <div class="textar maxx grid grid-cols-1 lg:grid-cols-2 mb-2 gap-2 lg:gap-x-4 mt-2">
             <template v-for="(field, key) in  localFfo.original" :key="key">
-
                 <input-container v-if="field.name === 'reading_time'">
                     <InputFormText
                         :id="field.name"
@@ -75,6 +74,25 @@
                     </InputFormText>
                 </input-container>
 
+                <input-container v-else-if="['textarea_nohtml'].includes(field.class)" :full-width="true">
+                <InputTextarea
+                        :id="field.name"
+                        :name="field.name"
+                        v-model="field.value"
+                        :rows="field.rows"
+                        cols="25"
+                        :placeholder="field.placeholder || ''"
+                        :class="field.class"
+                        @focus="isFocused = true"
+                        @validationFailed="() => handleValidationFailed(index, field.required)"
+                        @validationPassed="() => handleValidationPassed(index)"
+                        :required="isRequired(field.required)"
+                >
+                        <template #label>{{ field.label }}</template>
+                </InputTextarea>
+                    <div v-if="fieldErrors && fieldErrors[key]" class="text-red-500 text-sm">Dieses Feld ist erforderlich</div>
+
+                </input-container>
                 <!-- Textarea für den Inhalt -->
                 <input-container v-else-if="['textarea', 'textarea_short'].includes(field.type)" :full-width="true">
 
@@ -114,6 +132,8 @@
                         v-model="field.value"
                         :placeholder="field.placeholder || ''"
                         :required="isRequired(field.required)"
+                        :disabled="field.disabled"
+                        :class="field.disabled ? 'cursor-not-allowed' : ''"
                         >
                         <template #label>{{ field.label }}</template>
                     </InputFormText>
@@ -227,7 +247,8 @@
                         v-model="field.value"
                         :exValue.Number="field.value"
                         :value="field.value"
-
+                        :disabled="field.disabled"
+                        :class="field.disabled ? 'cursor-not-allowed' : ''"
                         >
                         {{field.label}}</input-checkbox
                     >
@@ -261,7 +282,8 @@
                                     @input-change="updateFormData"
                                     :id="field.name"
                                     :model-value="field.value"
-
+                                    :disabled="field.disabled"
+                                    :class="field.disabled ? 'cursor-not-allowed' : ''"
                                     :name="field.name"
                                     :xname="field.name"
                                     :required="isRequired(field.required)"
@@ -285,7 +307,8 @@
                                     @input-change="updateFormData"
                                     :id="field.name"
                                     :model-value="field.value"
-
+                                    :disabled="field.disabled"
+                                    :class="field.disabled ? 'cursor-not-allowed' : ''"
                                     :name="field.name"
                                     :xname="field.name"
                                     :required="isRequired(field.required)"
@@ -320,6 +343,8 @@
                                         :xname="field.name"
                                         :tablex="tablex"
                                         :required="isRequired(field.required)"
+                                        :disabled="field.disabled"
+                                        :class="field.disabled ? 'cursor-not-allowed' : ''"
                                     >
 
                                 </InputSelectEnum>
@@ -356,6 +381,8 @@
                                         :xname="field.name"
                                         :tablex="tablex"
                                         :required="isRequired(field.required)"
+                                        :disabled="field.disabled"
+                                        :class="field.disabled ? 'cursor-not-allowed' : ''"
                                     >
 
                                 </InputSelectEnum>

@@ -57,6 +57,9 @@
             </button>
             <tippy>Geordnete Liste</tippy>
         </div>
+        <div>
+        <smileys :editor="name"></smileys>
+        </div>
         <div v-if="hasError" class="text-red-500 text-sm mt-1">
                 Dieses Feld darf nicht leer sein.
             </div>
@@ -106,6 +109,7 @@
     import IconPictures from "@/Application/Components/Icons/IconPictures.vue";
     import IconList from "@/Application/Components/Icons/IconList.vue";
     import IconOrdList from "@/Application/Components/Icons/IconOrdList.vue";
+    import smileys from "@/Application/Components/Social/smileys.vue";
     import IconCode from "@/Application/Components/Icons/IconCode.vue";
     import IconHyperLink from "@/Application/Components/Icons/IconHyperLink.vue";
     import { Tippy } from 'tippy.vue';
@@ -121,6 +125,7 @@
         IconOrdList,
         selectionHelper,
         GetSettings,
+        smileys,
         },
         props: {
         imageId: [String, Number],

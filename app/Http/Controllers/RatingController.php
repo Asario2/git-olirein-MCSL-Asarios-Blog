@@ -24,7 +24,7 @@ class RatingController extends Controller
         $userId = Auth::id();
         $rating = DB::table("ratings")
             ->where("table", $table)
-            ->where("image_id", $postId)
+            ->where("images_id", $postId)
             ->where("users_id", $userId)
             ->value("rating"); // Nur die Bewertung holen
 
@@ -57,7 +57,7 @@ class RatingController extends Controller
                     [
                         "table" => $table,
                         "rating" => $rating,
-                        "image_id" => $postId,
+                        "images_id" => $postId,
                         "users_id" => $userId,
                         "created_at" => now(),
                         "updated_at" => now(),
@@ -107,7 +107,7 @@ class RatingController extends Controller
     }
     public function GetExistingRate($table,$postId)
     {
-        $id = DB::table("ratings")->where("table",$table)->where("users_id",Auth::id())->where("image_id",$postId)->select("id")->first();
+        $id = DB::table("ratings")->where("table",$table)->where("users_id",Auth::id())->where("imagea_id",$postId)->select("id")->first();
         $id = !$id ? null : $id;
         return $id;
     }
@@ -115,7 +115,7 @@ class RatingController extends Controller
     {
         $result = DB::table('ratings')
             ->where('table', $table)
-            ->where('image_id', $postId)
+            ->where('images_id', $postId)
             ->selectRaw('AVG(rating) as average, COUNT(id) as total')
             ->first();
 
@@ -130,10 +130,10 @@ class RatingController extends Controller
         $table = basename(parse_url(request()->fullUrl(), PHP_URL_PATH));
         $rating = DB::table('ratings')
             ->where('table', $table)
-            ->groupBy('image_id')
-            ->selectRaw('image_id, AVG(rating) as average, COUNT(id) as total')
+            ->groupBy('images_id')
+            ->selectRaw('images_id, AVG(rating) as average, COUNT(id) as total')
             ->get()
-            ->keyBy('image_id');
+            ->keyBy('images_id');
         $queries = DB::getQueryLog();
 
         // \Log::info(json_encode([$rating,$queries,$table]));

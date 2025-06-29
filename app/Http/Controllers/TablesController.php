@@ -494,7 +494,7 @@ class TablesController extends Controller
         // \Log::info("tb: " . $table);
 
         if (!$table || !Schema::hasTable($table)) {
-            abort(404, "Tabelle existiert nicht.");
+                    abort(404, "Tabelle existiert nicht.");
         }
 
         if (!CheckRights(Auth::id(), $table, "view")) {
@@ -661,9 +661,34 @@ class TablesController extends Controller
             'table_q'       => strtolower($table),
             'namealias'     => "{$table}_name",
             'users'         => $users_img,
+
         ]);
     }
+    public function getCreatedAt()
+    {
+        $crea = [];
 
+        foreach (Settings::$searchable as $tablex) {
+            $rows = DB::table($tablex)
+                ->select(
+                    'id AS post_id',
+                    'created_at AS created'
+                )
+                ->get()
+                ->toArray();
+
+            // Zeit entfernen (alles nach dem Datum abschneiden)
+            foreach ($rows as &$row) {
+                // created z. B. "2025-06-17 13:45:22"
+                // wir nehmen nur das Datum
+                $row->created = substr($row->created, 0, 100);
+            }
+
+            $crea[$tablex] = $rows;
+        }
+
+        return response()->json($crea);
+    }
 
 
 

@@ -10,7 +10,7 @@
             ></template>
         </page-content>
 
-        <page-content v-if="loading">
+        <page-content v-show="loading">
             <template #content>
                 <InputLoading
                     :loading="loading"

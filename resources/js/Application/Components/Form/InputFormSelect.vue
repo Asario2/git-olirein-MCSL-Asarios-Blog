@@ -1,5 +1,6 @@
 <template>
     <select
+    v-bind="$attrs"
         class="w-fully wf_2 p-2.5 text-sm rounded-lg block border border-layout-sun-300 text-layout-sun-900 bg-layout-sun-50 placeholder-layout-sun-400 focus:ring-primary-sun-500 focus:border-primary-sun-500 dark:border-layout-night-300 dark:text-layout-night-900 dark:bg-layout-night-50 dark:placeholder-layout-night-400 dark:focus:ring-primary-night-500 dark:focus:border-primary-night-500"
         :value="xval"
         @input="$emit('update:modalValue', $event.target.value)"
@@ -9,6 +10,7 @@
         :required="required"
         :users_id="users_id"
         v-model="users_id"
+        :disabled="disabled"
     > <option disabled value="0">Bitte wählen</option>
         <template v-if="Array.isArray(sortedOptions_sel)">
             <option
@@ -41,7 +43,7 @@
     window.$ = window.jQuery = $;
 export default {
     name: "Contents_Form_InputSelect",
-
+    inheritAttrs: false,
     data() {
         return {
             selectedValue: '',
@@ -76,6 +78,8 @@ export default {
         name:{
             type: String
         },
+        disabled:  { type: Boolean, default: false },
+
     },
 
     emits: ["input-change"],

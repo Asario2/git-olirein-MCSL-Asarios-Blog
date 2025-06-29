@@ -22,7 +22,7 @@
                     </span>
                 </p>
                 <div class="text-layout-sun-700 dark:text-layout-night-600 w-[190px] max-w-[190px] mxy">
-                    <div v-html="nl2br(comment?.content)"></div>
+                    <div v-html="smilies(comment?.content)"></div>
                 </div>
                 <small class="text-xs text-layout-sun-600 dark:text-layout-night-500">
                     <display-date :value="comment?.created_at" :time-on="false" />
@@ -65,7 +65,7 @@
         import IconComment from "@/Application/Components/Icons/IconComment.vue";
         import DisplayDate from "@/Application/Components/Content/DisplayDate.vue";
         import IconTrash from "@/Application/Components/Icons/Trash.vue";
-        import { CleanTable_alt, CleanId } from '@/helpers';
+        import { CleanTable_alt, replaceSmilies } from '@/helpers';
         export default {
 
             components: {
@@ -121,6 +121,9 @@
             });
             },
             methods: {
+                smilies(text){
+                    return replaceSmilies(this.nl2br(text));
+                },
             nl2br(text){
                 return text?.replace(/\n/g,"<br />");
             },
@@ -223,6 +226,9 @@
     };
         </script>
 <style scoped>
+.inline-smiley{
+display:inline;
+}
 .object-cover{
     object-fit:cover;
     width:48px;

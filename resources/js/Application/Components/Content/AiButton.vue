@@ -54,7 +54,7 @@ export default {
 }
 
 .small .ai-button {
-    bottom: 0px;
+    bottom:0px;
     right:  0px;
 }
 .bigger .ai-button{

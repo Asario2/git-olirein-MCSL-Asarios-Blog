@@ -335,51 +335,54 @@ export default {
     IconMenu,
     Dropdown,
     DropdownLink,
-
     ButtonChangeMode
   },
+
   setup() {
     const loadingStore = useLoadingStore();
     return { loadingStore };
   },
+
   data() {
     return {
       mode: localStorage.theme ? localStorage.theme : "light",
       isOpen_Menu: false,
       year: new Date().getFullYear(),
-      pendingRequests: 0, // Wird bei jeder Anfrage erhöht
+      pendingRequests: 0,
       isLoading: localStorage.getItem('loading') === 'true',
       search: '',
+      searchval: false,
       imagesLoaded: false,
+      searchTimeout: null, // Timeout für Inaktivitätsprüfung
     };
   },
 
- mounted() {
-
-    // Debugging: Prüfen, ob die Seite zum ersten Mal geladen wird
+  mounted() {
     const shouldReload = localStorage.getItem('reload_dashboard');
 
     if (shouldReload) {
-        localStorage.removeItem('reload_dashboard'); // Wichtig: Sonst Endlosschleife
-        location.reload();
+      localStorage.removeItem('reload_dashboard');
     }
 
     // Den 'search' Parameter prüfen
     const urlParams = new URLSearchParams(window.location.search);
-    const searchParam = urlParams.get('search'); // Holt den 'search' Parameter
+    const searchParam = urlParams.get('search');
 
-    // Wenn der 'search' Parameter leer oder nicht gesetzt ist, zeige den Loader
+    this.search = searchParam ?? '';
+
     if (searchParam === '' || searchParam === null) {
-      this.setLoadingState(true); // Setze Loading auf true, wenn 'search' leer oder nicht vorhanden ist
+      this.setLoadingState(true);
       this.searchval = true;
+
+      // Startet Timeout für spätere leere Suche
+      this.startSearchTimeout();
     } else {
-      this.setLoadingState(false); // Verstecke den Loader, wenn 'search' gesetzt ist
+      this.setLoadingState(false);
       this.searchval = false;
     }
 
     // Axios Interceptoren
     axios.interceptors.request.use((config) => {
-    //   console.log('Request sent, pendingRequests:', this.pendingRequests);
       this.pendingRequests += 1;
       this.setLoadingState(this.searchval);
       return config;
@@ -388,13 +391,11 @@ export default {
     axios.interceptors.response.use(
       (response) => {
         this.pendingRequests -= 1;
-        // console.log('Response received, pendingRequests:', this.pendingRequests);
         this.checkLoadingState();
         return response;
       },
       (error) => {
         this.pendingRequests -= 1;
-        // console.log('Error response received, pendingRequests:', this.pendingRequests);
         this.checkLoadingState();
         return Promise.reject(error);
       }
@@ -402,27 +403,20 @@ export default {
 
     // Bilder laden überwachen
     this.waitForImagesToLoad();
+
     if (this.isLoading) {
-    localStorage.setItem('loading', 'true');
+      localStorage.setItem('loading', 'true');
     }
   },
-methods: {
-    setLoadingState(state) {
-    //   console.log('Setting loading state to:', state);
 
-    //
-    //
-    // STATE
-    //
-    //
-      this.isLoading = state; // state;
+  methods: {
+    setLoadingState(state) {
+      this.isLoading = state;
       localStorage.setItem('loading', state.toString());
     },
 
     checkLoadingState() {
-      // Überprüft den Status und blendet den Loader aus, wenn alle Bilder geladen sind und keine ausstehenden Anfragen mehr vorhanden sind
       if (this.pendingRequests === 0 && this.imagesLoaded) {
-        //console.log('All requests completed and images loaded, hiding loader');
         this.setLoadingState(false);
       }
     },
@@ -433,33 +427,28 @@ methods: {
       let imagesLoadedCount = 0;
 
       if (totalImages === 0) {
-        //console.log('No images found');
-        this.imagesLoaded = true; // Keine Bilder, also direkt auf true setzen
-        this.checkLoadingState();  // Prüfe den Lade-Status erneut
+        this.imagesLoaded = true;
+        this.checkLoadingState();
         return;
       }
 
       images.forEach((img, index) => {
         if (img.complete) {
           imagesLoadedCount++;
-        //   console.log(`Image ${index + 1} already loaded`);
         } else {
           img.addEventListener('load', () => {
             imagesLoadedCount++;
-            //console.log(`Image ${index + 1} loaded`);
             if (imagesLoadedCount === totalImages) {
-              //console.log('All images loaded');
               this.imagesLoaded = true;
-              this.checkLoadingState();  // Prüfe den Lade-Status erneut
+              this.checkLoadingState();
             }
           });
         }
       });
 
       if (imagesLoadedCount === totalImages) {
-       // console.log('All images were already loaded');
         this.imagesLoaded = true;
-        this.checkLoadingState();  // Prüfe den Lade-Status erneut
+        this.checkLoadingState();
       }
     },
 
@@ -467,17 +456,30 @@ methods: {
       this.isOpen_Menu = !this.isOpen_Menu;
     },
 
-    // Ändert den Modus (Light/Dark)
     changeMode() {
       this.mode = this.mode === "dark" ? "light" : "dark";
       localStorage.theme = this.mode;
     },
-    logoutUser() {
-            let routeLogout = "logout";
-            //
-            this.$inertia.post(this.route(routeLogout));
-        },
 
+    logoutUser() {
+      this.$inertia.post(this.route("logout"));
+    },
+
+    // Startet 3-Sekunden-Timeout, wenn der Nutzer mit Tippen aufhört
+    startSearchTimeout() {
+      clearTimeout(this.searchTimeout);
+      this.searchTimeout = setTimeout(() => {
+        if (this.search.trim() !== '') {
+          this.setLoadingState(true);
+        }
+      }, 3000);
+    },
+
+    // Bei Eingabe im Suchfeld
+    onSearchInput(event) {
+      this.search = event.target.value;
+      this.startSearchTimeout();
+    },
   },
 };
 </script>

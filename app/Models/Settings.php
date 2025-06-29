@@ -19,12 +19,12 @@
                     'name'=>"Name",'xis_aiImage'=>"Bild mit KI erstellt","blog_date" => "Öffentlich ab:","slug" => "URL","reading_time" => "Lesezeit","markdown_on" => "Markdown verwendet","blog_images_iid" => "Bildupload","updated_at" => "Letzte Änderung","first_name" => "Vorname","name" => "Nickame","email_verified_at" => "Email bestätigt","password" =>
     "Passwort","users_rights_id" => "Benutzergruppe","profile_photo_path" => "Profilbild","is_admin" => "Administrator","is_employee" => "Mitarbeiter","is_customer" => "Kunde","admin_id" => "Admin ID","company_id" => "Firmen ID","customer_id" => "Kunden ID","last_login_at" =>
     "Letzter Login","two_factor_secret" => "2fa Secret","two_factor_recovery_codes" => "2fa Recovery Codes","two_factor_confirmed_at" => "2fa bestätigt am","remember_token" => "Login merken","position" => "Position","shortname" => "Kurzname","xkis_AdminPanel" => "AdminPanel Zugriff","xkis_UserRights" =>
-    "Benutzergruppen Zugriff","xkis_SendMail" => "Email Senden","xkis_SandMail" => "Email Senden","xkis_CommentsCenter" => "Commentscenter","author_id" => "Autor","chg_date" => "Geändert am:","name" => "Name","description" => "Beschreibung","modul" => "Modul","published_at" => "Veröffentlicht am:","name_en" =>
+    "Benutzergruppen Zugriff","xkis_SendMail" => "Email Senden","xkis_SandMail" => "Email Senden","xkis_CommentsCenter" => "Commentscenter","xkis_comment_edit"=>"Kommentarbearbeitung","Kommentarbearbeitung"=>"Alle Felder bearbeiten","author_id" => "Autor","chg_date" => "Geändert am:","name" => "Name","description" => "Beschreibung","modul" => "Modul","published_at" => "Veröffentlicht am:","name_en" =>
     "Name Englisch","heading_alt" => "Überschrift","heading_alt_en" => "Überschrift Englisch","img_icon" => "Icon","AscName" => "AscName","AscName_en" => "AscName Englisch","description_en" => "Beschreibung Englisch","itemscope" => "Objekttyp","xis_shopable" => "Verkäuflich","image_categories_id" => "Bilder Kategorie","status" =>
     "Status","message" => "Text","message_en" => "Text Englisch","camera_id" => "Kamera","link" => "Link","Format" => "Format","Format_en" => "Format Englisch","preis" => "Preis","tablename" => "Tabelle","xis_checked" => "checked","ordering" => "Position","Longname" => "Langer Name","Mpixel" =>
     "Megapixel","view_table"=>"Anzeigen",'add_table'=>"Hinzufügen",'story_en'=>"Geschichte Englisch",'story'=>"Geschichte","edit_table"=>"Bearbeiten","publish_table"=>"Veröffentlichen","date_table"=>"Datum Ändern","delete_table"=>"Löschen","short_tag" => "Tag","exif_copyright" => "Exif copy",
     'autoslug'=>"Url der Seite","admin_table_id"=>"Tabelle","exif_comp" => "exif Comp","exif_model" => "Exif Model","AdminPanel"=>"Admin Dashboard","UserRights"=>"BenutzerRechte",'LogViewer'=>"Log Viewer","SendMail"=>"Emails verschicken","ChangePassword"=>"Passwort Ändern","CommentsCenter"=>"Kommentar Admin Center","DataBases"=>"Datenbank Admin"
-    ,"about"=>"Über dich","ischecked"=>"Überprüft","about_en"=>"Über dich Englisch","website" => "Website","fbd"=>"facebook ID","xis_disabled"=>"Benutzer deaktivieren"];
+    ,"about"=>"Über dich","ischecked"=>"Überprüft","about_en"=>"Über dich Englisch","website" => "Website","fbd"=>"facebook ID","xis_disabled"=>"Benutzer deaktivieren","CommentsEdit"=>"Alle Felder bearbeiten"];
 
         public static array $no_req = ['exif_copyright','exif_comp','exif_model','Mpixel','modul','is_admin','is_customer','is_employee','customer_id','admin_id','company_id',
                                        'profile_photo_path',"category_id","type_id",'message','message_en',
@@ -36,6 +36,11 @@
         public static array $big_thumb = ["users","blog_posts","images"];
         public static array $int_date_tables = ["didyouknow"];
         public static array $textfield = ["Mdown"]; // Mdown / HTML
+
+        public static array $disa = [
+            'comments' => ['users_id','post_id', 'admin_table_id', 'nick', 'email'],
+        ];
+
         public static array $impath = ["users"=>'profile_photo_path','default'=>"image_path"];
         public static array $image_sizes =
         [
@@ -137,7 +142,7 @@
     ];
     public static array $presetting = [
         "blogs"=>"blog_categories",
-        "images"=>"image_categories",
+        "images"=>"images",
         "comments"=>"users",
 
     ];

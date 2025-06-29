@@ -43,7 +43,7 @@
                     </div>
                 </div>
 
-                <p v-html="blog.summary"></p>
+                <p v-html="smilies(blog.summary)"></p>
                 <div>
                     <display-number class="text-xs text-layout-sun-600 dark:text-layout-night-600 py-2"
                 :value="blog.reading_time"
@@ -75,6 +75,7 @@ import IconCamera from "@/Application/Components/Icons/Camera.vue";
 import editbtns from "@/Application/Components/Form/editbtns.vue";
 import IconComment from "@/Application/Components/Icons/IconComment.vue";
 import { throttle } from "lodash";
+import { CleanTable_alt, replaceSmilies } from '@/helpers';
 import mapValues from "lodash/mapValues";
 import pickBy from "lodash/pickBy";
 import IconEye from "@/Application/Components/Icons/Eye.vue";
@@ -130,6 +131,9 @@ export default {
     };
 },
 methods:{
+    smilies(text){
+return replaceSmilies(text);
+    },
     handleBodyClick(event) {
         this.$nextTick(() => {
             const box = document.getElementById("commentBox");

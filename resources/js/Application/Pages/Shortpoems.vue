@@ -4,12 +4,9 @@
       <section class="max-w-3xl mx-auto mt-10 px-4">
         <h1 class="text-3xl font-bold mb-6 text-layout-title">Shortpoems</h1>
 
-        <div class="p-2 md:p-4" v-if="Array.isArray(items.data) && items.data.length === 0 && form.search">
-          <alert type="warning">
-            Für den vorgegebenen Suchbegriff wurden keine Bilder gefunden.
-          </alert>
-        </div>
 
+        <newbtn table="shortpoems">
+        </newbtn>
         <div class="flex justify-between items-center">
           <search-filter
             v-if="searchFilter"
@@ -17,9 +14,15 @@
             :placeholder="searchText"
             class="w-full"
             @reset="reset"
+
+            @input="$emit('update:modelValue', $event.target.value)"
           />
         </div>
-
+        <div class="p-2 md:p-4" v-if="Array.isArray(items.data) && items.data.length === 0 && form.search">
+          <alert type="warning">
+            Für den vorgegebenen Suchbegriff wurden keine Shortpoems gefunden.
+          </alert>
+        </div>
         <div
           v-for="(item, index) in items.data"
           :key="item.id || index"
@@ -103,6 +106,8 @@
   import averageRating from "@/Application/Components/Social/averageratings.vue";
   import MetaHeader from "@/Application/Homepage/Shared/MetaHeader.vue";
   import SearchFilter from "@/Application/Components/Lists/SearchFilter.vue";
+  import Alert from "@/Application/Components/Content/Alert.vue";
+  import newbtn from "@/Application/Components/Form/newbtn.vue";
 
   import pickBy from "lodash/pickBy";
   import mapValues from "lodash/mapValues";
@@ -116,6 +121,13 @@
       averageRating,
       MetaHeader,
       SearchFilter,
+      Alert,
+      newbtn,
+    },
+    computed: {
+        search() {
+    // return this.filters?.search ?? "";
+  },
     },
     props: {
       items: {
@@ -138,10 +150,10 @@
         type: String,
         default: "Hier kannst du den Suchbegriff eingeben",
       },
-      searchValue: {
-        type: String,
-        default: null,
-      },
+    //   searchValue: {
+    //     type: String,
+    //     default: null,
+    //   },
       links: {
         type: Array,
         default: () => [],
@@ -151,8 +163,9 @@
       return {
         openIndex: null,
         form: {
-          search: this.filters.search,
-        },
+            search: this.filters?.search ?? "",
+
+        }
       };
     },
     watch: {

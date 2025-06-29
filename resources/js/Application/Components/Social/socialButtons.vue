@@ -244,7 +244,11 @@ methods:{
             let p = ''
             if($_GET['page'])
             {
-                p = "?page=" + $_GET['page'] + "&search=".$_GET['search'];
+                p = "?page=" + $_GET['page'];
+            }
+            if($_GET['search'])
+            {
+                p += "&search=".$_GET?.['search'];
             }
 
             return p + "#st"+id;

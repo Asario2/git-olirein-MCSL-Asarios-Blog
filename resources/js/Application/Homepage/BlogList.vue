@@ -16,7 +16,8 @@
                 <page-title>
                     <template #title> Asarios Blog </template>
                 </page-title>
-
+                <newbtn table="blogs">
+                </newbtn>
                 <div class="flex justify-between items-center">
                     <search-filter
                         v-model="form.search"
@@ -85,6 +86,7 @@
 
 <script>
 import { defineComponent } from "vue";
+import newbtn from "@/Application/Components/Form/newbtn.vue";
 
 import Layout from "@/Application/Homepage/Shared/Layout.vue";
 import PageTitle from "@/Application/Components/Content/PageTitle.vue";
@@ -104,6 +106,7 @@ export default defineComponent({
         Layout,
         PageTitle,
         MetaHeader,
+        newbtn,
         BlogPreviewBig,
         BlogPreviewSmall,
         SearchFilter,

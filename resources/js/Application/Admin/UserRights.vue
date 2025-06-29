@@ -315,7 +315,7 @@ saveRights() {
       },
       getLabel(key) {
 
-        let labels = this.settings?.exl?.[this.stripXkis(key)]
+        let labels = this.settings?.exl?.[this.stripXkis(key)];
 
         return labels || this.stripXkis(key);
     },

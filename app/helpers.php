@@ -134,15 +134,15 @@ if(!function_exists("renderText"))
 
                     }
                 }
-                if(@$table == "pictures")
-                    {
+                if(@$table == "pictures" || $table == "image_categories")
+                {
                         $table = "images";
                         $_GET['table'] = $table;
-                    }
-                    if(empty($table)){
+                }
+                if(empty($table)){
                         // $table = "comments";
                         dd($parts);
-                    }
+                }
                 // dd($parts,$_GET['table']);
 
                 if (!empty($filters['search'])) {
@@ -186,6 +186,11 @@ if(!function_exists("renderText"))
                     if(in_array("created_at",$columns)){
                         $this->orWhere("$table.created_at", 'like', '%'.$filters['search']. '%');
                     }
+                    if(in_array("date_begin",$columns)){
+                        $this->orWhere("$table.date_begin", 'like', '%'.$filters['search']. '%');
+                    }
+                    // ID
+                    $this->orWhere("$table.id", 'like', '%'.$filters['search']. '%');
 
                 }
                 // \Log::info("GT:".$table);

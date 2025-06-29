@@ -10,7 +10,7 @@ use Inertia\Inertia;
 use App\Models\DidYouKnow;
 use App\Models\ShortPoem;
 use App\Models\User;
-
+use App\Models\Image;
 use Illuminate\Support\Str;
 use Laravel\Jetstream\Jetstream;
 use Illuminate\Support\Facades\Request;
@@ -109,8 +109,92 @@ class HomeController extends Controller
         $data = DB::table($table)->orderBy("shortname","ASC")->get();
         return Inertia::render('Homepage/PicturesCat', [
            'data'=>$data,
+
         ]);
     }
+    public function home_images_search_cat(Request $request)
+    {
+        // if($slug != "Alphabet")
+        // {
+        //     $ord[0] = "created_at";
+        //     $ord[1] = "DESC";
+        // }
+        // else{
+            $ord[0] = "created_at";
+            $ord[1] = "DESC";
+//         // }
+        // \Log::info(Request::input('search')); // oder: \Log::info($request->all());
+// ;
+//         $search = $request->search;
+        $search = Request::input('search');   // ← korrekt für die Facade
+            if(empty($search))
+            {
+                header("Location: /home/pictures");
+            }
+
+    // $entries = Image::query()
+    // ->leftJoin("image_categories", "image_categories.id", "=", "images.image_categories_id")
+    // ->whereIn('images.pub', [1, 2])                    // Sichtbarkeit
+    // ->select("images.created_at AS created_at , images.*, image_categories.*")
+    // ->filterDefault(['search' => $search])      // ← eigener Scope
+    // ->orderByDesc('images.created_at')                 // Sortierung
+    // ->paginate(20);
+    // $entries = DB::table('images')
+    // ->leftJoin('image_categories', 'image_categories.id', '=', 'images.image_categories_id')
+    // ->whereIn('images.pub', [1, 2])
+    // ->when($search, function ($q, $s) {
+    //     $q->where('image_categories.shortname', 'like', "%{$s}%")
+    //       ->orWhere('images.headline', 'like', "%{$s}%")
+    //       ->orWhere('images.created_at', 'like', "%{$s}%");
+    // })
+    // ->select(
+    //     'images.*',
+    //     'images.created_at as created_at',
+    //     'image_categories.slug as slug'
+    // )
+    // ->orderByDesc('images.created_at')
+    // ->paginate(20);
+    $rat = RatingController::getTotalRating("images");
+    $perPage = 25;
+
+    $query = Image::published()
+        ->when(request('search'), function ($query) {
+            $query->where(function ($q) {
+                $q->filterdefault(['search' => request('search')]);
+            });
+        })
+        ->orderBy('created_at', 'desc');
+
+    $paginated = $query->paginate($perPage);
+
+    $data = [
+        'data' => $paginated->items(), // die aktuellen Items
+        'ocont' => [],
+        'links' => $paginated->linkCollection(), // automatisch generierte Links
+        'meta' => [
+            'current_page' => $paginated->currentPage(),
+            'last_page' => $paginated->lastPage(),
+            'per_page' => $paginated->perPage(),
+            'from' => $paginated->firstItem(),
+            'to' => $paginated->lastItem(),
+            'total' => $paginated->total(),
+        ],
+    ];
+    $rat = RatingController::getTotalRating("images");
+
+    return Inertia::render('Homepage/Pictures', [
+        'items' => $data,
+        'ratings' => $rat,
+        "entries"=>$data, // falls du Bewertungen dazupackst
+        "filters" => request()->only('search'),
+    ]);          // ← dann paginierenp
+\Log::info(json_encode($entries));
+return Inertia::render('Homepage/Pictures', [
+    'entries' => $entries,
+    'filters' => ['search' => $search],
+    'ratings' => RatingController::getTotalRating('images'),
+]);
+}
     public function home_images(Request $request,$slug)
     {
         if($slug != "Alphabet")
@@ -122,20 +206,22 @@ class HomeController extends Controller
             $ord[0] = "position";
             $ord[1] = "ASC";
         }
+        $search = Request::input('search');   // ← korrekt für die Facade
         $entries = DB::table("images")
-        ->leftJoin("camera", "images.camera_id", "=", "camera.id")
-        ->leftJoin("image_categories", "image_categories.id", "=", "images.image_categories_id")
-        ->where(function($query) {
-            $query->where("images.pub", 1)->orWhere("images.pub", 2);
-        })
-        ->where("image_categories.slug", $slug)
-        ->select("images.*", "camera.name as camera", "image_categories.slug as slug")
-        ->when(request("search"), function ($query) {
-            $query->filterdefault(['search' => request('search')]);
-        })
-        ->orderBy($ord[0], $ord[1]) // ← erst sortieren
-        ->paginate(20);             // ← dann paginieren
+            ->leftJoin("image_categories", "image_categories.id", "=", "images.image_categories_id")
+            ->whereIn("images.pub", [1, 2])
+            ->where("image_categories.slug",$slug)
+            ->select("images.created_at AS created_at", "images.*", "image_categories.slug as slug")
 
+            ->when($search, function ($query, $search) {
+                return $query->where(function($q) use ($search) {
+                    $q->where("images.headline", "like", "%{$search}%")
+                      ->orWhere("images.message", "like", "%{$search}%")
+                      ->orWhere("images.created_at", "like", "%{$search}%");
+                });
+            })
+            ->orderByDesc("images.created_at")
+            ->paginate(20);
 
         // \Log::info("cr:".CheckRights(Auth::id(),"images","date"));
         $rat = RatingController::getTotalRating("images");
@@ -196,6 +282,7 @@ class HomeController extends Controller
         return Inertia::render('Pages/shortpoems', [
             'items' => $data,
             'ratings' => $rat, // falls du Bewertungen dazupackst
+            "filters" => request()->only('search'),
         ]);          // ← dann paginierenp
         // \Log::info("VALS:".json_encode($values));
         // $values = DB::table("shortpoems")->select('id', 'headline', 'story')->get();
@@ -263,6 +350,7 @@ class HomeController extends Controller
         return Inertia::render('Pages/didyouknow', [
             'items' => $data,
             'ratings' => $rat, // falls du Bewertungen dazupackst
+            "filters" => request()->only('search'),
         ]);
 
         // ← dann paginierenp
@@ -375,9 +463,18 @@ class HomeController extends Controller
     }
     public function home_userlist()
     {
-        $users = DB::table("users")->where("xis_disabled","0")->where("pub","1")->select("users.*")->orderBy("name","ASC")->paginate(18);
+        $search = Request::input('search');   // ← korrekt für die Facade
+        $users = DB::table("users")->where("xis_disabled","0")->where("pub","1")
+        ->when($search, function ($query, $search) {
+            return $query->where(function($q) use ($search) {
+                $q->where("users.name", "like", "%{$search}%")
+                  ->orWhere("users.about", "like", "%{$search}%")
+                  ->orWhere("users.created_at", "like", "%{$search}%");
+            });
+        })->select("users.*")->orderBy("name","ASC")->paginate(18);
         return Inertia::render('Homepage/Users', [
             'users' => $users, // statt 'data'
+            'filters' => Request()->all('search'),
         ]);
     }
     public function home_usershow($username)

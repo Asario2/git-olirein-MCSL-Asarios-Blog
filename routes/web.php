@@ -124,9 +124,12 @@ Route::get('/home/terms', [HomeController::class, 'home_terms'])->name('home.ter
 Route::get('/home/ai', [HomeController::class, 'home_AI'])->name('home.ai');
 // Picures show gallery
 Route::get('/home/show/pictures/{slug}', [HomeController::class, 'home_images'])->name('home.images.gallery');
-Route::get('/home/show/pictures/search/{slug}', [HomeController::class, 'home_images_search'])->name('home.images.gallery.search');
+Route::get('/home/search/pictures/{slug}', [HomeController::class, 'home_images_search'])->name('home.images.gallery.search');
+// SEARCH from PicturesCat
+Route::get('/home/search_cat/pictures/', [HomeController::class, 'home_images_search_cat'])->name('home.images.search.cat');
 // Pictures Overview
 Route::get('/home/pictures', [HomeController::class, 'home_images_index'])->name('home.images.index');
+
 // Shortpoems
 Route::get('/home/shortpoems', [HomeController::class, 'home_shortpoems'])->name('home.shortpoems');
 // DidYouKnow
@@ -214,6 +217,17 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
             [DashboardAdminController::class, 'admin_index']
         )->name('admin.dashboard');
         Route::post("/personal_update", [PersonalController::class, 'update'])->name("personal.update");
+        Route::get('/api/created-at', [TablesController::class, 'getCreatedAt'])->name("created.at");
+        // Route::get("/api/created-at", [TablesController::class],'GetCreatedAt')->name("created.at");
+
+
+
+
+
+
+
+
+
         // =================
         // Laravel-Log-Datei
         // =================

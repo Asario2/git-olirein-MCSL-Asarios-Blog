@@ -48,6 +48,55 @@ const cache = {
   rights: null,
   ready: false,
 };
+export function replaceSmilies(text) {
+    const smilies = {
+      ";)": "wink",
+      ":D": "biggrin",
+      ":)": "smile",
+      ":o": "surprised",
+      ":shock:": "eek",  // letzte Definition zählt im PHP-Array
+      ":?": "confused",
+      " 8)": "cool",
+      ":lol:": "lol",
+      ":x": "mad",
+      ":P": "razz",
+      ":mrgreen:": "mrgreen",
+      ":arrow:": "arrow",
+      ":cry:": "cry",
+      ":evil:": "evil",
+      ":!:": "exclaim",
+      ":{": "frown",
+      ":idea:": "idea",
+      ":|": "neutral",
+      ":question:": "question",
+      ":shy:": "redface",
+      ":roll:": "rolleyes",
+      ":(": "sad",
+      "^^": "twisted",
+      ":diso:": "disor",
+      ":bankrob:": "bankrob",
+      ":jesus:": "jesus",
+      ":cyborg:": "cyborg",
+      ":pirat:": "pirat",
+      ":blade:": "blade",
+      ":drugs:": "drugs",
+      ":ying:": "ying",
+      ":skull:": "skull",
+      ":bomb:": "bomb",
+      ":kiss:": "kiss",
+      ":holy:": "holy"
+    };
+
+    // Ersetze jedes Smiley durch das entsprechende <img>
+    for (const [key, value] of Object.entries(smilies)) {
+      const escapedKey = key.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&'); // für Regex escapen
+      const regex = new RegExp(escapedKey, 'g');
+      const img = `<img src="/images/smilies/icon_${value}.gif" alt="${key}" class="inline" />`;
+      text = text.replace(regex, img);
+    }
+
+    return text;
+  }
 
 export async function initRights() {
   if (!cache.ready) {
@@ -458,3 +507,25 @@ export const selectionHelper = {
 };
 
 
+/**
+ * stripTags(text, allowed = [])
+ * @param {String} text      – Eingabestring (kann HTML enthalten)
+ * @param {String[]|String} allowed – Array oder kommaseparierte Liste erlaubter Tags (ohne < >)
+ * @returns {String} – text ohne verbotene Tags
+ */
+export function stripTags(text, allowed = []) {
+  if (!text) return '';
+
+  // in Array umwandeln (z. B. "b,i" → ["b","i"])
+  const allow = Array.isArray(allowed)
+    ? allowed
+    : (allowed || '').split(',').map(t => t.trim().toLowerCase());
+
+  // Kurzer Weg ohne Whitelist: alles killen
+  if (!allow.length) return text.replace(/<\/?[^>]+>/gi, '');
+
+  // RegExp:  <tag ...> oder </tag>
+  return text.replace(/<\/?([a-z][a-z0-9]*)\b[^>]*>/gi, (match, tag) =>
+    allow.includes(tag.toLowerCase()) ? match : ''
+  );
+}

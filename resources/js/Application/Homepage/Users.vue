@@ -5,6 +5,20 @@
         :header-image="$page.props.saas_url + '/images/blogimages/Blog_Idee_480x360.jpg'"
     >
     <MetaHeader title="Bneutzer" />
+
+    <newbtn table="users">
+
+    </newbtn>
+    <div class="flex justify-between items-center">
+                            <search-filter
+                            v-if="searchFilter"
+                            v-model="form.search"
+                            class="w-full"
+                            ref="searchField"
+                            @reset="reset"
+                            @input="onSearchInput"
+                            />
+                            </div>
         <section class="bg-layout-sun-0 text-layout-sun-800 dark:bg-layout-night-0 dark:text-layout-night-800">
             <div class="p-2 md:p-4" v-if="users.data?.length === 0 && !form.search">
                 <alert type="warning">
@@ -84,7 +98,7 @@
 
 <script>
 import { defineComponent } from "vue";
-
+import newbtn from "@/Application/Components/Form/newbtn.vue";
 import Layout from "@/Application/Homepage/Shared/Layout.vue";
 import PageTitle from "@/Application/Components/Content/PageTitle.vue";
 import BlogPreviewBig from "@/Application/Homepage/Shared/BlogPreviewBig.vue";
@@ -107,6 +121,7 @@ export default defineComponent({
         SearchFilter,
         Alert,
         MetaHeader,
+        newbtn,
     },
 
     props: {
@@ -144,7 +159,7 @@ export default defineComponent({
 
                 this.$inertia.get(
                     this.route(
-                        "home.blog.index",
+                        "home.userlist",
                         Object.keys(query).length ? query : { remember: "forget" },
                     ),
                     this.form,
@@ -155,6 +170,7 @@ export default defineComponent({
                 );
             }, 150),
             deep: true,
+            immediate: false,
         },
     },
 

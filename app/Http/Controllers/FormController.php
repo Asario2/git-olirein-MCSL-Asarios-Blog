@@ -56,14 +56,12 @@ class FormController extends Controller
                 $value = "XXXXXXXXXX";
             }
             $value = html_entity_decode($value);
-
-
         $label = isset(Settings::$exl[$name]) ? Settings::$exl[$name] : $name;
         $class = FormController::getClass($name,1,$table);
         $req   = FormController::getReq($name);
         $type = FormController::getClass($name);
         $rows = FormController::getRows($type);
-
+        $disa = FormController::getDisa($name,$table);
             $namefield = $name."Field";
 
 
@@ -78,6 +76,7 @@ class FormController extends Controller
                 'class' => $class,
                 'rows'  => $rows,
                 "required" => $req,
+                "disabled" => $disa,
 
                 ];
             if($name == "users_id")
@@ -101,6 +100,24 @@ class FormController extends Controller
         return $fields;
 
         }
+    }
+    public static function getDisa($name,$table)
+    {
+            if(isset($disa[$table])){
+
+                if(!in_array($name,Settings::$disa[$table]) || CheckZRights("CommentsEdit"))
+                {
+                    return ;
+                }
+            }
+            if($table != "comments")
+            {
+                return ;
+            }
+
+
+            return "disabled";
+
     }
     public static function getReq($oname)
     {
@@ -282,6 +299,10 @@ class FormController extends Controller
                 return "artselect";
             break;
             case "content":
+                if($table == "comments")
+                {
+                    return "textarea_nohtml";
+                }
                 return "textarea";
             break;
             case "content_en":

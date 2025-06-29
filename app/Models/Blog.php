@@ -73,7 +73,8 @@ class Blog extends Model
                 ->orWhere('blogs.content', 'like', '%' . $search . '%')
                 ->orWhere('blog_authors.name', 'like', '%' . $search . '%')
                 ->orWhere('blog_categories.name', 'like', '%' . $search . '%')
-                ->orWhere('blogs.id', 'like', '%' . $search . '%');
+                ->orWhere('blogs.id', 'like', '%' . $search . '%')
+                ->orWhere('blogs.created_at', 'like', '%' . $search . '%');
         }
         //
         return $query;

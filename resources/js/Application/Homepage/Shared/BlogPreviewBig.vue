@@ -10,9 +10,9 @@
         <img
             :src="`/images/blogs/${blog.url}`"
             :alt="blog.name"
-            width="520"
+            width="1000"
             height="390"
-            style="max-height:420px;margin-right:-10px;"
+            style="max-height:500px;margin-right:-10px;"
             :class="['object-cover w-full rounded lg:col-span-7 object-cover rounded bg-layout-sun-100 dark:bg-layout-night-100', blog.madewithai ? 'ai-icon' : '']"
 
         />
@@ -60,7 +60,7 @@
 
 
             <!-- Blog-Zusammenfassung -->
-            <div v-html="blog.summary" class="pb-2"></div>
+            <div v-html="smilies(blog.summary)" class="pb-2"></div>
 
             <!-- Lesezeit anzeigen -->
             <div>
@@ -85,7 +85,7 @@ import DisplayNumber from "@/Application/Components/Content/DisplayNumber.vue";
 import AiButton from "@/Application/Components/Content/AiButton.vue";
 import editbtns from "@/Application/Components/Form/editbtns.vue";
 import SocialButtons from "@/Application/Components/Social/socialButtons.vue";
-
+import { CleanTable_alt, replaceSmilies } from '@/helpers';
 export default {
     name: "Homepage_Shared_BlogPreviewBig",
     components: {
@@ -113,6 +113,15 @@ export default {
         //     type: Number,
         // },
     },
+
+methods:{
+    smilies(text){
+                    return replaceSmilies(this.nl2br(text));
+                },
+            nl2br(text){
+                return text?.replace(/\n/g,"<br />");
+            },
+}
 };
 </script>
 
@@ -154,6 +163,10 @@ export default {
     overflow:visible;
 
 }
+}
+.object-cover{
+    min-height:390px;
+    width:auto;
 }
 img {
   display: block;

@@ -1,49 +1,40 @@
 <template>
     <Layout>
-        <MetaHeader :title="'Bilder - ' + ocont.slug" />
+        <MetaHeader :title="'Bilder - ' + ocont?.slug || 'Suchergebnisse'" />
         <div @click="handleBodyClick">
-        <div v-if="ocont.id" class="p-4 bg-layout-sun-200 dark:bg-layout-night-200">
+        <div v-if="ocont?.id" class="p-4 bg-layout-sun-200 dark:bg-layout-night-200">
         <hgroup>
-            <h1 class="text-2xl font-bold">{{ decodeEntities(ocont.slug) }}</h1>
-            <h4 v-html="ocont.description.replace('fx_year()', new Date().getFullYear()).replace(/\n/g, '<br />')"></h4>
+            <h1 class="text-2xl font-bold">{{ decodeEntities(ocont?.slug) }}</h1>
+            <h4 v-html="ocont?.description.replace('fx_year()', new Date().getFullYear()).replace(/\n/g, '<br />')"></h4>
 
 
         </hgroup>
        </div>
     <div>
-            <div class="p-2 md:p-4" v-if="Array.isArray(entries.data) && entries.data.length === 0 && form.search">
-                <alert type="warning">
-                    Für den vorgegebenen Suchbegriff wurden keine Bilder gefunden.
-                </alert>
-            </div>
 
-                            <button-group>
-                                <input-icon-hyperlink
-                                    v-if="createOn"
-                                    :href="routeCreate"
-                                    display_type="table"
-                                >
-                                    <template #icon>
-                                        <icon-plus-circle
-                                            class="button_icon"
-                                        ></icon-plus-circle>
-                                        Erstelle
-                                    </template>
-                                </input-icon-hyperlink>
-                                <slot name="button"></slot>
-                            </button-group>
+
+        <newbtn table="images">
+
+        </newbtn>
                         </div>
                         <div class="flex justify-between items-center">
                             <search-filter
                             v-if="searchFilter"
                             v-model="form.search"
                             class="w-full"
+                            ref="searchField"
                             @reset="reset"
+                            @input="onSearchInput"
                             />
 
                 </div>
-
-                <div id="gallery" v-for="item in entries.data" :key="item.id"
+                <div class="p-2 md:p-4" v-if="Array.isArray(entries.data) && entries.data.length === 0 && form.search">
+                <alert type="warning">
+                    Für den vorgegebenen Suchbegriff wurden keine Bilder gefunden.
+                </alert>
+            </div>
+                <div id="gallery">
+                <div v-for="item in entries.data" :key="item?.id"
     class="w-full block max-w-sm gap-3 mx-auto sm:max-w-full group mb-4
         lg:grid lg:grid-cols-12 bg-layout-sun-100 dark:bg-layout-night-100
         border-2 border-layout-sun-300 dark:border-layout-night-300 p-4"
@@ -51,16 +42,16 @@
 >
 
     <!-- Linke Spalte: Thumbnail -->
-    <div :id="'st' + item.id" class="relative lg:col-span-3">
+    <div :id="'st' + item?.id" class="relative lg:col-span-4">
         <a
-  :href="'/images/images/big/' + item.image_path"
-  :data-pswp-width="item.img_x"
-  :data-pswp-height="item.img_y"
+  :href="'/images/images/big/' + item?.image_path"
+  :data-pswp-width="item?.img_x"
+  :data-pswp-height="item?.img_y"
 >
  <ZoomImage
-  :src="'/images/images/thumbs/' + item.image_path"
-  :alt="item.title"
-  :title="item.title"
+  :src="'/images/images/thumbs/' + item?.image_path"
+  :alt="item?.title"
+  :title="item?.title"
   :width="300"
   :height="300"
   class="imgprev"
@@ -68,18 +59,19 @@
 </a>
     </div>
 
+
     <!-- Mittlere Spalte: Überschrift, Beschreibung und Kommentar-Slot -->
-    <div class="p-6 space-y-2 lg:col-span-6 ml-6">
+    <div class="py-6 space-y-2 lg:col-span-5 ">
         <h2 class="text-xl font-semibold sm:text-2xl font-title whitespace-pre-line">
-        <p v-html="item.headline"></p>
+        <p v-html="item?.headline"></p>
         </h2>
 
         <div class="text-layout-sun-700 dark:text-layout-night-700 whitespace-pre-line">
-            <p v-html="item.message"></p>
+            <p v-html="stripTagsCom(item?.message)"></p>
         </div>
 
 
-            <SocialButtons :postId="item.id" />
+            <SocialButtons :postId="item?.id" />
 </div>
 
 
@@ -88,35 +80,37 @@
         <div class="text-sm font-semibold text-layout-sun-800 dark:text-layout-night-800">
         <h3>Kurzinfos</h3>
         </div>
-        <div v-if="item.Format">
-        <b>Format:</b> {{ item.Format }}
+        <div v-if="item?.Format">
+        <b>Format:</b> {{ item?.Format }}
         </div>
-        <averageRating :postId="item.id" :av="parseFloat(ratings['original'][item.id]?.average) || 0" :tot="ratings['original'][item.id]?.total || 0"/>
+        <averageRating :postId="item?.id" :av="parseFloat(ratings['original'][item?.id]?.average) || 0" :tot="ratings['original'][item?.id]?.total || 0"/>
         <!-- <span v-if="hasRight('delete', 'images') || hasRight('edit', 'images') " class="flex space-x-2">
         Edit Icon
         <span v-if="hasRight('edit', 'images') "
                 class="inl"
-                @click.prevent="editDataRow(item.id)">
+                @click.prevent="editDataRow(item?.id)">
             <icon-pencil class="w-6 h-6 cursor-pointer" v-tippy />
             <tippy>{{ editDescription }}</tippy>
         </span>
 
         <span v-if="hasRight('delete', 'images') "
                 class="inl"
-                @click="deleteDataRow(item.id)">
+                @click="deleteDataRow(item?.id)">
             <icon-trash class="w-6 h-6 cursor-pointer" v-tippy />
             <tippy>{{ deleteDescription }}</tippy>
         </span>
         </span> -->
-        <editbtns :id="item.id" table="images" />
+        <editbtns :id="item?.id" table="images" />
         <div class="text-xs text-layout-sun-600 dark:text-layout-night-600">
-        <display-date :value="item.created_at" :time-on="false" />
-        </div>
+        <display-date :value="item?.created_at" :time-on="false" />
 
-        <div v-if="item.camera" class="text-xs text-layout-sun-600 dark:text-layout-night-600">
-        <IconCamera />&nbsp;&nbsp;{{ item.camera }}
+    </div>
+
+        <div v-if="item?.camera" class="text-xs text-layout-sun-600 dark:text-layout-night-600">
+        <IconCamera />&nbsp;&nbsp;{{ item?.camera }}
         </div>
     </div>
+</div>
 </div>
 
 <!-- Pagination -->
@@ -142,7 +136,7 @@
                         <!-- Normale Links -->
                         <a
                             v-else
-                            :href="link.url"
+                            :href="link.url + '&search=' + searchterm"
                             class="flex items-center px-2.5 py-0.5 mx-1 mb-1 h-7 transition-colors duration-200 transform rounded-md border hover:bg-layout-sun-200 hover:text-layout-sun-800 dark:hover:bg-layout-night-200 dark:hover:text-layout-night-800"
                         >
                             <span v-html="link.label"></span>
@@ -157,15 +151,22 @@
 <script>
 import Layout from "@/Application/Homepage/Shared/Layout.vue";
 import MetaHeader from "@/Application/Homepage/Shared/MetaHeader.vue";
+import {stripTags} from "@/helpers";
 import ZoomImage from "@/Application/Components/Content/ZoomImage.vue";
 import SocialButtons from "@/Application/Components/Social/socialButtons.vue";
 import averageRating from "@/Application/Components/Social/averageratings.vue";
 import editbtns from "@/Application/Components/Form/editbtns.vue";
+import newbtn from "@/Application/Components/Form/newbtn.vue";
 import DisplayDate from "@/Application/Components/Content/DisplayDate.vue";
 import IconCamera from "@/Application/Components/Icons/Camera.vue";
+import mapValues from "lodash/mapValues";
+import SearchFilter from "@/Application/Components/Lists/SearchFilter.vue";
+import pickBy from "lodash/pickBy";
+import throttle from "lodash/throttle";
 import PhotoSwipeLightbox from "photoswipe/lightbox";
 import "photoswipe/style.css";
 import he from "he";
+import Alert from "@/Application/Components/Content/Alert.vue";
 
 export default {
   components: {
@@ -175,14 +176,17 @@ export default {
     SocialButtons,
     averageRating,
     editbtns,
+    newbtn,
     DisplayDate,
     IconCamera,
+    SearchFilter,
+    Alert,
   },
   props: {
     entries: {
-      type: [Array, Object],
-      default: () => [],
-    },
+    type: Object,
+    required: true,
+  },
     ocont: {
       type: [Array, Object],
       default: () => [],
@@ -202,20 +206,55 @@ export default {
       type: String,
       default: '',
     },
-    form: {
-      type: Object,
-      default: () => ({
-        search: '',
-      }),
+
+    filters: {
+        type: Object,
+        default: () => ({ search: '' }),
     },
   },
   data() {
     return {
       lightbox: null,
       openIndex: null,
+      form: {
+                search: this.filters?.search ?? "",
+                },
+      searchterm : this.filters?.search ?? "",
     };
   },
+  watch: {
+    form: {
+        handler: throttle(function () {
+            const query = pickBy(this.form);
+
+            this.$inertia.get(
+                this.route('home.images.search.cat'),
+                query,
+                {
+                    preserveState: true,
+                    replace: true,
+                }
+            );
+        }, 150),
+        deep: true,
+    },
+  '$page.url'() {
+    this.$nextTick(() => {
+      this.$refs.searchField?.focus();
+    });
+  }
+
+
+},
   methods: {
+    reset() {
+        this.form = mapValues(this.form, () => null);
+    },
+    stripTagsCom(txt)
+    {
+        txt = stripTags(txt,"br,i");
+        return txt.replace(/(<br\s*\/?>\s*){2,}/gi, '<br>');
+    },
     decodeEntities(text) {
       if (text) {
         text = text.replace(/<br\s*\/?>/g, "\n");
@@ -239,10 +278,13 @@ export default {
     },
   },
   mounted() {
+    this.$nextTick(() => {
+    this.$refs.searchField?.focus();
+    });
     const hash = window.location.hash;
     if (hash && hash.startsWith("#st")) {
       const id = hash.replace("#st", "");
-      const index = this.entries.data.findIndex((item) => String(item.id) === id);
+      const index = this.entries.data.findIndex((item) => String(item?.id) === id);
 
       if (index !== -1) {
         this.openIndex = index;

@@ -3,20 +3,24 @@
             <MetaHeader title="Wussten Sie Schon ?" />
         <section class="max-w-3xl mx-auto mt-10 px-4">
             <h1 class="text-3xl font-bold mb-6 text-layout-title">Wussten Sie schon...</h1>
-            <div class="p-2 md:p-4" v-if="Array.isArray(items.data) && items.data.length === 0 && form.search">
-                <alert type="warning">
-                    Für den vorgegebenen Suchbegriff wurden keine Bilder gefunden.
-                </alert>
-            </div>
+            <newbtn table="didyouknow">
+            </newbtn>
             <div class="flex justify-between items-center">
-                            <search-filter
+                <search-filter
                             v-if="searchFilter"
                             v-model="form.search"
                             class="w-full"
+                            ref="searchField"
                             @reset="reset"
+                            @input="onSearchInput"
                             />
 
                 </div>
+                <div class="p-2 md:p-4" v-if="Array.isArray(items.data) && items.data.length === 0 && form.search">
+                <alert type="warning">
+                    Für den vorgegebenen Suchbegriff wurden keine DidYouKnows gefunden.
+                </alert>
+            </div>
             <div v-for="(item, index) in items.data" :key="item.id || index" class="mb-4 border border-gray-300 dark:border-gray-600 rounded-lg">
                 <span :id="'st' + item.id"></span>
                 <button
@@ -80,102 +84,112 @@
         </Layout>
     </template>
 
-    <script>
-    import Layout from '@/Application/Homepage/Shared/Layout.vue';
-    import MetaHeader from "@/Application/Homepage/Shared/MetaHeader.vue";
-    import editbtns from '@/Application/Components/Form/editbtns.vue';
-    import SocialButtons from "@/Application/Components/Social/socialButtons.vue";
-    import averageRating from "@/Application/Components/Social/averageratings.vue";
-    import pickBy from "lodash/pickBy";
-    import { CleanTable, CleanId } from '@/helpers';
-    import SearchFilter from "@/Application/Components/Lists/SearchFilter.vue";
-    import mapValues from "lodash/mapValues";
-    import { throttle } from "lodash";
-    export default {
-        components: { Layout, editbtns,SocialButtons, averageRating,SearchFilter,MetaHeader  },
-        props: {
-        items: {
-            type: [Array,Object],
-            required: false,
-        },
-        ratings: {
-            type: [Array, Object],
-            default: [],
-                },
+<script>
+import Layout from '@/Application/Homepage/Shared/Layout.vue';
+import MetaHeader from "@/Application/Homepage/Shared/MetaHeader.vue";
+import editbtns from '@/Application/Components/Form/editbtns.vue';
+import newbtn from "@/Application/Components/Form/newbtn.vue";
+import SocialButtons from "@/Application/Components/Social/socialButtons.vue";
+import averageRating from "@/Application/Components/Social/averageratings.vue";
+import pickBy from "lodash/pickBy";
+import mapValues from "lodash/mapValues";
+import { throttle } from "lodash";
+import SearchFilter from "@/Application/Components/Lists/SearchFilter.vue";
+import Alert from "@/Application/Components/Content/Alert.vue";
+export default {
+  components: {
+    Layout,
+    editbtns,
+    SocialButtons,
+    averageRating,
+    SearchFilter,
+    MetaHeader,
+    newbtn,
+    Alert,
+  },
+  props: {
+    items: {
+      type: [Array, Object],
+      required: false,
+    },
+    ratings: {
+      type: [Array, Object],
+      default: () => ([]),
+    },
     searchFilter: {
-        type: Boolean,
-        default: true,
+      type: Boolean,
+      default: true,
     },
     filters: {
-    type: Object,
-    default: () => ({}),
-  },
+      type: Object,
+      default: () => ({}),
+    },
     searchText: {
-        type: String,
-        default: "Hier kannst du den Suchbegriff eingeben",
+      type: String,
+      default: "Hier kannst du den Suchbegriff eingeben",
     },
     searchValue: {
-        type: String,
-        default: null,
+      type: String,
+      default: null,
     },
     links: {
       type: Array,
-      default: () => [],
+      default: () => ([]),
     },
-        },
-        data() {
-        return {
-            openIndex: null,
-            form: {
-            search: this.filters.search,
-        },
-
-        };
-        },
-        watch: {
-            form: {
-                handler: throttle(function () {
-                    let query = pickBy(this.form);
-                    var tablezz = CleanTable();
-                    this.$inertia.get(
-                        this.route("home.didyouknow"),
-                        Object.keys(query).length ? query : { remember: "forget" },
-                        {
-                            preserveState: true,
-                            replace:true,
-                        }
-                    );
-                }, 150),
-                deep: true,
-            },
-        },
-        methods: {
-        reset() {
-            this.form = mapValues(this.form, () => null);
-        },
-        toggle(index) {
-            this.openIndex = this.openIndex === index ? null : index;
-        },
-        },
-        mounted() {
-            const hash = window.location.hash;
-            if (hash && hash.startsWith("#st")) {
-                const id = hash.replace("#st", "");
-                const index = this.items.findIndex((item) => String(item.id) === id);
-
-                if (index !== -1) {
-                this.openIndex = index;
-
-                // Warten, bis das Element sichtbar gerendert ist
-                this.$nextTick(() => {
-                    const el = document.getElementById(`st${id}`);
-                    if (el) {
-                    const y = el.getBoundingClientRect().top + window.pageYOffset - 115;
-                    window.scrollTo({ top: y, behavior: 'smooth' });
-                    }
-                });
-                }
-            }
-        }
+  },
+  data() {
+    return {
+      openIndex: null,
+      form: {
+        // Hier form.search initial mit filters.search befüllen oder leer
+        search: this.filters?.search ?? "",
+      },
     };
-    </script>
+  },
+  watch: {
+    form: {
+      handler: throttle(function () {
+        const query = pickBy(this.form);
+        if (Object.keys(query).length === 0) return; // Keine Anfrage wenn leer
+        this.$inertia.get(
+          this.route("home.didyouknow"),
+          query,
+          {
+            preserveState: true,
+            replace: true,
+          }
+        );
+      }, 150),
+      deep: true,
+      immediate: false,
+    },
+  },
+  methods: {
+    reset() {
+      this.form = mapValues(this.form, () => null);
+    },
+    toggle(index) {
+      this.openIndex = this.openIndex === index ? null : index;
+    },
+  },
+  mounted() {
+    const hash = window.location.hash;
+    if (hash && hash.startsWith("#st")) {
+      // Sicherstellen, dass items.data ein Array ist
+      const data = Array.isArray(this.items) ? this.items : (this.items?.data ?? []);
+      const id = hash.replace("#st", "");
+      const index = data.findIndex((item) => String(item.id) === id);
+      if (index !== -1) {
+        this.openIndex = index;
+        this.$nextTick(() => {
+          const el = document.getElementById(`st${id}`);
+          if (el) {
+            const y = el.getBoundingClientRect().top + window.pageYOffset - 115;
+            window.scrollTo({ top: y, behavior: 'smooth' });
+          }
+        });
+      }
+    }
+  },
+};
+</script>

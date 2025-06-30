@@ -47,4 +47,11 @@
 ![Version](https://img.shields.io/badge/version-2.58.4-green) User & User Details vues have to be done (#41)  
 ![Version](https://img.shields.io/badge/version-2.59.4-green) Add Comments Center (#43)  
 ![Version](https://img.shields.io/badge/version-2.60.4-green) fixed Bugs in HTML Editor  
+![Version](https://img.shields.io/badge/version-2.61.1-green) users_id autoselect (#38)  
+![Version](https://img.shields.io/badge/version-2.62.9-green) Remove Watermarks from Thumbnails (#15)  
+![Version](https://img.shields.io/badge/version-2.63.0-green) Search Fields on almost all pages (#44)  
+![Version](https://img.shields.io/badge/version-2.64.5-green) Migrate Comments & Image Ratings to MCSL (#42)  
+![Version](https://img.shields.io/badge/version-2.65.9-green) alert field in search function (#46)  
+![Version](https://img.shields.io/badge/version-2.66.4-green) link from comment table to entry (#45)  
+
 

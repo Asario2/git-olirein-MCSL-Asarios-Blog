@@ -5,6 +5,7 @@
 /public/storage
 /public/images/images/orig
 /storage/*.key
+README.md
 /vendor
 .env
 *.bat

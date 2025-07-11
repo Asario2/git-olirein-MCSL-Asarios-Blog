@@ -13,7 +13,7 @@
     DB_CONNECTION=mysql  
     DB_HOST=127.0.0.1  
     DB_PORT=3306  
-    DB_DATABASE=yourdb
+    DB_DATABASE=yourdb  
     DB_USERNAME=root  
     DB_PASSWORD=mypasswort  
 11. run `php artisan key:generate` in a shell

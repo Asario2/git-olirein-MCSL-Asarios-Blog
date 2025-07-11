@@ -23,7 +23,7 @@
             </template>
 
             <button type="button" @click="openModal_alt2" class="icon-btn" v-tippy aria-label="Bildupload">
-            <b><IconPictures stroke="white"/></b>
+            <b><IconPictures stroke="currentColor"/></b>
             </button>
             <tippy>Bildupload</tippy>
 
@@ -105,7 +105,7 @@
     import tippy from 'tippy.js';
     import 'tippy.js/dist/tippy.css';
     import ImageUploadModal from '@/Application/Components/ImageUploadModal.vue';
-    import { selectionHelper, GetSettings } from "@/helpers";
+    import { selectionHelper, GetSettings,rumLaut } from "@/helpers";
     import IconPictures from "@/Application/Components/Icons/IconPictures.vue";
     import IconList from "@/Application/Components/Icons/IconList.vue";
     import IconOrdList from "@/Application/Components/Icons/IconOrdList.vue";
@@ -126,7 +126,9 @@
         selectionHelper,
         GetSettings,
         smileys,
-        },
+        Tippy,
+        rumLaut,
+    },
         props: {
         imageId: [String, Number],
         modelValue: [String, Number],
@@ -177,14 +179,14 @@
             return this.modelValue;
             },
             set(value) {
-            this.$emit("update:modelValue", value);
+            this.$emit("update:modelValue", rumLaut(value));
             },
         },
         },
         watch: {
         modelValue(newVal) {
             if (this.$refs.editor && this.$refs.editor.innerHTML !== newVal) {
-            this.$refs.editor.innerHTML = newVal;
+            this.$refs.editor.innerHTML = this.rumLaut(newVal);
             this.setCursorAtEnd();
 
             }
@@ -195,6 +197,7 @@
       if (!this.required) return true;
 
       const html = this.$refs.editor?.innerHTML || '';
+      html = rumLaut(html);
       const plain = html.replace(/<[^>]*>/g, '').trim();
 
       const isValid = plain.length > 0;
@@ -217,7 +220,7 @@
     //   }
     // },
     setInitialContent() {
-      this.$refs.editor.innerHTML = this.content;
+      this.$refs.editor.innerHTML = rumLaut(this.content);
     },
 
             getLabel(name) {
@@ -227,6 +230,7 @@
   updateValue() {
     // this.cleanupEmptyTags();
     const html = this.$refs.editor.innerHTML.replace('%5B', '[').replace('%5D', ']');
+    html = rumLaut(html);
     this.$emit('update:modelValue', html);
 
         document.getElementById(this.name + "_alt").value = html;
@@ -417,6 +421,8 @@ restoreSelection() {
         const img = document.createElement("img");
         img.src = imageUrl;
         img.alt = "Bild";
+        img.class = "inline";
+        img.style.display = "inline";
         const br = document.createElement("br");
         this.$nextTick(() => {
           const selection = window.getSelection();

@@ -23,5 +23,15 @@
             fill="#0EA5E9"
         />
     </svg> -->
-    <img src="/images/web/alogo.png" style="height:40px;min-width:40px !important;max-width:40px;">
+    <img :src="'/images/_' + GetSd() + '/web/alogo.png'" style="height:40px;min-width:40px !important;max-width:40px;">
 </template>
+<script>
+export default {
+    name: "Homepage_Shared_BlogPreviewBig",
+methods:{
+    GetSd(){
+        return window.subdomain;
+    }
+}
+};
+</script>

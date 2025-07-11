@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="GetSd() == 'ab'">
         <Link :href="routeName" class="flex items-center">
             <div>
                 <favicon class="h-10 w-10 mr-4"></favicon>
@@ -29,6 +29,9 @@
                 </div>
             </div>
         </Link>
+    </div>
+    <div v-else-if="GetSd() == 'mfx'">
+    <a href='/'><img src="/images/_mfx/web/brandheader.png"></a>
     </div>
 </template>
 
@@ -63,5 +66,11 @@ export default {
             default: null,
         },
     },
+    methods:{
+    GetSd(){
+        return window.subdomain;
+    }
+}
 };
+
 </script>

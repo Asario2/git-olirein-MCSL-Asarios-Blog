@@ -7,6 +7,7 @@ use App\Models\Comment;
 use App\Models\Post;
 use Auth;
 use App\Mail\CommentMail;
+use App\Mail\ContactMail;
 use Illuminate\Support\Facades\Mail;
 use App\Helpers\MailHelper;
 use Illuminate\Support\Facades\DB;
@@ -124,13 +125,38 @@ class CommentController extends Controller
         // return redirect(url()->previous() . '#comment_' . $request->postid)
         //     ->with('success', 'Kommentar erfolgreich gepostet!');
         $url = url()->previous() . "#comment_{$request->post_id}";
-        \Log::info("TABLE: ".$table.auth()->user()->name);
+        // \Log::info("TABLE: ".$table.auth()->user()->name);
         Mail::to('parie@gmx.de')->send(new CommentMail('Asario.de', 'http://localhost:8081/admin/tables/comments/show',auth()->user()->name,$comment->content));
         return response()->json([
             'status' => 'success',
             'message' => 'Kommentar erfolgreich gespeichert',
         ]);
 
+    }
+    public function sendmc(Request $request)
+{
+    \Log::info($request);
+    $request->validate([
+        'name' => 'required',
+        'email' => 'required|email',
+        'subject' => 'required',
+        'message' => 'required',
+        'captcha' => 'required|in:7',
+        'accepted' => 'accepted',
+    ]);
+    Mail::to('parie@gmx.de')->send(new ContactMail($_SERVER['HTTP_HOST'],$request->name,$request->email,$request->subject,$request->message));
+    // try {
+    //     Mail::to('admin@marblefx.de')->send(new ContentMail(
+    //         $request->nick,
+    //         $requesr->text,
+    //     ));
+    //     return response()->json(['status' => 'ok']);
+    // } catch (\Exception $e) {
+    //     return response()->json(['error' => $e->getMessage()], 500);
+    // }
+}
+    public function SendMailContent(Request $request){
+        return true;
     }
      public function store(Request $request,$table='')
     {

@@ -1,0 +1,34 @@
+@layer utilities {
+    .form_text_h3 {
+        @apply text-lg font-medium text-layout-sun-900 dark:text-layout-night-900;
+    }
+
+    .form_qr_code {
+        @apply mt-4 p-2 inline-block bg-layout-sun-0 dark:bg-layout-sun-0;
+    }
+
+    .form_link {
+        @apply underline text-sm
+        rounded-md
+        focus:outline-none
+        focus:ring-2
+        focus:ring-offset-2
+        ms-2
+
+        text-layout-sun-600
+        hover:text-layout-sun-900
+        focus:ring-primary-sun-500
+
+        dark:text-layout-night-600
+        dark:hover:text-layout-night-900
+        dark:focus:ring-offset-layout-night-800;
+    }
+
+    .form_text_info {
+        @apply text-sm mt-2;
+    }
+
+    .form_text_info_success {
+        @apply text-sm mt-2 text-green-600 dark:text-green-400;
+    }
+}

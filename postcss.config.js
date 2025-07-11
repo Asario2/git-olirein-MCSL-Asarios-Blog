@@ -1,7 +1,8 @@
+const subdomain = process.env.SUBDOMAIN || 'default';
+
 export default {
-  plugins: {
-    autoprefixer: {},
-    tailwindcss: {}, 
- // Weitere Plugins
-  }
-}
+    plugins: {
+        tailwindcss: `./tailwind.${subdomain}.config.js`,
+        autoprefixer: {},
+    },
+};

@@ -253,6 +253,21 @@ class FormController extends Controller
     }
     public static function getClass($name,$cl='',$table='')
     {
+        if(substr_count($name,"xkis_"))
+        {
+            return "isbox";
+        }
+        elseif(Substr_count($name,"xis_"))
+        {
+            if ($cl) {
+                return "xis";
+            }
+            return "checkbox";
+        }
+        elseif(substr_count($name,"img_"))
+        {
+            return "imul";
+        }
         switch($name)
         {
             case "id":
@@ -390,6 +405,9 @@ class FormController extends Controller
                 }
                 return "IID";
             break;
+            case "projects_id":
+                return "select_id";
+            break;
             case "pub":
                 return "pub";
             break;
@@ -427,6 +445,20 @@ class FormController extends Controller
                 return "isbox";
             break;
             case "xis_IsSaleable":
+                if ($cl) {
+                    return "xis";
+                }
+                return "checkbox";
+
+            break;
+            case "xis_mcs":
+                if ($cl) {
+                    return "xis";
+                }
+                return "checkbox";
+
+            break;
+            case "xis_mcsl":
                 if ($cl) {
                     return "xis";
                 }
@@ -867,7 +899,7 @@ var $j = jQuery.noConflict(); // Weist jQuery einer anderen Variable zu, um Konf
 
         if ($subdomain == 'hm') {
             // Wechsel zur 'laravel_tutorial_hm' Verbindung
-            $connection = DB::connection('mariadb_hm');  // Sicherstellen, dass diese Verbindung in config/database.php definiert ist
+            $connection = DB::connection('mariadb_mfx');  // Sicherstellen, dass diese Verbindung in config/database.php definiert ist
         } else {
             // Verwende die Standardverbindung
             $connection = DB::connection();  // Standardverbindung (laravel_tutorial)

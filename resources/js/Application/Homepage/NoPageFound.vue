@@ -9,17 +9,36 @@
     </layout>
 </template>
 <script>
-import { defineComponent } from "vue";
-import Layout from "@/Application/Homepage/Shared/Layout.vue";
-
+import { defineComponent, defineAsyncComponent } from 'vue';
 import PageTitle from "@/Application/Components/Content/PageTitle.vue";
 
-export default defineComponent({
-    name: "Homepage_NoPageFound",
+// Mapping für dynamische Layouts
+const layoutComponents = {
+  mfx: () => import('@/Application/Homepage/Shared/mfx/Layout.vue'),
+  dag: () => import('@/Application/Homepage/Shared/dag/Layout.vue'),
+  default: () => import('@/Application/Homepage/Shared/Layout.vue'),
+};
 
-    components: {
-        Layout,
-        PageTitle,
-    },
+// Funktion zur Ermittlung der ersten Subdomain
+function getDomKey(urlString) {
+  try {
+    const url = new URL(urlString);
+    const hostname = url.hostname;
+    const parts = hostname.split('.');
+
+    return parts.length > 2 ? parts[0] : "default";
+  } catch (e) {
+    return "default";
+  }
+}
+
+export default defineComponent({
+  name: "Homepage_NoPageFound",
+  components: {
+    Layout: defineAsyncComponent(
+      layoutComponents[getDomKey(window.location.href)] || layoutComponents['default']
+    ),
+    PageTitle,
+  },
 });
 </script>

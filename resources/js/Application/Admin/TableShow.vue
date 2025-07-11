@@ -5,7 +5,6 @@
         <breadcrumb :breadcrumbs="breadcrumbs" :current="'Tabelle ' + table"></breadcrumb>
 
       </template>
-
         <!-- Table -->
         <section class="mt-8">
 

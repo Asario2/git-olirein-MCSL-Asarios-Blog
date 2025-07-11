@@ -3,7 +3,6 @@
 /public/build
 /public/hot
 /public/storage
-/public/images/images/orig
 /storage/*.key
 /vendor
 .env
@@ -14,13 +13,6 @@
 Homestead.json
 Homestead.yaml
 auth.json
-README.md
-CHANGELOG.md
-INSTALL.md
-backup.sql
-*.ps1
-*.yml
-copy_to_docker.ps1
 npm-debug.log
 yarn-error.log
 /.fleet
@@ -29,3 +21,5 @@ yarn-error.log
 handbook/
 handbook_admin/.vitepress/dist
 handbook_admin/.vitepress/cache
+database/migrations/2025_06_28_000000_create_tenants_table.php_old
+database/migrations/2025_06_15_132002_add_commentedit_to_users_rights_table.php_old

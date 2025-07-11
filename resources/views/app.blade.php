@@ -2,31 +2,52 @@
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);
+    use App\Helpers;
+
+    $subdomain = SD(); // z.B. "foo", "bar"
+    $favicon = "/images/_{$subdomain}/web/alogo.png";
+
+    // Fallback, falls Datei nicht existiert
+    if (!file_exists(public_path($favicon))) {
+        $favicon = "/images/favicon_default.png";
+    }
     ?>
     <!DOCTYPE html>
     <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
+
+
     <head>
         <meta charset="utf-8">
+        <script>
+            if (typeof global === 'undefined') {
+                window.global = window;
+            }
+           window.Laravel = {
+                    userId: {{ auth()->id() ?? 'null' }},
+                };
+                window.subdomain = '{{$subdomain}}';
+                </script>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title inertia>{{ config('app.name', 'Laravel') }}</title>
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <link href="/css/shariff-complete.css" rel="stylesheet">
-        <link href="/css/app.css" rel="stylesheet">
+        <link rel="icon" type="image/png" href="{{ $favicon }}">
+
+        <link href="/css/app.css?time={{time()}}" rel="stylesheet">
+
+        <link href="{{ mix('resources/css/app.css') }}" rel="stylesheet">
+
+
+
         <script src="/js/jquery-3.6.0.min.js"></script>
 
         <!-- Shariff JavaScript (über CDN) -->
         <script src="/js/shariff.min.js"></script>
-        <script>
-        if (typeof global === 'undefined') {
-            window.global = window;
-        }
-       window.Laravel = {
-                userId: {{ auth()->id() ?? 'null' }},
-            };
-        </script>
+
         @routes
-        @vite('resources/js/app.js')
+        @vite(['resources/js/app.js'])
+        <link href="/css/tailw/{{$sd_alt}}.css?time={{time()}}" rel="stylesheet">
         @inertiaHead
         <!-- additional Scripts -->
         <script src="{{ mix('resources/js/user.js') }}"></script>

@@ -1,0 +1,9 @@
+@layer utilities {
+    .footer_link {
+        @apply inline-flex gap-x-2 py-0.5 px-2 rounded-lg
+        text-layout-sun-600 hover:text-layout-sun-800 hover:bg-layout-sun-200
+        focus:outline-none focus:ring-1 focus:ring-layout-sun-600
+        dark:text-layout-night-600 dark:hover:text-layout-night-800 dark:hover:bg-layout-night-300
+        dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-layout-night-600;
+    }
+}

@@ -83,7 +83,7 @@ class ImageUploadController extends Controller
 
                 $size2 = $size;
             }
-            $resizedPath = "images/{$table}{$big[$size]}{$imageName}";
+            $resizedPath = "images/_{$subdomain}/{$table}{$big[$size]}{$imageName}";
             // \Log::info("RP:".$resizedPath);
             // Neues Imagick-Objekt erstellen
             $imagick = new \Imagick();
@@ -122,7 +122,7 @@ class ImageUploadController extends Controller
             if($size == 1400 || $Message || $size == "500")
             {
                 list($width,$height) = getimagesize($resizedPath);
-                
+
                 $imageName = "/".$resizedPath;
             }
 

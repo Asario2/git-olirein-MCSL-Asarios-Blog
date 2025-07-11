@@ -16,6 +16,7 @@ use Laravel\Jetstream\Jetstream;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Session;
 use App\Http\Controllers\RatingController;
+use App\Models\Tenant;  // <-- hier Tenant importieren
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -42,8 +43,19 @@ class HomeController extends Controller
         return Inertia::render('Homepage/AiContent', ["data" => [$data]]); // <-- in Array umwandeln
     }
     //
-    public function home_blog_index()
+    public function home_blog_index(Request $request)
     {
+    //     $host = request()->getHost();
+    //     $subdomain = explode('.', $host)[0];
+    //     $tenant = Tenant::where('subdomain', $subdomain)->firstOrFail();
+
+    //     // Dynamische DB-Verbindung setzen
+    //     config(['database.connections.mysql.database' => $tenant->database]);
+    //     DB::purge('mysql');
+    //     DB::reconnect('mysql');
+    //     // \Log::info('Subdomain gefunden: ' . $subdomain);
+    //     // \Log::info('Tenant gefunden: ' . $tenant->database);
+
         $zeitpunkt = Carbon::now();
         //
         $blogs = Blog::select(

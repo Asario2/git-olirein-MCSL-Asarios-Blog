@@ -1,37 +1,46 @@
-import { defineConfig } from "vite";
-import laravel from "laravel-vite-plugin";
+import { defineConfig } from 'vite';
+import laravel from 'laravel-vite-plugin';
 import vue from '@vitejs/plugin-vue';
 
-export default defineConfig({
-  define: {
-    'process.env': {} // Verhindert Fehler bei process.env
-  },
-  server: {
-    host: '127.0.0.1', // IPv4 verwenden statt [::1]
-    hmr: {
-      host: '127.0.0.1', // HMR über IPv4
+function extractSubdomain(host) {
+    const parts = host.split('.');
+    if (parts.length >= 3) {
+        return parts[0]; // z. B. admin.meineseite.test ? "admin"
     }
-  },
-  plugins: [
-    laravel({
-      input: [
-        'resources/js/app.js',
-      ],
-      refresh: true,
-    }),
-    vue({
-      template: {
-        transformAssetUrls: {
-          base: null,
-          includeAbsolute: false,
+    return 'default';
+}
+
+export default defineConfig(({ command }) => {
+    const host = process.env.VITE_HOST || 'ab.localhost.de'; // Default-Host
+    const subdomain = extractSubdomain(host);
+
+    process.env.SUBDOMAIN = subdomain; // An PostCSS übergeben
+
+    return {
+        server: {
+            host: '127.0.0.1',
+            port: 5173,
+            hmr: {
+                host: 'mfx.localhost.de',
+            },
+            cors: true,
         },
-      },
-    }),
-  ],
-  css: {
-    postcss: './postcss.config.js',
-  },
-  optimizeDeps: {
-    include: ['photoswipe']
-  }
+        plugins: [
+            laravel({
+                input: [
+                    
+					'resources/css/app.css',
+					
+					`public/css/app.css`,
+					
+                    `resources/js/app.js`,
+                ],
+                refresh: true,
+            }),
+            vue(),
+        ],
+        define: {
+            'process.env': {}, // ?? verhindert Fehler "process is not defined"
+        },
+    };
 });

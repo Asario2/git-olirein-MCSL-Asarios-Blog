@@ -25,7 +25,7 @@
     // Subdomain extrahieren (erster Teil des Hosts)
     $subdomain = SD();
     ?>
-    <link rel="icon" href="/favicon_<?php echo $subdomain; ?>.png" type="image/png">
+    <link rel="icon" href="_<?php echo $subdomain; ?>/web/alogo.png" type="image/png">
     <link type='text/css' href='/css/app.css' rel='stylesheet'>
     <script src='/js/app.js' type='module'></script>
     <link rel="stylesheet" href="/photoswipe/photoswipe.css">
@@ -40,6 +40,8 @@
 
     <!-- Datetimepicker JS -->
     <link rel="stylesheet" type="text/css" href="/css/shariff.complete.css">
+    <link rel="stylesheet" type="text/css" href="/css/tailw/{{$subdomain}}.css">
+
 
     <link type='text/css' href='{{ asset('css/bootstrap.css') }}' rel='stylesheet'>
     <link type='text/css' href='{{ asset('css/user.css') }}' rel='stylesheet'>

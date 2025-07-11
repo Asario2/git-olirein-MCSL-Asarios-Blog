@@ -47,7 +47,7 @@ class HandleInertiaRequests extends Middleware
             },
             // saas_url
             'saas_url' => function () {
-                return "http://localhost:8081/";
+                return "http://localhost/";
                 // return config('app.url');
             },
             // version

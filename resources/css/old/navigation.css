@@ -1,0 +1,5 @@
+@layer utilities {
+    .navigation_card {
+        @apply bg-layout-sun-100 dark:bg-layout-night-100 p-4 rounded-lg;
+    }
+}

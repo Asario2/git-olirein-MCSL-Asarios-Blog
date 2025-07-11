@@ -11,6 +11,7 @@ use App\Http\Controllers\DarkModeController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\NameBindingsController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\HomeController_mfx;
 use App\Http\Controllers\HandbookController;
 use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\TwoFactorController;
@@ -30,23 +31,58 @@ use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\RightsController;
 use App\Helpers\Settings;
 use App\Mail\CommentMail;
+use App\Mail\ContactMail;
 use Illuminate\Support\Facades\Mail;
 
 GlobalController::SetDomain();
 // include __DIR__."/extraroutes.php";
+Route::get('/test-admin', function () {
+    return '✅ Middleware is_admin funktioniert';
+})->middleware(['auth', 'is_admin']);
 Route::get('/copyleft/images', [ImageUploadController::class, 'CopyLeft'])->name('images.copyleft');
 Route::get('/db-check', function () {
-    try {
-        DB::connection()->getPdo();
-        return 'Verbindung erfolgreich! Aktuelle Datenbank: ' . DB::connection()->getDatabaseName();
-    } catch (\Exception $e) {
-        return 'Fehler: ' . $e->getMessage();
-    }
+    $tenant = App\Models\Tenant::first(); // oder aus Subdomain ermitteln
+    $connection = $tenant->getConnectionName(); // "mariadb_mfx"
+
+    // Optional DB Name auslesen
+    $dbName = $tenant->getConnection()->getDatabaseName();
+
+    return response()->json([
+        'connection' => $connection,
+        'db' => $dbName,
+        'host' => request()->getHost(),
+    ]);
 });
-Route::get('/mail-test', function () {
-    Mail::to('test@example.com')->send(new CommentMail('Asario.de', 'http://localhost:8081/admin/tables/comments/show'));
-    return 'Mail gesendet!';
+
+# === MFX ===
+Route::domain('mfx.localhost.de')->group(function () {
+    Route::get('/', [HomeController_mfx::class,"home"])->name("home.mfx");
+    Route::get('/changelog', [HomeController_mfx::class,"mcsl_changelog"])->name("mfx.changelog");
+    Route::get('/home/users', function () {
+        return redirect("NoPageFound");
+    })->name('home.userlist2');
+    Route::get('/home/users/show/{user}/{id}', function () {
+        return redirect("NoPageFound");
+    })->name('user.show');
+    Route::get('/home/projects',  [HomeController_mfx::class,"projects"])->name("home.projects.mfx");
+    Route::get('/home/images',  [HomeController_mfx::class,"images"])->name("home.images.mfx");
+    Route::get('/home/people',  [HomeController_mfx::class,"people"])->name("home.people.mfx");
+    Route::get('/home/impressum',  [HomeController_mfx::class,"imprint"])->name("home.imprint.mfx");
+    Route::get('/home/infos/',  [HomeController_mfx::class,"infos_index"])->name("home.infos.mfx");
+    Route::get('/home/infos/show/{id}',  [HomeController_mfx::class,"infos_show"])->name("home.infos.show.mfx");
+    Route::get('/home/powered-by-mcs',  [HomeController_mfx::class,"infos_pow"])->name("home.powered.show.mfx");
+
 });
+Route::get('/api/tailwind-colors/{subdomain}', [HomeController_mfx::class,"getStyles"])->name("mfx.getstyles");
+Route::get('/api/getVotez', [HomeController_mfx::class,"getVotez"])->name("mfx.getvotez");
+// MAILFORM SUBMIT
+Route::post('/contact/send',[CommentController::class,"sendmc"]);
+
+Route::post('/mail-test',[CommentController::class,"sendm"]);
+// Route::get('/mail-test', function () {
+    // Mail::to('parie@gmx.de')->send(new CommentMail('Asario.de', 'http://localhost:8081/admin/tables/comments/show',auth()->user()->name,$comment->content));
+    // return 'Mail gesendet!';
+// });
 Route::get("/api/user/rights/des/{table}/{right}",[RightsController::class,"GetRights"])->name("GetRights");
 Route::get('/api/chkcom/{id?}', [CommentController::class, 'checkComment'])->name("comments.check");
 

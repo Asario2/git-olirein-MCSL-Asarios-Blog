@@ -12,7 +12,7 @@
         >
             <!-- Blogartikel -->
             <navigation-card v-if="canView('blogs')"
-                class="navigation_card"
+                class="navigation_card p-4 rounded-md bg-layout-sun-100 dark:bg-layout-night-100"
                 title="Blogartikel"
                 :routeName="route('admin.tables.show','blogs')"
                 linkName="Liste der Blogartikel"
@@ -27,7 +27,7 @@
             </navigation-card>
             <!-- Bilder -->
             <navigation-card v-if="canView('images')"
-                class="navigation_card"
+                class="navigation_card p-4 rounded-md bg-layout-sun-100 dark:bg-layout-night-100"
                 title="Bilder"
                 :routeName="route('admin.tables.show','images')"
                 linkName="Überblick Bilder"
@@ -42,7 +42,7 @@
             </navigation-card>
             <!-- Didyouknow -->
             <navigation-card v-if="canView('didyouknow')"
-                class="navigation_card"
+                class="navigation_card p-4 rounded-md bg-layout-sun-100 dark:bg-layout-night-100"
                 title="DidYouKnow"
                 :routeName="route('admin.tables.show','didyouknow')"
                 linkName="Liste der Wussten Sie Schon Sektion"
@@ -57,7 +57,7 @@
             </navigation-card>
             <!-- Shortpoems Overview -->
             <navigation-card v-if="canView('shortpoems')"
-                class="navigation_card"
+                class="navigation_card p-4 rounded-md bg-layout-sun-100 dark:bg-layout-night-100"
                 title="Shortpoems"
                 :routeName="route('admin.tables.show','shortpoems')"
                 linkName="Liste der Shortpoems"
@@ -67,12 +67,12 @@
                 icon="IconStory"
             >
                 <template #description>
-                                Hier findest du eine Liste aller DidYouKnow-artikel.
+                                Hier findest du eine Liste aller Kurzgeschichten.
                 </template>
             </navigation-card>
             <!-- Comments Overview-->
             <navigation-card v-if="canView('comments')"
-                class="navigation_card"
+                class="navigation_card p-4 rounded-md bg-layout-sun-100 dark:bg-layout-night-100"
                 title="Kommentare"
                 :routeName="route('admin.tables.show','comments')"
                 linkName="Liste der Kommentare"
@@ -85,7 +85,7 @@
             </navigation-card>
             <!-- Tabellen Overview -->
             <navigation-card v-if="modulRights?.DataBases"
-                class="navigation_card"
+                class="navigation_card p-4 rounded-md bg-layout-sun-100 dark:bg-layout-night-100"
                 title="Tabellen"
                 :routeName="route('admin.tables.index', table)"
                 linkName="Inhalte Verwalten"
@@ -99,7 +99,7 @@
             </navigation-card>
             <!-- laravel.log -->
             <navigation-card v-if="modulRights?.LogViewer"
-                class="navigation_card"
+                class="navigation_card p-4 rounded-md bg-layout-sun-100 dark:bg-layout-night-100"
                 title="Log"
                 :routeName="route('admin.laravel_log')"
                 linkName="Zum Laravel-Log"
@@ -111,7 +111,7 @@
                 <template #description> Logs anzeigen    </template>
             </navigation-card>
             <navigation-card v-if="modulRights?.UserRights"
-                class="navigation_card"
+                class="navigation_card p-4 rounded-md bg-layout-sun-100 dark:bg-layout-night-100"
                 title="Rechte"
                 :routeName="route('admin.users_rights')"
                 linkName="Benutzerberechtigungen"
@@ -195,4 +195,8 @@ export default defineComponent({
     max-width: 100px !important;
 
 } */
+/* .navigation_card{
+    @apply bg-primary-sun-400 dark:bg-primary-night-400;
+} */
+
 </style>

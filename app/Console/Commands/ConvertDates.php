@@ -7,6 +7,8 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use App\Http\Controllers\GlobalController;
+
 
 class ConvertDates extends Command
 {
@@ -15,7 +17,8 @@ class ConvertDates extends Command
 
     public function handle()
     {
-        $table = "privacy";
+        GlobalController::SetDomain();
+        $table = "cleo.projects";
         // Beispiel: Tabelle "your_table_name"
         $rows = DB::table($table)->get();
 
@@ -32,8 +35,8 @@ class ConvertDates extends Command
                 ]);
 
             $this->info("Updated row ID {$row->id}");
-        }
 
+            }
         $this->info('Conversion complete.');
     }
 }

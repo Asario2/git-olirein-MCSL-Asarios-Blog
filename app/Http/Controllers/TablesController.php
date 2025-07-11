@@ -575,8 +575,13 @@ class TablesController extends Controller
 
                 $ord = ["name","ASC"];
 
-            } elseif ($table == "images") {
+            }
+            elseif($table == "news" || $table == "projects"){
+                $ord = ["created_at","DESC"];
+            }
+            elseif ($table == "images") {
                 $ord = ["id", "DESC"];
+
             } elseif ($table == "privacy") {
                 $ord = ["ordering", "DESC"];
             } elseif($table == "texts"){
@@ -598,11 +603,22 @@ class TablesController extends Controller
             $xis = "xis_disabled";
             $xisd = "1";
         }
-        \Log::info("NA:".json_encode([$ord[0],$ord[1]]));
+
+        // \Log::info("NA:".json_encode([$ord[0],$ord[1]]));
+        // $tables = $query
+        //     ->filterdefault(['search' => request('search')])
+        //     ->whereNot($xis,$xisd)
+        //     ->orderByRaw("LOWER($table.$ord[0]) $ord[1]")
+        //     ->paginate($pag)
+        //     ->withQueryString();
+
+        $orderColumn = $ord[0];
+        $orderDirection = strtoupper($ord[1]) === 'DESC' ? 'DESC' : 'ASC';
+
         $tables = $query
             ->filterdefault(['search' => request('search')])
-            ->whereNot($xis,$xisd)
-            ->orderByRaw("LOWER($table.$ord[0]) $ord[1]")
+            ->whereNot($xis, $xisd)
+            ->orderBy(DB::raw("LOWER(`$table`.`$orderColumn`)"), $orderDirection)
             ->paginate($pag)
             ->withQueryString();
 
@@ -681,7 +697,7 @@ class TablesController extends Controller
             foreach ($rows as &$row) {
                 // created z. B. "2025-06-17 13:45:22"
                 // wir nehmen nur das Datum
-                $row->created = substr($row->created, 0, 100);
+                $row->created = substr($row->created, 0, 10<0);
             }
 
             $crea[$tablex] = $rows;
@@ -1734,10 +1750,10 @@ class TablesController extends Controller
             foreach ($tables as $i => $row) {
                 DB::table('admin_table')->where('id', $row->id)->update(['position_alt' => $i]);
 
-                \Log::info("Vergleiche '{$row->name}' mit neuer ID $newId");
+          // \Log::info("Vergleiche '{$row->name}' mit neuer ID $newId");
                 if ($row->id === $newId) {
                     $insertedPosition = $i;
-                    \Log::info("Treffer! Neue Position für ID $newId ist $i");
+              // \Log::info("Treffer! Neue Position für ID $newId ist $i");
                 }
             }
 
@@ -1766,12 +1782,12 @@ class TablesController extends Controller
                     $new = implode('', $chars);
                     $updates[$col] = $new;
 
-                    \Log::info("User ID 1 Update [$col] → $new (1 eingefügt bei Index $insertedPosition)");
+              // \Log::info("User ID 1 Update [$col] → $new (1 eingefügt bei Index $insertedPosition)");
                 }
 
                 if (!empty($updates)) {
                     DB::table('users_rights')->where('id', 1)->update($updates);
-                    \Log::info("users_rights erfolgreich aktualisiert", $updates);
+              // \Log::info("users_rights erfolgreich aktualisiert", $updates);
                 } else {
                     \Log::warning("Keine Updates für users_rights ID 1 durchgeführt.");
                 }
@@ -1791,7 +1807,7 @@ class TablesController extends Controller
                         $new = implode('', $chars);
                         $otherUpdates[$col] = $new;
 
-                        \Log::info("User ID {$otherUser->id} Update [$col] → $new (0 eingefügt bei Index $insertedPosition)");
+                  // \Log::info("User ID {$otherUser->id} Update [$col] → $new (0 eingefügt bei Index $insertedPosition)");
                     }
 
                     if (!empty($otherUpdates)) {
@@ -1988,7 +2004,7 @@ class TablesController extends Controller
     }
     public function GetCats($table,$id){
         $res = DB::table($table)->where("id",$id)->select("type_id","categorie_id")->first();
-        \Log::info("GC".json_encode($res));
+  // \Log::info("GC".json_encode($res));
         return response()->json($res);
     }
     public function DeleteTables(Request $request, $table, $id)
@@ -2011,7 +2027,7 @@ class TablesController extends Controller
             foreach ($tables as $i => $row) {
                 if ($row->id == $id) {
                     $deletedPosition = $i;
-                    \Log::info("Treffer! Zu löschende Position für ID $id ist $i");
+              // \Log::info("Treffer! Zu löschende Position für ID $id ist $i");
                     break;
                 }
             }
@@ -2034,7 +2050,7 @@ class TablesController extends Controller
                             array_splice($chars, $deletedPosition, 1);
                             $new = implode('', $chars);
                             $updates[$col] = $new;
-                            \Log::info("User ID {$user->id} Update [$col] → $new (Position $deletedPosition entfernt)");
+                      // \Log::info("User ID {$user->id} Update [$col] → $new (Position $deletedPosition entfernt)");
                         }
                     }
 

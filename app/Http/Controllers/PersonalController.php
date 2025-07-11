@@ -23,7 +23,7 @@ class PersonalController
 
         $dateString = $request->input('birthday'); // z.B. '31.12.2023'
 
-        \Log::info('Raw birthday input: ' . $dateString);
+        // \Log::info('Raw birthday input: ' . $dateString);
 
         $request['birthday'] = date("Y-m-d 00:00:00",strtotime($dateString));
         $validated = $request->validate([
@@ -35,7 +35,7 @@ class PersonalController
             'fbd'=>['nullable','string','max:200'],
         ], [], [], 'updateProfileInformation');
 
-        \Log::info("✅ Empfangen:", $validated);
+        // \Log::info("✅ Empfangen:", $validated);
 
         $user->forceFill([
             'birthday' => $validated['birthday'] ?? null,

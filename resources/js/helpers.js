@@ -61,6 +61,7 @@ export function replaceSmilies(text) {
       ":x": "mad",
       ":P": "razz",
       ":mrgreen:": "mrgreen",
+      ":mcsl:":"mcsl",
       ":arrow:": "arrow",
       ":cry:": "cry",
       ":evil:": "evil",
@@ -441,7 +442,9 @@ export function GetSRights(modul) {
 }
 export function rumLaut(input, table = '') {
     let str = input;
-
+    if(!str){
+        return "";
+    }
     // 1. Regex: Entferne <br> nach </li> und vor <li>
     str = str.replace(/<\/li>\s*<br\s*\/?>/gi, '</li>');
     str = str.replace(/<li>\s*<br\s*\/?>/gi, '<li>');
@@ -468,18 +471,21 @@ export function rumLaut(input, table = '') {
     // 6. Weitere manuelle Zeichenersetzungen
     const find = [
         /---/g, /ÃƒÅ“/g, /ÃƒÂ¼/g, /ÃƒÅ¸/g, /Ãƒ\?/g, /ÃƒÂ¤/g, /â€™/g, /Ã„/g,
-        /Ãœ/gi, /Ã/g, /Ã¶/g, /Ã"Y/g, /Ã¼/g, /Ã¤/g, /ÃŸ/g, /âEUR¦/g, /Ã?/g, /ÃƒÂ¶/g
+        /Ãœ/gi, /Ã/g, /Ã¶/g, /Ã"Y/g, /Ã¼/g, /Ã¤/g, /ÃŸ/g, /âEUR¦/g, /ÃƒÂ¶/g,/Â§/gi, /Ã/gi
     ];
 
+    // const replace = [
+    //     '<hr>', '&Uuml;', '&uuml;', '&szlig;', '&szlig;', '&auml;', "'", '&Auml;',
+    //     '&Uuml;', '&szlig;', '&ouml;', '&Uuml;', '&uuml;', '&auml;', '&szlig;', '…', '&Auml;', '&ouml;'
+    // ];
     const replace = [
-        '<hr>', '&Uuml;', '&uuml;', '&szlig;', '&szlig;', '&auml;', "'", '&Auml;',
-        '&Uuml;', '&szlig;', '&ouml;', '&Uuml;', '&uuml;', '&auml;', '&szlig;', '…', '&Auml;', '&ouml;'
+        '<hr>', 'Ü', 'ü', 'ß', 'ß', 'ä', "'", 'Ä',
+        'Ü', 'ß', 'ö', 'Ü', 'ü', 'ä', 'ß', '…', 'ö','§','ß'
     ];
-
     find.forEach((regex, i) => {
         str = str.replace(regex, replace[i]);
     });
-
+    str = replaceSmilies(str);
     return str;
 }
 

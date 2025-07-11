@@ -24,12 +24,12 @@
     "Status","message" => "Text","message_en" => "Text Englisch","camera_id" => "Kamera","link" => "Link","Format" => "Format","Format_en" => "Format Englisch","preis" => "Preis","tablename" => "Tabelle","xis_checked" => "checked","ordering" => "Position","Longname" => "Langer Name","Mpixel" =>
     "Megapixel","view_table"=>"Anzeigen",'add_table'=>"Hinzufügen",'story_en'=>"Geschichte Englisch",'story'=>"Geschichte","edit_table"=>"Bearbeiten","publish_table"=>"Veröffentlichen","date_table"=>"Datum Ändern","delete_table"=>"Löschen","short_tag" => "Tag","exif_copyright" => "Exif copy",
     'autoslug'=>"Url der Seite","admin_table_id"=>"Tabelle","exif_comp" => "exif Comp","exif_model" => "Exif Model","AdminPanel"=>"Admin Dashboard","UserRights"=>"BenutzerRechte",'LogViewer'=>"Log Viewer","SendMail"=>"Emails verschicken","ChangePassword"=>"Passwort Ändern","CommentsCenter"=>"Kommentar Admin Center","DataBases"=>"Datenbank Admin"
-    ,"about"=>"Über dich","ischecked"=>"Überprüft","about_en"=>"Über dich Englisch","website" => "Website","fbd"=>"facebook ID","xis_disabled"=>"Benutzer deaktivieren","CommentsEdit"=>"Alle Felder bearbeiten"];
+    ,"about"=>"Über dich","ischecked"=>"Überprüft",'projects_id'=>'Aktuelles Projekt',"xis_mcsl"=>"mit MCSL erstellt","xis_mcs"=>"mit MCS erstellt","about_en"=>"Über dich Englisch","website" => "Website","fbd"=>"facebook ID","xis_disabled"=>"Benutzer deaktivieren","CommentsEdit"=>"Alle Felder bearbeiten"];
 
         public static array $no_req = ['exif_copyright','exif_comp','exif_model','Mpixel','modul','is_admin','is_customer','is_employee','customer_id','admin_id','company_id',
                                        'profile_photo_path',"category_id","type_id",'message','message_en',
                                        'position','ordering','image_path','link','format','preis','format_en','music','interest',"about",'story_en',
-                                       'occupation','birthday','answer_en','prename','xis_ai','id_new','exif_comp','exif_model',"interests","occupation","fbd","website","about_en","about"];
+                                       'img_bild',"img_thumb",'occupation','birthday','answer_en','prename','xis_ai','id_new','exif_comp','exif_model',"interests","occupation","fbd","website","about_en","about"];
 
 
 
@@ -42,7 +42,98 @@
         ];
 
         public static array $impath = ["users"=>'profile_photo_path','default'=>"image_path"];
-        public static array $image_sizes =
+
+        public static array $headline =
+        [
+            "admin_table" => 'name',
+            "blogs" => 'title',
+            "blog_authors" => 'name',
+            "blog_categories" => 'name',
+            "blog_images" => 'name',
+            "images"=>'headline',
+            "comments" => 'content',
+            "image_categories" => 'name',
+            "didyouknow" => 'headline',
+            "users" => 'name',
+            "infos" => 'headline',
+            "projects"=>"name",
+            "users_rights" => 'name',
+            "projects_sheets"=>"aufgabe",
+            "camera"=>"name",
+            "testfield"=>"title",
+            "shortpoems"=>"headline",
+            "privacy"=>"headline",
+            "texts"=>"headline",
+            'news'=>"headline",
+
+    ];
+    public static array $searchable = ["images","blogs","didyouknow","shortpoems","users"];
+    public static array $statusvals  = ["empty"=>"keine Angabe","forsale"=>"Zu Verkaufen","givenaway"=>"Verschenkt","sold"=>"Verkauft","unsaleable"=>"Unverkäuflich","lost"=>"Verloren","inwork"=>"In Arbeit"];
+    public static array $searchFields =
+        [
+            "admin_table" => ['name'],
+            "blogs" => ['title','content'/*'content_en','title_en'*/,"blog_categories.name"],
+            "blog_authors" => ['name'],
+            "blog_categories" => ['name',"summary"],
+            "blog_images" => ['name'],
+            "images"=> ['headline',"message"],
+            "comments" => ['users.name','content',"email","admin_table.name"],
+            "didyouknow" => ['headline',"answer"],
+            "image_categories"=>['heading_alt'],
+            "users" => ['name',"email"],
+            "projects_sheets"=>["headline","users.name"],
+            "projects"=>['headline',"Umfang"],
+            "users_rights" => ['name'],
+            "camera" => ['name','Longname',"Mpixel"],
+            "testfield" => ['title'.'content'],
+            "infos"=>["headline","message","summary"],
+            "shortpoems" => ['headline','story'],
+            "texts"=>["headline","text"],
+            "news" =>['headline','message'],
+
+    ];
+    public static array $otherField = [
+        'admin_table'=> "description",
+        'blog_images'=> 'url',
+        'blogs'=> 'summary',
+        "blog_categories" => "summary",
+        "image_categories"=>'heading_alt',
+        "images"=> "message",
+        "didyouknow"=>"answer",
+        'infos'=>"message",
+        "camera"=> "Longname",
+        'testfield' => "content",
+        'comments' => 'users_id',
+        'projects_sheets' => 'users_id',
+        "privacy" => 'message',
+        "shortpoems"    => "story",
+        "camera"=>"LongName",
+        "texts"=>"text",
+        "users"=>"email",
+        "news"=>"message",
+        "projects"=>'Umfang'
+    ];
+    public static array $namealias = [
+        "comments"=>"Kommentar"
+    ];
+    public static array $descalias = [
+        "comments"=>"Autor",
+        "users"=>"E-Mail",
+    ];
+    public static array $underCals=[
+    'comments' => "name",
+    ];
+    public static array $presetting = [
+        "blogs"=>"blog_categories",
+        "images"=>"images",
+        "comments"=>"users",
+
+    ];
+    public static array $aftsetting = [
+        "blogs"=>"author",
+    ];
+
+public static array $image_sizes =
         [
             'blog_posts' => [
                 'big' => 1205,
@@ -89,81 +180,4 @@
             ]
 
         ];
-        public static array $headline =
-        [
-            "admin_table" => 'name',
-            "blogs" => 'title',
-            "blog_authors" => 'name',
-            "blog_categories" => 'name',
-            "blog_images" => 'name',
-            "images"=>'headline',
-            "comments" => 'content',
-            "image_categories" => 'name',
-            "didyouknow" => 'headline',
-            "users" => 'name',
-            "users_rights" => 'name',
-            "camera"=>"name",
-            "testfield"=>"title",
-            "shortpoems"=>"headline",
-            "privacy"=>"headline",
-            "texts"=>"headline"
-
-    ];
-    public static array $searchable = ["images","blogs","didyouknow","shortpoems","users"];
-    public static array $statusvals  = ["empty"=>"keine Angabe","forsale"=>"Zu Verkaufen","givenaway"=>"Verschenkt","sold"=>"Verkauft","unsaleable"=>"Unverkäuflich","lost"=>"Verloren","inwork"=>"In Arbeit"];
-    public static array $searchFields =
-        [
-            "admin_table" => ['name'],
-            "blogs" => ['title','content'/*'content_en','title_en'*/,"blog_categories.name"],
-            "blog_authors" => ['name'],
-            "blog_categories" => ['name',"summary"],
-            "blog_images" => ['name'],
-            "images"=> ['headline',"message"],
-            "comments" => ['users.name','content',"email","admin_table.name"],
-            "didyouknow" => ['headline',"answer"],
-            "image_categories"=>['heading_alt'],
-            "users" => ['name',"email"],
-            "users_rights" => ['name'],
-            "camera" => ['name','Longname',"Mpixel"],
-            "testfield" => ['title'.'content'],
-            "shortpoems" => ['headline','story'],
-            "texts"=>["headline","text"],
-
-    ];
-    public static array $namealias = [
-        "comments"=>"Kommentar"
-    ];
-    public static array $descalias = [
-        "comments"=>"Autor",
-        "users"=>"E-Mail",
-    ];
-    public static array $underCals=[
-    'comments' => "name",
-    ];
-    public static array $presetting = [
-        "blogs"=>"blog_categories",
-        "images"=>"images",
-        "comments"=>"users",
-
-    ];
-    public static array $aftsetting = [
-        "blogs"=>"author",
-    ];
-    public static array $otherField = [
-    'admin_table'=> "description",
-    'blog_images'=> 'url',
-    'blogs'=> 'summary',
-    "blog_categories" => "summary",
-    "image_categories"=>'heading_alt',
-    "images"=> "message",
-    "didyouknow"=>"answer",
-    "camera"=> "Longname",
-    'testfield' => "content",
-    'comments'      => 'users_id',
-    "privacy" => 'message',
-    "shortpoems"    => "story",
-    "camera"=>"LongName",
-    "texts"=>"text",
-    "users"=>"email"
-    ];
     }

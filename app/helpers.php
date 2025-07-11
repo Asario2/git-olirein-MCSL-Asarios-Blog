@@ -730,10 +730,34 @@ if(!function_exists("SD"))
 {
     function SD()
     {
-        $host = request()->getHost();
-
+        $subb = explode('.', str_replace("www.",'',request()->getHost()))[0];
+        switch($subb){
+            case "asario":
+                $subb = "ab";
+            break;
+            case "monikadargies":
+                $subb = "dag";
+            break;
+            case "marblefx":
+                $subb = "mfx";
+            break;
+            case "mjs":
+                $subb = "mjs";
+            break;
+            case "ra-c-henning":
+                $subb = "chh";
+            break;
+            default:
+            $subb = $subb;
+            break;
+        }
+        if( substr_count($_SERVER['REQUEST_URI'],"/admin/"))
+        {
+            $subb  = "ab";
+            // dd($subb);
+        }
     // Den Host in Teile aufteilen (subdomain.localhost.de -> ['subdomain', 'localhost', 'de'])
-    return explode('.', $host)[0];
+    return $subb;
 
     }
 }

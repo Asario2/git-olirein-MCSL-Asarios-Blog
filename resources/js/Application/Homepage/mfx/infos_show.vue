@@ -17,7 +17,7 @@
         <div class="w-[150px] shrink-0">
         <img
             class="w-[150px] h-auto rounded"
-            :src="'/images/_mfx/infos/big/' + data.img_big"
+            :src="'/images/_mfx/infos/img_big/big/' + data.img_big"
             :alt="data.headline"
             :title="data.headline"
         />

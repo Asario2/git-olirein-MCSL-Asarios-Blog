@@ -25,7 +25,7 @@
 
                         <div class="flex flex-col items-center justify-center">
                             <link-header
-                                name="Asarios BLog"
+                                :name="GetPageName()"
                                 :route-name="route('home.index')"
                             ></link-header>
                         </div>
@@ -124,5 +124,11 @@ export default {
         LinkHeader,
         LinkFooter,
     },
+    methods:{
+        GetPageName()
+        {
+            return window.pagename;
+        }
+    }
 };
 </script>

@@ -26,7 +26,8 @@
                     <div
                         v-if="hasActions"
                         class="w-full px-1 md:px-4 lg:px-8 py-2 border-l border-r border-b border-layout-sun-100 dark:border-layout-night-100 bg-layout-sun-200 dark:bg-layout-night-200 lg:rounded-bl-lg lg:rounded-br-lg"
-                    >
+                    ><br />
+
                         <div class="flex items-center justify-end">
                             <slot name="actions" />
                         </div>

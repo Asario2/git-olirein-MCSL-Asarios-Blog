@@ -40,7 +40,10 @@ return [
     | application. If disabled, a simple generic error page is shown.
     |
     */
-
+    // 'providers' => [
+    //     // ...
+    // App\Providers\CookiesServiceProvider::class,
+    // ],
     'debug' => (bool) env('APP_DEBUG', false),
 
     /*

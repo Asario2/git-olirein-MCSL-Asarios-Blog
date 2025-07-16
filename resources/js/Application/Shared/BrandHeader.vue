@@ -31,7 +31,7 @@
         </Link>
     </div>
     <div v-else-if="GetSd() == 'mfx'">
-    <a href='/'><img src="/images/_mfx/web/brandheader.png"></a>
+    <a href="/admin/dashboard"><mfxlogo :ab="'_mfx' + this.GetLogin()"></mfxlogo></a>
     </div>
 </template>
 
@@ -39,13 +39,14 @@
 import { Link } from "@inertiajs/vue3";
 
 import Favicon from "@/Application/Components/Logo/Favicon.vue";
-
+import mfxlogo from "@/Application/Shared/mfxlogo.vue";
 export default {
     name: "Shared_BrandHeader",
     //
     components: {
         Link,
         Favicon,
+        mfxlogo,
     },
     //
     props: {
@@ -66,10 +67,23 @@ export default {
             default: null,
         },
     },
+    mounted() {
+
+  },
     methods:{
     GetSd(){
         return window.subdomain;
+    },
+    GetLogin()
+    {
+        const url = location.href;
+        if(!url.includes("/login") && !url.includes("/forgot-password") && !url.includes("/register") && !url.includes("/email/verify"))
+        {
+            return "";
+        }
+        return "l";
     }
+
 }
 };
 

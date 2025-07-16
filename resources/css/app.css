@@ -13,7 +13,7 @@
 [x-cloak] {
     display: none;
 }
-@import '../public/mfx.css';
+
 ul {
     display: block;
     list-style-type: disc;

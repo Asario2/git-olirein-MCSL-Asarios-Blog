@@ -81,15 +81,17 @@
       namee: String,
       column: String,
       namee2: String,
-      altpath: String,
       Message: {
         type: [Boolean, Number],
         default: false,
       },
+      alt_path: String,
       isModalOpen: {
     type: [Boolean, Number],
-    default: false
-  },
+    default: false,
+    },
+
+
 },
     computed: {
   isImages() {
@@ -99,24 +101,27 @@
 
     data() {
       return {
+
         selectedImage: null,
         previewImage: null,
         uploading: false,
         progress: 0,
         newFname: '',
-        tablex: this.altpath ? this.altpath : this.CleanTable(),
+        tablex: this.alt_path ?? this.CleanTable(),
+        oripath: true,
         form: {
           copyleft: ''
         },
-        options: {
-      type: Array,
-      default: () => []
-    },
+    //     options: {
+    //   type: Array,
+    //   default: () => []
+    // },
       };
     },
     async mounted() {
          //this.fetchDataX();
          this.GetAuth = await GetAuth();
+         alert(this.alt_path);
     },
     methods: {
         GetAuth,
@@ -222,8 +227,15 @@
      const ASD = "SD";
   }
 //   console.log("sel: " + JSON.stringify(this.selectedImage,null,2));
-  xhr.open('POST', '/upload-image/' + this.tablex + "/" + isw, true);
-  xhr.send(formData);
+    if (typeof this.oripath === "undefined" || this.oripath == "0") {
+        xhr.open('POST', '/upload-image/' + this.CleanTable() + "/" + isw ,true);
+    }
+    else{
+       xhr.open('POST', '/upload-image_alt/' + this.CleanTable() + "/" + isw + '/' + this.oripath, true);
+    }
+
+
+    xhr.send(formData);
 },
       closeModal() {
         this.selectedImage = null;

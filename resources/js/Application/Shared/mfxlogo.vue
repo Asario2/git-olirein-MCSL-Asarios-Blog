@@ -10,7 +10,7 @@
     <!-- Vordergrundbild -->
     <img
       class="relative z-10 h-full mx-auto"
-      src="/images/logos/mfx_logo_bh.png"
+      :src="'/images/logos/mfx_logo_bh' + ab + '.png'"
       alt="Logo"
     />
   </div>
@@ -20,6 +20,13 @@
 import { gsap } from 'gsap';
 
 export default {
+    props:{
+        ab:{
+            default:'',
+            type:String
+            
+        }
+    },
   mounted() {
     const bg = this.$refs.bg;
 

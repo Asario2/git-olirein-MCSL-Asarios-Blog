@@ -7,31 +7,31 @@ class="max-w-xl mx-auto space-y-6 p-6
         border border-layout-sun-1050 dark:border-layout-night-1050 lg:rounded-lg">
 
 <div>
-    <label class="block font-semibold mb-1 text-layout-sun-1000 dark:text-layout-night-1050">Name</label>
+    <label class="block font-semibold mb-1 text-layout-sun-1000 dark:text-layout-night-1000">Name</label>
     <input v-model="form.name" type="text"
         class="input border border-layout-sun-1050 dark:border-layout-night-1050" required />
 </div>
 
 <div>
-    <label class="block font-semibold mb-1 text-layout-sun-1000 dark:text-layout-night-1050">E-Mail</label>
+    <label class="block font-semibold mb-1 text-layout-sun-1000 dark:text-layout-night-1000">E-Mail</label>
     <input v-model="form.email" type="email"
         class="input border border-layout-sun-1050 dark:border-layout-night-1050" required />
 </div>
 
 <div>
-    <label class="block font-semibold mb-1 text-layout-sun-1000 dark:text-layout-night-1050">Betreff</label>
+    <label class="block font-semibold mb-1 text-layout-sun-1000 dark:text-layout-night-1000">Betreff</label>
     <input v-model="form.subject" type="text"
         class="input border border-layout-sun-1050 dark:border-layout-night-1050" required />
 </div>
 
 <div>
-    <label class="block font-semibold mb-1 text-layout-sun-1000 dark:text-layout-night-1050">Nachricht</label>
+    <label class="block font-semibold mb-1 text-layout-sun-1000 dark:text-layout-night-1000">Nachricht</label>
     <textarea v-model="form.message" rows="5"
             class="input border border-layout-sun-1050 dark:border-layout-night-1050" required></textarea>
 </div>
 
 <div>
-    <label class="block font-semibold mb-1 text-layout-sun-1000 dark:text-layout-night-1050">
+    <label class="block font-semibold mb-1 text-layout-sun-1000 dark:text-layout-night-1000">
         Sicherheitsfrage: Was ist 3 + 4?
     </label>
     <input v-model="form.captcha" type="text"

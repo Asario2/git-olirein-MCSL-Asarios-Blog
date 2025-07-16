@@ -31,5 +31,8 @@ export default {
             default: "Starter Eleven",
         },
     },
+    mounted(){
+        // alert(this.routeName);
+    }
 };
 </script>

@@ -5,6 +5,7 @@
     use App\Helpers;
 
     $subdomain = SD(); // z.B. "foo", "bar"
+    $pagen = SD("pn");
     $favicon = "/images/_{$subdomain}/web/alogo.png";
 
     // Fallback, falls Datei nicht existiert
@@ -26,7 +27,8 @@
            window.Laravel = {
                     userId: {{ auth()->id() ?? 'null' }},
                 };
-                window.subdomain = '{{$subdomain}}';
+                window.subdomain = "{{ $subdomain }}";
+                window.pagename = "{{ $pagen }}";
                 </script>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title inertia>{{ config('app.name', 'Laravel') }}</title>
@@ -40,8 +42,8 @@
 
 
 
-        <script src="/js/jquery-3.6.0.min.js"></script>
 
+        <script src="/js/jquery-3.6.0.min.js"></script>
         <!-- Shariff JavaScript (über CDN) -->
         <script src="/js/shariff.min.js"></script>
 

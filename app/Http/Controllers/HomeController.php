@@ -550,24 +550,28 @@ return Inertia::render('Homepage/Pictures', [
         ]);
     }
 
+
     public function home_no_application_found()
     {
-        return Inertia::render('Homepage/Home');
+        return redirect('/');
     }
 
     public function home_user_is_no_admin()
     {
-        return Inertia::render('Homepage/UserIsNoAdmin');
+        return redirect('/');
+
     }
 
     public function home_user_is_no_employee()
     {
-        return Inertia::render('Homepage/UserIsNoEmployee');
+        return redirect('/');
+
     }
 
     public function home_user_is_no_customer()
     {
-        return Inertia::render('Homepage/UserIsNoCustomer');
+        return redirect('/');
+
     }
 
     public function home_invalid_signature()

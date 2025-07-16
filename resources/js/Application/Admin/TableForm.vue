@@ -149,6 +149,52 @@
                         <template #label>{{ field.label }}</template>
                     </InputFormPrice>
                 </input-container>
+                <input-container v-else-if="field.type ==='imul'">
+
+<ImageUploadModal
+        :alt_path="'_' + this.subdomain + '/' + this.CleanTable_alt() + '/' + field.name"
+        v-show="isModalOpen"
+        oripath="1"
+        :tablex="table_x"
+        :column="field.name"
+        :path="tablex"
+        :ref="field.name"
+        :value="imageId"
+        :image="field.value"
+        :namee="field.value"
+        :namee2="field.name"
+        :Message="false"
+        @close="closeModal"
+        @update:fileName="handleFileNameUpdate"
+        @imageUploaded="handleImageUpload"
+/>
+<button type="button" @click="openModal_alt">
+    <p v-if="this.nf2 && typeof this.nf2 !== 'object' && this.nf2 != '[]' && this.nf2 != '008.jpg' ">Hochgeladenes Bild:
+
+        <img :src="table_alter + this.nf2" width="100" alt="Vorschau1" title="Vorschau1"/></p>
+        <p
+        v-else-if="localFfo.original[this.column] && localFfo.original[this.column].value && localFfo.original[this.column].value !== '008.jpg'"
+        >
+        Hochgeladenes Bild:
+        <img
+            :src="`${table_older}${localFfo.original[this.column].value}`"
+            width="100"
+            alt="Vorschau2"
+            title="Vorschau2"
+        />
+        </p>
+    <span v-else><img src="/images/blogs/thumbs/009.jpg" alt="Jetzt Bild Hochladen" width="100"  title="Jetzt Bild Hochladen" ></span>
+
+</button>
+<input type="hidden" :id="field.name" :value="this.nf2">
+<input
+type="hidden"
+:name="field.name"
+:value="nf2?.replace('images//images3/','images/')"
+:id="field.name"
+/>
+
+</input-container>
                 <input-container v-else-if="field.type ==='IID'">
 
                 <ImageUploadModal
@@ -694,6 +740,7 @@ export default defineComponent({
         table_x: '',
         aslug: '',
         nf2:'',
+        subdomain: window.subdomain || '',
 
         fieldtype: "", // Oder ein sinnvoller Standardwert
 
@@ -1069,6 +1116,9 @@ export default defineComponent({
                 // };
             },
             methods: {
+                CleanTable_alt() {
+                    return CleanTable();
+                    },
                 openModal_alt() {
             // console.log("Vor dem Setzen: " + this.isModalOpen);
 
@@ -1854,8 +1904,8 @@ async submitForm() {
 
         this.updateData();
         console.log("col:" + CleanTable());
-        this.table_alter = "/images/"+this.xtable+"/thumbs/";
-        this.table_alter = CleanTable() == "pictures" ? '/images/images/thumbs/' : "/images/"+CleanTable()+"/thumbs/";
+        // this.table_alter = "/images/"+this.xtable+"/thumbs/";
+        // this.table_alter = CleanTable() == "pictures" ? '/images/images/thumbs/' : "/images/"+CleanTable()+"/thumbs/";
         // this.table_alter = this.settings.impath?.[this.xtable] && tablex === "users" ? '' : "/images/"+this.tablex+"/thumbs/";
         this.table_older = "/images/"+this.xtable+"/thumbs/";
         if(CleanTable() == "users")

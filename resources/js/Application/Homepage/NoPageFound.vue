@@ -14,7 +14,7 @@ import PageTitle from "@/Application/Components/Content/PageTitle.vue";
 
 // Mapping für dynamische Layouts
 const layoutComponents = {
-  mfx: () => import('@/Application/Homepage/Shared/mfx/Layout.vue'),
+  mfx: () => import('@/Application/Homepage/Shared/Layout.vue'),
   dag: () => import('@/Application/Homepage/Shared/dag/Layout.vue'),
   default: () => import('@/Application/Homepage/Shared/Layout.vue'),
 };

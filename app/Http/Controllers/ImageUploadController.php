@@ -8,7 +8,11 @@ use Storage;
 
 class ImageUploadController extends Controller
 {
-    public function upload(Request $request,$table,$iswatermark='1')
+    public function upload_ori(Request $request,$table,$iswatermark="1")
+    {
+        return $this->upload($request,$table,$iswatermark,1);
+    }
+    public function upload(Request $request,$table,$iswatermark='1',$oripath='0')
     {
         // Validierung der Eingabedaten
         // $validated = $request->validate([
@@ -83,7 +87,13 @@ class ImageUploadController extends Controller
 
                 $size2 = $size;
             }
-            $resizedPath = "images/_{$subdomain}/{$table}{$big[$size]}{$imageName}";
+            $resizedPath = "images/{$request->table}{$big[$size]}{$imageName}";
+            if(!$oripath)
+            {
+                $subdomain = SD();
+                $resizedPath = "images/{$subdomain}/{$table}{$big[$size]}{$imageName}";
+            }
+
             // \Log::info("RP:".$resizedPath);
             // Neues Imagick-Objekt erstellen
             $imagick = new \Imagick();

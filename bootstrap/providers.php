@@ -6,4 +6,5 @@ return [
     App\Providers\FortifyServiceProvider::class,
     App\Providers\JetstreamServiceProvider::class,
     App\Providers\MarkdownServiceProvider::class,
+    App\Providers\CookiesServiceProvider::class,
 ];

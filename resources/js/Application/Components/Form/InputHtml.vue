@@ -114,7 +114,7 @@
     import IconHyperLink from "@/Application/Components/Icons/IconHyperLink.vue";
     import { Tippy } from 'tippy.vue';
 
-    export default {
+    export default {    
         name: "Editor",
         components: {
         IconPictures,
@@ -231,7 +231,7 @@
     // this.cleanupEmptyTags();
     const html = this.$refs.editor.innerHTML.replace('%5B', '[').replace('%5D', ']');
     html = rumLaut(html);
-    this.$emit('update:modelValue', html);
+    this.$emit('update:modelValue', rumLaut(html));
 
         document.getElementById(this.name + "_alt").value = html;
   },

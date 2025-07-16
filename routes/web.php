@@ -27,12 +27,16 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\TablesController;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CookieController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\RightsController;
 use App\Helpers\Settings;
 use App\Mail\CommentMail;
 use App\Mail\ContactMail;
-use Illuminate\Support\Facades\Mail;
+use Whitecube\LaravelCookieConsent\CookiesManager;
+use Whitecube\LaravelCookieConsent\Http\Controllers\AcceptAllController;
+use Whitecube\LaravelCookieConsent\Http\Controllers\AcceptEssentialsController;
+use Whitecube\LaravelCookieConsent\Http\Controllers\ConfigureController;
 
 GlobalController::SetDomain();
 // include __DIR__."/extraroutes.php";
@@ -53,9 +57,13 @@ Route::get('/db-check', function () {
         'host' => request()->getHost(),
     ]);
 });
+Route::post("/cookie_acceptall",[AcceptAllController::class,'__invoke'])->name("cookieconsent.accept.all2");
+Route::post("/cookie_acceptess",[AcceptEssentialsController::class,'__invoke'])->name("cookieconsent.accept.essentials2");
+Route::post("/cookie_config",[ConfigureController::class,'__invoke'])->name("cookieconsent.accept.configuration2");
 
-# === MFX ===
-Route::domain('mfx.localhost.de')->group(function () {
+# === MFX === #
+foreach (['mfx.localhost.de', 'www.marblefx.de'] as $domain) {
+    Route::domain($domain)->group(function () {
     Route::get('/', [HomeController_mfx::class,"home"])->name("home.mfx");
     Route::get('/changelog', [HomeController_mfx::class,"mcsl_changelog"])->name("mfx.changelog");
     Route::get('/home/users', function () {
@@ -73,6 +81,7 @@ Route::domain('mfx.localhost.de')->group(function () {
     Route::get('/home/powered-by-mcs',  [HomeController_mfx::class,"infos_pow"])->name("home.powered.show.mfx");
 
 });
+}
 Route::get('/api/tailwind-colors/{subdomain}', [HomeController_mfx::class,"getStyles"])->name("mfx.getstyles");
 Route::get('/api/getVotez', [HomeController_mfx::class,"getVotez"])->name("mfx.getvotez");
 // MAILFORM SUBMIT
@@ -128,6 +137,7 @@ Route::middleware(['auth'])->group(function () {
 
 Route::get('/namebindings', [NameBindingsController::class, 'RefreshFields'])->name("ColumnFetcher");
 Route::post('/upload-image/{table}/{isw?}', [ImageUploadController::class, 'upload'])->name('upload.image');
+Route::post('/upload-image_alt/{table}/{isw?}/{oripath?}', [ImageUploadController::class, 'upload_ori'])->name('upload.gen');
 Route::get('/GetUserNull', [TablesController::class, 'GetUserNull'])->name('GetUserNull');
 
 Route::post('/save-image/{table}', [ImageUploadController::class, 'save'])->name('save.image');

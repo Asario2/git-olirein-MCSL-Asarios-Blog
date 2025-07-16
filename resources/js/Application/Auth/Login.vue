@@ -80,6 +80,7 @@
                     </input-container>
                 </input-group>
             </template>
+
             <template #actions>
                 <!-- Befehle -->
                 <button-group>

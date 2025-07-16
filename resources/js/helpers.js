@@ -471,7 +471,7 @@ export function rumLaut(input, table = '') {
     // 6. Weitere manuelle Zeichenersetzungen
     const find = [
         /---/g, /ÃƒÅ“/g, /ÃƒÂ¼/g, /ÃƒÅ¸/g, /Ãƒ\?/g, /ÃƒÂ¤/g, /â€™/g, /Ã„/g,
-        /Ãœ/gi, /Ã/g, /Ã¶/g, /Ã"Y/g, /Ã¼/g, /Ã¤/g, /ÃŸ/g, /âEUR¦/g, /ÃƒÂ¶/g,/Â§/gi, /Ã/gi
+        /Ãœ/gi, /Ã/g, /Ã¶/g, /Ã"Y/g, /Ã¼/g, /Ã¤/g, /ÃŸ/g, /âEUR¦/g, /ÃƒÂ¶/g,/Â§/gi,/Â©/gi, /Ã/gi
     ];
 
     // const replace = [
@@ -480,7 +480,7 @@ export function rumLaut(input, table = '') {
     // ];
     const replace = [
         '<hr>', 'Ü', 'ü', 'ß', 'ß', 'ä', "'", 'Ä',
-        'Ü', 'ß', 'ö', 'Ü', 'ü', 'ä', 'ß', '…', 'ö','§','ß'
+        'Ü', 'ß', 'ö', 'Ü', 'ü', 'ä', 'ß', '…', 'ö','§',"©",'ß'
     ];
     find.forEach((regex, i) => {
         str = str.replace(regex, replace[i]);

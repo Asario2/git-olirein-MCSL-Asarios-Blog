@@ -57,4 +57,5 @@
 ![Version](https://img.shields.io/badge/version-2.67.1-orange) alert field in search function (#46)  
 ![Version](https://img.shields.io/badge/version-2.68.1-orange) Brandheader Subdomains (#50)  
 ![Version](https://img.shields.io/badge/version-2.69.0-orange) slider/checkbox choosing based on field name (#52)  
+![Version](https://img.shields.io/badge/version-2.70.7-orange) BrandFooter & Cookie Banner Bigfixes (#54)  
 

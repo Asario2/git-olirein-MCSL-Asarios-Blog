@@ -102,6 +102,7 @@
                         v-model="field.value"
                         :rows="field.rows"
                         cols="25"
+                        :vcol="field.value"
                         :placeholder="field.placeholder || ''"
                         :class="field.class"
                         @focus="isFocused = true"
@@ -183,7 +184,7 @@
             title="Vorschau2"
         />
         </p>
-    <span v-else><img src="/images/blogs/thumbs/009.jpg" alt="Jetzt Bild Hochladen" width="100"  title="Jetzt Bild Hochladen" ></span>
+    <span v-else><img style="float:left;margin-right: 12px;" :src="'/images/blogs/thumbs/009.jpg'" alt="Jetzt Bild Hochladen" width="100"  title="Jetzt Bild Hochladen" ><span style='display:inline;float:left;'>{{ field.label }}</span></span>
 
 </button>
 <input type="hidden" :id="field.name" :value="this.nf2">
@@ -228,7 +229,7 @@ type="hidden"
                             title="Vorschau2"
                         />
                         </p>
-                    <span v-else><img src="/images/blogs/thumbs/009.jpg" alt="Jetzt Bild Hochladen" width="100"  title="Jetzt Bild Hochladen" ></span>
+                    <span v-else><img :src="'/images/blogs/thumbs/009.jpg'" alt="Jetzt Bild Hochladen" width="100"  title="Jetzt Bild Hochladen" ></span>
 
                 </button>
                 <input type="hidden" :id="field.name" :value="this.nf2">
@@ -1397,62 +1398,59 @@ export default defineComponent({
 
             let input = response.data;
 
-
             const output = [];
             if (typeof input === 'object' && !Array.isArray(input)) {
                 input = Object.entries(input).map(([key, value]) => value);
-                }
-            input.sort((a, b) => a.position - b.position);
-            this.options2 =  this.options2 ?? [];
+            }
+
+            // Korrigierte Sortierung nach position (numerisch)
+            input.sort((a, b) => Number(a.position) - Number(b.position));
+
+            this.options2 = this.options2 ?? [];
             this.options2 = input;
 
             // Zuerst das Objekt in ein Array umwandeln und die ID/Name-Paare speichern
             Object.entries(input).forEach(([key, value]) => {
-                // Entfernen von "sortedOptions" aus dem Key, falls vorhanden
                 const cleanedKey = key.replace('.sortedOptions', '');
 
-                // Überprüfen, ob der Key ein String ist und ob er einen Punkt enthält
                 if (typeof cleanedKey === 'string' && cleanedKey.includes('.')) {
-                    const parts = cleanedKey.split('.'); // Key in zwei Teile aufteilen
-
+                    const parts = cleanedKey.split('.');
                     if (parts.length === 2) {
                         const [prefix, suffix] = parts;
-                        const newKey = `${suffix}.${prefix}`; // Reihenfolge umdrehen
+                        const newKey = `${suffix}.${prefix}`;
                         output.push({ id: newKey, name: value });
                     } else {
                         output.push({ id: cleanedKey, name: value });
                     }
                 } else {
-                    // Falls der Key keinen Punkt enthält, oder nicht als String vorliegt, Key unverändert lassen
                     output.push({ id: cleanedKey, name: value });
                 }
             });
+            console.log("Vor Sortierung:", input.map(i => i.position));
+            // Korrigierte Sortierung nach name (alphabetisch)
+            output.sort((a, b) => Number(a.id) - Number(b.id));
 
-            // Sortiere die Optionen nach 'name'
-            output.sort((a, b) => a.name.localeCompare(b.name)); // Sortieren nach Namen
-
-            // Nun haben wir die ID/Name-Paare nach Name sortiert
             const sortedObj = output.map(item => ({
                 [item.id]: item.name
             }));
 
-            let obj = JSON.stringify(input,null,2)
+            let obj = JSON.stringify(input, null, 2);
 
-obj = obj.replace(/"formFields": \[.*\]/, "")
-    .replace(/^\{|\}$/g, "")
-    .replace(/}\s*,\s*\n\s*}/g, "},")
-    .replace(/[[\]]/g, "")
-    .replace(/\[|\]$/, "")
-    .replace(/,\s*\n\s*{/g, ",")
-    .replace(/\s*\}(?!,)\s*/g, "}")
-    .replace(/}},/g, "\n   },")
-    .replace(/}}/g, "\n   }\n  }")
-    .replace(/"\d+"\s*:\s*{/g, '{')
-    .replace(/},\s*{/g, '},')
-    .replace(/},/g,"},{");
-    // obj = '{\n\"' + name + '": [\n' + obj + '\n]   \n}';
-    //console.log("ob: " + obj);
-            obj  = "["+obj+"]";
+            obj = obj
+                .replace(/"formFields": \[.*\]/, "")
+                .replace(/^\{|\}$/g, "")
+                .replace(/}\s*,\s*\n\s*}/g, "},")
+                .replace(/[[\]]/g, "")
+                .replace(/\[|\]$/, "")
+                .replace(/,\s*\n\s*{/g, ",")
+                .replace(/\s*\}(?!,)\s*/g, "}")
+                .replace(/}},/g, "\n   },")
+                .replace(/}}/g, "\n   }\n  }")
+                .replace(/"\d+"\s*:\s*{/g, '{')
+                .replace(/},\s*{/g, '},')
+                .replace(/},/g, "},{");
+
+            obj = "[" + obj + "]";
             obj = obj.replace(/[\u0000-\u001F\u007F]/g, '');
 
             input = obj;
@@ -1460,9 +1458,10 @@ obj = obj.replace(/"formFields": \[.*\]/, "")
         .catch((error) => {
             console.error("Fehler beim Abrufen der Formulardaten:3", error);
         });
-}
+},
 
-,
+
+
         getsel_enum(name,table,iscope='getselenumroute')
         {
             var sortedOptions_sel = this.sortedOptions_sel ?? [];

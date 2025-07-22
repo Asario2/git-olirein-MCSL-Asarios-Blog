@@ -911,7 +911,7 @@ function updateViews(id) {
     } else {
         $infinityText.hide();
     }
-    alert(value);
+    //alert(value);
 }
 function inf(id) {
     // Initial überprüfen
@@ -1197,7 +1197,7 @@ async function startRegistration() {
         );
 
         const result = await registrationResponse.json();
-        alert(result.message);
+        //alert(result.message);
     } catch (error) {
         console.error("Fehler bei der Registrierung:", error);
         alert("Fehler bei der Registrierung: " + error.message);
@@ -1224,5 +1224,5 @@ async function startAuthentication() {
     });
 
     const result = await authResponse.json();
-    alert(result.message);
+    //alert(result.message);
 }

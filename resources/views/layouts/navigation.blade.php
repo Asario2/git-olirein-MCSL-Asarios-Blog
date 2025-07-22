@@ -2,7 +2,7 @@
     $subdomain = SD();
     $dm = @$_SESSION['dm'];
     $dm = $dm ? $dm : 'dark';
-    $fullUri = $_SERVER['REQUEST_URI'];
+    $fullUri = @$_SERVER['REQUEST_URI'];
 
     // Entfernt den Query-String, um nur den Pfad zu erhalten
     $path = parse_url($fullUri, PHP_URL_PATH);

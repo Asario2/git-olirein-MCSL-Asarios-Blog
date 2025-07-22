@@ -28,6 +28,11 @@ class AppServiceProvider extends ServiceProvider
         if (app()->runningInConsole()) {
             return; // Verhindere Ausführung bei Artisan-Commands
         }
+
+
+        require_once app_path('helpers.php');
+
+
         // app()->singleton(LaravelCookieConsent::class, function ($app) {
         //     $consent = new LaravelCookieConsent();
 
@@ -76,7 +81,7 @@ class AppServiceProvider extends ServiceProvider
             break;
         }
         $subb2 = $subb;
-        if(substr_count($_SERVER['REQUEST_URI'],"/login") || substr_count($_SERVER['REQUEST_URI'],"/admin/"))
+        if(substr_count(@$_SERVER['REQUEST_URI'],"/login") || substr_count(@$_SERVER['REQUEST_URI'],"/admin/"))
         {
             $subb2  = "ab";
             // dd(rawurldecode("%7B%22consent_at%22%3A1752311194%2C%22laravel_cookie_consent%22%3Atrue%2C%22laravel_session%22%3Atrue%2C%22XSRF-TOKEN%22%3Atrue%2C%22darkmode_enabled%22%3Afalse%7D"));

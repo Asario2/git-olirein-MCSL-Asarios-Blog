@@ -23,6 +23,14 @@ use App\Http\Controllers\DashboardCustomerController;
 use App\Http\Controllers\DashboardEmployeeController;
 use App\Http\Controllers\ImageUploadController;
 use League\CommonMark\CommonMarkConverter;
+use App\Http\Controllers\Auth\ConfirmablePasswordController;
+use App\Http\Controllers\Auth\EmailVerificationNotificationController;
+use App\Http\Controllers\Auth\EmailVerificationPromptController;
+use App\Http\Controllers\Auth\NewPasswordController;
+use App\Http\Controllers\Auth\PasswordController;
+use App\Http\Controllers\Auth\PasswordResetLinkController;
+use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Http\Request;
 use App\Http\Controllers\TablesController;
 use Laravel\Fortify\TwoFactorAuthenticatable;
@@ -31,8 +39,10 @@ use App\Http\Controllers\CookieController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\RightsController;
 use App\Helpers\Settings;
+use App\Helpers;
 use App\Mail\CommentMail;
 use App\Mail\ContactMail;
+use App\Mail\RegisterMail;
 use Whitecube\LaravelCookieConsent\CookiesManager;
 use Whitecube\LaravelCookieConsent\Http\Controllers\AcceptAllController;
 use Whitecube\LaravelCookieConsent\Http\Controllers\AcceptEssentialsController;
@@ -61,37 +71,87 @@ Route::post("/cookie_acceptall",[AcceptAllController::class,'__invoke'])->name("
 Route::post("/cookie_acceptess",[AcceptEssentialsController::class,'__invoke'])->name("cookieconsent.accept.essentials2");
 Route::post("/cookie_config",[ConfigureController::class,'__invoke'])->name("cookieconsent.accept.configuration2");
 
-# === MFX === #
-foreach (['mfx.localhost.de', 'www.marblefx.de'] as $domain) {
-    Route::domain($domain)->group(function () {
-    Route::get('/', [HomeController_mfx::class,"home"])->name("home.mfx");
-    Route::get('/changelog', [HomeController_mfx::class,"mcsl_changelog"])->name("mfx.changelog");
-    Route::get('/home/users', function () {
-        return redirect("NoPageFound");
-    })->name('home.userlist2');
-    Route::get('/home/users/show/{user}/{id}', function () {
-        return redirect("NoPageFound");
-    })->name('user.show');
-    Route::get('/home/projects',  [HomeController_mfx::class,"projects"])->name("home.projects.mfx");
-    Route::get('/home/images',  [HomeController_mfx::class,"images"])->name("home.images.mfx");
-    Route::get('/home/people',  [HomeController_mfx::class,"people"])->name("home.people.mfx");
-    Route::get('/home/impressum',  [HomeController_mfx::class,"imprint"])->name("home.imprint.mfx");
-    Route::get('/home/infos/',  [HomeController_mfx::class,"infos_index"])->name("home.infos.mfx");
-    Route::get('/home/infos/show/{id}',  [HomeController_mfx::class,"infos_show"])->name("home.infos.show.mfx");
-    Route::get('/home/powered-by-mcs',  [HomeController_mfx::class,"infos_pow"])->name("home.powered.show.mfx");
+// Route::domain('{domain}')
+//     ->where('domain', '(mfx\.localhost\.de|www\.marblefx\.de)')
+//     ->group(function () {
+   $sub = SD();
+    // dd($sub);
+    // Route::middleware([])->group(function () {
+    //     $sub = $sub ?? SD();
 
-});
-}
-Route::get('/api/tailwind-colors/{subdomain}', [HomeController_mfx::class,"getStyles"])->name("mfx.getstyles");
-Route::get('/api/getVotez', [HomeController_mfx::class,"getVotez"])->name("mfx.getvotez");
+
+    //     // foreach ($domains as $key => $host) {
+    //     //     Route::domain($host)
+    //     //         ->as($key . '.')            // => z.B. mfx.home  / marble.home
+    //     //         ->group(function () use ($key) {
+    //     if($sub == "mfx"){
+            Route::get('/', [HomeController::class, 'home_index'])->name('home.mfx');
+            // dd($sub);
+            Route::get('/changelog', [HomeController::class,"mcsl_changelog"])->name("mfx.changelog");
+            Route::get('/home/users', fn () => redirect("NoPageFound"))->name('home.userlist2');
+            Route::get('/home/users/show/{user}/{id}', fn () => redirect("NoPageFound"))->name('user.show');
+            Route::get('/home/projects',  [HomeController::class,"projects"])->name("home.projects.mfx");
+            Route::get('/home/images',  [HomeController::class,"images"])->name("home.images.mfx");
+            Route::get('/home/people',  [HomeController::class,"people"])->name("home.people.mfx");
+            Route::get('/home/impressum',  [HomeController::class,"imprint"])->name("home.imprint.mfx");
+            Route::get('/home/infos/', [HomeController::class,"infos_index"])
+                   ->name("home.infos.mfx");
+            Route::get('/home/infos/show/{id}',  [HomeController::class,"infos_show"])->name("home.infos.show.mfx");
+            Route::get('/home/powered-by-mcs',  [HomeController::class,"infos_pow"])->name("home.powered.show.mfx");
+            Route::get("/",[HomeController::class,"home_index"])->name("home.index");
+    //     }
+    //     elseif($sub == "ab")
+    //     {
+    //         Route::get("/",[HomeController::class,"home_index"])->name("home.index");
+    //     }
+    //     elseif($sub != 'localhost'  )
+    //     {
+    //         $contr = "HomeController_".$sub;
+    //         Route::get("/",[$contr,"home_index"])->name("home.index");
+    //     }
+    //     else{
+    //         Route::get("/",[HomeController::class,"home_index_alt"])->name("home.index");
+    //     }
+    // });
+
+
+    // });
+// }
+
+
+Route::get('/api/tailwind-colors/{subdomain}', [HomeController::class,"getStyles"])->name("mfx.getstyles");
+Route::get('/api/getVotez', [HomeController::class,"getVotez"])->name("mfx.getvotez");
 // MAILFORM SUBMIT
 Route::post('/contact/send',[CommentController::class,"sendmc"]);
 
-Route::post('/mail-test',[CommentController::class,"sendm"]);
+// Route::post('/mail-test',[CommentController::class,"sendm"]);
+
+Route::get('/mail-test', function () {
+    $nick = "test";
+    $content = "test@example.com";
+
+    Mail::to('parie@gmx.de')->send(
+        new RegisterMail(
+            'Asario.de',
+            'http://' . request()->getHost() . '/admin/tables/users/show?search=' . $nick,
+            $nick,
+            $content
+        )
+    );
+
+    return 'Mail wurde versendet (oder an Transport übergeben).';
+});
+
+// Route::post('/register', [RegisteredUserController::class, 'store'])
+//      ->name('register.override');
+
+
+
 // Route::get('/mail-test', function () {
     // Mail::to('parie@gmx.de')->send(new CommentMail('Asario.de', 'http://localhost:8081/admin/tables/comments/show',auth()->user()->name,$comment->content));
     // return 'Mail gesendet!';
 // });
+
 Route::get("/api/user/rights/des/{table}/{right}",[RightsController::class,"GetRights"])->name("GetRights");
 Route::get('/api/chkcom/{id?}', [CommentController::class, 'checkComment'])->name("comments.check");
 
@@ -153,9 +213,7 @@ Route::get('/pb', [RatingController::class, 'pb'])
 // Homepage
 // ========
 // Startseite
-Route::get('/', function () {
-    return redirect('/blogs');
-})->name('home.index');
+
 // Get Started
 Route::get('/home/get_started', [HomeController::class, 'home_get_started'])->name('home.get_started');
 // Pricing
@@ -181,7 +239,7 @@ Route::get('/home/shortpoems', [HomeController::class, 'home_shortpoems'])->name
 // DidYouKnow
 Route::get('/home/didyouknow', [HomeController::class, 'home_didyouknow'])->name('home.didyouknow');
 // Liste der Blogartikel
-Route::get('/blogs', [HomeController::class, 'home_blog_index'])->name('home.blog.index')->middleware('remember');
+Route::get('/blogs', [HomeController::class, 'home_index'])->name('home.blog.index')->middleware('remember');
 // Display Blogartikel
 Route::get('/blogs/show/{autoslug}', [HomeController::class, 'home_blog_show'])->name('home.blog.show');
 
@@ -234,7 +292,10 @@ Route::get('/devmod', function () {
     Route::post('/comments/{table}/{id}', [CommentController::class, 'store'])->name('comments.store');
     // Route::get('/{table}/{cat?}#headline_{id}', [PostController::class, 'show'])->name('posts.show');
 
-
+    Route::get(
+        '/admin/dashboard',
+        [DashboardAdminController::class, 'admin_index']
+    )->name('dashboard');
 // ===============================
 // Routen für angemeldete Anwender
 // ===============================
@@ -248,10 +309,16 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     // CENTRAL DASHBOARD
     // =================
     // Central-Dashboard
-    Route::get(
-        '/central/dashboard',
-        [DashboardCentralController::class, 'central_index']
-    )->name('central.dashboard');
+    $subdomain = GlobalController::SD();
+    if ($subdomain != "ab" && $subdomain != "localhost"){
+        $dda = "_" . $subdomain;
+    } else {
+        $dda = '';
+    }
+
+    $controller = "App\\Http\\Controllers\\HomeController{$dda}";
+
+    Route::get('/news', [$controller, 'home_index'])->name('dashboard');
 
     // =================
     // APPLICATION ADMIN
@@ -405,9 +472,52 @@ Route::get('/act-category/{table}/{id?}', [CategoryController::class, 'index'])
     ->name("ArtAct");
 Route::get('/tables/sort-enumis/{table}/{name}', [TablesController::class, 'getOptionz_itemscope'])
         ->name("GetTableItemScope");
-Route::fallback(function () {
-    return Inertia::render('Homepage/NoPageFound');
-});
+
 Route::get("/api/images/{table}/{id}",[TablesController::class,"GetImageUrl"])
             ->name("api-get-image-url");
+             $sub = SD();
+        //     //
+     if($sub === "ab"){
 
+
+            Route::get('/', function () {
+                return redirect('/blogs');
+            })->name('home.index');
+
+            Route::get('/dashboard', function () {
+                return redirect('/blogs');
+            })->name('dashboard');
+        }
+        elseif($sub !== "localhost"){
+
+            Route::get("/",function(){
+                return redirect("/");
+
+            })->name("home.index");
+        }
+        // elseif($subdomain == "mfx")
+        // {
+        //     // dd($subdomain."asd");
+
+        //     Route::get('/', [HomeController_mfx::class, 'home'])->name('home.mfx');
+        //     Route::get('/', [HomeController_mfx::class, 'home'])->name('home.index');
+        // }
+        // elseif($subdomain != "localhost"){
+        //     $hc = "App\\Http\\Controllers\\HomeController_" . $subdomain;
+        //     Route::get('/', [$hc, 'home'])->name('home.index');
+        //     Route::get('/', [$hc, 'home'])->name('home.'.$subdomain);
+        // }
+        // else{
+        //     $hc = "App\\Http\\Controllers\\HomeController";
+        //     Route::get('/', [$hc,'home_index_alt'])->name('home.index');
+        //     Route::get('/', [$hc,'home_index_alt'])->name('home.mfx');
+        // }
+        // include __DIR__."/auth.php";
+        // Auth::routes();
+        Route::fallback(function () {
+            return Inertia::render('Homepage/NoPageFound');
+        });
+
+
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

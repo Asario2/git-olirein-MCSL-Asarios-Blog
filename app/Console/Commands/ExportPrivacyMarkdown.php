@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\GlobalController;
 
 class ExportPrivacyMarkdown extends Command
 {
@@ -14,7 +15,8 @@ class ExportPrivacyMarkdown extends Command
 
     public function handle()
     {
-        $entries = DB::table('privacy')->where("xico_doms","ab_mcsl")->orderBy('ordering',"DESC")->get();
+        GlobalController::SetDomain();
+        $entries = DB::table('cleo.privacy')->where("xico_doms","mfx_mcsl")->orderBy('ordering',"DESC")->get();
 
         if ($entries->isEmpty()) {
             $this->error('Keine Einträge in der Tabelle "privacy" gefunden.');
@@ -46,8 +48,8 @@ class ExportPrivacyMarkdown extends Command
         }
 
         // Datei speichern
-        Storage::disk('local')->put('privacy.md', $markdown);
-        $this->info("Markdown-Datei wurde unter storage/app/privacy.md gespeichert.");
+        Storage::disk('md')->put('privacy_mfx.md', $markdown);
+        $this->info("Markdown-Datei wurde unter storage/app/privacy_mfx.md gespeichert.");
     }
 
     protected function convertToMarkdown(string $message): string

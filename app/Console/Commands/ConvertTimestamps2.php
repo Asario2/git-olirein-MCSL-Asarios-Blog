@@ -23,7 +23,7 @@ class ConvertTimestamps2 extends Command
 
     public function handle()
     {
-        $table = 'users'; // ← Passe das ggf. an deine Tabelle an
+        $table = 'cleo.images'; // ← Passe das ggf. an deine Tabelle an
 
         $users = DB::table($table)->get();
 

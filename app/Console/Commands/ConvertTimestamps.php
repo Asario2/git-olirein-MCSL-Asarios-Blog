@@ -23,7 +23,7 @@ class ConvertTimestamps extends Command
     {
         $columns = Schema::getColumnListing($tableName);
         $timestampColumns = ['created_at', 'updated_at', 'published_at'];
-        
+
         // Temporär in VARCHAR(200) umwandeln
         Schema::table($tableName, function (Blueprint $table) use ($columns, $timestampColumns) {
             foreach ($timestampColumns as $column) {
@@ -32,14 +32,14 @@ class ConvertTimestamps extends Command
                 }
             }
         });
-        
+
         // Unix-Timestamps in DATETIME umwandeln
         foreach ($timestampColumns as $column) {
             if (in_array($column, $columns)) {
                 DB::statement("UPDATE `$tableName` SET `$column` = FROM_UNIXTIME(`$column`) WHERE `$column` REGEXP '^[0-9]{1,10}$'");
             }
         }
-        
+
         // Spalten auf DATETIME setzen
         Schema::table($tableName, function (Blueprint $table) use ($columns, $timestampColumns) {
             foreach ($timestampColumns as $column) {

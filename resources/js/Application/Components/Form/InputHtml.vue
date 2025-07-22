@@ -114,7 +114,7 @@
     import IconHyperLink from "@/Application/Components/Icons/IconHyperLink.vue";
     import { Tippy } from 'tippy.vue';
 
-    export default {    
+    export default {
         name: "Editor",
         components: {
         IconPictures,
@@ -142,6 +142,7 @@
             type:[Number,Boolean,String],
             default:false
         },
+        vcol:String,
         },
         data() {
         return {
@@ -167,7 +168,7 @@
     // this.setCursorAtEnd();
   });
         if (this.$refs.editor) {
-            this.$refs.editor.innerHTML = decodeHtml(this.modelValue) || "";
+            this.$refs.editor.innerHTML =   (this.modelValue) || "";
         }
         // this.$nextTick(() => this.setCursorAtEnd());
         // this.setInitialContent();
@@ -196,7 +197,7 @@
   isValid() {
       if (!this.required) return true;
 
-      const html = this.$refs.editor?.innerHTML || '';
+      let html = this.$refs.editor?.innerHTML || '';
       html = rumLaut(html);
       const plain = html.replace(/<[^>]*>/g, '').trim();
 
@@ -229,7 +230,7 @@
 
   updateValue() {
     // this.cleanupEmptyTags();
-    const html = this.$refs.editor.innerHTML.replace('%5B', '[').replace('%5D', ']');
+    let html = this.$refs.editor.innerHTML.replace('%5B', '[').replace('%5D', ']');
     html = rumLaut(html);
     this.$emit('update:modelValue', rumLaut(html));
 
@@ -449,7 +450,7 @@ restoreSelection() {
       },
 
             onInput(e) {
-                const html = e.target.innerHTML.trim();
+                let html = e.target.innerHTML.trim();
                 this.$emit('update:modelValue', html);
                 this.hasError = html.replace(/<[^>]*>/g, '').trim().length === 0;
     },

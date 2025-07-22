@@ -583,7 +583,7 @@ class TablesController extends Controller
                 $ord = ["id", "DESC"];
 
             } elseif ($table == "privacy") {
-                $ord = ["ordering", "DESC"];
+                $ord = ["created_at", "ASC"];
             } elseif($table == "texts"){
                 $ord = ["headline","ASC"];
             }

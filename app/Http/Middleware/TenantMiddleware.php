@@ -12,7 +12,7 @@ class TenantMiddleware
     public function handle(Request $request, Closure $next)
     {
         $host = $request->getHost();
-        $subdomain = explode('.', $host)[0];
+        $subdomain = SD();
 
         Log::info("Subdomain gefunden: " . $subdomain);
 

@@ -11,7 +11,7 @@ class DetectTenant {
     public function handle($request, Closure $next)
     {
         $host = $request->getHost(); // z. B. mfx.localhost.de
-        $subdomain = explode('.', $host)[0];
+        $subdomain = SD();
 
         $tenant = Tenant::where('subdomain', $subdomain)->first();
 

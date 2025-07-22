@@ -17,7 +17,7 @@
                     <!-- Profilbild (2 Spalten innerhalb der Box) -->
                     <div class="col-span-2">
                     <img
-                        :src="'/images/_mfx/people/' + item.profile_photo_path"
+                        :src="'/images/_mfx/people/' + item.profile_photo_path.replace('profile-photos/','')"
                         :alt="item.name"
                         :title="item.name"
                         height="184"
@@ -30,7 +30,7 @@
                     <!-- Text (4 Spalten innerhalb der Box) -->
                     <div class="col-span-4">
                     <div class="text-layout-sun-1000 dark:text-layout-night-1000 font-semibold text-lg">
-                        {{ item.name }}
+                        {{ item.name }} <editbtns :id="item.id" table="people"></editbtns>
                     </div>
                     <div class="text-sm text-gray-600 dark:text-gray-300">
                         {{ item.headline }}<br />

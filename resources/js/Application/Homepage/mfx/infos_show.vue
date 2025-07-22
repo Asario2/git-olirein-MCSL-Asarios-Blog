@@ -5,7 +5,7 @@
                 <div>
                 <page-title>
                     <template #title>
-                        <span class="dark:text-layout-night-1050 text-layout-sun-1000 inline" >Infos - <span v-html="cleanHtml(data.headline)"></span> <editbtns :id="data?.id" table="infos" /></span>
+                        <span class="dark:text-layout-night-1050 text-layout-sun-1000 inline">Infos - <span v-html="cleanHtml(data.headline)"></span> <editbtns :id="data?.id" table="infos" /></span>
                 </template>
                 </page-title>
 

@@ -121,7 +121,7 @@
     async mounted() {
          //this.fetchDataX();
          this.GetAuth = await GetAuth();
-         alert(this.alt_path);
+        /// alert(this.alt_path);
     },
     methods: {
         GetAuth,

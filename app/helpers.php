@@ -728,15 +728,72 @@ return smilies_oxx("<div class=\"vcard\">
 }
 if(!function_exists("SD"))
 {
-    function SD($pn='')
-    {
+    // function SD($pn='')
+    // {
+    //     $subb = explode('.', str_replace("www.",'',request()->getHost()))[0];
+    //     $pm = ["ab"=>"Asarios Blog",
+    //            "dag"=>"Monika Dargies",
+    //             "mfx"=>"MarbleFX",
+    //             "mjs"=>"Mitja Schult",
+    //             "chh"=>"Rechtsanwalt Christian Henning"];
+
+    //     switch($subb){
+    //         case "asario":
+    //             $subb = "ab";
+
+    //         break;
+    //         case "monikadargies":
+    //             $subb = "dag";
+
+    //         break;
+    //         case "marblefx":
+    //             $subb = "mfx";
+
+    //         break;
+    //         case "mjs":
+    //             $subb = "mjs";
+
+    //         break;
+    //         case "ra-c-henning":
+    //             $subb = "chh";
+
+    //         break;
+    //         default:
+    //         $subb = $subb;
+    //         break;
+    //     }
+    //     if( substr_count(@$_SERVER['REQUEST_URI'],"/admin/"))
+    //     {
+    //       $subb2  = "ab";
+    //         // dd($subb);
+    //         return 'ab';
+    //     }
+    //     if(empty($subb))
+    //     {
+    //         $subb = "ab";
+    //     }
+    //     if(!$pn){
+    //         return $subb;
+    //     }
+    //     elseif($pn == "pn"){
+    //         return $pm[$subb];
+    //     }
+    //     return $subb2;
+
+    // // Den Host in Teile aufteilen (subdomain.localhost.de -> ['subdomain', 'localhost', 'de'])
+
+
+    // }
+    function SD($pn=''){
+
+
         $subb = explode('.', str_replace("www.",'',request()->getHost()))[0];
+
         $pm = ["ab"=>"Asarios Blog",
                "dag"=>"Monika Dargies",
                 "mfx"=>"MarbleFX",
                 "mjs"=>"Mitja Schult",
                 "chh"=>"Rechtsanwalt Christian Henning"];
-
         switch($subb){
             case "asario":
                 $subb = "ab";
@@ -762,7 +819,7 @@ if(!function_exists("SD"))
             $subb = $subb;
             break;
         }
-        if( substr_count($_SERVER['REQUEST_URI'],"/admin/"))
+        if( substr_count(@$_SERVER['REQUEST_URI'],"/admin/"))
         {
          ///   $subb  = "ab";
             // dd($subb);
@@ -771,6 +828,7 @@ if(!function_exists("SD"))
         {
             $subb = "ab";
         }
+
         if(!$pn){
             return $subb;
         }
@@ -854,7 +912,7 @@ if(!function_exists("checkurl"))
 {
     function checkurl($t,$a='')
     {
-        $fullUri = $_SERVER['REQUEST_URI'];
+        $fullUri = @$_SERVER['REQUEST_URI'];
 
         // Entfernt den Query-String, um nur den Pfad zu erhalten
         $path = parse_url($fullUri, PHP_URL_PATH);
@@ -869,7 +927,7 @@ if(!function_exists("CheckRights"))
 {
     function CheckRights($userId, $table, $right)
     {
-        $fullUri = $_SERVER['REQUEST_URI'];
+        $fullUri = @$_SERVER['REQUEST_URI'];
 
         // Entfernt den Query-String, um nur den Pfad zu erhalten
         $path = parse_url($fullUri, PHP_URL_PATH);
@@ -1335,7 +1393,7 @@ if(!function_exists("errlog"))
         $go = "-2";
     }
     echo "<form method='post' action='exxon.php?exx=errlog'>";
-    echo "<input type='submit' name='mline' value='Check Content' class='bigbtn'> <input type='hidden' name='mline2' value='1'> <input type='button' class='bigbtn' value='Go Backwards' OnClick=\"history.go('$go');\"><input class='bigbtn' type='button' value='Clear History' onclick=\"location.href='".$_SERVER['REQUEST_URI']."&clear=All'\">";
+    echo "<input type='submit' name='mline' value='Check Content' class='bigbtn'> <input type='hidden' name='mline2' value='1'> <input type='button' class='bigbtn' value='Go Backwards' OnClick=\"history.go('$go');\"><input class='bigbtn' type='button' value='Clear History' onclick=\"location.href='".@$_SERVER['REQUEST_URI']."&clear=All'\">";
     echo "</form>";
     echo "<a name='bottom'></a>";
 

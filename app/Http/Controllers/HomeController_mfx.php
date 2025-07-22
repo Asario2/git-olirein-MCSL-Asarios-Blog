@@ -41,6 +41,16 @@ class HomeController_mfx extends Controller
 
         return Inertia::render('Homepage/mfx/Home', compact('news', 'text'));
     }
+    public static function home_mfx()
+    {
+        //
+        $news = DB::table("news")->orderBy("id", "DESC")->paginate(10);
+        $text = DB::table("texts")->where("type","mfx_welcome")->select("headline","text")->first();
+        // dd($text);
+
+
+        return Inertia::render('Homepage/mfx/Home', compact('news', 'text'));
+    }
     public function people()
     {
         $data = DB::table("users")->where("pub","1")->where("xis_friends","1")->orderBy("users_rights_id","ASC")->get();

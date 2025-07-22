@@ -56,7 +56,7 @@ class FormController extends Controller
                 $value = "XXXXXXXXXX";
             }
             $value = html_entity_decode($value);
-        $label = isset(Settings::$exl[$name]) ? Settings::$exl[$name] : $name;
+        $label = isset(Settings::$exl[$name]) ? Settings::$exl[$name] : ucf($name);
         $class = FormController::getClass($name,1,$table);
         $req   = FormController::getReq($name);
         $type = FormController::getClass($name);
@@ -481,7 +481,7 @@ class FormController extends Controller
 
     }
     public static function CheckCreate(){
-        if(!substr_count($_SERVER['REQUEST_URI'],"create")){
+        if(!substr_count(@$_SERVER['REQUEST_URI'],"create")){
             return false;
         }
         return true;

@@ -20,11 +20,12 @@
 import { gsap } from 'gsap';
 
 export default {
+    name: "mfxlogo",
     props:{
         ab:{
             default:'',
             type:String
-            
+
         }
     },
   mounted() {

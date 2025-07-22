@@ -25,6 +25,7 @@
         "laravel/jetstream": "^5.0",
         "laravel/sanctum": "^4.0.8",
         "laravel/tinker": "^2.9",
+        "laravel/ui": "^4.6",
         "league/commonmark": "^2.7",
         "nextqs/bacon-qr-code": "^2.0",
         "qsfx/bacon-qr-code": "^1.0",

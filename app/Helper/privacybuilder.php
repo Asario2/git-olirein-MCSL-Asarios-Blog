@@ -5,7 +5,7 @@ if (!function_exists('buildPrivacyText')) {
     function buildPrivacyText()
     {
         include __DIR__."/inc/rinfo_code.php";
-        $priv = DB::table("privacy")->orderBy("ordering","DESC")->Where("xico_doms","ab_mcsl")->get();
+        $priv = DB::table("privacy")->orderBy("ordering","DESC")->Where("xico_doms","mfx_mcsl")->get();
             foreach($priv as  $key=>$val)
             {
                 $msg = rinfo_code($val->message);

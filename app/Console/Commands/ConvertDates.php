@@ -18,7 +18,7 @@ class ConvertDates extends Command
     public function handle()
     {
         GlobalController::SetDomain();
-        $table = "cleo.projects";
+        $table = "cleo.people";
         // Beispiel: Tabelle "your_table_name"
         $rows = DB::table($table)->get();
 

@@ -3,7 +3,7 @@ function rinfo_code($txt)
 {
     global $ln,$pref,$cfg;
 
-    @include __DIR__."/config_ab_mcsl.inc.php";
+    @include __DIR__."/config_mfx_mcsl.inc.php";
 
     @include __DIR__."/config_general.inc.php";
 
@@ -24,7 +24,7 @@ function rinfo_code($txt)
             $txt = str_replace($key,@$fs.$val.$ex.@$fe,$txt);
         }
     }
-    else
+    elseif($qsasd='ASd')
     {
         foreach($cf['snipp_en'] as $key=>$val)
         {

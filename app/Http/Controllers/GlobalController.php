@@ -60,4 +60,59 @@ class GlobalController extends Controller
     //         \Log::info("KEIN TENANT");
     //     }
     // }
-}
+        public static function SD($pn=''){
+
+
+            $subb = explode('.', str_replace("www.",'',request()->getHost()))[0];
+            \Log::info($subb);
+            $pm = ["ab"=>"Asarios Blog",
+                   "dag"=>"Monika Dargies",
+                    "mfx"=>"MarbleFX",
+                    "mjs"=>"Mitja Schult",
+                    "chh"=>"Rechtsanwalt Christian Henning"];
+            switch($subb){
+                case "asario":
+                    $subb = "ab";
+
+                break;
+                case "monikadargies":
+                    $subb = "dag";
+
+                break;
+                case "marblefx":
+                    $subb = "mfx";
+
+                break;
+                case "mjs":
+                    $subb = "mjs";
+
+                break;
+                case "ra-c-henning":
+                    $subb = "chh";
+
+                break;
+                default:
+                $subb = $subb;
+                break;
+            }
+            if( substr_count(@$_SERVER['REQUEST_URI'],"/admin/"))
+            {
+             ///   $subb  = "ab";
+                // dd($subb);
+            }
+            if(empty($subb))
+            {
+                $subb = "ab";
+            }
+
+            if(!$pn){
+                return $subb;
+            }
+            return $pm[$subb];
+        // Den Host in Teile aufteilen (subdomain.localhost.de -> ['subdomain', 'localhost', 'de'])
+
+
+        }
+    }
+
+

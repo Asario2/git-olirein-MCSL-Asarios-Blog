@@ -19,7 +19,7 @@
                     <div class="col-span-6 p-4 lg:rounded-lg ">
                     <div v-for="item in news.data" :key="item.id">
                     <div class="bg-layout-sun-50 dark:bg-layout-night-50 lg:rounded-lg p-2 mb-6  border border-layout-sun-1000 dark:border-layout-night-1050" >
-                        <span class="dark:text-layout-night-1050 bold text-layout-sun-1000" v-html="cleanHtml(item.headline)"></span><br />
+                        <span class="dark:text-layout-night-1050 bold text-layout-sun-1000" v-html="cleanHtml(item.headline)"></span> <editbtns :id="item.id" table="news"></editbtns><br />
                         <span class="text-layout-sun-1000 dark:text-layout-night-1000" v-html="cleanHtml(item.message)"></span>
 
                     </div>
@@ -32,7 +32,7 @@
 
                 <div class="bg-layout-sun-50 dark:bg-layout-night-50 lg:rounded-lg p-2 mb-6  border border-layout-sun-1000 dark:border-layout-night-1050">
                     <div v-if="text" class="text-layout-sun-1000 dark:text-layout-night-1000">
-                        <h1 class="text-2xl text-layout-sun-1000 dark:text-layout-night-1050">{{ text.headline }}</h1>
+                        <h1 class="text-2xl text-layout-sun-1000 dark:text-layout-night-1050">{{ text.headline }}</h1> <editbtns id="14" table="texts"></editbtns>
                         <div v-html="text.text"></div>
                     </div>
                     <div v-else>
@@ -55,6 +55,7 @@
 import { defineComponent } from "vue";
 import Layout from "@/Application/Homepage/Shared/mfx/Layout.vue";
 import { selectionHelper, GetSettings,rumLaut } from "@/helpers";
+import editbtns from "@/Application/Components/Form/editbtns.vue";
 import PageContent from "@/Application/Components/Content/PageContent.vue";
 import PageTitle from "@/Application/Components/Content/PageTitle.vue";
 import PageParagraph from "@/Application/Components/Content/PageParagraph.vue";
@@ -69,6 +70,7 @@ export default defineComponent({
         PageTitle,
         PageParagraph,
         emailview,
+        editbtns,
     },
     props:{
         news:[Array,Object],

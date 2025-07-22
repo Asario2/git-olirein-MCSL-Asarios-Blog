@@ -58,6 +58,14 @@ return [
             "throw" => false
 
         ],
+        'md' => [
+            'driver' => 'local',
+            'root' => 'resources/markdown/',
+            'url' => env('APP_URL') . '/markdown/',
+
+            "throw" => false
+
+        ],
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),

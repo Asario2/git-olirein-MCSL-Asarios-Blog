@@ -4,7 +4,7 @@
         session_start();
     }
     $ida = $ida ?? -1;
-    $fullUri = $_SERVER['REQUEST_URI'];
+    $fullUri = @$_SERVER['REQUEST_URI'];
 
     // Entfernt den Query-String, um nur den Pfad zu erhalten
     $path = parse_url($fullUri, PHP_URL_PATH);

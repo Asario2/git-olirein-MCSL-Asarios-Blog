@@ -4,7 +4,8 @@
 .dark\:border-layout-night-1050:is(.dark *){
     border-color:#ffa200 !important;
 }
-a{
+a,.ckoo{
+   font-weight:bold;
     color:#f68243 !important;
 }
 *, ::before, ::after {

@@ -406,6 +406,8 @@ export default {
   },
 
   methods: {
+
+
     setLoadingState(state) {
       this.isLoading = state;
       localStorage.setItem('loading', state.toString());

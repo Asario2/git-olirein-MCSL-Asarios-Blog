@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="GetSd() == 'ab'">
         <Link :href="routeName" class="flex items-center">
             <div>
                 <favicon class="h-10 w-10 mr-2"></favicon>
@@ -28,19 +28,23 @@
             </div>
         </Link>
     </div>
+    <div v-if="GetSd() == 'mfx'">
+        <a href="/"><mfxlogo :ab="'_mfx_alt' + this.GetLogin()"></mfxlogo></a>
+    </div>
 </template>
 
 <script>
 import { Link } from "@inertiajs/vue3";
 
 import Favicon from "@/Application/Components/Logo/Favicon.vue";
-
+import mfxlogo from "@/Application/Shared/mfxlogo.vue";
 export default {
     name: "Shared_BrandFooter",
     //
     components: {
         Link,
         Favicon,
+        mfxlogo,
     },
     //
     props: {
@@ -61,5 +65,19 @@ export default {
             default: null,
         },
     },
+    methods:{
+        GetSd(){
+        return window.subdomain;
+    },
+    GetLogin()
+    {
+        const url = location.href;
+        if(!url.includes("/login") && !url.includes("/forgot-password") && !url.includes("/register") && !url.includes("/email/verify"))
+        {
+            return "";
+        }
+        return "l";
+    },
+    }
 };
 </script>

@@ -543,6 +543,12 @@ return Inertia::render('Homepage/Pictures', [
             'imprint' => $imprint,
         ]);
     }
+    public function changelog_old(){
+        $data = DB::table("texts")->select('texts.*','users.name as author_name')->leftJoin('users', 'users.id', '=', 'texts.users_id')->where("texts.id","15")->first();
+        $data->text = Str::markdown($data->text);
+        return Inertia::render('Homepage/Changelog_old', ["data" => [$data]]); // <-- in Array umwandeln
+
+    }
     //
     public function home_privacy()
     {

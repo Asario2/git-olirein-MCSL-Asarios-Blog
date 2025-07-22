@@ -407,6 +407,15 @@ export default {
   },
 
   methods: {
+    reopenCookieBanner() {
+        window.LaravelCookieConsent.reset();
+        //   // Whitecube-API aufrufen, wenn verfügbar
+    //   if (window.CookieConsent && typeof window.CookieConsent.showBanner === "function") {
+    //     window.CookieConsent.showBanner();
+    //   } else {
+    //     console.log("Whitecube CookieConsent API nicht gefunden.");
+    //   }
+    },
     setLoadingState(state) {
       this.isLoading = state;
       localStorage.setItem('loading', state.toString());

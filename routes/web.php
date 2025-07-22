@@ -88,6 +88,7 @@ Route::post("/cookie_config",[ConfigureController::class,'__invoke'])->name("coo
             Route::get('/', [HomeController::class, 'home_index'])->name('home.mfx');
             // dd($sub);
             Route::get('/changelog', [HomeController::class,"mcsl_changelog"])->name("mfx.changelog");
+            Route::get('/changelog_old', [HomeController::class,"changelog_old"])->name("mfx.changelog.old");
             Route::get('/home/users', fn () => redirect("NoPageFound"))->name('home.userlist2');
             Route::get('/home/users/show/{user}/{id}', fn () => redirect("NoPageFound"))->name('user.show');
             Route::get('/home/projects',  [HomeController::class,"projects"])->name("home.projects.mfx");

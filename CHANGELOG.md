@@ -54,3 +54,7 @@
 ![Version](https://img.shields.io/badge/version-2.64.5-orange) Migrate Comments & Image Ratings to MCSL (#42)  
 ![Version](https://img.shields.io/badge/version-2.65.9-orange) alert field in search function (#46)  
 ![Version](https://img.shields.io/badge/version-2.66.4-orange) link from comment table to entry (#45)  
+![Version](https://img.shields.io/badge/version-2.67.1-orange) alert field in search function (#46)  
+![Version](https://img.shields.io/badge/version-2.68.1-orange) Brandheader Subdomains (#50)  
+![Version](https://img.shields.io/badge/version-2.69.0-orange) slider/checkbox choosing based on field name (#52)  
+

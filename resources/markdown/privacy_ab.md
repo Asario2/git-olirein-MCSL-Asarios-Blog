@@ -7,17 +7,18 @@
 - [3)&nbsp; Begriffsbestimmungen](#begriffsbestimmungen)
 - [4)&nbsp; Cookies](#cookies)
 - [5)&nbsp; Erfassung von allgemeinen Daten und Informationen](#erfassung-von-allgemeinen-daten-und-informationen)
-- [6)&nbsp; Kontaktm&ouml;glichkeit &uuml;ber die Internetseite](#kontaktmoumlglichkeit-uumlber-die-internetseite)
-- [7)&nbsp; Kommentarfunktion im Blog auf der Internetseite](#kommentarfunktion-im-blog-auf-der-internetseite)
-- [8)&nbsp; Routinem&auml;&szlig;ige L&ouml;schung und Sperrung von personenbezogenen Daten](#routinemaumlszligige-loumlschung-und-sperrung-von-personenbezogenen-daten)
-- [9)&nbsp; Rechte der betroffenen Person](#rechte-der-betroffenen-person)
-- [10)&nbsp; Rechtsgrundlage der Verarbeitung](#rechtsgrundlage-der-verarbeitung)
-- [11)&nbsp; Datenschutzbestimmungen zu Einsatz und Verwendung von Shariff](#datenschutzbestimmungen-zu-einsatz-und-verwendung-von-shariff)
-- [12)&nbsp; Dauer, f&uuml;r die die personenbezogenen Daten gespeichert werden](#dauer-fuumlr-die-die-personenbezogenen-daten-gespeichert-werden)
-- [13)&nbsp; Gesetzliche oder vertragliche Vorschriften zur Bereitstellung der personenbezogenen Daten; Erforderlichkeit f&uuml;r den Vertragsabschluss; Verpflichtung der betroffenen Person, die personenbezogenen Daten bereitzustellen; m&ouml;gliche Folgen der Nichtbereitstellung](#gesetzliche-oder-vertragliche-vorschriften-zur-bereitstellung-der-personenbezogenen-daten-erforderlichkeit-fuumlr-den-vertragsabschluss-verpflichtung-der-betroffenen-person-die-personenbezogenen-daten-bereitzustellen-moumlgliche-folgen-der-nichtbereitstellung)
-- [14)&nbsp; Berechtigte Interessen an der Verarbeitung, die von dem Verantwortlichen oder einem Dritten verfolgt werden](#berechtigte-interessen-an-der-verarbeitung-die-von-dem-verantwortlichen-oder-einem-dritten-verfolgt-werden)
-- [15)&nbsp; Bestehen einer automatisierten Entscheidungsfindung](#bestehen-einer-automatisierten-entscheidungsfindung)
-- [16)&nbsp; Quellenangabe](#quellenangabe)
+- [6)&nbsp; Registrierung auf unserer Internetseite](#registrierung-auf-unserer-internetseite)
+- [7)&nbsp; Kontaktm&ouml;glichkeit &uuml;ber die Internetseite](#kontaktmoumlglichkeit-uumlber-die-internetseite)
+- [8)&nbsp; Kommentarfunktion im Blog auf der Internetseite](#kommentarfunktion-im-blog-auf-der-internetseite)
+- [9)&nbsp; Routinem&auml;&szlig;ige L&ouml;schung und Sperrung von personenbezogenen Daten](#routinemaumlszligige-loumlschung-und-sperrung-von-personenbezogenen-daten)
+- [10)&nbsp; Rechte der betroffenen Person](#rechte-der-betroffenen-person)
+- [11)&nbsp; Rechtsgrundlage der Verarbeitung](#rechtsgrundlage-der-verarbeitung)
+- [12)&nbsp; Datenschutzbestimmungen zu Einsatz und Verwendung von Shariff](#datenschutzbestimmungen-zu-einsatz-und-verwendung-von-shariff)
+- [13)&nbsp; Dauer, f&uuml;r die die personenbezogenen Daten gespeichert werden](#dauer-fuumlr-die-die-personenbezogenen-daten-gespeichert-werden)
+- [14)&nbsp; Gesetzliche oder vertragliche Vorschriften zur Bereitstellung der personenbezogenen Daten; Erforderlichkeit f&uuml;r den Vertragsabschluss; Verpflichtung der betroffenen Person, die personenbezogenen Daten bereitzustellen; m&ouml;gliche Folgen der Nichtbereitstellung](#gesetzliche-oder-vertragliche-vorschriften-zur-bereitstellung-der-personenbezogenen-daten-erforderlichkeit-fuumlr-den-vertragsabschluss-verpflichtung-der-betroffenen-person-die-personenbezogenen-daten-bereitzustellen-moumlgliche-folgen-der-nichtbereitstellung)
+- [15)&nbsp; Berechtigte Interessen an der Verarbeitung, die von dem Verantwortlichen oder einem Dritten verfolgt werden](#berechtigte-interessen-an-der-verarbeitung-die-von-dem-verantwortlichen-oder-einem-dritten-verfolgt-werden)
+- [16)&nbsp; Bestehen einer automatisierten Entscheidungsfindung](#bestehen-einer-automatisierten-entscheidungsfindung)
+- [17)&nbsp; Quellenangabe](#quellenangabe)
 
 ---
 
@@ -116,15 +117,28 @@ Bei der Nutzung dieser allgemeinen Daten und Informationen zieht |die| keine Rü
 
 ---
 
+<a id="registrierung-auf-unserer-internetseite"></a>
+## <span class='dark:text-layout-night-1050 text-layout-sun-1000'>6)&nbsp;Registrierung auf unserer Internetseite</span>
+
+Die betroffene Person hat die Möglichkeit, sich auf der Internetseite des für die Verarbeitung Verantwortlichen unter Angabe von personenbezogenen Daten zu registrieren. Welche personenbezogenen Daten dabei an den für die Verarbeitung Verantwortlichen übermittelt werden, ergibt sich aus der jeweiligen Eingabemaske, die für die Registrierung verwendet wird. Die von der betroffenen Person eingegebenen personenbezogenen Daten werden ausschließlich für die interne Verwendung bei dem für die Verarbeitung Verantwortlichen und für eigene Zwecke erhoben und gespeichert. Der für die Verarbeitung Verantwortliche kann die Weitergabe an einen oder mehrere Auftragsverarbeiter, beispielsweise einen Paketdienstleister, veranlassen, der die personenbezogenen Daten ebenfalls ausschließlich für eine interne Verwendung, die dem für die Verarbeitung Verantwortlichen zuzurechnen ist, nutzt.
+
+Durch eine Registrierung auf der Internetseite des für die Verarbeitung Verantwortlichen wird ferner die vom Internet-Service-Provider (ISP) der betroffenen Person vergebene IP-Adresse, das Datum sowie die Uhrzeit der Registrierung gespeichert. Die Speicherung dieser Daten erfolgt vor dem Hintergrund, dass nur so der Missbrauch unserer Dienste verhindert werden kann, und diese Daten im Bedarfsfall ermöglichen, begangene Straftaten aufzuklären. Insofern ist die Speicherung dieser Daten zur Absicherung des für die Verarbeitung Verantwortlichen erforderlich. Eine Weitergabe dieser Daten an Dritte erfolgt grundsätzlich nicht, sofern keine gesetzliche Pflicht zur Weitergabe besteht oder die Weitergabe der Strafverfolgung dient.
+
+Die Registrierung der betroffenen Person unter freiwilliger Angabe personenbezogener Daten dient dem für die Verarbeitung Verantwortlichen dazu, der betroffenen Person Inhalte oder Leistungen anzubieten, die aufgrund der Natur der Sache nur registrierten Benutzern angeboten werden können. Registrierten Personen steht die Möglichkeit frei, die bei der Registrierung angegebenen personenbezogenen Daten jederzeit abzuändern oder vollständig aus dem Datenbestand des für die Verarbeitung Verantwortlichen löschen zu lassen.
+
+Der für die Verarbeitung Verantwortliche erteilt jeder betroffenen Person jederzeit auf Anfrage Auskunft darüber, welche personenbezogenen Daten über die betroffene Person gespeichert sind. Ferner berichtigt oder löscht der für die Verarbeitung Verantwortliche personenbezogene Daten auf Wunsch oder Hinweis der betroffenen Person, soweit dem keine gesetzlichen Aufbewahrungspflichten entgegenstehen. Die Gesamtheit der Mitarbeiter des für die Verarbeitung Verantwortlichen stehen der betroffenen Person in diesem Zusammenhang als Ansprechpartner zur Verfügung.
+
+---
+
 <a id="kontaktmoumlglichkeit-uumlber-die-internetseite"></a>
-## <span class='dark:text-layout-night-1050 text-layout-sun-1000'>6)&nbsp;Kontaktm&ouml;glichkeit &uuml;ber die Internetseite</span>
+## <span class='dark:text-layout-night-1050 text-layout-sun-1000'>7)&nbsp;Kontaktm&ouml;glichkeit &uuml;ber die Internetseite</span>
 
 Die Internetseite |der| enth&auml;lt aufgrund von gesetzlichen Vorschriften Angaben, die eine schnelle elektronische Kontaktaufnahme zu |unsuntm| sowie eine unmittelbare Kommunikation mit uns erm&ouml;glichen, was ebenfalls eine allgemeine Adresse der sogenannten elektronischen Post (E-Mail-Adresse) umfasst. Sofern eine betroffene Person per E-Mail oder &uuml;ber ein Kontaktformular den Kontakt mit dem f&uuml;r die Verarbeitung Verantwortlichen aufnimmt, werden die von der betroffenen Person &uuml;bermittelten personenbezogenen Daten automatisch gespeichert. Solche auf freiwilliger Basis von einer betroffenen Person an den f&uuml;r die Verarbeitung Verantwortlichen &uuml;bermittelten personenbezogenen Daten werden f&uuml;r Zwecke der Bearbeitung oder der Kontaktaufnahme zur betroffenen Person gespeichert. Es erfolgt keine Weitergabe dieser personenbezogenen Daten an Dritte.
 
 ---
 
 <a id="kommentarfunktion-im-blog-auf-der-internetseite"></a>
-## <span class='dark:text-layout-night-1050 text-layout-sun-1000'>7)&nbsp;Kommentarfunktion im Blog auf der Internetseite</span>
+## <span class='dark:text-layout-night-1050 text-layout-sun-1000'>8)&nbsp;Kommentarfunktion im Blog auf der Internetseite</span>
 
 |Die| bietet den Nutzern auf einem Blog, der sich auf der Internetseite des für die Verarbeitung Verantwortlichen befindet, die Möglichkeit, individuelle Kommentare zu einzelnen Blog-Beiträgen zu hinterlassen. Ein Blog ist ein auf einer Internetseite geführtes, in der Regel öffentlich einsehbares Portal, in welchem eine oder mehrere Personen, die Blogger oder Web-Blogger genannt werden, Artikel posten oder Gedanken in sogenannten Blogposts niederschreiben können. Die Blogposts können in der Regel von Dritten kommentiert werden.
 
@@ -133,7 +147,7 @@ Hinterlässt eine betroffene Person einen Kommentar in dem auf dieser Internetse
 ---
 
 <a id="routinemaumlszligige-loumlschung-und-sperrung-von-personenbezogenen-daten"></a>
-## <span class='dark:text-layout-night-1050 text-layout-sun-1000'>8)&nbsp;Routinem&auml;&szlig;ige L&ouml;schung und Sperrung von personenbezogenen Daten</span>
+## <span class='dark:text-layout-night-1050 text-layout-sun-1000'>9)&nbsp;Routinem&auml;&szlig;ige L&ouml;schung und Sperrung von personenbezogenen Daten</span>
 
 Der für die Verarbeitung Verantwortliche verarbeitet und speichert personenbezogene Daten der betroffenen Person nur für den Zeitraum, der zur Erreichung des Speicherungszwecks erforderlich ist oder sofern dies durch den Europäischen Richtlinien- und Verordnungsgeber oder einen anderen Gesetzgeber in Gesetzen oder Vorschriften, welchen der für die Verarbeitung Verantwortliche unterliegt, vorgesehen wurde.
 
@@ -142,7 +156,7 @@ Entfällt der Speicherungszweck oder läuft eine vom Europäischen Richtlinien- 
 ---
 
 <a id="rechte-der-betroffenen-person"></a>
-## <span class='dark:text-layout-night-1050 text-layout-sun-1000'>9)&nbsp;Rechte der betroffenen Person</span>
+## <span class='dark:text-layout-night-1050 text-layout-sun-1000'>10)&nbsp;Rechte der betroffenen Person</span>
 
 <ul class="nsl">
 <li><b>a) Recht auf Bestätigung</b>
@@ -238,7 +252,7 @@ Möchte die betroffene Person ihr Recht auf Widerruf einer Einwilligung geltend 
 ---
 
 <a id="rechtsgrundlage-der-verarbeitung"></a>
-## <span class='dark:text-layout-night-1050 text-layout-sun-1000'>10)&nbsp;Rechtsgrundlage der Verarbeitung</span>
+## <span class='dark:text-layout-night-1050 text-layout-sun-1000'>11)&nbsp;Rechtsgrundlage der Verarbeitung</span>
 
 Art. 6 I lit. a DS-GVO dient |unsuntm| als Rechtsgrundlage für Verarbeitungsvorgänge, bei denen wir eine Einwilligung für einen bestimmten Verarbeitungszweck einholen. Ist die Verarbeitung personenbezogener Daten zur Erfüllung eines Vertrags, dessen Vertragspartei die betroffene Person ist, erforderlich, wie dies beispielsweise bei Verarbeitungsvorgängen der Fall ist, die für eine Lieferung von Waren oder die Erbringung einer sonstigen Leistung oder Gegenleistung notwendig sind, so beruht die Verarbeitung auf Art. 6 I lit. b DS-GVO. Gleiches gilt für solche Verarbeitungsvorgänge die zur Durchführung vorvertraglicher Maßnahmen erforderlich sind, etwa in Fällen von Anfragen zur unseren Produkten oder Leistungen. Unterliegt |unser| einer rechtlichen Verpflichtung durch welche eine Verarbeitung von personenbezogenen Daten erforderlich wird, wie beispielsweise zur Erfüllung steuerlicher Pflichten, so basiert die Verarbeitung auf Art. 6 I lit. c DS-GVO. In seltenen Fällen könnte die Verarbeitung von personenbezogenen Daten erforderlich werden, um lebenswichtige Interessen der betroffenen Person oder einer anderen natürlichen Person zu schützen. Dies wäre beispielsweise der Fall, wenn ein Besucher in unserem Betrieb verletzt werden würde und daraufhin sein Name, sein Alter, seine Krankenkassendaten oder sonstige lebenswichtige Informationen an einen Arzt, ein Krankenhaus oder sonstige Dritte weitergegeben werden müssten. Dann würde die Verarbeitung auf Art. 6 I lit. d DS-GVO beruhen.
 Letztlich könnten Verarbeitungsvorgänge auf Art. 6 I lit. f DS-GVO beruhen. Auf dieser Rechtsgrundlage basieren Verarbeitungsvorgänge, die von keiner der vorgenannten Rechtsgrundlagen erfasst werden, wenn die Verarbeitung zur Wahrung eines berechtigten Interesses |unsunts| oder eines Dritten erforderlich ist, sofern die Interessen, Grundrechte und Grundfreiheiten des Betroffenen nicht überwiegen. Solche Verarbeitungsvorgänge sind uns insbesondere deshalb gestattet, weil sie durch den Europäischen Gesetzgeber besonders erwähnt wurden. Er vertrat insoweit die Auffassung, dass ein berechtigtes Interesse anzunehmen sein könnte, wenn die betroffene Person ein Kunde des Verantwortlichen ist (Erwägungsgrund 47 Satz 2 DS-GVO).
@@ -247,7 +261,7 @@ Letztlich könnten Verarbeitungsvorgänge auf Art. 6 I lit. f DS-GVO beruhen. Au
 ---
 
 <a id="datenschutzbestimmungen-zu-einsatz-und-verwendung-von-shariff"></a>
-## <span class='dark:text-layout-night-1050 text-layout-sun-1000'>11)&nbsp;Datenschutzbestimmungen zu Einsatz und Verwendung von Shariff</span>
+## <span class='dark:text-layout-night-1050 text-layout-sun-1000'>12)&nbsp;Datenschutzbestimmungen zu Einsatz und Verwendung von Shariff</span>
 
 Der f&uuml;r die Verarbeitung Verantwortliche hat auf dieser Internetseite die Komponente Shariff integriert. Die Shariff-Komponente stellt Social-Media-Buttons zur Verf&uuml;gung, die datenschutzkonform sind. Shariff wurde f&uuml;r die deutsche Computerzeitschrift c't entwickelt und wird &uuml;ber die GitHub, Inc. publiziert.
 
@@ -260,14 +274,14 @@ Weitere Informationen und die geltenden Datenschutzbestimmungen von GitHub k&oum
 ---
 
 <a id="dauer-fuumlr-die-die-personenbezogenen-daten-gespeichert-werden"></a>
-## <span class='dark:text-layout-night-1050 text-layout-sun-1000'>12)&nbsp;Dauer, f&uuml;r die die personenbezogenen Daten gespeichert werden</span>
+## <span class='dark:text-layout-night-1050 text-layout-sun-1000'>13)&nbsp;Dauer, f&uuml;r die die personenbezogenen Daten gespeichert werden</span>
 
 Das Kriterium f&uuml;r die Dauer der Speicherung von personenbezogenen Daten ist die jeweilige gesetzliche Aufbewahrungsfrist. Nach Ablauf der Frist werden die entsprechenden Daten routinem&auml;&szlig;ig gel&ouml;scht, sofern sie nicht mehr zur Vertragserf&uuml;llung oder Vertragsanbahnung erforderlich sind.
 
 ---
 
 <a id="gesetzliche-oder-vertragliche-vorschriften-zur-bereitstellung-der-personenbezogenen-daten-erforderlichkeit-fuumlr-den-vertragsabschluss-verpflichtung-der-betroffenen-person-die-personenbezogenen-daten-bereitzustellen-moumlgliche-folgen-der-nichtbereitstellung"></a>
-## <span class='dark:text-layout-night-1050 text-layout-sun-1000'>13)&nbsp;Gesetzliche oder vertragliche Vorschriften zur Bereitstellung der personenbezogenen Daten; Erforderlichkeit f&uuml;r den Vertragsabschluss; Verpflichtung der betroffenen Person, die personenbezogenen Daten bereitzustellen; m&ouml;gliche Folgen der Nichtbereitstellung</span>
+## <span class='dark:text-layout-night-1050 text-layout-sun-1000'>14)&nbsp;Gesetzliche oder vertragliche Vorschriften zur Bereitstellung der personenbezogenen Daten; Erforderlichkeit f&uuml;r den Vertragsabschluss; Verpflichtung der betroffenen Person, die personenbezogenen Daten bereitzustellen; m&ouml;gliche Folgen der Nichtbereitstellung</span>
 
 Wir kl&auml;ren Sie dar&uuml;ber auf, dass die Bereitstellung personenbezogener Daten zum Teil gesetzlich vorgeschrieben ist (z.B. Steuervorschriften) oder sich auch aus vertraglichen Regelungen (z.B. Angaben zum Vertragspartner) ergeben kann.
 Mitunter kann es zu einem Vertragsschluss erforderlich sein, dass eine betroffene Person uns personenbezogene Daten zur Verf&uuml;gung stellt, die in der Folge durch uns verarbeitet werden m&uuml;ssen. Die betroffene Person ist beispielsweise verpflichtet uns personenbezogene Daten bereitzustellen, wenn |unser| mit ihr einen Vertrag abschlie&szlig;t. Eine Nichtbereitstellung der personenbezogenen Daten h&auml;tte zur Folge, dass der Vertrag mit dem Betroffenen nicht geschlossen werden k&ouml;nnte.
@@ -277,21 +291,21 @@ Vor einer Bereitstellung personenbezogener Daten durch den Betroffenen muss sich
 ---
 
 <a id="berechtigte-interessen-an-der-verarbeitung-die-von-dem-verantwortlichen-oder-einem-dritten-verfolgt-werden"></a>
-## <span class='dark:text-layout-night-1050 text-layout-sun-1000'>14)&nbsp;Berechtigte Interessen an der Verarbeitung, die von dem Verantwortlichen oder einem Dritten verfolgt werden</span>
+## <span class='dark:text-layout-night-1050 text-layout-sun-1000'>15)&nbsp;Berechtigte Interessen an der Verarbeitung, die von dem Verantwortlichen oder einem Dritten verfolgt werden</span>
 
 Basiert die Verarbeitung personenbezogener Daten auf Artikel 6 I lit. f DS-GVO ist unser berechtigtes Interesse die Durchführung unserer Geschäftstätigkeit zugunsten des Wohlergehens all unserer Mitarbeiter und unserer Anteilseigner.
 
 ---
 
 <a id="bestehen-einer-automatisierten-entscheidungsfindung"></a>
-## <span class='dark:text-layout-night-1050 text-layout-sun-1000'>15)&nbsp;Bestehen einer automatisierten Entscheidungsfindung</span>
+## <span class='dark:text-layout-night-1050 text-layout-sun-1000'>16)&nbsp;Bestehen einer automatisierten Entscheidungsfindung</span>
 
 Als |veruns| verzichten wir auf eine automatische Entscheidungsfindung oder ein Profiling.
 
 ---
 
 <a id="quellenangabe"></a>
-## <span class='dark:text-layout-night-1050 text-layout-sun-1000'>16)&nbsp;Quellenangabe</span>
+## <span class='dark:text-layout-night-1050 text-layout-sun-1000'>17)&nbsp;Quellenangabe</span>
 
 Diese Datenschutzerklärung wurde durch den <a href="https://dsgvo-muster-datenschutzerklaerung.dg-datenschutz.de/">Datenschutzerklärungs-Generator</a> der Deutschen Gesellschaft für Datenschutz, in Kooperation mit den <a href="https://www.wbs-law.de/taetigkeitsgebiete/medienrecht/">Medienrecht</a> Anwälten WILDE BEUGER SOLMECKE | Rechtsanwälte erstellt.
 

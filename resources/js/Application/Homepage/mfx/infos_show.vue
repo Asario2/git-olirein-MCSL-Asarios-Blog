@@ -11,10 +11,10 @@
 
 
 
-                    <div class="min-h-[350px] pl-0 bg-layout-sun-50 dark:bg-layout-night-0 lg:rounded-lg p-4 border border-layout-sun-1000 dark:border-layout-night-1050 flex gap-4 items-start">
+                    <div class="min-h-[350px] pl-0 bg-layout-sun-50 dark:bg-layout-night-0 lg:rounded-lg p-4 border border-layout-sun-1000 dark:border-layout-night-1050 flex gap-4 ">
 
         <!-- Bild links (feste Breite 150px) -->
-        <div class="w-[150px] shrink-0">
+        <div class="w-[150px] shrink-0 items-center flex">
         <img
             class="w-[150px] h-auto rounded"
             :src="'/images/_mfx/infos/img_big/big/' + data.img_big"
@@ -26,7 +26,8 @@
         <!-- Text rechts -->
         <div class="flex-1 space-y-2">
         <div class="text-layout-sun-1000 dark:text-layout-night-1050 text-xl font-bold"></div>
-        <div class="text-layout-sun-1000 dark:text-layout-night-1000" v-html="cleanHtml(data.message)"></div>
+        <div class="text-layout-sun-1000 dark:text-layout-night-1000 items-start" v-html="cleanHtml(data.message)"></div>
+
         </div>
 
     </div>
@@ -66,6 +67,7 @@ export default defineComponent({
         news: [Array, Object],
         text: [Array, Object],
         data: [Array, Object],
+        privacy: String,
     },
 
     data() {
@@ -102,6 +104,12 @@ export default defineComponent({
     },
 
     methods: {
+        ch(txt){
+            return txt
+            .replace(/\n<li>/g, '<li>')   // Zeilenumbruch vor <li> entfernen
+            .replace(/\n/g, '<br />');    // alle übrigen \n in <br />
+
+        },
         showtodo() {
         if (!Array.isArray(this.todolist) || this.todolist.length === 0) {
             return '<p>Keine offenen Issues gefunden.</p>';
@@ -120,6 +128,11 @@ export default defineComponent({
 
 
         return html;
+        },
+        showprivacy(){
+            // return "test";
+            return this.ch(this.privacy);
+
         },
         repimg(txt) {
             txt = txt.replace('<img src="https://www.asario.de/_images/mcsl_changelog.jpg" alt="MCSL Changelog">', '');
@@ -162,8 +175,19 @@ export default defineComponent({
         },
 
         cleanHtml(html) {
-            let result = this.decodeHtml(rumLaut(html));
+            if (!html) return '';
+
+            let result = this.ch(html);
+            // 1. HTML-Entities wie &lt; &gt; wieder zu < und > machen
+            result = this.decodeHtml(rumLaut(html));
+
+            // 2. Zeilenumbrüche (\n oder \r\n) in <br> konvertieren
+            // result = result.replace(/(\r\n|\n|\r)/g, '<br />');
+
+
+            // 3. Eigene Platzhalter-Funktionen {{...}} ersetzen
             result = this.parseMessage(result);
+
             return result;
         },
 
@@ -172,6 +196,7 @@ export default defineComponent({
                 'votez()': () => rumLaut(this.voteHtml),
                 'changelog()': () => this.changelogText,
                 'showtodo()': () => this.showtodo(),
+                'showprivacy()': () => this.showprivacy(),
             };
         },
 
@@ -183,8 +208,26 @@ export default defineComponent({
         },
 
         decodeHtml(html) {
-            return html.replace(/%5B/g, '[').replace(/%5D/g, ']').replace("\n", "<br />");
-        },
+
+    return html
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>')
+        .replace(/&amp;/g, '&')
+        .replace(/%5B/g, '[')
+        .replace(/%5D/g, ']');
+
+            },
+  cleanListHtml(html) {
+    return html
+        // <br> vor <li> entfernen
+
+    //   .replace(/<br\s*>\s*<li>/gi, '<li>')
+    //   .replace(/<ul>\s*<br\s*>/gi, '<ul>')
+    //   .replace(/<br\s*>\s*<\/ul>/gi, '</ul>');
+        // doppelte <br><br> zu einem <br> reduzieren
+        // .replace(/(<br\s*>\s*){2,}/gi, '<br>');
+},
+
 
         async submitForm() {
             try {

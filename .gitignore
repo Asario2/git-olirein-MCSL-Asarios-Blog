@@ -22,6 +22,7 @@ yarn-error.log
 /.idea
 /.vscode
 handbook/
+storage/logs
 handbook_admin/.vitepress/dist
 handbook_admin/.vitepress/cache
 database/migrations/2025_06_28_000000_create_tenants_table.php_old

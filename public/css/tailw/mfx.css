@@ -4,6 +4,10 @@
 .dark\:border-layout-night-1050:is(.dark *){
     border-color:#ffa200 !important;
 }
+H1,H2,H3,H4,H5,H6{
+    color:#ffa200 !important;
+
+}
 a,.ckoo{
    font-weight:bold;
     color:#f68243 !important;

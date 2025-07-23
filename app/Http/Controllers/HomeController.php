@@ -544,7 +544,7 @@ return Inertia::render('Homepage/Pictures', [
         ]);
     }
     public function changelog_old(){
-        $data = DB::table("texts")->select('texts.*','users.name as author_name')->leftJoin('users', 'users.id', '=', 'texts.users_id')->where("texts.id","15")->first();
+        $data = DB::table("texts")->select('texts.*','users.name as author_name')->leftJoin('users', 'users.id', '=', 'texts.users_id')->where("texts.id","15F")->first();
         $data->text = Str::markdown($data->text);
         return Inertia::render('Homepage/Changelog_old', ["data" => [$data]]); // <-- in Array umwandeln
 
@@ -552,11 +552,11 @@ return Inertia::render('Homepage/Pictures', [
     //
     public function home_privacy()
     {
-        if(SD() != "ab")
-        {
+        // if(SD() != "ab")
+        // {
             $set = "_".SD();
             $dol = SD()."/";
-        }
+        // }
         $pf = "privacy".@$set.".md";
         $privacyFile = Jetstream::localizedMarkdownPath($pf);
         include_once "inc/functions/rinfo_code.php";
@@ -630,7 +630,17 @@ return Inertia::render('Homepage/Pictures', [
     }
     public function infos_show($id){
         $data = DB::table("infos")->where("pub","1")->where("id",$id)->select("id","headline","message","img_big")->orderBy("position","DESC")->first();
-        return Inertia::render('Homepage/mfx/infos_show',compact('data'));
+        if(SD() != "ab")
+        {
+            $set = "_".SD();
+            $dol = SD()."/";
+        }
+        $pf = "privacy".@$set.".md";
+        $privacyFile = Jetstream::localizedMarkdownPath($pf);
+        include_once "inc/functions/rinfo_code.php";
+        $privacy = Str::markdown(file_get_contents($privacyFile)); // HTML erzeugt
+        $privacy = rinfo_code($privacy);
+        return Inertia::render('Homepage/mfx/infos_show',compact('data',"privacy"));
     }
     public function infos_pow($id='48'){
         $data = DB::table("infos")->where("id",$id)->select("id","headline","message","img_big")->orderBy("position","DESC")->first();

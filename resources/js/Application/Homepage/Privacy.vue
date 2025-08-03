@@ -1,7 +1,7 @@
 <template>
     <Layout>
         <div class="prose prose-layout dark:prose-invert max-w-none">
-            <div v-html="privacy" />
+            <div v-html="ch(privacy)"></div>
         </div>
     </Layout>
   </template>
@@ -23,6 +23,13 @@
         window.removeEventListener("hashchange", this.scrollToHashAnchor);
         },
   methods: {
+    ch(txt){
+            return txt
+            .replace(/\n<li>/g, '<li>')   // Zeilenumbruch vor <li> entfernen
+            .replace(/\n/g, '<br />');    // alle übrigen \n in <br />
+
+        },
+
     scrollToHashAnchor() {
     const hash = window.location.hash;
     if (hash && hash.startsWith("#")) {

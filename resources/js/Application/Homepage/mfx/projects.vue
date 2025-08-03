@@ -11,15 +11,15 @@
 
                     <div class="grid  gap-0">
                     <div v-for="item in data" :key="item.id" class="p-3 lg:rounded-lg">
-                    <div class="min-h-[102px] bg-layout-sun-50 dark:bg-layout-night-50 lg:rounded-lg border border-layout-sun-1000 dark:border-layout-night-1050 grid grid-cols-12 gap-4 p-2">
+                    <div class="min-h-[102px] bg-layout-sun-50 dark:bg-layout-night-50 lg:rounded-lg border border-layout-sun-1000 dark:border-layout-night-1050 grid grid-cols-12 gap-4">
 
                         <!-- Bild: 2 Spalten -->
                         <div class="col-span-2">
                         <img
-                            :src="'/images/_mfx/projects/' + item.img_thumb"
+                            :src="'/images/_mfx/projects/img_thumb/thumbs/' + item.img_thumb"
                             :alt="item.name"
                             :title="item.name"
-                            class="w-full h-[100px] object-cover rounded-lg"
+                            class="w-full h-[100px] object-cover object-top rounded-lg bordah"
                         />
                         </div>
 
@@ -52,13 +52,13 @@
                         <div class="col-span-2 flex justify-end items-center gap-2">
                         <img
                             v-if="item.xis_mcsl"
-                            src="/images/_mfx/icons/made_with_mcsl.png"
+                            :src="'/images/_mfx/icons/made_with_mcsl.png'"
                             alt="mcsl"
                             class=""
                         />
                         <img
                             v-if="item.xis_mcs"
-                            src="/images/_mfx/icons/made_with_mcs.png"
+                            :src="'/images/_mfx/icons/made_with_mcs.png'"
                             alt="mcs"
                             class=""
                         />
@@ -152,5 +152,9 @@ export default defineComponent({
 
 .btn {
   @apply px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50;
+}
+.bordah{
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
 }
 </style>

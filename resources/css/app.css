@@ -433,4 +433,7 @@ A
 		SPAN .fab .fa-twitter:before {
  content: "\e61b" !important;
 }
+.bg-layout-trans{
+    background-color:transparent !important;
+}
 

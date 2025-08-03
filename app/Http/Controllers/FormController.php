@@ -30,6 +30,21 @@ class FormController extends Controller
 
 
     }
+    public function br2ln($txt)
+    {
+        return nl2br($txt);
+    }
+    public static function generateUniqueFolder($basePath = 'uploads/') {
+        do {
+            $value = substr(md5(microtime(true) . random_int(0, PHP_INT_MAX)), 0, 6);
+            $fullPath = $basePath . $value;
+        } while (is_dir($fullPath));
+
+        // Ordner anlegen, wenn gewünscht
+        // mkdir($fullPath, 0755, true);
+
+        return $value;
+    }
     //VUE Formmaker
     public static function Fields($name,$value,$table,$id='',$create='')
     {
@@ -55,7 +70,33 @@ class FormController extends Controller
             if($name == "password" && !FormController::CheckCreate()){
                 $value = "XXXXXXXXXX";
             }
-            $value = html_entity_decode($value);
+            $value = html_entity_decode(nl2br($value));
+            $value = str_replace(
+                '<br /><br /><br /><br />',
+                '<br /><br /><br />',
+                $value
+            );
+            if(!empty($create) && substr_count($name,"imgdir_") && empty($_SESSION['asd']))
+            {
+                $bpath = "_".SD()."/images/".$name."/";
+                $value = FormController::generateUniqueFolder("/images/".$bpath);
+                $value2 = public_path("/images/".$bpath.$value);
+                \Log::info($value2);
+                mkdir($value2);
+                mkdir($value2."/orig/");
+                mkdir($value2."/big/");
+                mkdir($value2."/sm/");
+                mkdir($value2."/thumbs/");
+                mkdir($value2."/ret/");
+                mkdir($value2."/bthumbs/");
+                $_SESSION['asd'] = basename($value2);
+            }
+            elseif(!empty($create) && substr_count($name,"imgdir_") && $_SESSION['asd'] ){
+                $value = $_SESSION['asd'];
+            }
+            $value = str_replace("&nbsp;",'',$value);
+
+
         $label = isset(Settings::$exl[$name]) ? Settings::$exl[$name] : ucf($name);
         $class = FormController::getClass($name,1,$table);
         $req   = FormController::getReq($name);
@@ -267,6 +308,10 @@ class FormController extends Controller
         elseif(substr_count($name,"img_"))
         {
             return "imul";
+        }
+        elseif(substr_count($name,"imgdir_"))
+        {
+            return "imgal";
         }
         switch($name)
         {

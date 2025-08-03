@@ -14,7 +14,7 @@
                         <a :href="'infos/show/'+ item.id">
 
                         <div style="min-height:102px;" class="bg-layout-sun-50 dark:bg-layout-night-50 lg:rounded-lg pr-2 border border-layout-sun-1000 dark:border-layout-night-1050" >
-                        <div class="inline" style="float:left;padding-right:5px;margin-right:5px;"><img :src="'/images/_mfx/infos/img_thumb/thumbs/' + item.img_thumb" :alt="item.headline" :title="item.headline" class="inline lg:rounded-lg nor_border"/></div>
+                        <div class="inline" style="float:left;padding-right:5px;margin-right:5px;"><img :src="'/images/_mfx/infos/img_thumb/' + item.img_thumb" :alt="item.headline" :title="item.headline" class="inline lg:rounded-lg nor_border"/></div>
                             <div><span class="dark:text-layout-night-1050 text-layout-sun-1000" v-html="`<b>${cleanHtml(item.headline)}</b>`"></span> <editbtns :id="item?.id" table="infos" /><br />
                         <span class="text-layout-sun-1000 dark:text-layout-night-1000" v-html="cleanHtml(item.summary)"></span></div>
 

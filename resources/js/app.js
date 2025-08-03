@@ -27,7 +27,7 @@ import { faPencilAlt, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 library.add(faPencilAlt, faTrashCan);
 
 const appName = import.meta.env.VITE_APP_NAME || "Starter Eleven";
-
+axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 // Rechte laden
 loadAllRights()
   .then(() => {
@@ -136,6 +136,7 @@ async function loadDarkMode() {
 // 🎯 Dark Mode direkt beim Laden der Seite setzen
 document.addEventListener("DOMContentLoaded", loadDarkMode);
 
+
 function checkImageExists(url, callback) {
     const img = new Image();
     img.onload = () => callback(true);   // Bild erfolgreich geladen
@@ -144,7 +145,7 @@ function checkImageExists(url, callback) {
   }
   function decodeHtml(txt) {
     if(!txt){
-        return "";
+return "";
     }
     return txt.replace(/%5B/g, '[').replace(/%5D/g, ']');
 
@@ -191,3 +192,13 @@ function ucf(str) {
     // document.body.appendChild(fallback);
     // console.error("Fehler beim Laden der Benutzerrechte: ", error);
   });
+  let oldUrl = window.location.href;
+
+window.addEventListener('beforeunload', function (event) {
+  let newUrl = document.activeElement?.href || '';
+
+  // Wenn die neue URL sich von der aktuellen unterscheidet
+  if (newUrl && newUrl !== oldUrl) {
+    navigator.sendBeacon('/unset-session.php');
+  }
+});

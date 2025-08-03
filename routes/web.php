@@ -92,7 +92,8 @@ Route::post("/cookie_config",[ConfigureController::class,'__invoke'])->name("coo
             Route::get('/home/users', fn () => redirect("NoPageFound"))->name('home.userlist2');
             Route::get('/home/users/show/{user}/{id}', fn () => redirect("NoPageFound"))->name('user.show');
             Route::get('/home/projects',  [HomeController::class,"projects"])->name("home.projects.mfx");
-            Route::get('/home/images',  [HomeController::class,"images"])->name("home.images.mfx");
+            Route::get('/home/images',  [HomeController::class,"home_images_cat_mfx"])->name("home.images.cat.mfx");
+            Route::get('/home/images/show/{id}',  [HomeController::class,"home_images_show_mfx"])->name("home.images.mfx");
             Route::get('/home/people',  [HomeController::class,"people"])->name("home.people.mfx");
             Route::get('/home/impressum',  [HomeController::class,"imprint"])->name("home.imprint.mfx");
             Route::get('/home/infos/', [HomeController::class,"infos_index"])
@@ -100,24 +101,20 @@ Route::post("/cookie_config",[ConfigureController::class,'__invoke'])->name("coo
             Route::get('/home/infos/show/{id}',  [HomeController::class,"infos_show"])->name("home.infos.show.mfx");
             Route::get('/home/powered-by-mcs',  [HomeController::class,"infos_pow"])->name("home.powered.show.mfx");
             Route::get("/",[HomeController::class,"home_index"])->name("home.index");
-    //     }
-    //     elseif($sub == "ab")
-    //     {
-    //         Route::get("/",[HomeController::class,"home_index"])->name("home.index");
-    //     }
-    //     elseif($sub != 'localhost'  )
-    //     {
-    //         $contr = "HomeController_".$sub;
-    //         Route::get("/",[$contr,"home_index"])->name("home.index");
-    //     }
-    //     else{
-    //         Route::get("/",[HomeController::class,"home_index_alt"])->name("home.index");
-    //     }
-    // });
+            Route::post('/api/save-json', [ImageUploadController::class, 'store_json'])->name("save-json-gallery");
+            Route::post('api/saveFolder',  [ImageUploadController::class, 'store_dir'])->name("save-dirsave");
+            // Route::post('/api/save-json', function (Request $request) {
+            //     $path = public_path($request->input('path'));
+            //     $data = $request->input('data');
 
+            //     // if (!str_starts_with(realpath($path), public_path('images'))) {
+            //     //     return response()->json(['error' => 'Ungültiger Pfad'], 403);
+            //     // }
 
-    // });
-// }
+            //     File::put($path, json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+            //     return response()->json(['success' => true]);
+            // });
+
 
 
 Route::get('/api/tailwind-colors/{subdomain}', [HomeController::class,"getStyles"])->name("mfx.getstyles");

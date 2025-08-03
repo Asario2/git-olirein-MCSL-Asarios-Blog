@@ -3,6 +3,13 @@
 }
 .dark\:border-layout-night-1050:is(.dark *){
     border-color:#ffa200 !important;
+    border-width: 2px !important;
+
+}
+.dark\:border-layout-night-1060:is(.dark *){
+    border-color:#ffa200 !important;
+    border-bottom-width: 2px !important;
+
 }
 H1,H2,H3,H4,H5,H6{
     color:#ffa200 !important;
@@ -12,6 +19,7 @@ a,.ckoo{
    font-weight:bold;
     color:#f68243 !important;
 }
+
 *, ::before, ::after {
   --tw-border-spacing-x: 0;
   --tw-border-spacing-y: 0;
@@ -6422,4 +6430,10 @@ select {
 
 .rtl\:flex-row-reverse:where([dir="rtl"], [dir="rtl"] *) {
   flex-direction: row-reverse;
+}
+.dark\:bg-layout-night-200:is(.dark *){
+    background-color:#313033 !important;
+}
+.dark\:bg-layout-night-2050:is(.dark *){
+    background-color:#000 !important;
 }

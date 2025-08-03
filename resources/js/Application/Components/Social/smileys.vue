@@ -1,7 +1,7 @@
 <template>
     <span class="smbg">
       <span v-for="(val, xkey) in smilies" :key="xkey">
-        <img
+    <img
           @click="add_smilie(xkey, editor)"
           v-tippy
           :src="'/images/smilies/icon_' + val + '.gif'"
@@ -72,7 +72,7 @@
   };
   </script>
 
-  <style scoped>
+  <style>
   .inline_alt {
     display: inline;
   }

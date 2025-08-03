@@ -7,6 +7,7 @@
     $subdomain = SD(); // z.B. "foo", "bar"
     $pagen = SD("pn");
     $favicon = "/images/_{$subdomain}/web/alogo.png";
+    $ahost = $_SERVER['HTTP_HOST'];
 
     // Fallback, falls Datei nicht existiert
     if (!file_exists(public_path($favicon))) {
@@ -31,6 +32,7 @@
                 window.subdomain = "{{ $subdomain }}";
                 window.subdomain_alt = "{{ $sd_alt }}";
                 window.pagename = "{{ $pagen }}";
+                window.ahost = "{{ $ahost }}";
                 </script>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title inertia>{{ config('app.name', 'MCSL') }}</title>

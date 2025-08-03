@@ -1,0 +1,86 @@
+[
+    {
+        "position": 1,
+        "filename": "child_bw.jpg",
+        "label": "child_bw.jpg",
+        "width": 1200,
+        "height": 1200
+    },
+    {
+        "position": 2,
+        "filename": "collie_sunrise.jpg",
+        "label": "collie_sunrise.jpg",
+        "width": 1200,
+        "height": 1200
+    },
+    {
+        "position": 3,
+        "filename": "crazy_frog.jpg",
+        "label": "crazy_frog.jpg",
+        "width": 1200,
+        "height": 1200
+    },
+    {
+        "position": 4,
+        "filename": "dome_st.jpg",
+        "label": "dome_st.jpg",
+        "width": 1200,
+        "height": 1200
+    },
+    {
+        "position": 5,
+        "filename": "elephants.jpg",
+        "label": "elephants.jpg",
+        "width": 1200,
+        "height": 655
+    },
+    {
+        "position": 6,
+        "filename": "green_eyed_kitten.jpg",
+        "label": "green_eyed_kitten.jpg",
+        "width": 1200,
+        "height": 720
+    },
+    {
+        "position": 7,
+        "filename": "h2o_polo.jpg",
+        "label": "h2o_polo.jpg",
+        "width": 3000,
+        "height": 3000
+    },
+    {
+        "position": 8,
+        "filename": "iceland_big.jpg",
+        "label": "iceland_big.jpg",
+        "width": 1200,
+        "height": 1200
+    },
+    {
+        "position": 9,
+        "filename": "iceland_summer_04.jpg",
+        "label": "iceland_summer_04.jpg",
+        "width": 1200,
+        "height": 720
+    },
+    {
+        "position": 10,
+        "filename": "lamas_with_hats_big.jpg",
+        "label": "lamas_with_hats_big.jpg",
+        "width": 1200,
+        "height": 1200
+    },
+    {
+        "position": 11,
+        "filename": "orange_big.jpg",
+        "label": "orange_big.jpg",
+        "width": 3000,
+        "height": 3000
+    },
+    {
+        "position": 12,
+        "filename": "polarlichter_iceland_reflect_rock.jpg",
+        "label": "polarlichter_iceland_reflect_rock.jpg",
+        "width": 1200,
+        "height": 720
+    }
+]

@@ -22,9 +22,9 @@
     <main :class="mode" id="app-layout-start">
       <section class="relative bg-layout-sun-50 text-layout-sun-900 dark:bg-layout-night-50 dark:text-layout-night-900 transition-colors duration-1000"  style='z-index:50;'>
         <!-- Header -->
-        <nav class="fixed top-0 left-0 right-0 z-30 bg-layout-sun-50 text-layout-sun-900 dark:bg-layout-night-50 dark:text-layout-night-900 border-b border-layout-sun-200 dark:border-layout-night-1050"  style='z-index:50;'>
+        <nav class="fixed top-0 left-0 right-0 z-30 bg-layout-night-50 text-layout-sun-900 dark:bg-layout-night-50 dark:text-layout-night-900 border-b border-layout-sun-200 dark:border-layout-night-1060"  style='z-index:50;'>
           <div class="container mx-auto max-w-6xl p-6 lg:flex lg:items-center lg:justify-between" style='z-index:50;'>
-            <div class="flex items-center justify-between">
+            <div class="flex items-center justify-between ">
               <!-- <brand-header :route-name="route('home.index')" :brand_1="$page.props.applications.brand_name_1" :brand_2="$page.props.applications.brand_name_2" :app-name="$page.props.applications.app_name"></brand-header> -->
                 <a href="/"><mfxlogo></mfxlogo></a>
               <!-- Mobile menu button -->
@@ -37,14 +37,14 @@
             </div>
 
             <!-- Mobile Menu open: "block", Menu closed: "hidden" -->
-            <div :class="[isOpen_Menu ? 'translate-x-0 opacity-100 ' : 'opacity-0 -translate-x-full']" style='z-index:10000000;' class="absolute inset-x-0 mt-6 w-full px-6 py-4 shadow-md transition-all duration-300 ease-in-out bg-primary-sun-200 dark:bg-primary-night-200 lg:relative lg:top-0 lg:mt-0 lg:flex lg:w-auto lg:translate-x-0 lg:items-center lg:bg-transparent lg:p-0 lg:opacity-100 lg:shadow-none lg:dark:bg-transparent">
+            <div :class="[isOpen_Menu ? 'translate-x-0 opacity-100 ' : 'opacity-0 -translate-x-full']" style='z-index:10000000;' class="absolute inset-x-0 mt-6 w-full px-6 py-4 shadow-md transition-all duration-300 ease-in-out bg-layout-trans dark:bg-primary-night-200 lg:relative lg:top-0 lg:mt-0 lg:flex lg:w-auto lg:translate-x-0 lg:items-center lg:bg-transparent lg:p-0 lg:opacity-100 lg:shadow-none lg:dark:bg-transparent">
               <div class="flex flex-col items-center space-y-4 lg:mt-0 lg:flex-row lg:space-y-0 lg:space-x-8 dark:bg-layout-night-50" style='z-index:10000000;'>
                 <link-header :route-name="route('home.index')" name="News"></link-header>
                 <link-header :route-name="route('home.infos.mfx')" name="Infos"></link-header>
                 <!--<link-header :route-name="route('home.pricing')" name="Preise"></link-header>-->
                 <!-- <link-header :route-name="route('home.blog.index')" name="Blog"></link-header> -->
                 <link-header :route-name="route('home.projects.mfx')" name="Projects"></link-header>
-                <link-header :route-name="route('home.images.mfx')" name="Images"></link-header>
+                <link-header :route-name="route('home.images.cat.mfx')" name="Images"></link-header>
                 <link-header :route-name="route('home.people.mfx')" name="People"></link-header>
 
                 <template v-if="!$page.props.userdata.user_id">

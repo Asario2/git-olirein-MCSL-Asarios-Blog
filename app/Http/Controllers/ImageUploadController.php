@@ -25,6 +25,17 @@ class ImageUploadController extends Controller
             // \Log::info($request->all());
         // Das hochgeladene Bild holen
         $image = $request->file('image');
+        $is_imgdir = $request->is_imgdir;
+            if($is_imgdir){
+
+
+        $is_imgdir = str_replace("//","/",$is_imgdir);
+        \Log::info("iid: ".$is_imgdir);
+        $is_imgdir = explode("/",$is_imgdir);
+        $is_imgdir = $is_imgdir[count($is_imgdir)-2];
+    }
+        $subdomain = SD();
+        \Log::info(CleanTable().$subdomain.$request->column);
         $Message = $request->Message === "true" ? true : false;
         if (!$request->hasFile('image')) {
            // \Log::info('Keine Datei empfangen!');
@@ -39,7 +50,7 @@ class ImageUploadController extends Controller
            // 'size' => $image->getSize()
        // ]);
         $image = $request->file('image') ?? [];
-        $path = $request->path;
+        $path = $request->ulpath;
 //$table_dir = Settings::$image_paths[$request->table];
         $watermarkfile = $request->copyleft;
         // \Log::info("WMF: ".$watermarkfile);
@@ -52,12 +63,12 @@ class ImageUploadController extends Controller
         $imageName = md5($image->getClientOriginalName()."_".Auth::id()).".".$image->getClientOriginalExtension();
         //$imagePath = $image->storeAs($path, $imageName, 'public');
 
-        $filename = $imageName;
+        $filename = basename($imageName);
         // Speicherpfad definieren
         $sizes = [1200];
         $tmpname = $_FILES['image']['tmp_name'];
        if(!$Message && !array_key_exists($table, Settings::$impath)){
-        $IMOpath =  public_path("images/{$table}/orig/{$filename}");
+        $IMOpath =  public_path("images/_{$subdomain}/{$table}/{$column}/${is_imgdir}/orig/".basename($filename)."");
 
         copy($tmpname,$IMOpath);
 
@@ -87,11 +98,11 @@ class ImageUploadController extends Controller
 
                 $size2 = $size;
             }
-            $resizedPath = "images/{$request->table}{$big[$size]}{$imageName}";
+            $resizedPath = "images/_{$subdomain}/{$request->table}/{$column}/{$is_imgdir}/{$big[$size]}".basename($imageName)."";
             if(!$oripath)
             {
                 $subdomain = SD();
-                $resizedPath = "images/{$subdomain}/{$table}{$big[$size]}{$imageName}";
+                $resizedPath = "images/_{$subdomain}/{$table}{$big[$size]}".basename($imageName)."  ";
             }
 
             // \Log::info("RP:".$resizedPath);
@@ -149,6 +160,9 @@ class ImageUploadController extends Controller
             // \Log::info($Message);
         }
 
+        $imageName = str_replace("/images/_".$subdomain."/".$table."/".$column."//big/",'',basename($imageName));
+        $imageName = $column."/".basename($imageName);
+        \Log::info($imageName);
         // $iid = DB::table($table_dir)->insertGetId([
         //     'name' => $name,
         //     'url' => $url,
@@ -177,4 +191,16 @@ class ImageUploadController extends Controller
         ]);
 
     }
+    public function store_json(Request $request)
+{
+    $data = $request->images;
+    // dd($request->all());
+    // Pfad zur Datei z. B. via folder:
+    $folder = $request->input('folder');
+    $path = public_path($folder . '/index.json');
+    \Log::info($data);
+
+    file_put_contents($path, json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+    return response()->json(['success' => true]);
+}
 }

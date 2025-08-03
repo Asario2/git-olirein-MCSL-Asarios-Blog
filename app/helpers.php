@@ -1,6 +1,6 @@
 <?php
 use Illuminate\Support\Str;
-
+use Illuminate\Support\Facades\File;
 use League\CommonMark\CommonMarkConverter;
 use League\CommonMark\Environment\Environment;
 use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
@@ -627,6 +627,111 @@ if(!function_exists("Import_Dump"))
         }
         echo "<script>location.href=history.back();</script>";
     }
+}
+if(!function_exists("readfolders")){
+
+    function readfolders($path = null)
+{
+    // Standardpfad setzen, wenn keiner übergeben wurde
+    if (!$path) {
+        $path = public_path('images/_mfx/images/imgdir_content/');
+    }
+    else{
+        $path = ($path);
+    }
+
+    $folders = [];
+
+    if (is_dir($path)) {
+        // Alle Elemente im Verzeichnis (außer . und ..)
+        $items = array_diff(scandir($path), ['.', '..']);
+
+        foreach ($items as $item) {
+            if (is_dir($path . DIRECTORY_SEPARATOR . $item)) {
+                $folders[] = $item;
+            }
+        }
+    } else {
+        logger("Verzeichnis existiert nicht: $path");
+    }
+    // dd($folders);
+    return $folders;
+}
+}
+if(!function_exists("readtitlez")){
+
+    function readtitlez($path)
+    {
+        $file = file_get_contents($path);
+        $files = json_decode($file);
+        return $files;
+    }
+}
+if(!function_exists("readimages_alt")){
+
+    function readimages_alt($path)
+    {
+        $path = ($path);
+        if (!File::isDirectory($path)) {
+            logger("Verzeichnis existiert nicht: $path");
+            return [];
+        }
+
+        $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif'];
+        $allFiles = File::files($path);
+
+        return collect($allFiles)
+            ->filter(fn($file) => in_array(strtolower($file->getExtension()), $allowedExtensions))
+            ->map(fn($file) => $path."/".$file->getFilename())
+            ->toArray();
+
+        // dd($files);
+        //return $files;
+    }
+}
+if(!function_exists("readimages")){
+
+    function readimages($path)
+    {
+        $path = public_path($path);
+        if (!File::isDirectory($path)) {
+            logger("Verzeichnis existiert nicht: $path");
+            return [];
+        }
+
+        $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif'];
+        $allFiles = File::files($path);
+
+        return collect($allFiles)
+            ->filter(fn($file) => in_array(strtolower($file->getExtension()), $allowedExtensions))
+            ->map(fn($file) => $file->getFilename())
+            ->toArray();
+
+        // dd($files);
+        //return $files;
+    }
+}
+if(!function_exists("CleanTable")){
+
+    function CleanTable()
+{
+    $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH); // z.B. /admin/tables/show/Example
+    $segments = explode('/', $path);
+
+    $fo_vals = ['admin', 'tables', 'edit', 'delete', 'create', 'show', 'search', 'home', 'pictures'];
+
+    // Durchlaufe die Segmente und filtere unerwünschte Werte
+    $cleaned = array_filter($segments, function ($segment) use ($fo_vals) {
+        return $segment !== '' && !in_array($segment, $fo_vals) && !is_numeric($segment);
+    });
+
+    // Zusammensetzen und Sonderzeichen entfernen
+    $result = implode('', $cleaned);
+    $result = str_replace(['[', ']', "'"], '', $result);
+
+    return $result;
+}
+
 }
 if(!function_exists('rinfo_code2'))
 {

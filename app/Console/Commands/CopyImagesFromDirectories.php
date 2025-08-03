@@ -19,8 +19,8 @@ class CopyImagesFromDirectories extends Command
     public function handle()
     {
         $this->info("Starte die Durchsuchung der Ordner...");
-
-        $imagePathsInDb = DB::table('images')->pluck('image_path')->toArray();
+        $imagePathsInDb = readimages("/images/_mfx/images/imgcomp_content/");
+        // $imagePathsInDb = DB::table('images')->pluck('image_path')->toArray();
         $targetDir = public_path('images/images/orig');
 
         if (!File::exists($targetDir)) {
@@ -29,7 +29,7 @@ class CopyImagesFromDirectories extends Command
 
         foreach ($this->directories as $dir) {
             $this->searchAndCopy($dir, $imagePathsInDb, $targetDir);
-        }
+        }   
 
         $this->info("Fertig!");
     }

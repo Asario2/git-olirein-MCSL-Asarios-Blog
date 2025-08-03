@@ -1,0 +1,44 @@
+[
+    {
+        "position": 1,
+        "filename": "rotten-psychos-background.jpg",
+        "label": "Rotten-Psychos-Background",
+        "width": 1024,
+        "height": 672
+    },
+    {
+        "position": 2,
+        "filename": "rp-obsidian2.jpg",
+        "label": "Rotten-Psychos2",
+        "width": 1024,
+        "height": 768
+    },
+    {
+        "position": 3,
+        "filename": "smell the roses.jpg",
+        "label": "Smell the Roses",
+        "width": 1024,
+        "height": 768
+    },
+    {
+        "position": 4,
+        "filename": "southpole-backyard.jpg",
+        "label": "Southpole-Backyard",
+        "width": 1024,
+        "height": 768
+    },
+    {
+        "position": 5,
+        "filename": "they say jump.jpg",
+        "label": "They say jump",
+        "width": 1024,
+        "height": 768
+    },
+    {
+        "position": 6,
+        "filename": "where are you.jpg",
+        "label": "Where are you",
+        "width": 1024,
+        "height": 768
+    }
+]

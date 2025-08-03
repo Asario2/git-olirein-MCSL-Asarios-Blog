@@ -28,6 +28,8 @@
           <template #header>
             <tr>
               <th class="np-dl-th-normal">ID</th>
+              <th class="np-dl-th-normal" >Pub</th>
+
               <th v-if="cat_on_head" class="np-dl-ht-normal">{{ cat_on_head }}</th>
               <th v-if="table_head" class="np-dl-ht-normal">{{ table_head }}</th>
               <th class="np-dl-th-normal">{{ prename }}</th>
@@ -42,7 +44,7 @@
           <!-- Datenzeilen -->
           <template v-slot:datarow="data" :items="items" @update-list="removeItem">
             <td class="np-dl-td-normal">{{ getMixId(data.datarow) }}</td>
-
+            <td class="np-dl-td-normal" v-if="data.datarow.pub !== 'undefined'"><span v-html="onoffbtn(data.datarow.pub)"></span></td>
             <!-- Kategorie -->
             <td v-if="data.datarow.image_categories" class="np-dl-td-normal">
               <img :src="'/images/_ab/images_categories/sm/' + data.datarow.image_categories + '.jpg'" />
@@ -209,6 +211,7 @@
       };
     },
     computed: {
+
       prename() {
         return this.namealias[this.table] ?? "Name";
       },
@@ -249,6 +252,14 @@
 
     },
     methods: {
+        onoffbtn(state)
+        {
+            if(state == "1")
+            {
+                return "<img src='/images/icons/online.png' />"
+            }
+            return "<img src='/images/icons/offline.png' />"
+        },
       onCheckedStatusUpdate(status) {
         this.checkedStatus = status;
       },

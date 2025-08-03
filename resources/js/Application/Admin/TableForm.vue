@@ -152,42 +152,50 @@
                 </input-container>
                 <input-container v-else-if="field.type ==='imul'">
 
-<ImageUploadModal
-        :alt_path="'_' + this.subdomain + '/' + this.CleanTable_alt() + '/' + field.name"
-        v-show="isModalOpen"
-        oripath="1"
-        :tablex="table_x"
-        :column="field.name"
-        :path="tablex"
-        :ref="field.name"
-        :value="imageId"
-        :image="field.value"
-        :namee="field.value"
-        :namee2="field.name"
-        :Message="false"
-        @close="closeModal"
-        @update:fileName="handleFileNameUpdate"
-        @imageUploaded="handleImageUpload"
-/>
-<button type="button" @click="openModal_alt">
-    <p v-if="this.nf2 && typeof this.nf2 !== 'object' && this.nf2 != '[]' && this.nf2 != '008.jpg' ">Hochgeladenes Bild:
+                <ImageUploadModal
+                v-if="modals?.[field.name]"
+                :is-modal-open="modals?.[field.name]"
+                :column="field.name"
+                :isModalOpen="modals[field.name]"
+                @close="modals[field.name] = false"
+                :namee="field.value"
+                :alt_path="'_' + subdomain + '/' + CleanTable_alt() + '/' + field.name"
+                :domain="subdomain"
+                :tablex="table_x"
+                :path="tablex"
 
-        <img :src="table_alter + this.nf2" width="100" alt="Vorschau1" title="Vorschau1"/></p>
-        <p
+                :ref="field.name"
+                :value="imageId"
+                :image="field.value"
+                :namee2="field.name"
+                :Message="false"
+
+                @update:fileName="handleFileNameUpdate"
+                @imageUploaded="handleImageUpload"
+                @previewUpdated="updatePreviewImage"
+
+                />
+                {{ saveValz(field,'1') }}
+<button type="button" @click="openModal(field.name)"><b>{{ field.label }}</b><br />
+    <p  v-if="(previewImages[field.name] ?? field.value) ">
+
+            <img :src="getPreviewSrc(field)" width="100" alt="Vorschau1" title="Vorschau1" :id="'com_'+field.name" style="float:left;margin-right:12px;"/></p>
+                    <p
         v-else-if="localFfo.original[this.column] && localFfo.original[this.column].value && localFfo.original[this.column].value !== '008.jpg'"
         >
-        Hochgeladenes Bild:
-        <img
+        <!-- Hochgeladenes Bild: -->
+        <!-- <img
             :src="`${table_older}${localFfo.original[this.column].value}`"
             width="100"
             alt="Vorschau2"
             title="Vorschau2"
-        />
+        /> -->
         </p>
-    <span v-else><img style="float:left;margin-right: 12px;" :src="'/images/blogs/thumbs/009.jpg'" alt="Jetzt Bild Hochladen" width="100"  title="Jetzt Bild Hochladen" ><span style='display:inline;float:left;'>{{ field.label }}</span></span>
+    <span v-else><img style="float:left;margin-right: 12px;" :src="'/images/blogs/thumbs/009.jpg'" alt="Jetzt Bild Hochladen" width="100"  title="Jetzt Bild Hochladen" ><span style='display:inline;float:left;'></span></span>
 
 </button>
-<input type="hidden" :id="field.name" :value="this.nf2">
+<!-- <input type="hidden" :name="field.name" :id="field.name" :value="getPreviewSrc(field,'1')" /> -->
+
 <input
 type="hidden"
 :name="field.name"
@@ -196,6 +204,71 @@ type="hidden"
 />
 
 </input-container>
+<input-container v-else-if="field.type ==='imgal'">
+
+<ImageUploadModal
+v-if="modals?.[field.name]"
+:is-modal-open="modals?.[field.name]"
+:column="field.name"
+:is_imgdir="true"
+:path="'/images/_mfx/images/imgdir_content/'+field.value+'/'"
+:isModalOpen="modals[field.name]"
+@close="modals[field.name] = false"
+:namee="field.value"
+:alt_path="'_' + subdomain + '/' + CleanTable_alt() + '/' + field.name"
+:domain="subdomain"
+:tablex="table_x"
+:ref="field.name"
+:value="imageId"
+:image="field.value"
+:namee2="field.name"
+:Message="false"
+
+@update:fileName="handleFileNameUpdate"
+@imageUploaded="handleImageUpload"
+@previewUpdated="updatePreviewImage"
+
+/>
+<button type="button" @click="openModal(field.name)">
+<p  v-if="(previewImages[field.name] ?? field.value) "><span style='float:left;'><b>{{ field.label }}</b><br />
+    {{ saveValz(field) }}
+    <div v-html="previewHtml"></div></span></p>
+    <p
+v-else-if="localFfo.original[this.column] && localFfo.original[this.column].value && localFfo.original[this.column].value !== '008.jpg'"
+>
+<!-- Hochgeladenes Bild: -->
+<!-- <img
+:src="`${table_older}${localFfo.original[this.column].value}`"
+width="100"
+alt="Vorschau2"
+title="Vorschau2"
+/> -->
+</p>
+<span v-else><img style="float:left;margin-right: 12px;" :src="'/images/blogs/thumbs/009.jpg'" alt="Jetzt Bild Hochladen" width="100"  title="Jetzt Bild Hochladen" ><span style='display:inline;float:left;'>{{ field.label }}</span></span>
+
+</button>
+<input type="hidden" :name="field.name" :id="field.name" :value="field.value" />
+<!--
+<input
+type="hidden"
+:name="field.name"
+:value="nf2?.replace('images//images3/','images/')"
+:id="field.name"
+/> -->
+
+</input-container>
+<input-container v-else-if="field.type === 'pub'">
+<PublicRadio v-model.number="field.value" :is_created="is_created" :valx="field.value">
+
+                    <template #icon-public>
+                    <img :src="'/images/icons/online.png'" alt="" class="w-6 h-6" />
+                </template>
+                <template #icon-private>
+                    <img :src="'/images/icons/offline.png'" alt="" class="w-6 h-6" />
+                </template>
+                </PublicRadio>
+
+                </input-container>
                 <input-container v-else-if="field.type ==='IID'">
 
                 <ImageUploadModal
@@ -600,6 +673,7 @@ import DialogModal from "@/Application/Components/DialogModal.vue";
 import { hasRight,loadAllRights,isRightsReady } from '@/utils/rights';
 import { toastBus } from '@/utils/toastBus';
 import { reactive } from "vue";
+import PublicRadio from "@/Application/Components/Form/PublicRadio.vue";
 import Alert from "@/Application/Components/Content/Alert.vue";
 // import { console } from "inspector/promises";
 onMounted(() => {
@@ -613,7 +687,7 @@ export default defineComponent({
         Layout,
         Breadcrumb,
         SmoothScroll,
-        // PageTitle,
+        PublicRadio,
         InputSelectU,
         toastBus,
         InputFormDateTime,
@@ -729,7 +803,8 @@ export default defineComponent({
     data() {
         return {
             isModalOpen: false,
-
+            ulpath: '',
+            previewHtml: '',
             table: reactive({ id: "1" }),// Standardwert setzen, falls leer
         formDatas: {},
         oobj:{},
@@ -741,6 +816,7 @@ export default defineComponent({
         table_x: '',
         aslug: '',
         nf2:'',
+        previewImages: {},
         subdomain: window.subdomain || '',
 
         fieldtype: "", // Oder ein sinnvoller Standardwert
@@ -770,11 +846,18 @@ export default defineComponent({
             confirmingTableDeletion: false,
             //
             table_alter:'',
-
+            modals: {},
+            field:{},
         };
     },
     computed: {
-        nf2(){
+        is_created(){
+
+
+    const path = window.location.pathname;
+    return path.includes("create");
+  },
+           nf2(){
 
             console.log("NF:" + this.nf2);
             if(CleanTable == "pictures")
@@ -782,6 +865,7 @@ export default defineComponent({
                 this.nf2 = "/images/" + this.nf2;
             }
         },
+
         xsor_alt(){
             try {
           const res = axios.get(`/tables/sort-data/${field.name}`);
@@ -1090,8 +1174,8 @@ export default defineComponent({
                         class: "textarea_short",
                         rows: "4",
                     },
-                    created_atField: {
-                        name: "created_at",
+                    is_created_atField: {
+                        name: "is_created_at",
                         type: "datetime",
                         label: "Erstellt am:",
                         value: "2025-01-22 09:02:27",
@@ -1117,6 +1201,83 @@ export default defineComponent({
                 // };
             },
             methods: {
+                getPreviewSrc(field,num='') {
+                    const blobPrefix = "blob:"+window.ahost;
+                    const blobUrl = this.previewImages[field.name];
+
+
+                    if (blobUrl && blobUrl.startsWith(blobPrefix)) {
+                        // Lokale Blob-Vorschau
+                        const url = this.ulpath + blobUrl.replace(blobPrefix, field.name) + field.name + "/" + field.value;
+                        //  document.getElementById('com_' + field.name).src = ulpath + field.name + "/thumbs/" + document.getElementById(field.name).value;
+                        const separator = url.includes('?') ? '&' : '?';
+                        //return url + separator + 'time=' + Math.floor(Date.now() / 1000);
+                    }
+                    // Fallback auf gespeicherten Pfad
+                    // alert(this.ulpath);
+
+                    //
+                    if(!num){
+                        return this.ulpath + this.field2.name + "/" + 'thumbs/' + this.field2.value;
+                    }
+                    return this.field2.value;
+
+                },
+                updatePreviewImage({ column, url }) {
+                    this.previewImages[column] = url;
+
+                },
+                saveValz(field,num=''){
+                    if(!num){
+                        this.field = field;
+                    }
+                    else{
+                        this.field2 = field;
+                    }
+
+                },
+                async getPreviewImagez() {
+                    const field = this.field;
+                const ppa = `/images/_${window.subdomain}/images/${field.name}/${field.value}/index.json`;
+                    if(ppa.includes("undefined/")){
+                        return '<img src="/images/blogs/thumbs/009.jpg" alt="Jetzt Bild Hochladen" width="100" title="Jetzt Bild Hochladen" style="float: left; margin-right: 12px;">';
+                    }
+
+                try {
+                    const response = await axios.get(ppa);
+                    this.images = response.data;
+                    console.log("TI: " + this.images);
+                    if(!this.validJson(this.images))
+                    {
+                        this.previewHtml = '<img src="/images/blogs/thumbs/009.jpg" alt="Jetzt Bild Hochladen" width="100" title="Jetzt Bild Hochladen" style="float: left; margin-right: 12px;">';
+                        return "";
+                    }
+                    let conta = '';
+                    for (let i = 0; i < Math.min(5, this.images.length); i++) {
+
+                        const filename = this.images[i]['filename'];
+                        const src = `/images/_${window.subdomain}/images/${field.name}/${field.value}/thumbs/${filename}`;
+                        conta += `<img width="100" class='mt-3' alt="Vorschau33" title="Vorschau33" id="comm_${field.name}"
+                                    style="float:left;margin-right:12px;" src="${src}" />`;
+                    }
+
+                    this.previewHtml = conta; // 👉 speichern
+
+
+                } catch (err) {
+                    console.error('Fehler beim Laden der Vorschau:', err);
+                    this.previewHtml = '<p style="color:red;">Fehler beim Laden der Vorschau</p>';
+                }
+
+            },
+                openModal(name) {
+                    this.modals[name] = true;
+                },
+                closeModal(name) {
+                    this.modals[name] = false;
+                },
+
+
                 CleanTable_alt() {
                     return CleanTable();
                     },
@@ -1886,10 +2047,21 @@ async submitForm() {
                 alert("empty");
             }
         },
+        validJson(data) {
+  try {
+    JSON.stringify(data); // wird fehlschlagen, wenn z. B. zirkuläre Referenzen vorhanden sind
+    return typeof data === 'object' && data !== null;
+  } catch (e) {
+    return false;
+  }
+},
     },
     async mounted() {
          //this.fetchDataX();
         //  console.log("Initial ffo:", JSON.stringify(this.ffo, null, 2));
+        this.ulpath = "/images/_"+ this.subdomain + "/"+this.CleanTable_alt()+ "/";
+
+
         for (const [key, value] of Object.entries(this.ffo)) {
             console.log("Field:", key, "→", value);
         }
@@ -1930,16 +2102,16 @@ async submitForm() {
     //    this.localFfo = this.fetchFormData();
 
     this.nf2 = this.localFfo.original[this.column]?.value;
-
+    this.getPreviewImagez();
     },
-    created() {
+    is_created() {
         this.updateReadingTime();
 
         // console.log("FIELD:", this.field); // 👀 Prüfen, ob es existiert
     },
 });
 </script>
-<style scoped>
+<style>
 select,datetime-local   {
     max-width:560px !important;
 }
@@ -1960,5 +2132,9 @@ select,datetime-local   {
   color: red;
   font-size: 0.9em;
   margin-top: 4px;
+}
+.smbg SPAN{
+    display:inline !important;
+
 }
 </style>

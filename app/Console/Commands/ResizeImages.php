@@ -13,43 +13,64 @@ class ResizeImages extends Command
     protected $signature = 'images:resize';
     protected $description = 'Resize images to 350px width and save to /thumbs/';
 
+    // public function handle()
+    // {
+    //     $this->info("Teststart");
+
+    //     $dirs = $this->readfolders("images/_mfx/images/imgdir_content/");
+    //     dd($dirs); // Stopp und prüfe Ergebnis
+
+    //     $this->info("Testende");
+    // }
     public function handle()
     {
-        $sourceDirs = [public_path("images/images/orig")        ];
-        $thumbsDir = public_path('images/images/thumbs');
+        $this->info("Start resizing...");
 
-        if (!File::exists($thumbsDir)) {
-            File::makeDirectory($thumbsDir, 0777, true);
-        }
-
-        // ImageManager mit ImagickDriver initialisieren
         $manager = new ImageManager(new ImagickDriver());
 
-        foreach ($sourceDirs as $sourceDir) {
+        foreach ($this->readfolders("/images/_mfx/images/imgdir_content/") as $ref) {
+
+            $sourceDir = public_path("/images/_mfx/images/imgdir_content/$ref/orig/");
+            $thumbsDir = $sourceDir . '/..';
+
+            if (!File::exists($thumbsDir)) {
+                File::makeDirectory($thumbsDir, 0777, true);
+            }
+
             if (!File::exists($sourceDir)) {
+                $this->warn("Quellordner fehlt: $sourceDir");
                 continue;
             }
 
-            $files = File::files($sourceDir);
-            foreach ($files as $file) {
+            foreach (File::files($sourceDir) as $file) {
                 $thumbPath = $thumbsDir . '/' . $file->getFilename();
                 if (File::exists($thumbPath)) {
                     // continue;
                 }
 
-                // Bild einlesen und skalieren
-                 $image =  $manager->read($file->getPathname())->resize(400, null, function ($constraint) {
-                    $constraint->aspectRatio(); // Maintains aspect ratio
-                    $constraint->upsize(); // Prevents upscaling the image if it's smaller than 350px
-                 });
                 $image = $manager->read($file->getPathname());
-                $width = 400;
+                $width = 1000;
                 $height = (int) ($image->height() * ($width / $image->width()));
-                //  \Log::info($width."x".$height);
                 $image = $image->resize($width, $height);
                 $image->save($thumbPath);
                 $this->info("Resized: " . $file->getFilename());
             }
         }
+
+        $this->info("✅ Fertig!");
+    }
+    protected function readfolders($relativePath)
+    {
+        $fullPath = public_path($relativePath);
+
+        if (!File::exists($fullPath)) {
+            return [];
+        }
+
+        return collect(File::directories($fullPath))
+            ->map(fn($dir) => basename($dir))
+            ->filter(fn($name) => !in_array($name, ['thumbs', 'orig', 'big', 'ret', 'sm', 'bthumbs', 'titlez.dat']))
+            ->values()
+            ->toArray();
     }
 }

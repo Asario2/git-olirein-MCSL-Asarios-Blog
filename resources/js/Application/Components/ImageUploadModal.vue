@@ -1,154 +1,200 @@
 <template>
     <div
-      v-show="isModalOpen"
-      class="fixed inset-0 z-100 flex items-center justify-center bg-black bg-opacity-50" style="z-index: 100;"
+      v-if="isModalOpen"
+      class="fixed inset-0 z-100 flex items-start justify-center bg-black bg-opacity-50 overflow-y-auto pt-[160px]"
     >
-      <div class="bg-layout-sun-100 dark:bg-layout-night-100 rounded-lg shadow-lg w-full max-w-lg p-6" style="z-index: 100;">
-        <form @submit.prevent="uploadImage">
-          <h3 class="text-2xl font-semibold text-center mb-4">Bild hochladen</h3>
-          <CopyLeftSelect
+      <div class="bg-layout-sun-100 dark:bg-layout-night-100 rounded-lg shadow-lg w-full max-w-lg p-6 max-h-[calc(100vh-200px)] overflow-y-auto">
+
+        <!-- Tabs & Inhalte -->
+        <div v-if="!pxa">
+          <!-- Tabs -->
+          <div v-if="is_imgdir" class="mb-4 border-b border-layout-sun-300 dark:border-layout-night-300">
+            <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+              <button :class="tabClass('upload')" @click="activeTab = 'upload'" type="button">Upload</button>
+              <button :class="tabClass('gallery')" @click="activeTab = 'gallery'" type="button">Galerieverwaltung</button>
+            </nav>
+          </div>
+
+          <!-- Upload Tab -->
+          <div v-show="activeTab === 'upload'">
+            <form @submit.prevent="uploadImage">
+              <h3 class="text-2xl font-semibold text-center mb-4">Bild hochladen</h3>
+
+              <CopyLeftSelect
                 v-if="isImages && !Message"
                 v-model="form.copyleft"
                 label="Wasserzeichen"
                 name="copyleft"
               />
-          <!-- Datei-Dropzone -->
-          <div
-            class="border-2 border-dashed border-layout-sun-500 dark:border-layout-night-500 rounded-lg p-6 text-center cursor-pointer hover:bg-layout-sun-200 dark:hover:bg-layout-night-200"
-            @dragover.prevent
-            @drop.prevent="handleDrop"
-            @click="triggerFileInput"
-          >
-            <input
-              ref="fileInput"
-              type="file"
-              accept="image/*"
-              class="hidden"
-              @change="handleFileChange"
+
+              <!-- Dropzone -->
+              <div
+                class="border-2 border-dashed border-layout-sun-500 dark:border-layout-night-500 rounded-lg p-6 text-center cursor-pointer hover:bg-layout-sun-200 dark:hover:bg-layout-night-200"
+                @dragover.prevent
+                @drop.prevent="handleDrop"
+                @click="triggerFileInput"
+              >
+                <input
+                  ref="fileInput"
+                  multiple
+                  type="file"
+                  accept="image/*"
+                  class="hidden"
+                  @change="handleFileChange"
+                />
+                <p class="text-layout-sun-700 dark:text-layout-night-700">
+                  Ziehe das Bild hierher oder klicke, um eine Datei auszuwählen.
+                </p>
+              </div>
+
+              <!-- Vorschau -->
+              <div v-if="previewImages[column]" class="mt-4 text-center">
+                <img :src="previewImages[column]" alt="Bildvorschau" class="w-full h-auto rounded-lg shadow-md" />
+              </div>
+
+              <!-- Upload-Fortschritt -->
+              <div v-if="uploading" class="mt-4">
+                <progress :value="progress" max="100" class="w-full"></progress>
+                <p class="text-center mt-2">{{ progress }}%</p>
+              </div>
+
+              <!-- Buttons -->
+              <div class="mt-6 flex justify-between">
+                <button type="button" @click="closeModal" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600">
+                  Schliessen
+                </button>
+                <button
+                  type="submit"
+                  v-if="selectedImages[column]"
+                  class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+                >
+                  Hochladen
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Galerieverwaltung -->
+          <div v-show="activeTab === 'gallery' && is_imgdir">
+            <ImageJsonEditor
+              :folder="path"
+              @jsonUpdated="onJsonUpdated"
+              @close="closeModal"
             />
-            <p class="text-layout-sun-700 dark:text-layout-night-700">
-
-              Ziehe das Bild hierher oder klicke, um eine Datei auszuwählen.
-            </p>
           </div>
+        </div>
 
-          <!-- Bildvorschau -->
-          <div v-if="previewImage" class="mt-4 text-center">
-            <img :src="previewImage" alt="Bildvorschau" class="w-full h-auto rounded-lg shadow-md" />
-          </div>
+        <!-- Alternative Ansicht, wenn pxa gesetzt ist -->
+        <div v-else class="space-y-4">
+          <label class="block text-sm font-medium text-layout-sun-700 dark:text-layout-night-300"> Bilderordner </label>
 
-          <!-- Fortschrittsanzeige -->
-          <div v-if="uploading" class="mt-4">
-            <progress :value="progress" max="100" class="w-full"></progress>
-            <p class="text-center mt-2">{{ progress }}%</p>
-          </div>
-
-          <!-- Buttons -->
-          <div class="mt-6 flex justify-between">
+          <input
+            type="text"
+            v-model="field.value"
+            id="folder_save"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white"
+          />
+          <div class="flex justify-between mt-6">
             <button
-              type="button"
-              @click="closeModal"
-              class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
+                type="button"
+                @click="closeModal"
+                class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
             >
-              Abbrechen
+                Schliessen
             </button>
-            <button
-              type="submit"
-              v-if="selectedImage"
-              class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+
+            <button type="button"
+                @click="savedir"
+                class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
             >
-              Hochladen
+                Weiter
             </button>
-          </div>
-        </form>
+            </div>
+
+            </div>
       </div>
     </div>
   </template>
 
   <script>
   import { CleanTable as cleanTableFn, GetAuth } from '@/helpers';
-  import md5 from 'md5';
   import CopyLeftSelect from "@/Application/Components/Content/CopyLeftSelect.vue";
+  import ImageJsonEditor from "@/Application/Admin/ImageJsonEditor.vue";
 
   export default {
     name: 'ImageUploadModal',
     components: {
       CopyLeftSelect,
+      ImageJsonEditor,
     },
     props: {
+      is_imgdir: { type: Boolean, default: false },
       isOpen: [Boolean, Number],
+      isModalOpen: { type: [Boolean, Number], default: false },
+      column: String,
+      domain: String,
       path: String,
       namee: String,
-      column: String,
       namee2: String,
-      Message: {
-        type: [Boolean, Number],
-        default: false,
-      },
+      Message: { type: [Boolean, Number], default: false },
       alt_path: String,
-      isModalOpen: {
-    type: [Boolean, Number],
-    default: false,
+      pxa: { type: Boolean, default: false },
+      field: { type: Object, default: () => ({ value: '' }) },
+      path:String,
+
     },
-
-
-},
-    computed: {
-  isImages() {
-    return cleanTableFn() === 'images';
-  },
-},
-
     data() {
       return {
-
-        selectedImage: null,
-        previewImage: null,
+        activeTab: 'upload',
+        form: { copyleft: '' },
+        previewImages: {},
+        selectedImages: {},
         uploading: false,
         progress: 0,
         newFname: '',
-        tablex: this.alt_path ?? this.CleanTable(),
-        oripath: true,
-        form: {
-          copyleft: ''
-        },
-    //     options: {
-    //   type: Array,
-    //   default: () => []
-    // },
+        tablex: this.CleanTable(),
+        oripath: 1,
+        ulpath: this.alt_path,
+        modals: {},
+        GetAuth: null,
+        pxa: null,
+        localPath: this.path,
+        finalPath: this.path + this.field.value,
       };
     },
+    computed: {
+      isImages() {
+        return cleanTableFn() === 'images';
+      },
+      uploadPath() {
+        return `${this.domain}/${this.CleanTable()}/${this.column}`;
+      },
+    },
     async mounted() {
-         //this.fetchDataX();
-         this.GetAuth = await GetAuth();
-        /// alert(this.alt_path);
+      this.GetAuth = await GetAuth();
+      const paths = window.location.pathname; // Gibt "/admin/tables/show/Example" zurück
+            const segments = paths.split("/"); // Teilt den Pfad in Segmente auf
+            if(segments[segments.length - 2] == "create" && this.is_imgdir)
+            {
+               // this.pxa = true;
+            }
+            let finalPath = this.path;
+        // if (!finalPath.includes(this.field.value)) {
+        //     finalPath += '/' + this.field.value;
+        //     alert(this.finalPath);
+        // }
     },
     methods: {
-        GetAuth,
-        insertImage(imageUrl) {
-    const editor = this.$refs.editor; // Hier ist der Referenz-Editor
-    const selection = window.getSelection();
-    const range = selection.getRangeAt(0); // Hole den aktuellen Bereich
-
-    // Erstelle ein neues <img>-Tag mit der URL
-    const img = document.createElement('img');
-    img.src = imageUrl;
-    img.alt = 'Image';  // Optional: Füge einen Alt-Text hinzu
-    img.style.maxWidth = '100%';  // Optional: Maximalbreite definieren
-    img.style.display = 'block';  // Optional: Bild als Block-Element darstellen
-
-    // Füge das Bild an der aktuellen Cursor-Position ein
-    range.deleteContents();  // Lösche die aktuelle Auswahl (falls vorhanden)
-    range.insertNode(img);  // Füge das Bild ein
-
-    // Setze den Cursor direkt nach dem Bild
-    range.setStartAfter(img);
-    range.setEndAfter(img);
-    selection.removeAllRanges();
-    selection.addRange(range);
-  },
       CleanTable() {
         return cleanTableFn();
+      },
+      tabClass(tab) {
+        return [
+          'whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm',
+          this.activeTab === tab
+            ? 'border-blue-500 text-blue-600'
+            : 'border-transparent text-layout-sun-500 dark:text-layout-night-500 hover:text-layout-sun-700 dark:hover:text-layout-night-700 hover:border-layout-sun-300 dark:hover:border-layout-night-300',
+        ];
       },
       triggerFileInput() {
         this.$refs.fileInput.click();
@@ -162,141 +208,116 @@
       handleFileChange(event) {
         const file = event.target.files[0];
         if (file) {
-          this.selectedImage = file;
-          this.newFname = file.name;
-          this.previewImage = URL.createObjectURL(file);
+          this.selectedImages[this.column] = file;
+          const previewUrl = URL.createObjectURL(file);
+          this.previewImages[this.column] = previewUrl;
+
+          this.$emit('previewUpdated', {
+            column: this.column,
+            url: previewUrl,
+          });
+
           if (this.Message) {
             const extension = file.name.split('.').pop();
             const newfg = (file.name + "_" + this.GetAuth()) + '.' + extension;
             this.$emit('insertImage', newfg);
-            }
+          }
         }
       },
-      async uploadImage() {
-  if (!this.selectedImage && !this.value) return;
-  this.selectedImage = this.selectedImage ?? this.value;
-
-  this.uploading = true;
-  this.progress = 0;
-
-  // FormData für den Upload erstellen
-  const formData = new FormData();
-  formData.append('image', this.selectedImage);
-  formData.append('path', this.path);
-  formData.append('namee', this.name);
-  formData.append('_token', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
-  formData.append('table', this.tablex);
-  formData.append('copyleft', this.form.copyleft);
-  formData.append("Message",this.Message);
-
-
-  // Überprüfung und Fehlerbehandlung im Upload-Prozess
-  const xhr = new XMLHttpRequest();
-  xhr.upload.addEventListener('progress', (event) => {
-    if (event.lengthComputable) {
-      this.progress = Math.round((event.loaded / event.total) * 100);
-    }
-  });
-
-  xhr.onload = () => {
-    this.uploading = false;
-    if (xhr.status === 200) {
-      const response = JSON.parse(xhr.responseText);
-      this.newFname = response.image_url;
-    if (this.Message) {
-      this.$emit('insertImage', response.image_url);
-    } else {
-      this.$emit('imageUploaded', response.image_url);
-    }
-
-    //   console.log("ri:" + response.image_url);
-      this.closeModal();
-    } else {
-      console.error("Fehler beim Upload:", xhr.status);
-    }
-  };
-
-  xhr.onerror = () => {
-    this.uploading = false;
-    console.error("Fehler beim Hochladen",xhr.status);
-  };
-  let isw = "0";
-  if(this.CleanTable() === "images" && !this.Message)
-  {
-     isw = "1";
-     const ASD = "SD";
-  }
-//   console.log("sel: " + JSON.stringify(this.selectedImage,null,2));
-    if (typeof this.oripath === "undefined" || this.oripath == "0") {
-        xhr.open('POST', '/upload-image/' + this.CleanTable() + "/" + isw ,true);
-    }
-    else{
-       xhr.open('POST', '/upload-image_alt/' + this.CleanTable() + "/" + isw + '/' + this.oripath, true);
-    }
-
-
-    xhr.send(formData);
-},
       closeModal() {
-        this.selectedImage = null;
-        this.previewImage = null;
+        this.selectedImages[this.column] = null;
+        this.previewImages[this.column] = null;
         this.uploading = false;
         this.progress = 0;
+        this.activeTab = 'upload';
         this.$emit('close');
       },
-    },
-    watch: {
-        isModalOpen(newVal) {
-    if (newVal) {
-      // Modals öffnen, alles zurücksetzen
-      this.selectedImage = null;
-      this.previewImage = null;
-      this.uploading = false;
-      this.progress = 0;
-    }
-  },
+      async uploadImage() {
+        const selectedImage = this.selectedImages[this.column];
+        if (!selectedImage) return;
+
+        this.uploading = true;
+        this.progress = 0;
+
+        const formData = new FormData();
+        formData.append('image', selectedImage);
+        formData.append('path', this.finalPath);
+        formData.append('ulpath', this.ulpath);
+        formData.append('column', this.column);
+        formData.append('namee', this.namee);
+        formData.append('_token', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
+        formData.append('table', this.tablex);
+        formData.append('copyleft', this.form.copyleft);
+        formData.append("Message", this.Message);
+        formData.append("is_imgdir", this.finalPath);
+
+        const xhr = new XMLHttpRequest();
+
+        xhr.upload.addEventListener('progress', (event) => {
+          if (event.lengthComputable) {
+            this.progress = Math.round((event.loaded / event.total) * 100);
+          }
+        });
+
+        xhr.onload = () => {
+          this.uploading = false;
+          if (xhr.status === 200) {
+            const response = JSON.parse(xhr.responseText);
+            const iurl = response.image_url.replace(this.column + "/", '');
+            if (this.Message) {
+              this.$emit('insertImage', iurl);
+            } else if(!this.is_imgdir) {
+              this.$emit('imageUploaded', iurl);
+              document.getElementById(this.column).value = "/images/" + this.ulpath.replace("//","/") + "/thumbs/"   +  iurl;
+                if(document.getElementById("com_" + this.column))
+                {
+                    document.getElementById("com_" + this.column).src = "/images/" + this.ulpath.replace("//","/") + "/thumbs/"   +  iurl;
+                }
+
+            }
+            else{
+                document.getElementById(this.column).value = iurl;
+                alert("Imggal");
+            }
+            this.closeModal();
+          } else {
+            console.error("Fehler beim Upload:", xhr.status);
+          }
+        };
+
+        xhr.onerror = () => {
+          this.uploading = false;
+          console.error("Fehler beim Hochladen", xhr.status);
+        };
+
+        let isw = (this.CleanTable() === "images" && !this.Message) ? "1" : "0";
+
+        const endpoint = (typeof this.oripath === "undefined" || this.oripath == "0")
+          ? `/upload-image/${this.CleanTable()}/${isw}`
+          : `/upload-image_alt/${this.CleanTable()}/${isw}/${this.oripath}`;
+
+        xhr.open('POST', endpoint, true);
+        xhr.send(formData);
+      },
+      onJsonUpdated(newJson) {
+        this.$emit('jsonUpdated', newJson);
+      },
+      savedir(){
+        const dir = document.getElementById("folder_save").value;
+        this.field.value = dir;
+
+        if (this.field.value && this.field.value.trim() !== '') {
+            this.pxa = false; // Modal neu laden → Tabs und Inhalte werden sichtbar
+        }
+
+      },
     },
   };
   </script>
 
   <style scoped>
-  .modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  nav button {
+    outline: none;
+    transition: all 0.3s ease;
   }
-
-  .modal-content {
-    background: white;
-    padding: 20px;
-    border-radius: 5px;
-    text-align: center;
-  }
-
-  .dropzone {
-    border: 2px dashed #ccc;
-    padding: 20px;
-    cursor: pointer;
-  }
-
-  .preview-container {
-    margin-top: 10px;
-  }
-
-  .preview {
-    max-width: 300px;
-    width: auto;
-    height: auto;
-  }
-
-  /* .w-full{
-    min-width:320px;
-    max-width:400px;
-  } */
   </style>

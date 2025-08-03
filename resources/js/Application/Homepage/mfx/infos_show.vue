@@ -1,6 +1,8 @@
 <template>
     <layout header-title="Home" :header-url="$page.props.saas_url + '/'">
-        <page-content>
+        <p v-if="!data">Kein Eintrag zu dieser ID vorhanden</p>
+
+        <page-content v-else>
             <template #content>
                 <div>
                 <page-title>
@@ -17,7 +19,7 @@
         <div class="w-[150px] shrink-0 items-center flex">
         <img
             class="w-[150px] h-auto rounded"
-            :src="'/images/_mfx/infos/img_big/big/' + data.img_big"
+            :src="'/images/_mfx/infos/img_big/' + data.img_big"
             :alt="data.headline"
             :title="data.headline"
         />
@@ -100,16 +102,26 @@ export default defineComponent({
     console.error('Fehler beim Laden der Issues:', error);
     this.todolist = [];
   }
-
-    },
-
+  this.scrollToHashAnchor();
+        window.addEventListener("hashchange", this.scrollToHashAnchor);
+        },
+        beforeUnmount() {
+        window.removeEventListener("hashchange", this.scrollToHashAnchor);
+        },
     methods: {
-        ch(txt){
+        ch(txt) {
             return txt
-            .replace(/\n<li>/g, '<li>')   // Zeilenumbruch vor <li> entfernen
-            .replace(/\n/g, '<br />');    // alle übrigen \n in <br />
+        // //    .replace("/<br />\n<br />\n<br />/gi","\n\n")
+        //     .replace(/<br\s*\/?>/gi, "\n")     // alle Varianten von <br>, inkl. <br>, <br/> und <br />
+        //     .replace(/<\/li>\s*(<br\s*\/?>)+/gi, '</li>')
+
+            .replace(/\n/g, '<br />')       // alle übrigen \n in <br />
+        // .replace(/\n/g, '<br />')               // \n in <br />
+        // .replace(/(<br\s*\/?>\s*){3,}/gi, '<br />');
+        .replace(/(<br\s*\/?>\s*){3,}/gi, '<br /><br />')
 
         },
+
         showtodo() {
         if (!Array.isArray(this.todolist) || this.todolist.length === 0) {
             return '<p>Keine offenen Issues gefunden.</p>';
@@ -248,7 +260,19 @@ export default defineComponent({
                 captcha: '',
                 accepted: false
             }
+        },
+        scrollToHashAnchor() {
+    const hash = window.location.hash;
+    if (hash && hash.startsWith("#")) {
+      setTimeout(() => {
+        const el = document.getElementById(hash.substring(1));
+        if (el) {
+          const y = el.getBoundingClientRect().top + window.pageYOffset - 134;
+          window.scrollTo({ top: y, behavior: "smooth" });
         }
+      }, 50); // etwas Delay, bis DOM fertig gerendert ist
+    }
+  }
     },
 });
 </script>

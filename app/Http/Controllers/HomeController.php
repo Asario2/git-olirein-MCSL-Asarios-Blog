@@ -257,6 +257,56 @@ return Inertia::render('Homepage/Pictures', [
             'ratings' => $rat,
         ]);
     }
+    public function home_images_show_mfx($id)
+    {
+        $images = DB::table('images')
+            ->where('id', $id)
+            ->whereIn('pub', [1, 2])
+            ->first();
+
+        $def = str_replace("_mfx/images/pix/",'',$images->imgdir_content)   ;
+        $im_cont = readtitlez(public_path("/images/_".SD()."/images/imgdir_content/".$def."index.json"));
+        // dd($def);
+        return Inertia::render('Homepage/mfx/ImagesShow', ["images"=>$images,"im_cont"=>$im_cont,"def"=>$def]);
+    }
+    public function home_images_cat_mfx(Request $request)
+    {
+        // if($slug != "Alphabet")
+        // {
+        //     $ord[0] = "created_at";
+        //     $ord[1] = "DESC";
+        // }
+        // else{
+        //     $ord[0] = "position";
+        //     $ord[1] = "ASC";
+        // }
+        $search = Request::input('search');   // ← korrekt für die Facade
+        $entries = DB::table("images")
+            ->whereIn("images.pub", [1, 2])
+            ->select("images.created_at AS created_at", "images.*")
+
+            ->when($search, function ($query, $search) {
+                return $query->where(function($q) use ($search) {
+                    $q->where("images.headline", "like", "%{$search}%")
+                      ->orWhere("images.message", "like", "%{$search}%")
+                      ->orWhere("images.created_at", "like", "%{$search}%");
+                });
+            })
+            ->orderByDesc("images.created_at")
+            ->paginate(20);
+
+        // \Log::info("cr:".CheckRights(Auth::id(),"images","date"));
+        // $rat = RatingController::getTotalRating("images");
+        // \Log::info("en:" . json_encode([$rat]));
+        // $ocont = DB::table("image_categories")->where("slug",$slug)->first();
+        return Inertia::render('Homepage/mfx/images_cat', [
+            'data' => $entries,
+            // 'ocont' => $ocont,
+            'filters' => Request()->all('search'),
+            // 'ratings' => $rat,
+        ]);
+    }
+
     public function home_index_alt(){
         $sd = SD();
         if($sd == "ab"){
@@ -562,6 +612,7 @@ return Inertia::render('Homepage/Pictures', [
         include_once "inc/functions/rinfo_code.php";
         $privacy = Str::markdown(file_get_contents($privacyFile)); // HTML erzeugt
         $privacy = rinfo_code($privacy);
+        // $privacy = nl2br($privacy);
         return Inertia::render('Homepage/'.@$dol.'Privacy', [
             'privacy' => $privacy,
         ]);

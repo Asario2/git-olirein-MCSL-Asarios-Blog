@@ -31,6 +31,7 @@
     alt="calendar icon (white)"
   ></IconCal>
 </div>
+<input type="hidden" :name="name" :id="name" :value="modelValue" />
 </template>
 
 <script>

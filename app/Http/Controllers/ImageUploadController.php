@@ -33,6 +33,7 @@ class ImageUploadController extends Controller
         \Log::info("iid: ".$is_imgdir);
         $is_imgdir = explode("/",$is_imgdir);
         $is_imgdir = $is_imgdir[count($is_imgdir)-2];
+
     }
         $subdomain = SD();
         \Log::info(CleanTable().$subdomain.$request->column);
@@ -155,6 +156,10 @@ class ImageUploadController extends Controller
 
 
         }
+
+        if($is_imgdir){
+            $this->AddJson($path."/".$is_imgdir,$filename);
+        }
         if($Message){
             $imageName = ($imageName);
             // \Log::info($Message);
@@ -192,15 +197,138 @@ class ImageUploadController extends Controller
 
     }
     public function store_json(Request $request)
-{
-    $data = $request->images;
-    // dd($request->all());
-    // Pfad zur Datei z. B. via folder:
-    $folder = $request->input('folder');
-    $path = public_path($folder . '/index.json');
-    \Log::info($data);
+    {
+        $data = $request->images;
+        // dd($request->all());
+        // Pfad zur Datei z. B. via folder:
+        $folder = $request->input('folder');
+        $path = public_path($folder . '/index.json');
+        \Log::info($data);
 
-    file_put_contents($path, json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
-    return response()->json(['success' => true]);
+        file_put_contents($path, json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+        return response()->json(['success' => true]);
+    }
+    public function AddJson($folder,$fn)
+    {
+        if(!is_file(public_path("/images/".$folder."/index.json")))
+        {
+            file_put_contents(public_path("/images/".$folder."/index.json"), json_encode([], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+        }
+        $oldjs = file_get_contents(public_path("/images/".$folder."/index.json"));
+
+        $array = json_decode($oldjs);
+
+
+        // Neue Werte
+        $filename = $fn;
+        $size = getimagesize("images/".$folder."/big/".$fn);
+        $w = $size[0];
+        $h = $size[1];
+
+        // Letzte Position ermitteln
+        $lastPosition = 0;
+        if (!empty($array)) {
+            $last = end($array);
+            $lastPosition = $last->position;
+        }
+        $filenames = array_map(fn($item) => $item->filename, $array);
+
+        if (!in_array($fn, $filenames))
+        {
+            // Neues Objekt anhängen
+            $array[] = (object)[
+                'position' => $lastPosition + 1,
+                'filename' => $filename,
+                'label' => '',
+                'width' => $w,
+                'height' => $h,
+        ];
+        }
+        file_put_contents(public_path("/images/".$folder."/index.json"), json_encode($array, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+    }
+    function Del_Image($column,$folder,$posi=1){
+        if(!CheckRights(Auth::id(),CleanTable(),"delete"))
+        {
+            return response()->json(["success"=>"false","message"=>"Rechte nicht vorhanden"]);
+        }
+        $path = public_path("/images/_".SD()."/images/".$column."/".$folder."/");
+        $oldjs = file_get_contents(public_path("/images/_".SD()."/images/".$column."/".$folder."/index.json"));
+        $oldjs = json_decode($oldjs,true);
+        $newjs = $this->deleteImageByPosition($oldjs,($posi+1),$path);
+        \Log::info("old: ".json_encode($oldjs,JSON_PRETTY_PRINT));
+        \Log::info("new: ".json_encode($newjs,JSON_PRETTY_PRINT));
+        file_put_contents(public_path("/images/_".SD()."/images/".$column."/".$folder."/index.json"), json_encode($newjs, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+        return response()->json(["success"=>"true","message"=>"Bild wurde erfolgreich gelöscht"]);
+    }
+    function deleteImageByPosition(array $images, int $deletePosition, string $path): array
+{
+    // Wenn nur 1 Element vorhanden ist und das gelöscht werden soll → leere JSON
+    if (count($images) === 1 && $images[0]['position'] == $deletePosition) {
+        \Log::info("P:".$path);
+        $file = $images[0]['filename'];
+        if (is_file($path.$file)) {
+            @unlink($path."thumbs/".$images[0]['filename']);
+            @unlink($path."orig/".$images[0]['filename']);
+            @unlink($path."big/".$images[0]['filename']);
+            @unlink($path."".$file);
+            file_put_contents($path."index.json","[]");
+
+        }
+        return []; // JSON wird geleert
+    }
+
+    // Normales Entfernen des Elements mit der gewünschten Position + Datei löschen
+    $images = array_filter($images, function($item) use ($deletePosition, $path) {
+        if ($item['position'] === $deletePosition) {
+            $file = $item['filename'];
+            if( is_file($path."/".$file)) {
+                @unlink($path."/thumbs/".$item['filename']);
+                @unlink($path."/orig/".$item['filename']);
+                @unlink($path."/big /".$item['filename']);
+                @unlink($path."/".$file);
+            }
+            return false; // Entfernen
+        }
+        return true;
+    });
+
+    // Neu indizieren
+    $images = array_values($images);
+
+    // Positionen neu zuweisen
+    foreach ($images as $index => &$item) {
+        $item['position'] = $index + 1;
+    }
+
+    return $images;
 }
+
+    function old_deleteImageByPosition(array $images, int $deletePosition, string $path): array
+{
+    // 1. Entferne das Element mit der gewünschten Position und lösche die Datei
+    $images = array_filter($images, function($item) use ($deletePosition, $path) {
+        if ($item['position'] === $deletePosition) {
+            $file = rtrim($path, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $item['filename'];
+            if (is_file($file)) {
+                unlink($path."/thumbs/".$item['filename']);
+                unlink($path."/orig/".$item['filename']);
+                unlink($path."/big /".$item['filename']);
+                unlink($file);
+            }
+            return false; // Element wird entfernt
+        }
+        return true; // Element bleibt
+    });
+
+    // 2. Neu indizieren
+    $images = array_values($images);
+
+    // 3. Positionen neu zuweisen
+    foreach ($images as $index => &$item) {
+        $item['position'] = $index + 1;
+    }
+
+    return $images;
+}
+
 }

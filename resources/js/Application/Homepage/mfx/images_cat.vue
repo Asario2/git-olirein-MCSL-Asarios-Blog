@@ -13,7 +13,7 @@
                         <a :href="'/home/images/show/'+ item.id">
 
                         <div style="min-height:104px;" class="bg-layout-sun-50 dark:bg-layout-night-50 lg:rounded-lg pr-2 border border-layout-sun-1000 dark:border-layout-night-1050" >
-                        <div class="inline" style="float:left;padding-right:5px;margin-right:5px;"><img :src="'/images/_mfx/images/img_thumb/' + item.img_thumb" :alt="item.headline" :title="item.headline" class="inline lg:rounded-lg nor_border"/></div>
+                        <div class="inline" style="float:left;padding-right:5px;margin-right:5px;"><img :src="'/images/_mfx/images/img_thumb/thumbs/' + item.img_thumb" :alt="item.headline" :title="item.headline" class="inline lg:rounded-lg nor_border"/></div>
                             <div><span class="dark:text-layout-night-1050 text-layout-sun-1000 mr-3" style="float:left;" v-html="`<b>${cleanHtml(item.headline)}</b>`"></span> <editbtns style="float:left;" :id="item?.id" table="images" /><br />
                         <span class="text-layout-sun-1000 dark:text-layout-night-1000" v-html="cleanHtml(item.message)"></span></div>
 
@@ -114,6 +114,7 @@ export default defineComponent({
 .nor_border{
     border-top-right-radius:0;
     border-bottom-right-radius:0;
+    max-height:100px;
 
 }
 </style>

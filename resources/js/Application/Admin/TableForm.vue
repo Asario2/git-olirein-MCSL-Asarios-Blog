@@ -227,8 +227,8 @@ v-if="modals?.[field.name]"
 @update:fileName="handleFileNameUpdate"
 @imageUploaded="handleImageUpload"
 @previewUpdated="updatePreviewImage"
+@refresh-preview="getPreviewImagez" />
 
-/>
 <button type="button" @click="openModal(field.name)">
 <p  v-if="(previewImages[field.name] ?? field.value) "><span style='float:left;'><b>{{ field.label }}</b><br />
     {{ saveValz(field) }}
@@ -556,7 +556,7 @@ type="hidden"
                             @click.prevent="createTableData"
                         >
                             {{ItemName}} erstellen
-                        </input-button>
+                </input-button>
                     </smooth-scroll>
                 </button-group>
                 <!-- ENDS Befehle -->
@@ -614,6 +614,8 @@ sortOptions = sortOptions ?? {};
 // console.log(routes.getselroute("blog_authors"));
 import { defineComponent } from "vue";
 import { nextTick } from 'vue';
+import emitter from "@/eventBus";
+
 import { GetSettings } from "@/helpers";
 
 
@@ -1265,7 +1267,7 @@ export default defineComponent({
 
 
                 } catch (err) {
-                    console.error('Fehler beim Laden der Vorschau:', err);
+                    console.error('Fehler beim  Laden der Vorschau:', err);
                     this.previewHtml = '<p style="color:red;">Fehler beim Laden der Vorschau</p>';
                 }
 
@@ -2056,10 +2058,17 @@ async submitForm() {
   }
 },
     },
+    beforeUnmount() {
+    // Listener aufräumen
+    emitter.off('refresh-preview', this.getPreviewImagez);
+  },
     async mounted() {
          //this.fetchDataX();
         //  console.log("Initial ffo:", JSON.stringify(this.ffo, null, 2));
         this.ulpath = "/images/_"+ this.subdomain + "/"+this.CleanTable_alt()+ "/";
+        emitter.on('refresh-preview', this.getPreviewImagez);
+        this.getPreviewImagez();
+
 
 
         for (const [key, value] of Object.entries(this.ffo)) {

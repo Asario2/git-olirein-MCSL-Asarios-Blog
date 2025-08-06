@@ -12,17 +12,17 @@
                 <div
                     v-for="item in data"
                     :key="item.id"
-                    class="col-span-6 border border-layout-sun-1000 dark:border-layout-night-1050 bg-layout-sun-50 dark:bg-layout-night-50 p-4 rounded-lg grid grid-cols-6 gap-4"
+                    class="col-span-6 border border-layout-sun-1000 dark:border-layout-night-1050 bg-layout-sun-50 dark:bg-layout-night-50 rounded-lg grid grid-cols-6"
                 >
                     <!-- Profilbild (2 Spalten innerhalb der Box) -->
-                    <div class="col-span-2">
+                    <div class="col-span-2 rounded-lg">
                     <img
                         :src="'/images/_mfx/people/' + item.profile_photo_path.replace('profile-photos/','')"
                         :alt="item.name"
                         :title="item.name"
                         height="184"
                         width="158"
-                        class="object-cover"
+                        class="object-cover no_bord rounded-lg"
                         style="max-height:184px"
                     />
                     </div>
@@ -136,12 +136,16 @@ export default defineComponent({
   },
 });
 </script>
-<style scoped>
+<style>
 .input {
   @apply w-full px-4 py-2 border rounded-md dark:bg-zinc-800 dark:text-white;
 }
 
 .btn {
   @apply px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50;
+}
+IMG.no_bord{
+    border-top-right-radius:0 !important;
+    border-bottom-right-radius:0 !important;
 }
 </style>

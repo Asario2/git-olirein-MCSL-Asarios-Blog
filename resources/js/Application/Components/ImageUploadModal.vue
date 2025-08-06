@@ -21,7 +21,7 @@
               <h3 class="text-2xl font-semibold text-center mb-4">Bild hochladen</h3>
 
               <CopyLeftSelect
-                v-if="isImages && !Message"
+                v-if="isImages && !Message && !column.includes('img_thumb')"
                 v-model="form.copyleft"
                 label="Wasserzeichen"
                 name="copyleft"
@@ -78,7 +78,11 @@
           <div v-show="activeTab === 'gallery' && is_imgdir">
             <ImageJsonEditor
               :folder="path"
+              :column="column"
               @jsonUpdated="onJsonUpdated"
+              @imageUploaded="refreshGallery"
+              @refresh-gallery="$emit('refresh-preview')"
+              ref="editor2"
               @close="closeModal"
             />
           </div>
@@ -120,7 +124,6 @@
   import { CleanTable as cleanTableFn, GetAuth } from '@/helpers';
   import CopyLeftSelect from "@/Application/Components/Content/CopyLeftSelect.vue";
   import ImageJsonEditor from "@/Application/Admin/ImageJsonEditor.vue";
-
   export default {
     name: 'ImageUploadModal',
     components: {
@@ -170,6 +173,7 @@
         return `${this.domain}/${this.CleanTable()}/${this.column}`;
       },
     },
+
     async mounted() {
       this.GetAuth = await GetAuth();
       const paths = window.location.pathname; // Gibt "/admin/tables/show/Example" zurück
@@ -183,6 +187,7 @@
         //     finalPath += '/' + this.field.value;
         //     alert(this.finalPath);
         // }
+
     },
     methods: {
       CleanTable() {
@@ -258,7 +263,7 @@
             this.progress = Math.round((event.loaded / event.total) * 100);
           }
         });
-
+        let imd = false;
         xhr.onload = () => {
           this.uploading = false;
           if (xhr.status === 200) {
@@ -275,11 +280,17 @@
                 }
 
             }
+            // IMGGALLL
             else{
                 document.getElementById(this.column).value = iurl;
-                alert("Imggal");
+                imd = true
+                this.$emit("refresh-preview")
+                this.$refs.editor2.fetchImages();
             }
-            this.closeModal();
+            if(!imd){
+                this.closeModal();
+            }
+
           } else {
             console.error("Fehler beim Upload:", xhr.status);
           }

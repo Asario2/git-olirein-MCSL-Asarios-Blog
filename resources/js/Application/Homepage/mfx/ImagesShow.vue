@@ -9,13 +9,12 @@
               </span>
             </template>
           </page-title>
-
           <div v-if="!Object.keys(im_cont || {}).length" class="text-layout-sun-1000 dark:text-layout-night-1000">
             <p>Keine Bilder gefunden.</p>
           </div>
 
           <div v-else class="">
-            <photoswipe :images="im_cont" :basePath="'/images/_mfx/images/imgdir_content/' + def">
+            <photoswipe :images="im_cont" :basePath="'/images/_mfx/images/imgdir_content/' + def + '/'">
 
             </photoswipe>
         </div>

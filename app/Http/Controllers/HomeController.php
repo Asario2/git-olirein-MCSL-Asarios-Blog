@@ -265,8 +265,12 @@ return Inertia::render('Homepage/Pictures', [
             ->first();
 
         $def = str_replace("_mfx/images/pix/",'',$images->imgdir_content)   ;
-        $im_cont = readtitlez(public_path("/images/_".SD()."/images/imgdir_content/".$def."index.json"));
-        // dd($def);
+        $im_cont = readtitlez(public_path("/images/_".SD()."/images/imgdir_content/".$def."/index.json"));
+
+        $im_cont = @file_get_contents(public_path("/images/_".SD()."/images/imgdir_content/".$def."/index.json"));
+        $im_cont = json_decode($im_cont);
+        // dd($im_cont);
+
         return Inertia::render('Homepage/mfx/ImagesShow', ["images"=>$images,"im_cont"=>$im_cont,"def"=>$def]);
     }
     public function home_images_cat_mfx(Request $request)
@@ -610,6 +614,7 @@ return Inertia::render('Homepage/Pictures', [
         $pf = "privacy".@$set.".md";
         $privacyFile = Jetstream::localizedMarkdownPath($pf);
         include_once "inc/functions/rinfo_code.php";
+        // dd($privacyFile);
         $privacy = Str::markdown(file_get_contents($privacyFile)); // HTML erzeugt
         $privacy = rinfo_code($privacy);
         // $privacy = nl2br($privacy);

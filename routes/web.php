@@ -103,6 +103,7 @@ Route::post("/cookie_config",[ConfigureController::class,'__invoke'])->name("coo
             Route::get("/",[HomeController::class,"home_index"])->name("home.index");
             Route::post('/api/save-json', [ImageUploadController::class, 'store_json'])->name("save-json-gallery");
             Route::post('api/saveFolder',  [ImageUploadController::class, 'store_dir'])->name("save-dirsave");
+            Route::post("/api/del_image/{column}/{folder}/{posi}", [ImageUploadController::class, 'Del_Image'])->name("remove.img");
             // Route::post('/api/save-json', function (Request $request) {
             //     $path = public_path($request->input('path'));
             //     $data = $request->input('data');

@@ -662,8 +662,8 @@ if(!function_exists("readtitlez")){
 
     function readtitlez($path)
     {
-        $file = file_get_contents($path);
-        $files = json_decode($file);
+        $file = @file_get_contents($path);
+        $files = @json_decode($file);
         return $files;
     }
 }

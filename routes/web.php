@@ -97,7 +97,10 @@ Route::post("/cookie_config",[ConfigureController::class,'__invoke'])->name("coo
             Route::get('/home/people',  [HomeController::class,"people"])->name("home.people.mfx");
             Route::get('/home/impressum',  [HomeController::class,"imprint"])->name("home.imprint.mfx");
             Route::get('/home/infos/', [HomeController::class,"infos_index"])
-                   ->name("home.infos.mfx");
+                              ->name("home.infos.mfx");
+            Route::get('/home/contacts/', [HomeController::class,"infos_index"])
+                ->name("home.contacts.mfx");
+
             Route::get('/home/infos/show/{id}',  [HomeController::class,"infos_show"])->name("home.infos.show.mfx");
             Route::get('/home/powered-by-mcs',  [HomeController::class,"infos_pow"])->name("home.powered.show.mfx");
             Route::get("/",[HomeController::class,"home_index"])->name("home.index");

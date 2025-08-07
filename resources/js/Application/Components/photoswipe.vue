@@ -16,8 +16,12 @@
           :alt="image.label"
           :title="image.label"
         />
-        <div v-if="image.label" v-html="image.label" class="text-sm mt-2 text-layout-sun-1000 dark:text-layout-night-1000 dark:bg-layout-night-0 rounded-lg pt-0 p-2">
-
+        <div
+        v-if="image.label && image.label.trim() && image.label != 'null'"
+        v-html="image.label"
+        class="text-sm mt-2 text-layout-sun-1000 dark:text-layout-night-1000 dark:bg-layout-night-0 rounded-lg pt-0 p-2"
+        ></div>
+        <div v-else style="margin-bottom: -25px;">
         </div>
       </a>
     </div>
@@ -68,4 +72,8 @@ export default {
     border-bottom-right-radius: 0 !important;
     border-bottom-left-radius: 0 !important;
 }
+#photoswipe-gallery .text-sm:empty {
+  display: none;
+}
+
 </style>

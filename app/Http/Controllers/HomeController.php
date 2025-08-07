@@ -264,7 +264,7 @@ return Inertia::render('Homepage/Pictures', [
             ->whereIn('pub', [1, 2])
             ->first();
 
-        $def = str_replace("_mfx/images/pix/",'',$images->imgdir_content)   ;
+        $def = str_replace("_mfx/images/pix/",'',@$images->imgdir_content)   ;
         $im_cont = readtitlez(public_path("/images/_".SD()."/images/imgdir_content/".$def."/index.json"));
 
         $im_cont = @file_get_contents(public_path("/images/_".SD()."/images/imgdir_content/".$def."/index.json"));

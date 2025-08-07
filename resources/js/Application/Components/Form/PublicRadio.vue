@@ -114,7 +114,7 @@
     created() {
   const normalized = this.normalizeValue(this.modelValue);
 
-  if (this.isCreate && (normalized === '' || normalized === undefined)) {
+  if (this.is_created && (normalized === '' || normalized === undefined)) {
     this.internalValue = '1';
     this.emitChange('1');
   } else {
@@ -132,6 +132,7 @@
 
     is_created() {
       if (this.is_created && (this.modelValue === null || this.modelValue === undefined || this.modelValue === '')) {
+        alert("created");
         this.internalValue = '1';
         this.emitChange('1');
       }

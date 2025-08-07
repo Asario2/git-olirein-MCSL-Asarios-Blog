@@ -4,6 +4,9 @@
         <template #content>
           <page-title>
             <template #title>
+                <span v-if="!Object.keys(images || {}).length">
+                    {{ Redirect() }}
+                </span>
               <span class="dark:text-layout-night-1050 text-layout-sun-1000 inline">
                 Bildergalerie: {{ images.headline }} <editbtns style="float:left;" :id="CleanId()" table="images" />
               </span>
@@ -52,6 +55,11 @@
     },
     methods:{
         CleanId,
+        Redirect()
+        {
+            location.href="/home/images/";
+            return "";
+        }
     },
   });
   </script>

@@ -46,10 +46,9 @@
                 <link-header :route-name="route('home.projects.mfx')" name="Projects"></link-header>
                 <link-header :route-name="route('home.images.cat.mfx')" name="Images"></link-header>
                 <link-header :route-name="route('home.people.mfx')" name="People"></link-header>
-
+                <link-header :route-name="route('home.contacts.mfx')" name="Contacts"></link-header>
                 <template v-if="!$page.props.userdata.user_id">
                   <link-header :route-name="route('login')" name="Login"></link-header>
-                  <link-header :route-name="route('register')" name="Registrieren"></link-header>
                 </template>
 
                 <template v-if="$page.props.userdata.user_id">

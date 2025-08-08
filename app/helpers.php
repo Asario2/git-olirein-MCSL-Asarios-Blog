@@ -920,8 +920,9 @@ if(!function_exists("SD"))
                 $subb = "chh";
 
             break;
-            case: "localhost":
-            $subb = "ab"
+            case "localhost":
+            $subb = "ab";
+            break;
             default:
             $subb = $subb;
             break;

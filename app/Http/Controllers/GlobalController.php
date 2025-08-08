@@ -12,8 +12,9 @@ class GlobalController extends Controller
     }
     public static function SetDomain()
     {
-        $subdomain = explode('.', request()->getHost())[0]; // Subdomain extrahieren
+        //$subdomain = explode('.', request()->getHost())[0]; // Subdomain extrahieren
     //     \Log::info("sd: ".$subdomain);
+        $subdomain = SD();
 
         if ($subdomain === 'mfx') {
             config(['database.default' => 'mariadb_mfx']);

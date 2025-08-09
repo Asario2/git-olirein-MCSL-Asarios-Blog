@@ -10,6 +10,8 @@ README.md
 /vendor
 .env
 *.bat
+*.sh
+*.yml
 .env.backup
 .env.production
 .phpunit.result.cache
@@ -28,4 +30,3 @@ handbook_admin/.vitepress/dist
 handbook_admin/.vitepress/cache
 database/migrations/2025_06_28_000000_create_tenants_table.php_old
 database/migrations/2025_06_15_132002_add_commentedit_to_users_rights_table.php_old
-fetch_

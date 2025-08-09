@@ -58,4 +58,9 @@
 ![Version](https://img.shields.io/badge/version-2.68.1-orange) Brandheader Subdomains (#50)  
 ![Version](https://img.shields.io/badge/version-2.69.0-orange) slider/checkbox choosing based on field name (#52)  
 ![Version](https://img.shields.io/badge/version-2.70.7-orange) BrandFooter & Cookie Banner Bigfixes (#54)  
-
+![Version](https://img.shields.io/badge/version-2.71.3-orange) Update Images without watermarks on image gallerys (#55)  
+![Version](https://img.shields.io/badge/version-2.72.5-orange) Add json file for image gallerys (#56)  
+![Version](https://img.shields.io/badge/version-2.71.3-orange) Watermarks MarbleFx.de (#57)  
+![Version](https://img.shields.io/badge/version-2.72.4-orange) Fix Bugs in PublicRadio (#59)  
+![Version](https://img.shields.io/badge/version-2.73.4-orange) PublicRadio default selection (#61)   
+![Version](https://img.shields.io/badge/version-2.74.1-orange) Fallback of localhost (#62)   

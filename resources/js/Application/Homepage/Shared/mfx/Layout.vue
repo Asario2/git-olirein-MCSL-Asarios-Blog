@@ -46,18 +46,37 @@
                 <link-header :route-name="route('home.projects.mfx')" name="Projects"></link-header>
                 <link-header :route-name="route('home.images.cat.mfx')" name="Images"></link-header>
                 <link-header :route-name="route('home.people.mfx')" name="People"></link-header>
-                <link-header :route-name="route('home.contacts.mfx')" name="Contacts"></link-header>
+                <link-header :route-name="route('home.contacts.mfx')" name="Contact"></link-header>
                 <template v-if="!$page.props.userdata.user_id">
                   <link-header :route-name="route('login')" name="Login"></link-header>
                 </template>
+                <div v-else-if="$page.props.auth.user" class="block md:hidden">
 
+                <link-header :route-name="route('admin.dashboard')" name="Dashboard" /><br />
+                <link-header :route-name="route('admin.profile')" name="Profil">
+                <img
+                    id="prof_pic"
+                    class="h-8 w-8 rounded-full object-cover"
+                    :src="$page.props.auth.user?.profile_photo_url || '/images/profile-photos/008.jpg'"
+                    :alt="$page.props.userdata.full_name"
+                /></link-header><br />
+                <hr />
+                <link-header :route-name="route('logout')" name="Abmelden" />
+                </div>
                 <template v-if="$page.props.userdata.user_id">
-                  <link-header :route-name="route('applicationswitch')" name="Dashboard"></link-header>
+                  <!-- <link-header :route-name="route('applicationswitch')" name="Dashboard"></link-header> -->
                 </template>
 
-                <button-change-mode :mode="mode" @changeMode="changeMode"></button-change-mode>
-                <div class="ms-3 relative">
-                                <Dropdown align="right" width="72" v-if="$page.props.auth.user">
+               <!-- <button-change-mode :mode="mode" @changeMode="changeMode"></button-change-mode>-->
+
+
+                                                    <path
+                                                        stroke-linecap="round"
+                                                        stroke-linejoin="round"
+                                                        d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+                                                    />
+                                                    <div class="ms-3 relative flex hidden sm:flex">
+                                <Dropdown align="right" width="72" v-if="$page.props.auth.user" class="">
                                     <template #trigger>
                                         <button
                                             v-if="
@@ -94,19 +113,12 @@
                                                         .full_name
                                                 }}
 
-                                                <svg
+                                                <!-- <svg
                                                     class="ms-2 -me-0.5 h-4 w-4"
                                                     xmlns="http://www.w3.org/2000/svg"
                                                     viewBox="0 0 24 24"
-                                                    stroke-width="1.5"
-                                                    stroke="currentColor" fill="none"
-                                                >
-                                                    <path
-                                                        stroke-linecap="round"
-                                                        stroke-linejoin="round"
-                                                        d="M19.5 8.25l-7.5 7.5-7.5-7.5"
-                                                    />
-                                                </svg>
+                                                    stroke-width="1.5">
+                                                </svg> -->
                                             </button>
                                         </span>
                                     </template>
@@ -157,21 +169,7 @@
                                             Profil
                                         </dropdown-link>
 
-                                        <dropdown-link
-                                            v-if="
-                                                $page.props.jetstream
-                                                    .hasApiFeatures
-                                            "
-                                            :with-icon="false"
-                                            :with-route="true"
-                                            :route-name="
-                                                route('admin.api_tokens.index')
-                                            "
-                                        >
-                                            API-Token
-                                        </dropdown-link>
-
-                                        <div
+                                    <div
                                             class="my-2 border-t border-layout-sun-200 dark:border-layout-night-1050"
                                         />
 
@@ -179,7 +177,7 @@
                                         <form @submit.prevent="logoutUser">
                                             <button type="submit">
                                                 <dropdown-link>
-                                                    Abmelden
+                                                    <b>Abmelden</b>
                                                 </dropdown-link>
                                             </button>
                                         </form>
@@ -227,10 +225,7 @@
                   <h3 class="text-sm font-semibold leading-6 px-2">
                     <span> Webseite </span>
                   </h3>
-                  <ul role="list" class="mt-6 space-y-4">
-                    <li>
-                      <link-footer name="Get Started" :route-name="route('home.get_started')"></link-footer>
-                    </li>
+                  <ul role="list" class="mt-6 space-y-4 list-none">
                     <li>
                       <link-footer name="Impressum" :route-name="route('home.imprint.mfx')"></link-footer>
                     </li>
@@ -246,12 +241,12 @@
                   <h3 class="text-sm font-semibold leading-6 px-2">
                     <span> Authentifizierung </span>
                   </h3>
-                  <ul role="list" class="mt-6 space-y-4">
+                  <ul role="list" class="mt-6 space-y-4 list-none">
                     <li>
                       <link-footer name="Login" :route-name="route('login')"></link-footer>
                     </li>
-                    <li>
-                      <link-footer name="Registrierung" :route-name="route('register')"></link-footer>
+                    <li v-if="SD() == 'ab'">
+                      <link-footer  name="Registrierung" :route-name="route('register')"></link-footer>
                     </li>
                   </ul>
                 </div>
@@ -266,18 +261,18 @@
                   </div>
                   <div>
                     <link-footer>
-                      <a href="https://www.facebook.com" target="_blank" class="bg-layout-sun-0 dark:bg-layout-night-0">
+                      <a href="https://www.facebook.de" target="_blank" class="bg-layout-sun-0 dark:bg-layout-night-0">
                         <icon-facebook class="flex-shrink-0 w-6 h-6"></icon-facebook>
                       </a>
                     </link-footer>
                     <link-footer>
-                      <a href="https://www.linkedin.com" target="_blank" class="bg-layout-sun-0 dark:bg-layout-night-0">
-                        <icon-linked-in class="flex-shrink-0 w-6 h-6"></icon-linked-in>
+                      <a href="https://www.xing.de" target="_blank" class="bg-layout-sun-0 dark:bg-layout-night-0">
+                        <icon-xing class="flex-shrink-0 w-6 h-6"></icon-xing>
                       </a>
                     </link-footer>
                     <link-footer>
-                      <a href="https://youtube" target="_blank" class="bg-layout-sun-0 dark:bg-layout-night-0">
-                        <icon-youtube class="flex-shrink-0 w-6 h-6"></icon-youtube>
+                      <a href="https://whatsapp.com " target="_blank" class="bg-layout-sun-0 dark:bg-layout-night-0">
+                        <icon-whatsapp class="flex-shrink-0 w-6 h-6"></icon-whatsapp>
                       </a>
                     </link-footer>
                   </div>
@@ -289,7 +284,7 @@
                   </div>
 
                   <div class="text-xs leading-6">
-                    <span> Version: </span>
+                    <span><IconMCSL></IconMCSL> Version: </span>
                     {{ $page.props.version.versionnr }}
                   </div>
                 </div>
@@ -302,21 +297,31 @@
   </template>
 <script>
 import axios from "axios";
-import { router } from '@inertiajs/vue3';
+import IconMCSL from "@/Application/Components/Icons/IconMCSL.vue";
 import { useLoadingStore } from '@/loading';
 import MetaHeader from "@/Application/Homepage/Shared/MetaHeader.vue";
 import BrandHeader from "@/Application/Shared/BrandHeader.vue";
 import mfxlogo from "@/Application/Shared/mfxlogo.vue";
 import Dropdown from "@/Application/Components/Content/Dropdown.vue";
 import DropdownLink from "@/Application/Components/Content/DropdownLink.vue";
-import LinkHeader from "@/Application/Shared/LinkHeader.vue";
+import LinkHeader from "@/Application/Shared/LinkHeader_mfx.vue";
 import BrandFooter from "@/Application/Shared/BrandFooter.vue";
 import LinkFooter from "@/Application/Shared/LinkFooter.vue";
 import IconMenu from "@/Application/Components/Icons/Menu.vue"
 import Toast from "@/Application/Components/Content/Toast.vue";
 import ButtonChangeMode from "@/Application/Components/ButtonChangeMode.vue";
-import { ref } from "vue";
+// import * as Ziggy from 'ziggy-js';
+// // import { Ziggy } from '@/ziggy';
 
+// // Globale Wrapper-Funktion
+// window.route = function(name, params = {}, absolute = true) {
+//     if (!Ziggy.namedRoutes[name]) {
+//         console.warn(`Ziggy: Route '${name}' nicht gefunden. Leite auf 404 um.`);
+//         window.location.href = '/404';
+//         return; // Falls 404 sofort verlässt
+//     }
+//     return originalRoute(name, params, absolute);
+// };
 export default {
   name: "Homepage_Shared_Layout",
 
@@ -327,6 +332,7 @@ export default {
     BrandFooter,
     LinkFooter,
     Toast,
+    IconMCSL,
     mfxlogo,
     IconMenu,
     Dropdown,
@@ -406,6 +412,9 @@ export default {
   },
 
   methods: {
+    SD(){
+        return window.subdomain ;
+    },
     reopenCookieBanner() {
         window.LaravelCookieConsent.reset();
         //   // Whitecube-API aufrufen, wenn verfügbar

@@ -684,6 +684,20 @@ return Inertia::render('Homepage/Pictures', [
         $data = DB::table("infos")->where("pub","1")->select("id","headline","summary","img_thumb")->orderBy("position","DESC")->get();
         return Inertia::render('Homepage/mfx/infos_cat',compact('data'));
     }
+    public function infos_privacy()
+    {
+        return $this->infos_show("43");
+    }
+    public function contacts_mfx(){
+        $text = DB::table("texts")->where("type", "ContactsHeader")->select('headline', 'text')->first();
+        $contacts = DB::table("texts")->where("type", "ContactsInfos")->select('headline', 'text')->first();
+        // \Log::info("TT:".json_encode($text));
+
+        return Inertia::render('Homepage/mfx/contacts', [
+            "text" => $text,
+            'contacts'=>$contacts,
+        ]);
+    }
     public function infos_show($id){
         $data = DB::table("infos")->where("pub","1")->where("id",$id)->select("id","headline","message","img_big")->orderBy("position","DESC")->first();
         if(SD() != "ab")
@@ -741,16 +755,19 @@ return Inertia::render('Homepage/Pictures', [
         $data = DB::table("infos")->where("pub","1")->where("id",$id)->select("id","headline","message","img_big")->orderBy("position","DESC")->first();
         return Inertia::render('Homepage/mfx/infos_show',compact('data'));
     }
-    public function home_usershow($username)
+    public function home_usershow($id)
     {
-        $users = DB::table("users")->where("name",$username)->where("pub","1")->where("xis_disabled","0")->select("users.*")->first();
-        // \Log::info("HU:".json_encode($users,JSON_PRETTY_PRINT));
+        $users = DB::table("users")->where("id",$id)->where("pub","1")->where("xis_disabled","0")->select("users.*", "users.xis_aiImage as madewithai")->first();
+        \Log::info("HU:".json_encode($users,JSON_PRETTY_PRINT));
         return Inertia::render('Homepage/Usershow', [
             'users' => $users, // statt 'data'
         ]);
     }
     //
-
+    public function AddUserAI($val = 0)
+    {
+        DB::table("users")->where("id",Auth::id())->update(["xis_aiImage"=>$val]);
+    }
 
 
 

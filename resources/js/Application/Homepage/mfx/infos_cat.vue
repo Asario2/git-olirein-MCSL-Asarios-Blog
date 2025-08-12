@@ -8,19 +8,43 @@
                         <span class="dark:text-layout-night-1050 text-layout-sun-1000">Infos</span>
                 </template>
                 </page-title>
-                <div class="grid grid-cols-12 gap-4">
+                <div class="grid grid-cols-12 sm:gap-0">
+                    <div
+                    v-for="item in data"
+                    :key="item.id"
+                    class="col-span-6 p-4 lg:rounded-lg"
+                    >
+                    <a :href="'infos/show/' + item.id" class="block">
+                        <div
+                        class="bg-layout-sun-50 dark:bg-layout-night-50 lg:rounded-lg pr-2 border border-layout-sun-1000 dark:border-layout-night-1050 flex flex-col md:flex-row min-h-[104px] sm:gap-0"
+                        >
+                        <!-- Bildcontainer -->
+                        <div
+                            class="w-full md:w-[104px] h-[104px] md:h-[104px] relative rounded-lg overflow-hidden mb-4 md:mb-0 nor_border sm:gap-0"
+                        >
+                            <img
+                            :src="`/images/_mfx/infos/img_thumb/${item.img_thumb}`"
+                            :alt="item.headline"
+                            :title="item.headline"
+                            class="absolute top-0 left-0 w-full h-full object-cover nor_border"
+                            />
+                        </div>
 
-                    <div v-for="item in data" :key="item.id"  class="col-span-6 p-4 lg:rounded-lg">
-                        <a :href="'infos/show/'+ item.id">
-
-                        <div style="min-height:104px;" class="bg-layout-sun-50 dark:bg-layout-night-50 lg:rounded-lg pr-2 border border-layout-sun-1000 dark:border-layout-night-1050" >
-                        <div class="inline" style="float:left;padding-right:5px;margin-right:5px;"><img :src="'/images/_mfx/infos/img_thumb/' + item.img_thumb" :alt="item.headline" :title="item.headline" class="inline lg:rounded-lg nor_border"/></div>
-                            <div><span class="dark:text-layout-night-1050 text-layout-sun-1000" v-html="`<b>${cleanHtml(item.headline)}</b>`"></span> <editbtns :id="item?.id" table="infos" /><br />
-                        <span class="text-layout-sun-1000 dark:text-layout-night-1000" v-html="cleanHtml(item.summary)"></span></div>
-
+                        <!-- Textcontainer -->
+                        <div
+                            class="flex flex-col justify-start text-layout-sun-1000 dark:text-layout-night-1000 p-2 sm:gap-0"
+                        >
+                            <div class="flex items-center mb-1 dark:text-layout-night-1050 text-layout-sun-1000">
+                            <span class="font-bold" v-html="cleanHtml(item.headline)"></span>
+                            <editbtns :id="item?.id" table="infos" class="ml-3" />
+                            </div>
+                            <span v-html="cleanHtml(item.summary)"></span>
+                        </div>
+                        </div>
+                    </a>
                     </div>
-                </a>
-                    </div>
+
+
                     </div>
                     </div>
 
@@ -112,5 +136,8 @@ export default defineComponent({
     border-top-right-radius:0;
     border-bottom-right-radius:0;
     max-height:100px;
+    min-width:125px;
+    max-width:105% !important;
+    margin-right:5px;
 }
 </style>

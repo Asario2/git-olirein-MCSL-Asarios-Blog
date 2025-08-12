@@ -1,5 +1,5 @@
 <template>
-<h1 class="2xl">Kontakt</h1>
+<h1 v-if="!nohead" class="2xl">Kontakt</h1>
 <form @submit.prevent="submitForm"
 class="max-w-xl mx-auto space-y-6 p-6
         bg-white dark:bg-layout-night-50
@@ -41,7 +41,7 @@ class="max-w-xl mx-auto space-y-6 p-6
 <div class="flex items-center">
     <input v-model="form.accepted" type="checkbox" id="accept" class="mr-2" />
     <label for="accept" class="text-layout-sun-1000 dark:text-layout-night-1000">
-        Ich akzeptiere die Datenschutzbestimmungen
+        Ich akzeptiere die Datenschutz-Bestimmungen
     </label>
 </div>
 
@@ -71,6 +71,7 @@ export default defineComponent({
     props:{
         news:[Array,Object],
         text: [Array,Object],
+        nohead:[Array,String,Boolean,Number],
     },
     data() {
     return {

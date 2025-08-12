@@ -28,6 +28,10 @@ if(!session_id())
 class HomeController_mfx extends Controller
 {
     //
+
+    public function home_index(){
+        return $this->home();
+    }
     public function home()
     {
         //

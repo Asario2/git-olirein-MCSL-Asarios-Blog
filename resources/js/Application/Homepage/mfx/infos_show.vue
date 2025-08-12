@@ -13,10 +13,10 @@
 
 
 
-                    <div class="min-h-[350px] pl-0 bg-layout-sun-50 dark:bg-layout-night-0 lg:rounded-lg p-4 border border-layout-sun-1000 dark:border-layout-night-1050 flex gap-4 ">
+                    <div class="min-h-[350px] pl-0 bg-layout-sun-50 dark:bg-layout-night-0 lg:rounded-lg p-4 border border-layout-sun-1000 dark:border-layout-night-1050 flex gap-4">
 
         <!-- Bild links (feste Breite 150px) -->
-        <div class="w-[150px] shrink-0 items-center flex">
+        <div class="w-[150px] shrink-0 items-center hidden md:flex">
         <img
             class="w-[150px] h-auto rounded"
             :src="'/images/_mfx/infos/img_big/' + data.img_big"
@@ -27,8 +27,8 @@
 
         <!-- Text rechts -->
         <div class="flex-1 space-y-2">
-        <div class="text-layout-sun-1000 dark:text-layout-night-1050 text-xl font-bold"></div>
-        <div class="text-layout-sun-1000 dark:text-layout-night-1000 items-start" v-html="cleanHtml(data.message)"></div>
+        <!-- <div class="text-layout-sun-1000 dark:text-layout-night-1050 text-xl font-bold"></div> -->
+        <div class="text-layout-sun-1000 dark:text-layout-night-1000 items-start p-2 mt-[-20px]" v-html="cleanHtml(data.message)"></div>
 
         </div>
 

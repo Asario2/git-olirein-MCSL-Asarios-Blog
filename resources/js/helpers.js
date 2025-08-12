@@ -459,7 +459,7 @@ export function rumLaut(input, table = '') {
         str = str.replace(/<\/p>/gi, '');
         str = str.replace(/<br\s*\/?>/gi, '');
     }
-
+    str = str.replace('%5B', '[').replace('%5D', ']')
     // 4. Zeichen ersetzen
     str = str.replace(/â€“/g, '-');
 

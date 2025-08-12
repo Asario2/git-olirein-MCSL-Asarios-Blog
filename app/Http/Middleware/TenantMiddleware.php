@@ -19,7 +19,7 @@ class TenantMiddleware
         $tenant = Tenant::where('subdomain', $subdomain)->first();
 
         if (!$tenant) {
-            abort(404, 'Tenant nicht gefunden.');
+            abort(405, 'Tenant nicht gefunden.');
         }
 
         Log::info("Tenant gefunden: " . $tenant->database);

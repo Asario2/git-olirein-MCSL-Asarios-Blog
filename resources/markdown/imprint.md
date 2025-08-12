@@ -14,7 +14,7 @@ Website: [www.asario.de](https://www.asario.de)
 
 ## Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV
 
-**Asario Mustermann**  
+**Paul Rieser**  
 Adresse wie oben
 
 ## Haftungsausschluss

@@ -229,13 +229,7 @@
                   </h3>
                   <ul role="list" class="mt-6 space-y-4">
                     <li>
-                      <link-footer name="Get Started" :route-name="route('home.get_started')"></link-footer>
-                    </li>
-                    <li>
-                      <link-footer name="Benutzer" :route-name="route('home.userlist')"></link-footer>
-                    </li>
-                    <li>
-                      <link-footer name="Blog" :route-name="route('home.blog.index')"></link-footer>
+                      <link-footer name="Benutzer" href='/home/users'></link-footer>
                     </li>
                     <li>
                       <link-footer name="Impressum" :route-name="route('home.imprint')"></link-footer>
@@ -321,6 +315,7 @@ import IconMenu from "@/Application/Components/Icons/Menu.vue"
 import Toast from "@/Application/Components/Content/Toast.vue";
 import ButtonChangeMode from "@/Application/Components/ButtonChangeMode.vue";
 import { ref } from "vue";
+
 
 export default {
   name: "Homepage_Shared_Layout",

@@ -13,10 +13,10 @@
             width="480"
             height="360"
             style="max-height:390px"
-            :class="['object-cover w-full rounded lg:col-span-7 object-cover rounded bg-layout-sun-500 dark:bg-layout-night-500', blog.madewithai ? 'ai-icon' : '']"
+            :class="['object-cover w-full rounded lg:col-span-7 object-cover rounded bg-layout-sun-500 dark:bg-layout-night-500', blog.madewithai ? 'ai-image-corner' : '']"
 
         />
-
+        
         </Link>
         <div class="relative">
         <!-- Der AI-Button wird hier angezeigt -->

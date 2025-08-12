@@ -65,7 +65,7 @@
             </div>
         <!-- Textfeld -->
         <div class="mb-4 p-4 bg-layout-sun-0 dark:bg-layout-night-0 rounded-lg edit0R editor">
-            <div ref="editor" :id="name" contenteditable="true" class="editor rounded p-3 min-h-[150px] focus:outline-none"
+            <div ref="editor" :id="name" contenteditable="true" class="editor rounded p-3 min-h-[150px] max-h-[350px] focus:outline-none"
             :required="required"
             @focus="isFocused = true"
             @blur="isFocused = false"

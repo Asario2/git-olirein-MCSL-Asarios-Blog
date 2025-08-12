@@ -7,7 +7,27 @@ import { createInertiaApp } from "@inertiajs/vue3";
 import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
 import { ZiggyVue } from "../../vendor/tightenco/ziggy";
 import { i18nVue } from "laravel-vue-i18n";
-import { route } from "ziggy-js";
+import { route as ziggyRoute } from 'ziggy-js';
+import { Inertia } from '@inertiajs/inertia';
+
+// Wrapper
+function safeRoute(...args) {
+    try {
+        return ziggyRoute(...args);
+    } catch (error) {
+        if (error.message.includes('is not in the route list')) {
+            console.warn(`Ziggy: Route '${args[0]}' nicht gefunden. Leite auf 404 um.`);
+            alert("404");
+            Inertia.visit('/404');
+            return '/404';
+        }
+        throw error;
+    }
+}
+
+// Nur global setzen, nicht das Modul-Export überschreiben
+window.route = safeRoute;
+
 import { createPinia } from "pinia";  // <--- Pinia importieren
 
 // Schriftarten
@@ -26,6 +46,36 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import { faPencilAlt, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 library.add(faPencilAlt, faTrashCan);
 
+import { route } from "ziggy-js";
+
+// // Ziggy mit globalem Error-Handler erweitern
+// const originalRoute = route;
+// window.route = (...args) => {
+//     try {
+//         return originalRoute(...args);
+//     } catch (error) {
+//         if (error.message.includes('is not in the route list')) {
+//             alert("404");
+//             Inertia.visit('/404')
+//             return '/404'; // Fallback
+
+//         }
+//         throw error;
+//     }
+// };
+// import route, { Ziggy } from "ziggy-js";
+// import * as ZiggyModule from 'ziggy-js';
+
+// const originalRoute = ZiggyModule.route;
+// ZiggyModule.route = (...args) => {
+//     const name = args[0];
+//     if (!ZiggyModule.Ziggy.namedRoutes[name]) {
+//         alert("404");
+//         Inertia.visit('/404');
+//         return '/404';
+//     }
+//     return originalRoute(...args);
+// };
 const appName = import.meta.env.VITE_APP_NAME || "Starter Eleven";
 axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 // Rechte laden

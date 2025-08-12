@@ -135,7 +135,7 @@ const clearPhotoFileInput = () => {
                 >
                     Remove Photo
                 </SecondaryButton>
-
+                
                 <InputError :message="form.errors.photo" class="mt-2" />
             </div>
 

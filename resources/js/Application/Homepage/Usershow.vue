@@ -12,12 +12,13 @@
         width="480"
         height="360"
         style="max-height:380px;"
-        :class="['object-cover w-full rounded lg:col-span-4 object-cover rounded bg-layout-sun-100 dark:bg-layout-night-100', users.madewithai ? 'ai-icon' : '']"
+        :class="['object-cover w-full rounded lg:col-span-4 object-cover rounded bg-layout-sun-100 dark:bg-layout-night-100', users.madewithai ? 'ai-image-corner' : '']"
 
         />
 
 
         <div class="relative">
+<AiButton></AiButton>
 
 
     </div>
@@ -59,8 +60,9 @@
                 </tr>
                 <th class="pr-4">Facebook:</th>
                 <td>
-                    <a :href="'https://facebook.com/profile.php?id=' + users.fbd" target="_blank">
+                    <a v-if="users.fbd" :href="'https://facebook.com/profile.php?id=' + users.fbd" target="_blank">
                     https://www.facebook.com/profile.php?id={{ users.fbd }}</a>
+                    <p v-else>keine Angabe</p>
                 </td>
                 </tbody>
             </table>
@@ -89,9 +91,9 @@ import MetaHeader from "@/Application/Homepage/Shared/MetaHeader.vue";
 import Layout from "@/Application/Homepage/Shared/Layout.vue";
 import DisplayDate from "@/Application/Components/Content/DisplayDate.vue";
 import DisplayNumber from "@/Application/Components/Content/DisplayNumber.vue";
-import AiButton from "@/Application/Components/Content/AiButton.vue";
 import editbtns from "@/Application/Components/Form/editbtns.vue";
 import SocialButtons from "@/Application/Components/Social/socialButtons.vue";
+import AiButton from "@/Application/Components/Content/AiButton.vue";
 
 export default {
     name: "Homepage_Shared_BlogPreviewBig",

@@ -1,9 +1,9 @@
 @component('mail::message')
-# Neuer Email von {{ $domain }}
+# Neue Email von {{ $domain }}
 
 von **{{ $nickname }}** ({{$email}})
 
-<b>{{ $content }}</b>
+<b>{!! nl2br(e($content)) !!}</b>       
 
 **{{ config('app.name') }} Team**
 @endcomponent

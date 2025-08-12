@@ -8,20 +8,44 @@
                         <span class="dark:text-layout-night-1050 text-layout-sun-1000">Infos</span>
                 </template>
                 </page-title>
-                <div class="grid grid-cols-12 gap-4">
-                    <div v-for="item in data.data" :key="item.id"  class="col-span-6 p-4 lg:rounded-lg">
-                        <a :href="'/home/images/show/'+ item.id">
+                <div class="grid grid-cols-12">
+  <div v-for="item in data.data" :key="item.id" class="col-span-6 p-4 lg:rounded-lg">
+    <a :href="'/home/images/show/' + item.id" class="block">
+      <div
+        class="bg-layout-sun-50 dark:bg-layout-night-50 lg:rounded-lg pr-2 border border-layout-sun-1000 dark:border-layout-night-1050
+               flex flex-col md:flex-row items-start min-h-[104px]"
+      >
+        <!-- Bild -->
+        <img
+          :src="'/images/_mfx/images/img_thumb/thumbs/' + item.img_thumb"
+          :alt="item.headline"
+          :title="item.headline"
+          class="w-full h-auto md:w-[104px] md:h-[104px] object-cover rounded-lg nor_border flex-shrink-0 mr-[-3px]"
+        />
 
-                        <div style="min-height:104px;" class="bg-layout-sun-50 dark:bg-layout-night-50 lg:rounded-lg pr-2 border border-layout-sun-1000 dark:border-layout-night-1050" >
-                        <div class="inline" style="float:left;padding-right:5px;margin-right:5px;"><img :src="'/images/_mfx/images/img_thumb/thumbs/' + item.img_thumb" :alt="item.headline" :title="item.headline" class="inline lg:rounded-lg nor_border"/></div>
-                            <div><span class="dark:text-layout-night-1050 text-layout-sun-1000 mr-3" style="float:left;" v-html="`<b>${cleanHtml(item.headline)}</b>`"></span> <editbtns style="float:left;" :id="item?.id" table="images" /><br />
-                        <span class="text-layout-sun-1000 dark:text-layout-night-1000" v-html="cleanHtml(item.message)"></span></div>
+        <!-- Textcontainer -->
+        <div class="mt-3 md:mt-0 md:ml-4 flex flex-col flex-1">
+          <div class="flex items-center space-x-3">
+            <span
+              class="dark:text-layout-night-1050 text-layout-sun-1000 font-bold p-2"
+              v-html="cleanHtml(item.headline)"
+            ></span>
+            <editbtns :id="item?.id" table="images" />
+          </div>
+          <span
+            class="text-layout-sun-1000 dark:text-layout-night-1000 mt-1 p-2"
+            v-html="cleanHtml(item.message)"
+          ></span>
+        </div>
+      </div>
+    </a>
 
+
+
+                        </div>
                     </div>
-                </a>
                     </div>
-                    </div>
-                    </div>
+
 
 
 

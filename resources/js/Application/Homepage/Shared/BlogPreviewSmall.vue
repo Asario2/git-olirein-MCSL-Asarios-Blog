@@ -9,7 +9,7 @@
             <div class="relative">
                 <img
                     role="presentation"
-                    :class="['object-cover w-full rounded h-44 bg-layout-sun-100 dark:bg-layout-night-100', blog.madewithai ? 'ai-icon' : '']"
+                    :class="['object-cover w-full rounded h-44 bg-layout-sun-100 dark:bg-layout-night-100', blog.madewithai ? 'ai-image-corner' : '']"
                     :src="`/images/blogs/thumbs/${blog.url}` || '/images/blogs/008.jpg'"
                     :alt="blog.name"
 

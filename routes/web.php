@@ -11,7 +11,6 @@ use App\Http\Controllers\DarkModeController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\NameBindingsController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\HomeController_mfx;
 use App\Http\Controllers\HandbookController;
 use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\TwoFactorController;
@@ -32,6 +31,7 @@ use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Http\Request;
+use App\Http\Middleware\CheckSubdomain;
 use App\Http\Controllers\TablesController;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use App\Http\Controllers\CategoryController;
@@ -49,6 +49,107 @@ use Whitecube\LaravelCookieConsent\Http\Controllers\AcceptEssentialsController;
 use Whitecube\LaravelCookieConsent\Http\Controllers\ConfigureController;
 
 GlobalController::SetDomain();
+// dd(class_exists(\App\Http\Middleware\CheckSubd::class)); // Sollte "true" zurückgeben
+if(SD() == "mfx"){
+    Route::get('/', function () {
+        return redirect('/news');
+    });
+}
+// Route::middleware(['checksubd:ab,asario'])->group(function () {
+    // Route::middleware('checksubd:ab,asario')->group(function () {
+
+        Route::get("/",[HomeController::class,"home_index"])->name("home.index");
+//
+//     AB- Asarios BLog
+//
+Route::middleware(\App\Http\Middleware\CheckSubd::class . ':ab,asario')->group(function () {
+
+    Route::get("/", [HomeController::class, "home_index"])->name("home.index");
+
+    
+    // Imprint
+    Route::get('/home/imprint', [HomeController::class, 'home_imprint'])->name('home.imprint');
+    // Privacy
+    Route::get('/home/privacy', [HomeController::class, 'home_privacy'])->name('home.privacy');
+    // Terms
+    Route::get('/home/terms', [HomeController::class, 'home_terms'])->name('home.terms');
+    // Ai Content
+    Route::get('/home/ai', [HomeController::class, 'home_AI'])->name('home.ai');
+
+    // Pictures
+    Route::get('/home/show/pictures/{slug}', [HomeController::class, 'home_images'])->name('home.images.gallery');
+    Route::get('/home/search/pictures/{slug}', [HomeController::class, 'home_images_search'])->name('home.images.gallery.search');
+    Route::get('/home/search_cat/pictures/', [HomeController::class, 'home_images_search_cat'])->name('home.images.search.cat');
+    Route::get('/home/pictures', [HomeController::class, 'home_images_index'])->name('home.images.index');
+
+    // Shortpoems
+    Route::get('/home/shortpoems', [HomeController::class, 'home_shortpoems'])->name('home.shortpoems');
+    // DidYouKnow
+    Route::get('/home/didyouknow', [HomeController::class, 'home_didyouknow'])->name('home.didyouknow');
+
+    // Blogs
+    Route::get('/blogs', [HomeController::class, 'home_index'])->name('home.blog.index')->middleware('remember');
+    Route::get('/blogs/show/{autoslug}', [HomeController::class, 'home_blog_show'])->name('home.blog.show');
+
+    // Root-Redirect
+    Route::get('/start', function () {
+        return redirect("/blogs");
+    })->name("home.start");
+
+    // Dashboard redirect
+    Route::get('/dashboard', function () {
+        return redirect('/blogs');
+    })->name('dashboard');
+
+    // Fehlerseiten
+    Route::get('/home/no_application_found', [HomeController::class, 'home_no_application_found'])->name('home.no_application_found');
+    Route::get("/api/GetCat/{table}/{id}", [TablesController::class, 'GetCats'])->name("GetCats");
+    Route::get('/home/user_is_no_admin', [HomeController::class, 'home_user_is_no_admin'])->name('home.user_is_no_admin');
+    Route::get('/home/user_is_no_employee', [HomeController::class, 'home_user_is_no_employee'])->name('home.user_is_no_employee');
+    Route::get('/home/user_is_no_customer', [HomeController::class, 'home_user_is_no_customer'])->name('home.user_is_no_customer');
+    Route::get('/home/invalid_signature', [HomeController::class, 'home_invalid_signature'])->name('home.invalid_signature');
+
+    // Users
+    Route::get('/home/users', [HomeController::class, 'home_userlist'])->name('home.userlist');
+    Route::get('/home/users/show/{id}', [HomeController::class, 'home_usershow'])->name('home.user.show');
+
+    // Pictures PagesController
+    Route::get('/pictures', [App\Http\Controllers\PagesController::class, 'ab_images'])->name('images');
+    Route::get('/pictures/{pic}', [App\Http\Controllers\PagesController::class, 'ab_images_cat'])->name('pictures');
+
+}); // <-- schließt Middleware group
+
+
+    #
+    #
+    # MFX MarbleFX
+    #
+    #
+    Route::middleware(\App\Http\Middleware\CheckSubd::class . ':mfx,marblefx')->group(function () {
+        Route::get('/', [HomeController::class, 'home_index'])->name('home.index');
+
+        Route::get('/changelog', [HomeController::class, 'mcsl_changelog'])->name('mfx.changelog');
+        Route::get('/changelog_old', [HomeController::class, 'changelog_old'])->name('mfx.changelog.old');
+
+        Route::get('/home/users/show/{user}/{id}', fn () => redirect('NoPageFound'))->name('user.show');
+        Route::get('/home/projects', [HomeController::class, 'projects'])->name('home.projects.mfx');
+
+        Route::get('/home/images', [HomeController::class, 'home_images_cat_mfx'])->name('home.images.cat.mfx');
+        Route::get('/home/images/show/{id}', [HomeController::class, 'home_images_show_mfx'])->name('home.images.mfx');
+
+        Route::get('/home/people', [HomeController::class, 'people'])->name('home.people.mfx');
+        Route::get('/home/impressum', [HomeController::class, 'imprint'])->name('home.imprint.mfx');
+        Route::get('/home/privacy_info', [HomeController::class, 'infos_privacy'])->name('home.privacy.mfx');
+
+        Route::get('/home/infos', [HomeController::class, 'infos_index'])->name('home.infos.mfx');
+        Route::get('/home/contacts', [HomeController::class, 'contacts_mfx'])->name('home.contacts.mfx');
+        Route::get('/home/infos/show/{id}', [HomeController::class, 'infos_show'])->name('home.infos.show.mfx');
+
+        Route::get('/home/powered-by-mcs', [HomeController::class, 'infos_pow'])->name('home.powered.show.mfx');
+    });
+
+
+
 // include __DIR__."/extraroutes.php";
 Route::get('/test-admin', function () {
     return '✅ Middleware is_admin funktioniert';
@@ -84,26 +185,21 @@ Route::post("/cookie_config",[ConfigureController::class,'__invoke'])->name("coo
     //     //     Route::domain($host)
     //     //         ->as($key . '.')            // => z.B. mfx.home  / marble.home
     //     //         ->group(function () use ($key) {
-    //     if($sub == "mfx"){
-            Route::get('/', [HomeController::class, 'home_index'])->name('home.mfx');
-            // dd($sub);
-            Route::get('/changelog', [HomeController::class,"mcsl_changelog"])->name("mfx.changelog");
-            Route::get('/changelog_old', [HomeController::class,"changelog_old"])->name("mfx.changelog.old");
-            Route::get('/home/users', fn () => redirect("NoPageFound"))->name('home.userlist2');
-            Route::get('/home/users/show/{user}/{id}', fn () => redirect("NoPageFound"))->name('user.show');
-            Route::get('/home/projects',  [HomeController::class,"projects"])->name("home.projects.mfx");
-            Route::get('/home/images',  [HomeController::class,"home_images_cat_mfx"])->name("home.images.cat.mfx");
-            Route::get('/home/images/show/{id}',  [HomeController::class,"home_images_show_mfx"])->name("home.images.mfx");
-            Route::get('/home/people',  [HomeController::class,"people"])->name("home.people.mfx");
-            Route::get('/home/impressum',  [HomeController::class,"imprint"])->name("home.imprint.mfx");
-            Route::get('/home/infos/', [HomeController::class,"infos_index"])
-                              ->name("home.infos.mfx");
-            Route::get('/home/contacts/', [HomeController::class,"infos_index"])
-                ->name("home.contacts.mfx");
 
-            Route::get('/home/infos/show/{id}',  [HomeController::class,"infos_show"])->name("home.infos.show.mfx");
-            Route::get('/home/powered-by-mcs',  [HomeController::class,"infos_pow"])->name("home.powered.show.mfx");
-            Route::get("/",[HomeController::class,"home_index"])->name("home.index");
+        // Route::middleware(\App\Http\Middleware\CheckSubd::class . ':mfx')->group(function () {
+        //     Route::get("/", [HomeController::class, "home_index"])->name("home.index");
+        // });
+
+
+
+
+
+
+
+
+
+
+            Route::post('/api/AddUserAI/{val}', [HomeController::class, 'AddUserAI'])->name("AddUserAI");
             Route::post('/api/save-json', [ImageUploadController::class, 'store_json'])->name("save-json-gallery");
             Route::post('api/saveFolder',  [ImageUploadController::class, 'store_dir'])->name("save-dirsave");
             Route::post("/api/del_image/{column}/{folder}/{posi}", [ImageUploadController::class, 'Del_Image'])->name("remove.img");
@@ -216,57 +312,6 @@ Route::get('/pb', [RatingController::class, 'pb'])
 // ========
 // Startseite
 
-// Get Started
-Route::get('/home/get_started', [HomeController::class, 'home_get_started'])->name('home.get_started');
-// Pricing
-Route::get('/home/pricing', [HomeController::class, 'home_pricing'])->name('home.pricing');
-// Imprint
-Route::get('/home/imprint', [HomeController::class, 'home_imprint'])->name('home.imprint');
-// Privacy
-Route::get('/home/privacy', [HomeController::class, 'home_privacy'])->name('home.privacy');
-// Terms
-Route::get('/home/terms', [HomeController::class, 'home_terms'])->name('home.terms');
-// Ai Content
-Route::get('/home/ai', [HomeController::class, 'home_AI'])->name('home.ai');
-// Picures show gallery
-Route::get('/home/show/pictures/{slug}', [HomeController::class, 'home_images'])->name('home.images.gallery');
-Route::get('/home/search/pictures/{slug}', [HomeController::class, 'home_images_search'])->name('home.images.gallery.search');
-// SEARCH from PicturesCat
-Route::get('/home/search_cat/pictures/', [HomeController::class, 'home_images_search_cat'])->name('home.images.search.cat');
-// Pictures Overview
-Route::get('/home/pictures', [HomeController::class, 'home_images_index'])->name('home.images.index');
-
-// Shortpoems
-Route::get('/home/shortpoems', [HomeController::class, 'home_shortpoems'])->name('home.shortpoems');
-// DidYouKnow
-Route::get('/home/didyouknow', [HomeController::class, 'home_didyouknow'])->name('home.didyouknow');
-// Liste der Blogartikel
-Route::get('/blogs', [HomeController::class, 'home_index'])->name('home.blog.index')->middleware('remember');
-// Display Blogartikel
-Route::get('/blogs/show/{autoslug}', [HomeController::class, 'home_blog_show'])->name('home.blog.show');
-
-// Anwendung konnte nicht gefunden werden
-Route::get('/home/no_application_found', [HomeController::class, 'home_no_application_found'])
-    ->name('home.no_application_found');
-    Route::get("/api/GetCat/{table}/{id}",[TablesController::class,'GetCats'])->name("GetCats");
-// Anwender ist kein Administrator
-Route::get('/home/user_is_no_admin', [HomeController::class, 'home_user_is_no_admin'])->name('home.user_is_no_admin');
-// Anwender ist kein Mitarbeiter
-Route::get('/home/user_is_no_employee', [HomeController::class, 'home_user_is_no_employee'])->name('home.user_is_no_employee');
-// Anwender ist kein Kunde
-Route::get('/home/user_is_no_customer', [HomeController::class, 'home_user_is_no_customer'])->name('home.user_is_no_customer');
-
-// Mail-Verifizierungs-Signatur ist abgelaufen
-Route::get('/home/invalid_signature', [HomeController::class, 'home_invalid_signature'])->name('home.invalid_signature');
-// User Liste
-Route::get('/home/users', [HomeController::class, 'home_userlist'])->name('home.userlist');
-// User Liste
-Route::get('/home/users/show/{user}/{id}', [HomeController::class, 'home_usershow'])->name('home.user.show');
-
-// PICTURES
-Route::get('/pictures', [App\Http\Controllers\PagesController::class, 'ab_images'])->name('images');
-Route::get('/pictures/{pic}/',[App\Http\Controllers\PagesController::class, 'ab_images_cat'])->name('pictures');
-// Route::get('/blogposts', [BlogPostController::class, 'index'])->name('blogposts.index');
 Route::get('/devmod', function () {
     // ShowRepo();
     //IMULController::smpix();
@@ -311,16 +356,16 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     // CENTRAL DASHBOARD
     // =================
     // Central-Dashboard
-    $subdomain = GlobalController::SD();
-    if ($subdomain != "ab" && $subdomain != "localhost"){
-        $dda = "_" . $subdomain;
-    } else {
-        $dda = '';
-    }
+    // $subdomain = GlobalController::SD();
+    // if ($subdomain != "ab" && $subdomain != "localhost"){
+    //     $dda = "_" . $subdomain;
+    // } else {
+    //     $dda = '';
+    // }
 
-    $controller = "App\\Http\\Controllers\\HomeController{$dda}";
+    // $controller = "App\\Http\\Controllers\\HomeController{$dda}";
 
-    Route::get('/news', [$controller, 'home_index'])->name('dashboard');
+    // Route::get('/news', [$controller, 'home_index'])->name('dashboard_alt');
 
     // =================
     // APPLICATION ADMIN
@@ -479,30 +524,13 @@ Route::get("/api/images/{table}/{id}",[TablesController::class,"GetImageUrl"])
             ->name("api-get-image-url");
              $sub = SD();
         //     //
-     if($sub === "ab"){
 
 
-            Route::get('/', function () {
-                return redirect('/blogs');
-            })->name('home.index');
-
-            Route::get('/dashboard', function () {
-                return redirect('/blogs');
-            })->name('dashboard');
-        }
-        elseif($sub !== "localhost"){
-
-            Route::get("/",function(){
-                return redirect("/");
-
-            })->name("home.index");
-        }
-        // elseif($subdomain == "mfx")
+           // elseif($subdomain == "mfx")
         // {
         //     // dd($subdomain."asd");
 
-        //     Route::get('/', [HomeController_mfx::class, 'home'])->name('home.mfx');
-        //     Route::get('/', [HomeController_mfx::class, 'home'])->name('home.index');
+        //
         // }
         // elseif($subdomain != "localhost"){
         //     $hc = "App\\Http\\Controllers\\HomeController_" . $subdomain;

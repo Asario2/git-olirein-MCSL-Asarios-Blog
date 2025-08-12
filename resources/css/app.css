@@ -14,7 +14,12 @@
 [x-cloak] {
     display: none;
 }
+.ai-icon{
 
+}
+.ai-image-corner{
+    border-bottom-right-radius: 64px;
+}
 ul {
     display: block;
     list-style-type: disc;

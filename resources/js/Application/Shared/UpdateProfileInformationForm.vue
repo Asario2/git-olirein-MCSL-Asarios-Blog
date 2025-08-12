@@ -42,6 +42,16 @@
                             "
                         />
                     </div>
+                    <input-checkbox_alt
+                    v-if="user.profile_photo_path"
+                    class="mt-2"
+                    name="xis_aiImage"
+                    :exValue="user.xis_aiImage"
+                    v-model="aiCheckValue"
+                    label="Bild wurde mit KI erstellt"
+                    @change="AiImage(aiCheckValue)"
+                    >
+                    </input-checkbox_alt>
                 </input-group>
 
                 <button-group align="justify-start">
@@ -62,7 +72,6 @@
                         Entferne Foto
                     </input-button>
                 </button-group>
-
                 <input-error :message="form.errors.photo" />
             </div>
 
@@ -247,7 +256,6 @@ import InputGroup from "@/Application/Components/Form/InputGroup.vue";
 import InputContainer from "@/Application/Components/Form/InputContainer.vue";
 import InputLabel from "@/Application/Components/Form/InputLabel.vue";
 import InputElement from "@/Application/Components/Form/InputElement.vue";
-import InputFormTextArea from "@/Application/Components/Form/InputHtml.vue";
 import IconCal from "@/Application/Components/Icons/IconCal.vue";
 import InputError from "@/Application/Components/Form/InputError.vue";
 import InputActionMessage from "@/Application/Components/Form/InputActionMessage.vue";
@@ -258,6 +266,8 @@ import InputWhiteButton from "@/Application/Components/Form/InputWhiteButton.vue
 
 import Alert from "@/Application/Components/Content/Alert.vue";
 import InputHtml from "../Components/Form/InputHtml.vue";
+import InputCheckbox_alt from "@/Application/Components/Form/InputCheckbox_alt.vue";
+import Users from "../Homepage/Users.vue";
 
 export default {
     name: "Shared_UpdateProfileInformationForm",
@@ -269,6 +279,7 @@ export default {
         InputContainer,
         InputLabel,
         InputElement,
+        InputCheckbox_alt,
         InputError,
         InputActionMessage,
         ButtonGroup,
@@ -302,10 +313,24 @@ export default {
             }),
             verificationLinkSent: false,
             photoPreview: null,
+            aiCheckValue: this.user.xis_aiImage,
         };
     },
 
     methods: {
+        AiImage(){
+            const val = this.aiCheckValue;
+            axios.post('/api/AddUserAI/' + val)
+            .then(() => {
+                this.user.xis_aiImage = val;
+                // Optionale Erfolgsmeldung o.Ä.
+            })
+            .catch(() => {
+                // Fehlerbehandlung, z.B. Wert zurücksetzen:
+                this.aiCheckValue = this.user.xis_aiImage;
+                alert('Fehler beim Speichern.');
+            });
+        },
         updateProfileInformation() {
             if (this.$refs.photoInput.value) {
                 this.form.photo = this.$refs.photoInput.files[0];

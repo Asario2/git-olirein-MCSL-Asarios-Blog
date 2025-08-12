@@ -13,7 +13,7 @@
             :alt="blog.name"
 
             style='min-width:480px;min-height:360px;width:100%'
-            :class="['object-cover w-full lg:col-span-7 object-cover bg-layout-sun-500 dark:bg-layout-night-500 coverclass', blog.madewithai ? 'ai-icon' : '']"
+            :class="['object-cover w-full lg:col-span-7 object-cover bg-layout-sun-500 dark:bg-layout-night-500 coverclass', blog.madewithai ? 'ai-image-corner' : '']"
             />
 
         <!-- AI-Button in der rechten unteren Ecke des Bildes -->

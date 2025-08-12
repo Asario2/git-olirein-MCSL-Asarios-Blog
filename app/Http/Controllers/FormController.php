@@ -277,6 +277,17 @@ class FormController extends Controller
             ];
 
         }
+        if($name == "typ")
+        {
+            $statusvals = [
+                ["id"=>"foto","name"=>"Foto"],
+                ["id"=>"gfx","name"=>"Grafik"],
+                ["id"=>"KI","name"=>"Made with AI"],
+                ["id"=>"wallpaper","name"=>"Wallpaper"],
+
+            ];
+
+        }
 
 
         // Direkt als assoziatives Array aufbauen
@@ -476,6 +487,9 @@ class FormController extends Controller
             break;
             case "type_id":
                 return "hidden";
+            break;
+            case "typ":
+                return "select";
             break;
             case "users_id":
                 return "select_id";

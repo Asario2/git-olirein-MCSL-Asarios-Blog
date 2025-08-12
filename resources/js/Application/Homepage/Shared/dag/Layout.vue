@@ -229,9 +229,6 @@
                   </h3>
                   <ul role="list" class="mt-6 space-y-4">
                     <li>
-                      <link-footer name="Get Started" :route-name="route('home.get_started')"></link-footer>
-                    </li>
-                    <li>
                       <link-footer name="Impressum" :route-name="route('home.imprint')"></link-footer>
                     </li>
                     <li>

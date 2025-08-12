@@ -1,6 +1,6 @@
 <template>
     <span
-        class="z-50 flex items-center flex-nowrap cursor-pointer rounded-md px-4 py-2 text-sm leading-4 font-medium transition focus:outline-none hover:underline bg-transparent text-layout-sun-700 hover:text-layout-sun-900 dark:text-layout-night-700 dark:hover:text-layout-night-900"
+        class="z-50 flex items-right font-bold ckoo flex-nowrap cursor-pointer w-full px-4 py-2 text-sm leading-4 font-medium transition focus:outline-none hover:underline dark:bg-layout-night-50 text-layout-sun-700 hover:text-layout-sun-900 dark:text-layout-night-700 dark:hover:text-layout-night-900"
     >
         <template v-if="withRoute">
             <a
@@ -8,7 +8,7 @@
                 :target="withTarget ? '_blank' : '_self'"
                 v-tippy
             >
-                <span>
+                <span class="font-bold">
                     <slot></slot>
                 </span>
                 <span v-if="withIcon">

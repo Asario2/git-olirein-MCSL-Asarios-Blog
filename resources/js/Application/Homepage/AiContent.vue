@@ -16,7 +16,7 @@
                                 :src="`/images/_ab/ai-teaser-light.jpg`"
                                 :alt="`Bild von ${item.headline}`"
 
-                                class="object-cover w-full object-cover h-64 sm:h-96 rounded bg-layout-sun-500 dark:bg-layout-night-500 ai-icon"
+                                class="object-cover w-full object-cover h-64 sm:h-96 rounded bg-layout-sun-500 dark:bg-layout-night-500 ai-image-corner"
                             />
                             <!-- AI-Button -->
                             <AiButton :dma="dmaa"></AiButton>

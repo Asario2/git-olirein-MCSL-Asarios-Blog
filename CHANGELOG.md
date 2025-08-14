@@ -64,3 +64,5 @@
 ![Version](https://img.shields.io/badge/version-2.72.4-orange) Fix Bugs in PublicRadio (#59)  
 ![Version](https://img.shields.io/badge/version-2.73.4-orange) PublicRadio default selection (#61)   
 ![Version](https://img.shields.io/badge/version-2.74.1-orange) Fallback of localhost (#62)   
+![Version](https://img.shields.io/badge/version-2.75.0-orange) Created Marblefx.de Page (#47)  
+

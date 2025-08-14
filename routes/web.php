@@ -58,7 +58,7 @@ if(SD() == "mfx"){
 // Route::middleware(['checksubd:ab,asario'])->group(function () {
     // Route::middleware('checksubd:ab,asario')->group(function () {
 
-        Route::get("/",[HomeController::class,"home_index"])->name("home.index");
+
 //
 //     AB- Asarios BLog
 //
@@ -66,7 +66,7 @@ Route::middleware(\App\Http\Middleware\CheckSubd::class . ':ab,asario')->group(f
 
     Route::get("/", [HomeController::class, "home_index"])->name("home.index");
 
-    
+
     // Imprint
     Route::get('/home/imprint', [HomeController::class, 'home_imprint'])->name('home.imprint');
     // Privacy
@@ -92,7 +92,7 @@ Route::middleware(\App\Http\Middleware\CheckSubd::class . ':ab,asario')->group(f
     Route::get('/blogs/show/{autoslug}', [HomeController::class, 'home_blog_show'])->name('home.blog.show');
 
     // Root-Redirect
-    Route::get('/start', function () {
+    Route::get('/', function () {
         return redirect("/blogs");
     })->name("home.start");
 
@@ -131,7 +131,6 @@ Route::middleware(\App\Http\Middleware\CheckSubd::class . ':ab,asario')->group(f
         Route::get('/changelog', [HomeController::class, 'mcsl_changelog'])->name('mfx.changelog');
         Route::get('/changelog_old', [HomeController::class, 'changelog_old'])->name('mfx.changelog.old');
 
-        Route::get('/home/users/show/{user}/{id}', fn () => redirect('NoPageFound'))->name('user.show');
         Route::get('/home/projects', [HomeController::class, 'projects'])->name('home.projects.mfx');
 
         Route::get('/home/images', [HomeController::class, 'home_images_cat_mfx'])->name('home.images.cat.mfx');
@@ -544,6 +543,7 @@ Route::get("/api/images/{table}/{id}",[TablesController::class,"GetImageUrl"])
         // }
         // include __DIR__."/auth.php";
         // Auth::routes();
+        Route::get("/",[HomeController::class,"home_index"])->name("home.index");
         Route::fallback(function () {
             return Inertia::render('Homepage/NoPageFound');
         });

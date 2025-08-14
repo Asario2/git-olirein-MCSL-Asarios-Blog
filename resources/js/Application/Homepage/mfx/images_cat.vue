@@ -5,7 +5,7 @@
                 <div>
                 <page-title>
                     <template #title>
-                        <span class="dark:text-layout-night-1050 text-layout-sun-1000">Infos</span>
+                        <span class="dark:text-layout-night-1050 text-layout-sun-1000">Images</span>
                 </template>
                 </page-title>
                 <div class="grid grid-cols-12">

@@ -229,7 +229,7 @@
                   </h3>
                   <ul role="list" class="mt-6 space-y-4">
                     <li>
-                      <link-footer name="Benutzer" href='/home/users'></link-footer>
+                      <link-footer name="Benutzer" :href="route('home.userlist')"></link-footer>
                     </li>
                     <li>
                       <link-footer name="Impressum" :route-name="route('home.imprint')"></link-footer>

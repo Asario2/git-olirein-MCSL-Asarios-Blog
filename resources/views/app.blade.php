@@ -40,6 +40,7 @@
         <script src="/js/users.js"></script>
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <link href="/css/app.css" rel="stylesheet">
+        <link href="/css/tailw/extrap.css" rel="stylesheet">
         {{-- <script src="/js/app.js"></script> --}}
         {{-- <script src="/js/users.js"></script> --}}
         <link rel="icon" type="image/png" href="{{ $favicon }}">

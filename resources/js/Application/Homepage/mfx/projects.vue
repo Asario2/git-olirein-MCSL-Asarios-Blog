@@ -8,80 +8,71 @@
                         <span class="dark:text-layout-night-1050 text-layout-sun-1000">Projects</span>
                 </template>
                 </page-title>
-                <div class="grid grid-cols-12 gap-0">
+                <div class="space-y-3">
+    <div
+        v-for="item in data"
+        :key="item.id"
+        class="min-h-[102px] bg-layout-sun-50 dark:bg-layout-night-50 lg:rounded-lg border border-layout-sun-1000 dark:border-layout-night-1050 grid grid-cols-12 gap-4"
+    >
+        <!-- Bild -->
+        <div class="col-span-12 sm:col-span-2">
+            <img
+                :src="'/images/_mfx/projects/img_thumb/' + item.img_thumb"
+                :alt="item.name"
+                :title="item.name"
+                class="w-full md:h-[100px] sm:h-[196px] object-cover object-top lg:rounded-lg bordah"
+            />
+        </div>
+
+        <!-- Headline, Umfang, URL -->
+        <div class="col-span-12 sm:col-span-5 space-y-1">
+            <div class="flex items-start flex-wrap gap-2">
                 <div
-                    v-for="item in data"
-                    :key="item.id"
-                    class="col-span-12 sm:col-span-6 p-3 lg:rounded-lg"
-                >
-                    <div
-                    class="min-h-[102px] bg-layout-sun-50 dark:bg-layout-night-50 lg:rounded-lg border border-layout-sun-1000 dark:border-layout-night-1050 grid grid-cols-12 gap-4"
-                    >
-                    <!-- Bild: 12 Spalten mobil, 2 ab sm -->
-                    <div class="col-span-12 sm:col-span-2">
-                        <img
-                        :src="'/images/_mfx/projects/img_thumb/' + item.img_thumb"
-                        :alt="item.name"
-                        :title="item.name"
-                        class="w-full md:h-[100px] sm:h-[196px] object-cover object-top lg:rounded-lg bordah"
-                        />
-                    </div>
+                    class="text-layout-sun-1000 dark:text-layout-night-1050 font-bold"
+                    v-html="cleanHtml(item.name)"
+                ></div>
+                &nbsp;<editbtns :id="item?.id" table="projects" />
+            </div>
+            <div
+                class="text-layout-sun-1000 dark:text-layout-night-1000"
+                v-html="cleanHtml(item.Umfang)"
+            ></div>
+            <div class="text-sm">
+                <template v-if="item.url !== 'Offline'">
+                    <a :href="item.url" class="text-blue-600 hover:underline">
+                        {{ item.url }}
+                    </a>
+                </template>
+                <template v-else>
+                    <span class="text-gray-500">Offline</span>
+                </template>
+            </div>
+        </div>
 
-                    <!-- Headline, Umfang, URL: 12 Spalten mobil, 5 ab sm -->
-                    <div class="col-span-12 sm:col-span-5 space-y-1">
-                        <div class="flex items-start flex-wrap gap-2">
-                        <div
-                            class="text-layout-sun-1000 dark:text-layout-night-1050 font-bold"
-                            v-html="cleanHtml(item.name)"
-                        ></div>
-                        &nbsp;<editbtns :id="item?.id" table="projects" />
-                        </div>
-                        <div
-                        class="text-layout-sun-1000 dark:text-layout-night-1000"
-                        v-html="cleanHtml(item.Umfang)"
-                        ></div>
-                        <div class="text-sm">
-                        <template v-if="item.url !== 'Offline'">
-                            <a :href="item.url" class="text-blue-600 hover:underline">{{
-                            item.url
-                            }}</a>
-                        </template>
-                        <template v-else>
-                            <span class="text-gray-500">Offline</span>
-                        </template>
-                        </div>
-                    </div>
+        <!-- Aufgaben -->
+        <div class="col-span-12 sm:col-span-3 text-sm text-gray-700 dark:text-gray-300">
+            <b>Aufgaben:</b><br />
+            <div v-for="sheet in sheets[item.id]" :key="sheet.nick + sheet.aufgabe">
+                {{ sheet.aufgabe }} ({{ sheet.nick }})<br />
+            </div>
+        </div>
 
-                    <!-- Sheets: 12 Spalten mobil, 3 ab sm -->
-                    <div
-                        class="col-span-12 sm:col-span-3 text-sm text-gray-700 dark:text-gray-300"
-                    >
-                        <b>Aufgaben:</b><br />
-                        <div v-for="sheet in sheets[item.id]" :key="sheet.nick + sheet.aufgabe">
-                        {{ sheet.aufgabe }} ({{ sheet.nick }})<br />
-                        </div>
-                    </div>
+        <!-- Icons -->
+        <div class="col-span-12 sm:col-span-2 flex justify-end items-center gap-2 pr-2">
+            <img
+                v-if="item.xis_mcsl"
+                :src="'/images/_mfx/icons/made_with_mcsl.png'"
+                alt="mcsl"
+            />
+            <img
+                v-else-if="item.xis_mcs"
+                :src="'/images/_mfx/icons/made_with_mcs.png'"
+                alt="mcs"
+            />
+        </div>
+    </div>
+</div>
 
-                    <!-- Made with: 12 Spalten mobil, 2 ab sm -->
-                    <div
-                        class="col-span-12 sm:col-span-2 flex justify-end items-center gap-2 pr-2"
-                    >
-                        <img
-                        v-if="item.xis_mcsl"
-                        :src="'/images/_mfx/icons/made_with_mcsl.png'"
-                        alt="mcsl"
-                        class=""
-                        />
-                        <img
-                        v-if="item.xis_mcs"
-                        :src="'/images/_mfx/icons/made_with_mcs.png'"
-                        alt="mcs"
-                        class=""
-                        />
-                    </div>
-                    </div>
-                </div>
-                </div>
 
                     </div>
             </template>

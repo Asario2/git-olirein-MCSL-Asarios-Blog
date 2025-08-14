@@ -4,7 +4,7 @@
         :header-url="$page.props.saas_url + '/blogs'"
         :header-image="$page.props.saas_url + '/images/blogimages/Blog_Idee_480x360.jpg'"
     >
-    <MetaHeader title="Bneutzer" />
+    <MetaHeader title="Benutzerliste" />
 
     <newbtn table="users">
 

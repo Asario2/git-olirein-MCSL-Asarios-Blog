@@ -13,12 +13,10 @@ CHANGELOG.md export-ignore
 *.vue linguist-detectable=true
 *.vue linguist-language=Vue
 
-# Blade-Dateien als PHP z‰hlen
-*.blade.php linguist-language=PHP
 
 # Vendor & Node ignorieren
 node_modules/* linguist-vendored
 vendor/* linguist-vendored
 
-# Nur Tailwind CSS im public ausschlieﬂen
+# Nur Tailwind CSS im public ausschlie√üen
 public/css/tailwind/* linguist-vendored

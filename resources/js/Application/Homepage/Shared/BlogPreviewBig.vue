@@ -8,7 +8,7 @@
         :href="route('home.blog.show', blog.autoslug)" class="block">
 
         <img
-            :src="`/images/blogs/${blog.url}`"
+            :src="`/images/_ab/blogs/image_path/${blog.url}`"
             :alt="blog.name"
             width="1000"
             height="390"

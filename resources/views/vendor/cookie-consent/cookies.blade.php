@@ -3,9 +3,6 @@
     {
         return "";
     }
-    \Log::info('Cookie:', request()->cookies->all());
-
-
     @endphp
     @if(Cookie::has('laravel_cookie_consent'))
     <script>console.log("Cookie ist gesetzt!")</script>

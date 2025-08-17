@@ -312,7 +312,7 @@ a,.ckoo{
   --tw-ring-offset-color: #803800;
 }
 
-}
+
 
 .selection\:bg-\[\#FF2D20\] *::-moz-selection {
   --tw-bg-opacity: 1;
@@ -1029,3 +1029,4 @@ a,.ckoo{
 .dark\:bg-layout-night-2050:is(.dark *){
     background-color:#000 !important;
 }
+

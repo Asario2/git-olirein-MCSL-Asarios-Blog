@@ -287,10 +287,11 @@ type="hidden"
                         @update:fileName="handleFileNameUpdate"
                         @imageUploaded="handleImageUpload"
                 />
+                {{ saveValz(field,'1') }}
                 <button type="button" @click="openModal_alt">
                     <p v-if="this.nf2 && typeof this.nf2 !== 'object' && this.nf2 != '[]' && this.nf2 != '008.jpg' ">Hochgeladenes Bild:
 
-                        <img :src="table_alter + this.nf2" width="100" alt="Vorschau1" title="Vorschau1"/></p>
+                        <img :src="getPreviewSrc(field)" width="100" alt="Vorschau1" title="Vorschau1"/></p>
                         <p
                         v-else-if="localFfo.original[this.column] && localFfo.original[this.column].value && localFfo.original[this.column].value !== '008.jpg'"
                         >
@@ -1220,9 +1221,18 @@ export default defineComponent({
 
                     //
                     if(!num){
-                        return this.ulpath + this.field2.name + "/" + 'thumbs/' + this.field2.value;
+                        return this.ulpath + field.name + "/thumbs/" + field.value;
                     }
-                    return this.field2.value;
+                    if(this.field2.value.includes("images/"))
+                    {
+
+                        return this.field2.value;
+                    }
+                    else
+                    {
+                        return this.ulpath + field.name + "/sdasss" + 'thumbs/' + field.value;
+                    }
+
 
                 },
                 updatePreviewImage({ column, url }) {

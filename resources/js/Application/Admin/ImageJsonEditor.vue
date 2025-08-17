@@ -8,39 +8,36 @@
       </h3>
       <div v-if="images.length !== 0">
         <div
-          v-for="(element, index) in images"
-          :key="element.filename"
-          class="flex items-center gap-4 border-b border-gray-200 dark:border-gray-700 py-3"
-        >
-          <span class="text-sm text-gray-500 dark:text-gray-400">
-            #{{ element.position }}
-          </span>
-          <span class="min-w-[100px]" align="right">
-            <img
-              :src="`${folder}/thumbs/${element.filename}`"
-              alt=""
-              class="max-w-[100px] max-h-[75px] rounded shadow"
-            />
-          </span>
-          <input
-            type="text"
-            placeholder=""
-            class="txt w-full p-2.5 text-sm rounded-lg block border focus:ring-3 focus:ring-opacity-75
-                   bg-layout-sun-0 text-layout-sun-900 border-primary-sun-500
-                   focus:border-primary-sun-500 focus:ring-primary-sun-500
-                   placeholder:text-layout-sun-400 selection:bg-layout-sun-200 selection:text-layout-sun-1000
-                   dark:bg-layout-night-0 dark:text-layout-night-900 dark:border-primary-night-500
-                   dark:focus:border-primary-night-500 dark:focus:ring-primary-night-500
-                   placeholder:dark:text-layout-night-400 dark:selection:bg-layout-night-200
-                   dark:selection:text-layout-night-1000"
-            v-model="element.label"
-          />
-          <form @submit.prevent="deletePost(index)" style="display:inline">
-            <button @click.stop type="submit" onclick="return confirm('Sind Sie sicher, dass Sie diesen Blogbeitrag löschen möchten?');">&nbsp;<IconTrash style="margin-top:-27px;" class="sm-pencil cursor-pointer"></IconTrash></button>
-        </form>
-        </div>
-
-      </div>
+  v-for="(element, index) in images"
+  :key="element.filename"
+  class="flex items-center gap-4 border-b border-gray-200 dark:border-gray-700 py-3"
+  draggable="true"
+  @dragstart="onDragStart(index)"
+  @dragover.prevent
+  @drop="onDrop(index)"
+>
+  <span class="text-sm text-gray-500 dark:text-gray-400 cursor-move">
+    #{{ element.position }}
+  </span>
+  <span class="min-w-[100px] cursor-move" align="right">
+    <img
+      :src="`${folder}/thumbs/${element.filename}`"
+      alt=""
+      class="max-w-[100px] max-h-[75px] rounded shadow"
+    />
+  </span>
+  <input
+    type="text"
+    class="txt w-full p-2.5 text-sm rounded-lg block border focus:ring-3 focus:ring-opacity-75 bg-layout-sun-0 text-layout-sun-900 border-primary-sun-500 focus:border-primary-sun-500 focus:ring-primary-sun-500 placeholder:text-layout-sun-400 selection:bg-layout-sun-200 selection:text-layout-sun-1000 dark:bg-layout-night-0 dark:text-layout-night-900 dark:border-primary-night-500 dark:focus:border-primary-night-500 dark:focus:ring-primary-night-500 placeholder:dark:text-layout-night-400 dark:selection:bg-layout-night-200 dark:selection:text-layout-night-1000"
+    v-model="element.label"
+  />
+  <form @submit.prevent="deletePost(index)" style="display:inline">
+    <button @click.stop type="submit" onclick="return confirm('Sind Sie sicher, dass Sie dieses Bild löschen möchten?');">
+      &nbsp;<IconTrash style="margin-top:-27px;" class="sm-pencil cursor-pointer"></IconTrash>
+    </button>
+  </form>
+</div>
+</div>
 
       <div class="mt-6 flex justify-between">
         <button
@@ -89,10 +86,28 @@
     data() {
       return {
         images: [],
-        windowHeight: window.innerHeight
+        windowHeight: window.innerHeight,
+        draggedIndex: null,
       };
     },
     methods: {
+        onDragStart(index) {
+    this.draggedIndex = index;
+  },
+  onDrop(dropIndex) {
+    if (this.draggedIndex === null) return;
+
+    // Element verschieben
+    const movedItem = this.images.splice(this.draggedIndex, 1)[0];
+    this.images.splice(dropIndex, 0, movedItem);
+
+    // Positionen neu setzen
+    this.images.forEach((img, idx) => {
+      img.position = idx + 1;
+    });
+
+    this.draggedIndex = null;
+  },
         refreshGallery() {
             emitter.emit('refresh-preview');
         },

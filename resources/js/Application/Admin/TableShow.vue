@@ -107,6 +107,7 @@
               <span v-if="checkedStatus && checkedStatus[data.datarow.id]" style="font-size:24px;">✅</span>
               <span v-else class="bg-[rgb(50,174,179)] rounded-full w-[24px] h-[24px] px-[3px] text-white">O</span>
             </td>
+
           </template>
         </list-container>
       </section>
@@ -122,6 +123,9 @@
   import Breadcrumb from "@/Application/Components/Content/Breadcrumb.vue";
   import ListContainer from "@/Application/Components/Lists/ListContainer.vue";
   import axios from "axios";
+  import { nextTick } from 'vue';
+  import Sortable from "sortablejs"; // <-- NEU
+
 
   let table_z = CleanTable();
   let table_alt = table_z;
@@ -200,6 +204,7 @@
         ItemName: "Tabellen",
         tablez: this.ucf(table_z),
         checkedStatus: {},
+        sortable: null,
         table: table.toLowerCase(),
         tableq: CleanTable(),
         settings: {},
@@ -249,9 +254,29 @@
       if (window.settings?.descalias) {
         this.descalias = window.settings.descalias;
       }
+//         await nextTick(); // <-- DOM vollständig gerendert
+//         this.initSortable();
+//     },
+//     methods: {
+//         initSortable() {
+//   const tbody = this.$el.querySelector("tbody"); // tbody aus der Tabelle holen
+//   if (!tbody) return;
 
-    },
-    methods: {
+//   this.sortable = Sortable.create(tbody, {
+//     handle: "td", // ganze Zelle als Drag-Bereich
+//     animation: 150,
+//     onEnd: (evt) => {
+//       const movedItem = this.rows?.splice(evt.oldIndex, 1)[0];
+//       this.rows.splice(evt.newIndex, 0, movedItem);
+
+//       // Optional: API-Call zum Speichern der Reihenfolge
+//       axios.post(`/api/${this.table}/reorder`, {
+//         order: this.rows.map((item) => item.id),
+//       });
+//     },
+//   });
+},
+methods: {
         onoffbtn(state)
         {
             if(state == "1")
@@ -324,8 +349,11 @@
       async checkhasCreated() {
         try {
           const response = await axios.get(`/hasCreated/${this.table}`);
-          this.hasCreated = response.data.hasCreated;
+          console.log("hascreated:" + response.data);
+          this.hasCreated = response.data;
+
         } catch (error) {
+
           console.error("Fehler bei hasCreated:", error);
           this.hasCreated = false;
         }

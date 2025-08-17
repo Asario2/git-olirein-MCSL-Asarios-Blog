@@ -568,8 +568,12 @@ class TablesController extends Controller
         foreach ($joins as $relatedTable => $join) {
             $query->leftJoin($relatedTable, $join['to'], '=', $join['from']);
         }
-              // Sortierung
-            if ($table == "blogs" || $table == "didyouknow" || $table == "images" || $table == "comments" || $table == "shortpoems") {
+
+        // Sortierung
+        if(Schema::hasColumn($table,"position")){
+            $ord = ["position","asc"];
+        }
+            elseif ($table == "blogs" || $table == "didyouknow" || $table == "images" || $table == "comments" || $table == "shortpoems") {
                 $ord = ["created_at", "DESC"];
             } elseif (in_array($table, ["admin_table", "image_categories", "camera","users"])) {
 
@@ -586,6 +590,9 @@ class TablesController extends Controller
                 $ord = ["created_at", "ASC"];
             } elseif($table == "texts"){
                 $ord = ["headline","ASC"];
+            }
+            elseif(Schema::hasColumn($table,"position")){
+                $ord = ["position","ASC"];
             }
             else {
                 $ord = ["id", "DESC"];
@@ -618,7 +625,7 @@ class TablesController extends Controller
         $tables = $query
             ->filterdefault(['search' => request('search')])
             ->whereNot($xis, $xisd)
-            ->orderBy(DB::raw("LOWER(`$table`.`$orderColumn`)"), $orderDirection)
+            ->orderByRaw('CAST('.$orderColumn.' AS UNSIGNED) '.$orderDirection.'')
             ->paginate($pag)
             ->withQueryString();
 
@@ -697,15 +704,31 @@ class TablesController extends Controller
             foreach ($rows as &$row) {
                 // created z. B. "2025-06-17 13:45:22"
                 // wir nehmen nur das Datum
-                $row->created = substr($row->created, 0, 10<0);
+                // \Log::info($row->created);
+                $row->created = substr($row->created, 0, 10);
             }
 
             $crea[$tablex] = $rows;
         }
-
+        // \Log::info("rows:".json_encode($rows));
         return response()->json($crea);
     }
+    public function save_order(Request $request,$table)
+    {
+        $rows = request()->input('rows');
+        // $rows = json_decode($rows);
+        \Log::info("row:". json_encode($rows,JSON_PRETTY_PRINT));
+        // \Log::info("TABLE:".$table);
+        foreach($rows as $row){
+            if(isset($row['id'],$row['position']))
+            {
+            DB::table($table) ->where('id', $row['id'])
+            ->update(['position' => $row['position']]);
+            }
+        }
 
+        return true;
+    }
 
 
     function stripslashes_recursive($data) {
@@ -795,7 +818,11 @@ class TablesController extends Controller
         $columns = array_diff($columns, $excl_cols);
 
         // Bestimme die Sortierreihenfolge
-        if ($table == "blogs" || $table == "mindblog") {
+        if (Schema::hasColumn($table, "position")) {
+            $ord[0] = 'position';
+            $ord[1] = 'ASC';
+        }
+        elseif ($table == "blogs" || $table == "mindblog") {
             $ord[0] = "created_at";
             $ord[1] = "DESC";
         }
@@ -804,10 +831,7 @@ class TablesController extends Controller
             $ord[0] = "id";
             $ord[1] = "DESC";
         }
-        elseif (Schema::hasColumn($table, "position")) {
-            $ord[0] = 'position';
-            $ord[1] = 'ASC';
-        }  else {
+        else {
             $ord[0] = "id";
             $ord[1] = "DESC";
         }

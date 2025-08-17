@@ -40,31 +40,71 @@
                         <slot name="header" />
                     </thead>
                     <tbody v-if="numberOfRows > 0">
-                        <tr v-for="datarow in datarows.data" :key="datarow[rowId]" class="np-dl-tr">
-                            <slot name="datarow" :datarow="datarow" />
-                            <td v-if="datarow.created_at && hasRight('view', datarow.full_name)" class="np-dl-td-normal">
-                               {{ new Date(datarow.created_at).toLocaleString('de-DE', {
-                                    day: '2-digit', month: '2-digit', year: 'numeric',
-                                    hour: '2-digit', minute: '2-digit', second: '2-digit'
-                                }) }}
-                            </td>
-                            <td v-if="hasRight('edit', datarow.full_name) && hasRight('view', datarow.full_name) && tableClean"
+                    <!-- Draggable rows -->
+                    <template v-for="(row, index) in rows" :key="'draggable-' + row.id">
+                    <tr v-if="row.position !== null && row.position !== undefined"
+                        draggable="true"
+                        @dragstart="onDragStart($event, index)"
+                        @dragover.prevent
+                        @drop="onDrop($event, index)"
+                        class="cursor-move hover:dark:bg-gray-800 hover:bg-gray-800">
+
+                        <slot name="datarow" :datarow="row" />
+
+                        <td v-if="row.created_at && hasRight('view', row.full_name)" class="np-dl-td-normal">
+                        {{ new Date(row.created_at).toLocaleString('de-DE', {
+                            day: '2-digit', month: '2-digit', year: 'numeric',
+                            hour: '2-digit', minute: '2-digit', second: '2-digit'
+                        }) }}
+                        </td>
+
+                            <td v-else-if="hasRight('view',row.full_name)"
+                            class="np-dl-td-edit"></td>
+                            <td v-if="hasRight('edit', row.full_name) && hasRight('view', row.full_name) && tableClean"
                                 class="np-dl-td-edit"
-                                @click.prevent="editDataRow(datarow[rowId])">
+                                @click.prevent="editDataRow(row['id'])">
                                 <icon-pencil class="w-6 h-6" v-tippy />
                                 <tippy>{{ editDescription }}</tippy>
                             </td>
-                            <td v-else-if="hasRight('view',datarow.full_name)"
-                            class="np-dl-td-edit"></td>
-                            <td v-if="hasRight('delete', datarow.full_name) && hasRight('view', datarow.full_name && tableClean)"
+                            <td v-if="hasRight('delete', row.full_name) && hasRight('view', row.full_name && tableClean)"
                                 class="np-dl-td-edit"
-                                @click="deleteDataRow(datarow[rowId])">
+                                @click="deleterow(row['id'])">
                                 <icon-trash class="w-6 h-6" v-tippy />
                                 <tippy>{{ deleteDescription }}</tippy>
                             </td>
-                            <td v-else-if="hasRight('view',datarow.full_name)"
+                            <td v-else-if="hasRight('view',row.full_name)"
                             class="np-dl-td-edit"></td>
                         </tr>
+                        </template>
+                        <template v-for="(row, index) in rows" :key="'normal-' + row.id">
+                        <tr v-if="row.position === null || row.position === undefined"
+                            class="hover:dark:bg-gray-800 hover:bg-gray-800">
+                        <slot name="datarow" :datarow="row" />
+                        <td v-if="row.created_at && hasRight('view', row.full_name)" class="np-dl-td-normal">
+                            {{ new Date(row.created_at).toLocaleString('de-DE', {
+                                day: '2-digit', month: '2-digit', year: 'numeric',
+                                hour: '2-digit', minute: '2-digit', second: '2-digit'
+                            }) }}
+                        </td>
+
+                            <td v-if="hasRight('edit', row.full_name) && hasRight('view', row.full_name) && tableClean"
+                                class="np-dl-td-edit"
+                                @click.prevent="editDataRow(row['id'])">
+                                <icon-pencil class="w-6 h-6" v-tippy />
+                                <tippy>{{ editDescription }}</tippy>
+                            </td>
+                            <td v-else-if="hasRight('view',row.full_name)"
+                            class="np-dl-td-edit"></td>
+                            <td v-if="hasRight('delete', row.full_name) && hasRight('view', row.full_name && tableClean)"
+                                class="np-dl-td-edit"
+                                @click="deleterow(row['id'])">
+                                <icon-trash class="w-6 h-6" v-tippy />
+                                <tippy>{{ deleteDescription }}</tippy>
+                            </td>
+                            <td v-else-if="hasRight('view',row.full_name)"
+                            class="np-dl-td-edit"></td>
+                        </tr>
+                        </template>
                     </tbody>
                 </table>
 
@@ -147,7 +187,16 @@ export default {
  this.pstate();
 //  this.$emit('status-changed', this.checkedStatus);
  this.fetchCheckedStatus();
-  },
+  // prüfen ob Array
+  if (this.datarows && Array.isArray(this.datarows.data)) {
+      this.rows = [...this.datarows.data]
+    } else {
+      console.error("datarows.data ist kein Array:", this.datarows)
+      this.rows = []
+    }
+    this.initRows();
+
+},
     data() {
         return {
             form: { search: this.filters.search },
@@ -156,7 +205,13 @@ export default {
             routeCreate: "/admin/tables/create/" + this.tableq,
             routeDelete: "/admin/tables/delete/" + this.tableq + "/" + this.id,
             table: '',
+            dragIndex: null,
+            draggedIndex: null,
             checkedStatus: {}, // z. B. { 100: true, 101: false }
+            rows: [...this.datarows.data],
+            currentPage: 1,
+            perPage: 20,
+
         };
     },
     created() {
@@ -165,6 +220,8 @@ export default {
 
     },
     computed: {
+
+
         numberOfRows() {
             if (Array.isArray(this.datarows.data)) {
                 return this.datarows.data.length;
@@ -207,9 +264,82 @@ export default {
             }, 0),
             deep: true,
         },
+        datarows: {
+    handler(newVal) {
+      if (newVal && Array.isArray(newVal.data)) {
+        this.rows = [...newVal.data]
+      } else {
+        this.rows = []
+      }
+    },
+    deep: true,
+    immediate: true
+  },
     },
     methods: {
-        updateCheckedStatus(newStatus) {
+        initRows() {
+      this.currentPage = this.datarows.current_page || 1
+      this.perPage = this.datarows.per_page || 20
+
+      this.rows = this.datarows.data.map(row => ({
+        ...row,
+        original_position: row.position || 0
+      }))
+    },
+    onDragStart(event, index) {
+    if (!this.rows[index]) return;
+    event.dataTransfer.effectAllowed = "move";
+    event.dataTransfer.setData("text/plain", index.toString());
+  },
+
+  onDrop(event, dropIndex) {
+    const dragIndex = parseInt(event.dataTransfer.getData("text/plain"));
+    if (isNaN(dragIndex)) return;
+
+    const item = this.rows[dragIndex];
+    if (!item) return;
+
+    // Element verschieben
+    this.rows.splice(dragIndex, 1);
+    this.rows.splice(dropIndex, 0, item);
+
+    // Absolute Start-Position der Seite berücksichtigen
+    // z.B. bei 20 Items pro Seite, Seite 2 => offset = 20
+    const perPage = this.perPage || 20; // Items pro Seite
+    const offset = ((this.currentPage || 1) - 1) * perPage;
+
+    this.rows.forEach((row, i) => {
+      // Nur ändern, wenn neue Position != alte Position
+      const newPos = offset + i + 1;
+      if (row.position !== newPos) {
+        row.position = newPos;
+      }
+    });
+
+    this.saveOrdering();
+  },
+
+  async saveOrdering() {
+    try {
+      // Nur geänderte Reihen senden
+      const payload = this.rows
+        .filter(row => row.position !== row.original_position)
+        .map(row => ({ id: row.id, position: row.position }));
+
+      if (payload.length === 0) return;
+
+      await axios.post("/api/save-order/" + CleanTable(), { rows: payload });
+      console.log("Neue Reihenfolge gespeichert");
+
+      // Originalpositionen aktualisieren
+      this.rows.forEach(row => {
+        row.original_position = row.position;
+      });
+    } catch (e) {
+      console.error("Fehler beim Speichern:", e);
+    }
+  },
+          updateCheckedStatus(newStatus) {
       this.checkedStatus = newStatus
       this.$emit('update-checked-status', this.checkedStatus)
     },
@@ -339,3 +469,13 @@ async pstate(){
 
 };
 </script>
+<style>
+tr {
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+tr.dragging {
+  opacity: 0.5;
+  background-color: #d1e7fd;
+}
+</style>

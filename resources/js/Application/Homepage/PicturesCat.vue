@@ -28,7 +28,7 @@
                     <!-- Bild mit Zoom-In Effekt -->
                     <div class="relative w-full overflow-hidden rounded-sm">
                     <img
-                        :src="`/images/_ab/images_cat/${ima.name}.jpg`"
+                        :src="`/images/_ab/images/images_cat/${ima.name}.jpg`"
                         :alt="ima.shortname"
                         :title="'zur ' + ima.shortname + 'Galerie'"
                         class="w-full h-full object-cover transition-transform duration-500 ease-in-out transform group-hover:scale-110"

@@ -145,6 +145,9 @@ Route::middleware(\App\Http\Middleware\CheckSubd::class . ':ab,asario')->group(f
         Route::get('/home/infos/show/{id}', [HomeController::class, 'infos_show'])->name('home.infos.show.mfx');
 
         Route::get('/home/powered-by-mcs', [HomeController::class, 'infos_pow'])->name('home.powered.show.mfx');
+        Route::get('/dashboard', function () {
+            return redirect('/');
+        })->name('dashboard');
     });
 
 
@@ -377,6 +380,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         )->name('admin.dashboard');
         Route::post("/personal_update", [PersonalController::class, 'update'])->name("personal.update");
         Route::get('/api/created-at', [TablesController::class, 'getCreatedAt'])->name("created.at");
+        Route::post("/api/save-order/{table}", [TablesController::class, 'save_order'])->name("save-order");
         // Route::get("/api/created-at", [TablesController::class],'GetCreatedAt')->name("created.at");
 
 

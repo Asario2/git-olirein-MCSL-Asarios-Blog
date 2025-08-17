@@ -44,12 +44,12 @@
     <!-- Linke Spalte: Thumbnail -->
     <div :id="'st' + item?.id" class="relative lg:col-span-4">
         <a
-  :href="'/images/images/big/' + item?.image_path"
+  :href="'/images/_ab/images/image_path/big/' + item?.image_path"
   :data-pswp-width="item?.img_x"
   :data-pswp-height="item?.img_y"
 >
  <ZoomImage
-  :src="'/images/images/thumbs/' + item?.image_path"
+  :src="'/images/_ab/images/image_path/thumbs/' + item?.image_path"
   :alt="item?.title"
   :title="item?.title"
   :width="300"

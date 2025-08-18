@@ -1,9 +1,10 @@
 <template>
     <layout
-        header-title="Blog"
+
         :header-url="$page.props.saas_url + '/blogs'"
         :header-image="$page.props.saas_url + '/images/blogimages/Blog_Idee_480x360.jpg'"
     >
+    <MetaHeader :title="'Benutzer:  '+ data.author_name2" />
         <section class="bg-layout-sun-0 text-layout-sun-800 dark:bg-layout-night-0 dark:text-layout-night-800">
             <div class="w-full max-w-7xl mx-auto mt-5">
                 <div v-if="data.length">
@@ -65,6 +66,7 @@
 
 <script>
 import { defineComponent } from "vue";
+import MetaHeader from "@/Application/Homepage/Shared/MetaHeader.vue";
 import Layout from "@/Application/Homepage/Shared/Layout.vue";
 
 import PageTitle from "@/Application/Components/Content/PageTitle.vue";
@@ -103,8 +105,7 @@ export default defineComponent({
         SearchFilter,
         Alert,
         AiButton,
-        Markdown,
-    },
+        Markdown, MetaHeader},
     data() {
     return {
       rightsData: {}, // Hier speichern wir die Rechte für den User

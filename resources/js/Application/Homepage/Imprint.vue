@@ -1,5 +1,6 @@
 <template>
     <layout header-title="Impressum">
+    <MetaHeader title="Impressum" />
         <page-content>
             <template #content>
                 <markdown :markdown="imprint"></markdown>
@@ -9,6 +10,7 @@
 </template>
 <script>
 import { defineComponent } from "vue";
+import MetaHeader from "@/Application/Homepage/Shared/MetaHeader.vue";
 import Layout from "@/Application/Homepage/Shared/Layout.vue";
 
 import PageContent from "@/Application/Components/Content/PageContent.vue";
@@ -28,6 +30,7 @@ export default defineComponent({
         Layout,
         PageContent,
         Markdown,
+        MetaHeader
     },
 });
 </script>

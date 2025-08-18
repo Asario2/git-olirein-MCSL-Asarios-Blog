@@ -1,5 +1,5 @@
 <template>
-
+<MetaHeader :title="'Benutzer:  '+ data.author_name2" />
      <div id="teaser-img2" class="block max-w-sm gap-3 mx-auto mh_65 sm:max-w-full group hover:no-underline focus:no-underline lg:grid lg:grid-cols-12 bg-layout-sun-100 dark:bg-layout-night-100 overfl" style="z-index:0;margin-bottom:-0px;" :class="{ 'disable-link': isCommentActive }"
     >
         <!-- Das Bild des Blog-Posts -->
@@ -16,7 +16,7 @@
             :class="['object-cover w-full rounded lg:col-span-7 object-cover rounded bg-layout-sun-500 dark:bg-layout-night-500', blog.madewithai ? 'ai-image-corner' : '']"
 
         />
-        
+
         </Link>
         <div class="relative">
         <!-- Der AI-Button wird hier angezeigt -->
@@ -79,6 +79,7 @@
 
 <script>
 import { Link } from "@inertiajs/vue3";
+import MetaHeader from "@/Application/Homepage/Shared/MetaHeader.vue";
 
 import DisplayDate from "@/Application/Components/Content/DisplayDate.vue";
 import DisplayNumber from "@/Application/Components/Content/DisplayNumber.vue";
@@ -94,8 +95,7 @@ export default {
         DisplayNumber,
         AiButton,
         editbtns,
-        SocialButtons,
-    },
+        SocialButtons, MetaHeader},
     props: {
         blog: {
             type: Object,

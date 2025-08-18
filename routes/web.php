@@ -98,7 +98,7 @@ Route::middleware(\App\Http\Middleware\CheckSubd::class . ':ab,asario')->group(f
 
     // Dashboard redirect
     Route::get('/dashboard', function () {
-        return redirect('/blogs');
+        return redirect('/admin/dashboard');
     })->name('dashboard');
 
     // Fehlerseiten
@@ -146,7 +146,7 @@ Route::middleware(\App\Http\Middleware\CheckSubd::class . ':ab,asario')->group(f
 
         Route::get('/home/powered-by-mcs', [HomeController::class, 'infos_pow'])->name('home.powered.show.mfx');
         Route::get('/dashboard', function () {
-            return redirect('/');
+            return redirect('/admin/dashboard');
         })->name('dashboard');
     });
 

@@ -1,5 +1,6 @@
 <template>
-    <layout header-title="Home" :header-url="$page.props.saas_url + '/'">
+    <layout :header-url="$page.props.saas_url + '/'">
+    <MetaHeader :title="'Infos: ' + data.headline" />
         <p v-if="!data">Kein Eintrag zu dieser ID vorhanden</p>
 
         <page-content v-else>
@@ -45,6 +46,7 @@
 </template>
 <script>
 import { defineComponent } from "vue";
+import MetaHeader from "@/Application/Homepage/Shared/MetaHeader.vue";
 import Layout from "@/Application/Homepage/Shared/mfx/Layout.vue";
 import { marked } from 'marked';
 import { selectionHelper, GetSettings, rumLaut } from "@/helpers";
@@ -63,8 +65,7 @@ export default defineComponent({
         PageTitle,
         PageParagraph,
         emailview,
-        editbtns,
-    },
+        editbtns, MetaHeader},
     props: {
         news: [Array, Object],
         text: [Array, Object],

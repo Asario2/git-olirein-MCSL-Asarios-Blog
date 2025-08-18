@@ -24,4 +24,6 @@ module.exports = {
   weibo: require('./weibo'),
   whatsapp: require('./whatsapp'),
   xing: require('./xing'),
+ 'x-twitter': require('./x-twitter')
+
 }

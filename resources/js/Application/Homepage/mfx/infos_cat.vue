@@ -1,5 +1,6 @@
 <template>
-    <layout header-title="Home" :header-url="$page.props.saas_url + '/'">
+    <layout header-url="$page.props.saas_url + '/'">
+    <MetaHeader title="Infos" />
         <page-content>
             <template #content>
                 <div>
@@ -56,6 +57,7 @@
 </template>
 <script>
 import { defineComponent } from "vue";
+import MetaHeader from "@/Application/Homepage/Shared/MetaHeader.vue";
 import Layout from "@/Application/Homepage/Shared/mfx/Layout.vue";
 import { selectionHelper, GetSettings,rumLaut } from "@/helpers";
 import PageContent from "@/Application/Components/Content/PageContent.vue";
@@ -74,6 +76,7 @@ export default defineComponent({
         PageParagraph,
         emailview,
         editbtns,
+        MetaHeader,
     },
     props:{
         news:[Array,Object],

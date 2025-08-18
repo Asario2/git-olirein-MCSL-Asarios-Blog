@@ -1,5 +1,7 @@
+import MetaHeader from "@/Application/Homepage/Shared/MetaHeader.vue";
 <template>
-    <layout header-title="Galerie" :header-url="$page.props.saas_url + '/'">
+    <layout :header-url="$page.props.saas_url + '/'">
+    <MetaHeader :title="'Galerie: ' + images.headline" />
       <page-content>
         <template #content>
           <page-title>
@@ -29,6 +31,7 @@
   <script>
   import { defineComponent } from "vue";
   import photoswipe from "@/Application/Components/photoswipe.vue";
+  import MetaHeader from "@/Application/Homepage/Shared/MetaHeader.vue";
   import Layout from "@/Application/Homepage/Shared/mfx/Layout.vue";
   import PageContent from "@/Application/Components/Content/PageContent.vue";
   import PageTitle from "@/Application/Components/Content/PageTitle.vue";
@@ -47,6 +50,7 @@
       emailview,
       editbtns,
       photoswipe,
+      MetaHeader,
     },
     props: {
       images: [Array, Object],

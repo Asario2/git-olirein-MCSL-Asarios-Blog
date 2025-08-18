@@ -3,6 +3,7 @@
         header-title="Ungültige Signatur"
         :header-url="$page.props.saas_url + '/home/invalid_signature'"
     >
+
         <page-content>
             <template #content>
                 <page-title>
@@ -28,6 +29,7 @@
 </template>
 <script>
 import { defineComponent } from "vue";
+import MetaHeader from "@/Application/Homepage/Shared/MetaHeader.vue";
 import Layout from "@/Application/Homepage/Shared/Layout.vue";
 
 import PageContent from "@/Application/Components/Content/PageContent.vue";
@@ -44,7 +46,6 @@ export default defineComponent({
         PageContent,
         PageTitle,
         PageParagraph,
-        DisplayHyperlink,
-    },
+        DisplayHyperlink, MetaHeader},
 });
 </script>

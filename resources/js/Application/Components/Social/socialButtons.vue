@@ -49,7 +49,9 @@
                     <!-- Teilen -->
                     <tr v-if="showShareBox[postId]">
                         <td colspan="3" class="p-4">
-                            <div align="center" :ref="'shariff_' + postId" :added="urlAdded" id="shariff-container" class="shariff w-full w300 relative border border-gray-300 p-4 pb-2 rounded-lg shadow-sm bg-white dark:bg-gray-800" data-button-style="icon"></div>
+                            <div align="center" :ref="'shariff_' + postId" :added="urlAdded"
+                            id="shariff-container" class="shariff w-full w300 relative border border-gray-300 p-4 pb-2 rounded-lg shadow-sm bg-white dark:bg-gray-800" data-button-style="icon">
+                        </div>
                         </td>
                     </tr>
 
@@ -72,6 +74,7 @@ import averageRating from "@/Application/Components/Social/averageratings.vue";
 import IconPencil from "@/Application/Components/Icons/Pencil.vue";
 import Comments from "@/Application/Components/Social/comments.vue";
 import Share from "@/Application/Components/Social/share.vue";
+
 import AddRating from "@/Application/Components/Social/addrating.vue";
 import SearchFilter from "@/Application/Components/Lists/SearchFilter.vue";
 import IconCamera from "@/Application/Components/Icons/Camera.vue";
@@ -80,6 +83,7 @@ import IconComment from "@/Application/Components/Icons/IconComment.vue";
 import { throttle } from "lodash";
 import { CleanTable, CleanId } from '@/helpers';
 import mapValues from "lodash/mapValues";
+import '@fortawesome/fontawesome-svg-core/styles.css';
 import pickBy from "lodash/pickBy";
 import IconEye from "@/Application/Components/Icons/Eye.vue";
 import IconTrash from "@/Application/Components/Icons/Trash.vue";
@@ -90,9 +94,17 @@ import { route } from "ziggy-js";
 import IconShare from "@/Application/Components/Icons/IconShare.vue";
 import IconStar from "@/Application/Components/Icons/IconStar.vue";
 import { Boolean } from "php-parser";
+import "@fortawesome/fontawesome-free/css/all.min.css";
+
+import 'shariff/dist/shariff.complete.css';
+import 'shariff/dist/shariff.complete.js';
+import Shariff from 'shariff';
+import XTwitter from "@/Shariff/services/x-twitter.js";
+// import TwitterService from "@/Shariff/services/twitter.js";
 export default {
     name: "SocialButtons",
     //
+
     components: {
         Link,
     DisplayDate,
@@ -103,6 +115,7 @@ export default {
     IconCamera,
     SearchFilter,
     Comments,
+    // TwitterService,
     Share,
     AddRating,
     IconComment,
@@ -335,6 +348,7 @@ methods:{
         // console.log(url);
 
         // console.log(`Shariff wird für ID ${id} initialisiert`, shariffRef);
+
         new Shariff(shariffRef, {
             services: ["facebook", "telegram", "whatsapp", "xing", "twitter"],
             theme: "classic",
@@ -396,7 +410,7 @@ showComments(newVal, oldVal) {
     }
 };
 </script>
-<style scoped>
+<style>
 #commentBox{
     max-width:300px !important;
     width:300px !important;
@@ -432,5 +446,35 @@ margin-left:-68px !important;
 }
 .w300{
     max-width:300px;
+}
+.fab .fa-twitter::before {
+  /* FontAwesome X Twitter */
+  content: "\e61b" !important;
+  font-family: "Font Awesome 6 Brands";
+  background-color: #000 !important;
+  padding:4px 7px;
+  color:#fff !important;
+  border:2px solid #000;
+}
+.fa-twitter::before {
+  /* FontAwesome X Twitter */
+  content: "\e61b" !important;
+  font-family: "Font Awesome 6 Brands";
+  background-color: #000 !important;
+  padding:4px 7px;
+  color:#fff !important;
+}
+
+.shariff .twitter a{
+    background-color: #000000 !important; /* Schwarz */
+    padding: 0px 5px;
+    color: #ffffff;            /* Icon weiß */
+    transition: background-color 0.2s ease;
+    margin-left:-7px;
+}
+
+/* Dunkelgrau beim Hover */
+.shariff .twitter a:hover {
+    background-color: #333333; /* Dunkelgrau */
 }
 </style>

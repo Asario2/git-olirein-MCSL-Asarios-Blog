@@ -1,5 +1,6 @@
 <template>
     <layout header-title="Home" :header-url="$page.props.saas_url + '/'">
+    <MetaHeader title="Home" />
         <page-content>
             <template #content>
                 <page-title>
@@ -18,6 +19,7 @@
 </template>
 <script>
 import { defineComponent } from "vue";
+import MetaHeader from "@/Application/Homepage/Shared/MetaHeader.vue";
 import Layout from "@/Application/Homepage/Shared/Layout.vue";
 
 import PageContent from "@/Application/Components/Content/PageContent.vue";
@@ -32,6 +34,7 @@ export default defineComponent({
         PageContent,
         PageTitle,
         PageParagraph,
+        MetaHeader
     },
 });
 </script>

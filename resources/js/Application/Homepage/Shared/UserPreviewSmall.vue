@@ -54,6 +54,7 @@
 
 <script>
 import { Link } from "@inertiajs/vue3";
+import MetaHeader from "@/Application/Homepage/Shared/MetaHeader.vue";
 import IconPlusCircle from "@/Application/Components/Icons/PlusCircle.vue";
 import { CleanTable, CleanId } from '@/helpers';
 import averageRating from "@/Application/Components/Social/averageratings.vue";
@@ -95,9 +96,7 @@ export default {
     IconShare,
     IconStar,
     SocialButtons,
-    AiButton,
-
-    },
+    AiButton, MetaHeader},
 
     props: {
         blog: {

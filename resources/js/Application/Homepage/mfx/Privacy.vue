@@ -1,5 +1,7 @@
+
 <template>
     <Layout>
+    <MetaHeader title="Datenschutzerklärung" />
         <div class="prose prose-layout dark:prose-invert max-w-none">
             <div v-html="privacy" />
         </div>
@@ -8,10 +10,10 @@
 
   <script>
   import Layout from "@/Application/Homepage/Shared/mfx/Layout.vue";
+  import MetaHeader from "@/Application/Homepage/Shared/MetaHeader.vue";
   export default {
     components: {
-    Layout,
-    },
+    Layout, MetaHeader},
     props: {
       privacy: String,
     },

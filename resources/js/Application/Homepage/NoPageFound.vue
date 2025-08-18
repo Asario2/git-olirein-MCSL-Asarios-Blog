@@ -1,8 +1,8 @@
 <template>
     <layout
-        header-title="Seite nicht gefunden"
         :header-url="$page.props.saas_url + '/no_page_found'"
     >
+    <MetaHeader title="Seite nicht gefunden" />
         <page-title>
             <template #title>Seite nicht gefunden!</template>
         </page-title>
@@ -10,6 +10,7 @@
 </template>
 <script>
 import { defineComponent, defineAsyncComponent } from 'vue';
+import MetaHeader from "@/Application/Homepage/Shared/MetaHeader.vue";
 import PageTitle from "@/Application/Components/Content/PageTitle.vue";
 
 // Mapping für dynamische Layouts
@@ -38,7 +39,6 @@ export default defineComponent({
     Layout: defineAsyncComponent(
       layoutComponents[getDomKey(window.location.href)] || layoutComponents['default']
     ),
-    PageTitle,
-  },
+    PageTitle, MetaHeader},
 });
 </script>

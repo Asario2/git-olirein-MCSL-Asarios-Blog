@@ -1,3 +1,4 @@
+import MetaHeader from "@/Application/Homepage/Shared/MetaHeader.vue";
 <template>
     <div class="prose max-w-none p-4">
       <div v-if="loading">Lade Changelog...</div>
@@ -9,6 +10,7 @@
   import { marked } from 'marked';
 
   export default {
+  components: { MetaHeader },
     data() {
       return {
         changelogMd: '',

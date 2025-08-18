@@ -447,34 +447,27 @@ margin-left:-68px !important;
 .w300{
     max-width:300px;
 }
-.fab .fa-twitter::before {
-  /* FontAwesome X Twitter */
-  content: "\e61b" !important;
-  font-family: "Font Awesome 6 Brands";
-  background-color: #000 !important;
-  padding:4px 7px;
-  color:#fff !important;
-  border:2px solid #000;
-}
-.fa-twitter::before {
-  /* FontAwesome X Twitter */
-  content: "\e61b" !important;
-  font-family: "Font Awesome 6 Brands";
-  background-color: #000 !important;
-  padding:4px 7px;
-  color:#fff !important;
+/* überschreibt Shariff Default komplett */
+.shariff .shariff-button.twitter,
+.shariff .shariff-button.twitter a {
+  background-color: #000 !important; /* Schwarz */
+  color: #fff !important;
+  transition: background-color 0.2s ease;
 }
 
-.shariff .twitter a{
-    background-color: #000000 !important; /* Schwarz */
-    padding: 0px 5px;
-    color: #ffffff;            /* Icon weiß */
-    transition: background-color 0.2s ease;
-    margin-left:-7px;
+/* Hover */
+.shariff .shariff-button.twitter:hover,
+.shariff .shariff-button.twitter a:hover {
+  background-color: #333 !important; /* Dunkelgrau */
+  color: #fff !important;
 }
 
-/* Dunkelgrau beim Hover */
-.shariff .twitter a:hover {
-    background-color: #333333; /* Dunkelgrau */
+/* Icon (weißes X) */
+.shariff .shariff-button.twitter .fa-twitter::before,
+.shariff .shariff-button.twitter .fa-x-twitter::before {
+  font-family: "Font Awesome 6 Brands";
+  content: "\e61b"; /* X Symbol */
+  color: #fff !important;
 }
+
 </style>

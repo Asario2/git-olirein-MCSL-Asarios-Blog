@@ -19,4 +19,4 @@ node_modules/* linguist-vendored
 vendor/* linguist-vendored
 
 # Nur Tailwind CSS im public ausschließen
-public/css/tailwind/* linguist-vendored
+public/css/tailw/* linguist-vendored

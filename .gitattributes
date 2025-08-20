@@ -12,7 +12,6 @@ CHANGELOG.md export-ignore
 # Vue-Dateien als Vue erkennen
 *.vue linguist-detectable=true
 *.vue linguist-language=Vue
-# test
 
 # Vendor & Node ignorieren
 node_modules/* linguist-vendored

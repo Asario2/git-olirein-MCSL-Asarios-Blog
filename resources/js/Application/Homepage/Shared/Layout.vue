@@ -51,7 +51,7 @@
                   <link-header :route-name="route('register')" name="Registrieren"></link-header>
                 </template>
 
-                <template v-if="$page.props.userdata.user_id">
+                <template v-if="$page.props.userdata.user_id && $page.props.userdata.is_admin">
                   <link-header :route-name="route('applicationswitch')" name="Dashboard"></link-header>
                 </template>
 
@@ -119,28 +119,37 @@
                                             <span
                                                 v-if="
                                                     $page.props.userdata
-                                                        .application_count > 1
+                                                        .application_count > 100
                                                 "
                                                 >Anwendung wechseln</span
                                             >
                                             <span v-else>Startseite</span>
                                         </div>
-                                        <dropdown-link
+                                        <dropdown-link v-if="$page.props.userdata.is_admin"
                                             :with-icon="false"
                                             :with-route="true"
                                             :route-name="
                                                 route('admin.dashboard')
                                             "
                                         >
+
                                             <span
                                                 v-if="
                                                     $page.props.userdata
-                                                        .application_count > 1
+                                                        .application_count > 100
                                                 "
                                                 >Anwendung wechseln</span
                                             >
-                                            <span v-else>zum Dashboard</span>
+                                            <span v-else-if="$page.props.userdata.is_admin">zum Dashboard</span>
+
                                         </dropdown-link>
+                                            <dropdown-link v-else
+                                                :with-icon="false"
+                                                :with-route="true"
+                                                :route-name="route('home.index')">
+                                                Home
+                                        </dropdown-link>
+
 
                                         <!-- Account Management -->
                                         <div
@@ -159,7 +168,7 @@
 
                                         <dropdown-link
                                             v-if="
-                                                $page.props.jetstream
+                                                !$page.props.jetstream
                                                     .hasApiFeatures
                                             "
                                             :with-icon="false"

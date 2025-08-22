@@ -351,7 +351,7 @@ methods:{
 
         new Shariff(shariffRef, {
             services: ["facebook", "telegram", "whatsapp", "xing", "twitter"],
-
+    
             theme: "classic",
             orientation: "horizontal",
         });

@@ -119,7 +119,7 @@
                                             <span
                                                 v-if="
                                                     $page.props.userdata
-                                                        .application_count > 1
+                                                        .application_count > 100
                                                 "
                                                 >Anwendung wechseln</span
                                             >
@@ -135,7 +135,7 @@
                                             <span
                                                 v-if="
                                                     $page.props.userdata
-                                                        .application_count > 1
+                                                        .application_count > 100
                                                 "
                                                 >Anwendung wechseln</span
                                             >

@@ -8,6 +8,6 @@ class DashboardCustomerController extends Controller
 {
     public function customer_index()
     {
-        return Inertia::render('Customer/Dashboard');
+        return redirect('/');
     }
 }

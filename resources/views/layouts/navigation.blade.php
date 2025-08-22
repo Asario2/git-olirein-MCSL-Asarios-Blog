@@ -26,7 +26,7 @@
     class="navbar ab_nav_ab nvi_{{ $host }} items-center justify-center  justify-content-center navbar-expand-lg navbar-{{ $dm }} bg-{{ $dm }}">
     <div class="container">
 
-        <a style='display:inline' class="navbar-brand" href="{{ route('blogposts.index') }}">Asarios Blog</a>
+        <a style='display:inline' class="navbar-brand" href="/">Asarios Blog</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>

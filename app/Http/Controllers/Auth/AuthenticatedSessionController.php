@@ -20,9 +20,11 @@ class AuthenticatedSessionController extends Controller
     /**
      * Führt den Login aus.
      */
-    public function store(LoginRequest $request)
+    public function store(LoginRequest $request): RedirectResponse
     {
-        $request->authenticate();
+        dd('store called');
+
+        $request->authenticate_alt();
 
         $request->session()->regenerate();
 

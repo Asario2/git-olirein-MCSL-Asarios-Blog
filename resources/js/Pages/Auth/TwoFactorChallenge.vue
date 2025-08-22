@@ -1,110 +1,71 @@
-<script setup>
-import { nextTick, ref } from "vue";
-import { Head, useForm } from "@inertiajs/vue3";
-import AuthenticationCard from "@/Components/AuthenticationCard.vue";
-import AuthenticationCardLogo from "@/Components/AuthenticationCardLogo.vue";
-import InputError from "@/Components/InputError.vue";
-import InputLabel from "@/Components/InputLabel.vue";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
-import TextInput from "@/Components/TextInput.vue";
-
-const recovery = ref(false);
-
-const form = useForm({
-    code: "",
-    recovery_code: "",
-});
-
-const recoveryCodeInput = ref(null);
-const codeInput = ref(null);
-
-const toggleRecovery = async () => {
-    recovery.value ^= true;
-
-    await nextTick();
-
-    if (recovery.value) {
-        recoveryCodeInput.value.focus();
-        form.code = "";
-    } else {
-        codeInput.value.focus();
-        form.recovery_code = "";
-    }
-};
-
-const submit = () => {
-    form.post(route("two-factor.login"));
-};
-</script>
-
 <template>
-    <Head title="Two-factor Confirmation" />
+    <div class="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900">
+      <div class="w-full max-w-md p-8 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
+        <h2 class="text-2xl font-bold mb-6 text-gray-900 dark:text-gray-100 text-center">
+          Zwei-Faktor-Authentifizierung
+        </h2>
 
-    <AuthenticationCard>
-        <template #logo>
-            <AuthenticationCardLogo />
-        </template>
+        <form @submit.prevent="submit" class="space-y-4">
+          <div>
+            <label for="code" class="block text-gray-700 dark:text-gray-300 mb-1">OTP-Code</label>
+            <input
+              type="text"
+              id="code"
+              v-model="form.code"
+              placeholder="123456"
+              class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
+            />
+            <p v-if="errors.code" class="text-red-500 text-sm mt-1">{{ errors.code }}</p>
+          </div>
 
-        <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">
-            <template v-if="!recovery">
-                Please confirm access to your account by entering the
-                authentication code provided by your authenticator application.
-            </template>
+          <div>
+            <label for="recovery_code" class="block text-gray-700 dark:text-gray-300 mb-1">Recovery-Code (optional)</label>
+            <input
+              type="text"
+              id="recovery_code"
+              v-model="form.recovery_code"
+              placeholder="abcd-efgh-ijkl"
+              class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
+            />
+            <p v-if="errors.recovery_code" class="text-red-500 text-sm mt-1">{{ errors.recovery_code }}</p>
+          </div>
 
-            <template v-else>
-                Please confirm access to your account by entering one of your
-                emergency recovery codes.
-            </template>
-        </div>
+          <button
+            type="submit"
+            class="w-full py-2 px-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg focus:outline-none focus:ring focus:ring-indigo-300"
+          >
+            Einloggen
+          </button>
 
-        <form @submit.prevent="submit">
-            <div v-if="!recovery">
-                <InputLabel for="code" value="Code" />
-                <TextInput
-                    id="code"
-                    ref="codeInput"
-                    v-model="form.code"
-                    type="text"
-                    inputmode="numeric"
-                    class="mt-1 block w-full"
-                    autofocus
-                    autocomplete="one-time-code"
-                />
-                <InputError class="mt-2" :message="form.errors.code" />
-            </div>
-
-            <div v-else>
-                <InputLabel for="recovery_code" value="Recovery Code" />
-                <TextInput
-                    id="recovery_code"
-                    ref="recoveryCodeInput"
-                    v-model="form.recovery_code"
-                    type="text"
-                    class="mt-1 block w-full"
-                    autocomplete="one-time-code"
-                />
-                <InputError class="mt-2" :message="form.errors.recovery_code" />
-            </div>
-
-            <div class="flex items-center justify-end mt-4">
-                <button
-                    type="button"
-                    class="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 underline cursor-pointer"
-                    @click.prevent="toggleRecovery"
-                >
-                    <template v-if="!recovery"> Use a recovery code </template>
-
-                    <template v-else> Use an authentication code </template>
-                </button>
-
-                <PrimaryButton
-                    class="ms-4"
-                    :class="{ 'opacity-25': form.processing }"
-                    :disabled="form.processing"
-                >
-                    Log in
-                </PrimaryButton>
-            </div>
+          <p v-if="errors.general" class="text-red-500 text-sm mt-2 text-center">{{ errors.general }}</p>
         </form>
-    </AuthenticationCard>
-</template>
+      </div>
+    </div>
+  </template>
+
+  <script>
+  import { ref } from 'vue';
+  import { Inertia } from '@inertiajs/inertia';
+
+  export default {
+    setup() {
+      const form = ref({
+        code: '',
+        recovery_code: '',
+      });
+
+      const errors = ref({});
+
+      const submit = () => {
+        errors.value = {};
+        Inertia.post('/two-factor-login', form.value, {
+          onError: (err) => {
+            errors.value = err;
+          },
+        });
+      };
+
+      return { form, errors, submit };
+    },
+  };
+  </script>

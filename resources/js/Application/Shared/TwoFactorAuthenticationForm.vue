@@ -159,7 +159,7 @@
                         </confirms-password>
                     </button-group>
                     <div class="mt-4 text-sm text-gray-400">
-                    [DEBUG] confirming: {{ confirming }}, twoFactorEnabled: {{ twoFactorEnabled }}, qrCode: {{ qrCode ? 'loaded' : 'null' }}
+                    <!-- [DEBUG] confirming: {{ confirming }}, twoFactorEnabled: {{ twoFactorEnabled }}, qrCode: {{ qrCode ? 'loaded' : 'null' }} -->
                     </div>
                 </div>
             </div>

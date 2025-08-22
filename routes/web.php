@@ -3,6 +3,7 @@
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\CustomLoginController;
 use App\Http\Controllers\PersonalController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\BlogPostController;
@@ -102,8 +103,9 @@ Route::middleware(\App\Http\Middleware\CheckSubd::class . ':ab,asario')->group(f
     })->name('dashboard');
 
     // Fehlerseiten
-    Route::get('/home/no_application_found', [HomeController::class, 'home_no_application_found'])->name('home.no_application_found');
+
     Route::get("/api/GetCat/{table}/{id}", [TablesController::class, 'GetCats'])->name("GetCats");
+    Route::get('/home/no_application_found', [HomeController::class, 'home_no_application_found'])->name('home.no_application_found');
     Route::get('/home/user_is_no_admin', [HomeController::class, 'home_user_is_no_admin'])->name('home.user_is_no_admin');
     Route::get('/home/user_is_no_employee', [HomeController::class, 'home_user_is_no_employee'])->name('home.user_is_no_employee');
     Route::get('/home/user_is_no_customer', [HomeController::class, 'home_user_is_no_customer'])->name('home.user_is_no_customer');
@@ -118,6 +120,11 @@ Route::middleware(\App\Http\Middleware\CheckSubd::class . ':ab,asario')->group(f
     Route::get('/pictures/{pic}', [App\Http\Controllers\PagesController::class, 'ab_images_cat'])->name('pictures');
 
 }); // <-- schließt Middleware group
+Route::get('/home/no_application_found', [HomeController::class, 'home_no_application_found'])->name('home.no_application_found');
+Route::get('/home/user_is_no_admin', [HomeController::class, 'home_user_is_no_admin'])->name('home.user_is_no_admin');
+Route::get('/home/user_is_no_employee', [HomeController::class, 'home_user_is_no_employee'])->name('home.user_is_no_employee');
+Route::get('/home/user_is_no_customer', [HomeController::class, 'home_user_is_no_customer'])->name('home.user_is_no_customer');
+Route::get('/home/invalid_signature', [HomeController::class, 'home_invalid_signature'])->name('home.invalid_signature');
 
 
     #
@@ -149,13 +156,38 @@ Route::middleware(\App\Http\Middleware\CheckSubd::class . ':ab,asario')->group(f
             return redirect('/admin/dashboard');
         })->name('dashboard');
     });
+    Route::get('/login', [CustomLoginController::class, 'showLoginForm'])->name('login');
 
+    // Login absenden
+    Route::post('/login', [CustomLoginController::class, 'login']);
+
+    // 2FA-Challenge
+    Route::get('/two-factor-challenge', [CustomLoginController::class, 'showTwoFactorForm'])
+    ->name('two-factor.login');
+
+    Route::post('/two-factor-challenge', [CustomLoginController::class, 'twoFactorLogin'])
+        ->name('two-factor.login.post');
+    // Route::get('/two-factor-challenge', [CustomLoginController::class, 'showTwoFactorForm'])
+    //     ->name('two-factor.login');
+    // Route::post('/two-factor-challenge', [CustomLoginController::class, 'twoFactorLogin']);
+    // Route::get('/login', [CustomLoginController::class, 'create'])->name('login');
+    // Route::post('/login', [CustomLoginController::class, 'store']);
+
+    // // Fortify-Routen manuell neu laden (außer login)
+    // \Laravel\Fortify\Fortify::routes(function ($router) {
+    //     $router->register();
+    //     $router->resetPassword();
+    //     $router->emailVerification();
+    // });
 
 
 // include __DIR__."/extraroutes.php";
 Route::get('/test-admin', function () {
+if(Auth::check()){
     return '✅ Middleware is_admin funktioniert';
-})->middleware(['auth', 'is_admin']);
+}
+
+});
 Route::get('/copyleft/images', [ImageUploadController::class, 'CopyLeft'])->name('images.copyleft');
 Route::get('/db-check', function () {
     $tenant = App\Models\Tenant::first(); // oder aus Subdomain ermitteln
@@ -503,7 +535,7 @@ Route::delete('/comments/delete/{comment_id}', [CommentController::class,'destro
 
 
 // Darkmode Route
-Route::post('/toggle-dark-mode', [DarkModeController::class, 'toggle'])->name('toggle-dark-mode');
+
 // Route::post('/get-dark-mode', [ApplicationController::class, 'session_dm'])->name('get-dark-mode');
 // Route::get('/api/dark-mode-status', function (Request $request) {
 //     return response()->json(['dark_mode' => Session::get('dark_mode', false)]);
@@ -520,6 +552,8 @@ Route::get('/tables/sort-enum/{table}/{name}', [TablesController::class, 'getOpt
         ->name("GetTableEnum");
 Route::get('/act-category/{table}/{id?}', [CategoryController::class, 'index'])
     ->name("ArtAct");
+    Route::post('/toggle-dark-mode', [DarkModeController::class, 'toggle'])->name('toggle-dark-mode');
+    Route::post('/toggle-dark-mode', [DarkModeController::class, 'toggle'])->name('toggle.darkmode');
 Route::get('/tables/sort-enumis/{table}/{name}', [TablesController::class, 'getOptionz_itemscope'])
         ->name("GetTableItemScope");
 

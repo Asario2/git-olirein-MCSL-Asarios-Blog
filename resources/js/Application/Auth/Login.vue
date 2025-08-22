@@ -28,13 +28,13 @@
                     <input-container :full-width="true">
                         <input-label
                             name="email"
-                            label="Mailadresse"
+                            label="Mailadresse oder Nickname"
                         ></input-label>
                         <input-element
                             type="email"
                             name="email"
                             v-model="form.email"
-                            placeholder="Mailadresse"
+                            placeholder="Mailadresse / Nickname"
                             autofocus
                             ref="email"
                         ></input-element>
@@ -80,7 +80,6 @@
                     </input-container>
                 </input-group>
             </template>
-
             <template #actions>
                 <!-- Befehle -->
                 <button-group>

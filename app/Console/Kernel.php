@@ -16,6 +16,7 @@ class Kernel extends ConsoleKernel
         \App\Console\Commands\ConvertTimestamps::class,
         \App\Console\Commands\ResizeImages::class,
         \App\Console\Commands\MigrateComments::class,
+        \App\Console\Commands\ApiRoutesCommand::class,
 
 
     ];

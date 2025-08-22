@@ -29,7 +29,7 @@
         <input-error :message="form?.errors?.birthday" />
             </input-container>
 
-            <input-container :full-width="true">
+            <input-container :full-width="true" v-if="form.music">
                 <input-label name="music" label="Musik" />
                 <input-element
                 type="text"
@@ -41,7 +41,7 @@
                 <input-error :message="form?.errors?.music" />
             </input-container>
 
-            <input-container :full-width="true">
+            <input-container :full-width="true" v-if="form.occupation">
                 <input-label name="occupation" label="Beschäftigung" />
                 <input-element
                 type="text"
@@ -52,8 +52,18 @@
                 />
                 <input-error :message="form?.errors?.occupation" />
             </input-container>
-
-            <input-container :full-width="true">
+            <input-container :full-width="true" v-if="form.headline">
+                <input-label name="headline" label="Beschreibung" />
+                <input-element
+                type="text"
+                name="headline"
+                v-model="form.headline"
+                placeholder="Beschreibung über dich "
+                ref="headline"
+                />
+                <input-error :message="form?.errors?.aufgabe" />
+            </input-container>
+            <input-container :full-width="true" v-if="form.interests">
                 <input-label name="interests" label="Interessen" />
                 <input-element
                 type="text"
@@ -64,6 +74,29 @@
                 />
                 <input-error :message="form?.errors?.interests" />
             </input-container>
+            <input-container :full-width="true" v-if="form.aufgabe">
+                <input-label name="tasks" label="Aufgabe" />
+                <input-element
+                type="text"
+                name="aufgabe"
+                v-model="form.aufgabe"
+                placeholder="Deine Aufgabe bei MarbleFX"
+                ref="aufgabe"
+                />
+                <input-error :message="form?.errors?.aufgabe" />
+            </input-container>
+            <input-container :full-width="true" v-if="form.location">
+                <input-label name="location" label="Wohnort" />
+                <input-element
+                type="text"
+                name="location"
+                v-model="form.location"
+                placeholder="Dein Wohnort/Region"
+                ref="location"
+                />
+                <input-error :message="form?.errors?.location" />
+            </input-container>
+
 
             <input-container :full-width="true">
                 <input-label name="fbd" label="Facebook ID" />
@@ -161,6 +194,9 @@ export default {
         interests: this.initialForm?.interests || '',
         fbd: this.initialForm?.fbd || '',
         about: this.initialForm?.about || '',
+        headline: this.initialForm?.headline || '',
+        aufgabe: this.initialForm?.aufgabe || '',
+        location: this.initialForm?.location || '',
       }),
     };
   },
@@ -246,6 +282,26 @@ export default {
       console.log("Formatted birthday:", this.initialForm.birthday);
     }
     },
+    watch: {
+  initialForm: {
+    handler(newVal) {
+      if (newVal) {
+        this.form.music = newVal.music || '';
+        this.form.occupation = newVal.occupation || '';
+        this.form.interests = newVal.interests || '';
+        this.form.fbd = newVal.fbd || '';
+        this.form.about = newVal.about || '';
+        this.form.birthday = newVal.birthday || '';
+        this.inputBirthday = newVal.birthday
+          ? dayjs(newVal.birthday).format('DD.MM.YYYY')
+          : '';
+      }
+    },
+    deep: true,
+    immediate: true,
+  },
+},
+
 };
 </script>
 

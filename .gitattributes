@@ -1,5 +1,4 @@
 * text=auto eol=lf
-
 *.blade.php diff=php
 *.css diff=css
 *.html diff=html
@@ -12,11 +11,10 @@ CHANGELOG.md export-ignore
 # Vue-Dateien als Vue erkennen
 *.vue linguist-detectable=true
 *.vue linguist-language=Vue
-# test
 
 # Vendor & Node ignorieren
 node_modules/* linguist-vendored
 vendor/* linguist-vendored
 
 # Nur Tailwind CSS im public ausschließen
-public/css/tailw/* linguist-vendored
+public/css/tailw/*.css linguist-vendored

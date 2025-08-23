@@ -68,7 +68,7 @@
                             </td>
                             <td v-if="hasRight('delete', row.full_name) && hasRight('view', row.full_name && tableClean)"
                                 class="np-dl-td-edit"
-                                @click="deleterow(row['id'])">
+                                @click="deleteDataRow(row['id'])">
                                 <icon-trash class="w-6 h-6" v-tippy />
                                 <tippy>{{ deleteDescription }}</tippy>
                             </td>
@@ -97,7 +97,7 @@
                             class="np-dl-td-edit"></td>
                             <td v-if="hasRight('delete', row.full_name) && hasRight('view', row.full_name && tableClean)"
                                 class="np-dl-td-edit"
-                                @click="deleterow(row['id'])">
+                                @click="deleteDataRow(row['id'])">
                                 <icon-trash class="w-6 h-6" v-tippy />
                                 <tippy>{{ deleteDescription }}</tippy>
                             </td>

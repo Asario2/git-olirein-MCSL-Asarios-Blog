@@ -664,12 +664,11 @@ return Inertia::render('Homepage/Pictures', [
 
     public function home_rindex(){
         if(SD() != "ab"){
-            $str = "home_".SD()."_ri";
-            return $this->$str();
+            return $this->home_ri();
         }
         return Inertia::render("Homepage/ab/Home");
     }
-    public function home_mfx_ri(){
+    public function home_ri(){
         return Inertia::render("Homepage/ri");
     }
     public function home_mfx()

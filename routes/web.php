@@ -59,6 +59,8 @@ if(SD() == "mfx"){
 // Route::middleware(['checksubd:ab,asario'])->group(function () {
     // Route::middleware('checksubd:ab,asario')->group(function () {
 
+        Route::post('reset-password', [NewPasswordController::class, 'store'])
+        ->name('password.store');
 
 //
 //     AB- Asarios BLog
@@ -380,10 +382,10 @@ Route::get('/devmod', function () {
     Route::post('/comments/{table}/{id}', [CommentController::class, 'store'])->name('comments.store');
     // Route::get('/{table}/{cat?}#headline_{id}', [PostController::class, 'show'])->name('posts.show');
 
-    Route::get(
-        '/admin/dashboard',
-        [DashboardAdminController::class, 'admin_index']
-    )->name('dashboard');
+//     Route::get(
+//         '/admin/dashboard',
+//         [DashboardAdminController::class, 'admin_index']
+//     )->name('dashboard');
 // ===============================
 // Routen für angemeldete Anwender
 // ===============================
@@ -412,6 +414,10 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     // APPLICATION ADMIN
     // =================
     Route::middleware(['is_admin'])->group(function () {
+
+        Route::get('/dashboard', function () {
+            return redirect('/admin/dashboard');
+        })->name('dashboard');
         // Dashboard
         Route::get(
             '/admin/dashboard',
@@ -570,7 +576,16 @@ Route::get("/api/images/{table}/{id}",[TablesController::class,"GetImageUrl"])
         //     //
 
 
-        Route::post('confirm-password', [CustomLoginController::class, 'pw_recovery']);
+
+        // Route::post('reset-password', [CustomLoginController::class, 'pw_recovery'])
+        //     ->name('password.store');
+
+
+
+
+
+
+
         // elseif($subdomain == "mfx")
         // {
         //     // dd($subdomain."asd");

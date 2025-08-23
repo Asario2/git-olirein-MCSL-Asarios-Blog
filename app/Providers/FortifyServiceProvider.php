@@ -43,8 +43,8 @@ class FortifyServiceProvider extends ServiceProvider
         RateLimiter::for('two-factor', function (Request $request) {
             return Limit::perMinute(5)->by($request->session()->get('login.id'));
         });
-        \Laravel\Fortify\Fortify::ignoreRoutes();
-        Fortify::ignoreRoutes();
+        // \Laravel\Fortify\Fortify::ignoreRoutes();
+        // Fortify::ignoreRoutes();
     }
     protected function loginPipeline(\Laravel\Fortify\Http\Requests\LoginRequest $request)
     {

@@ -29,7 +29,7 @@
         <input-error :message="form?.errors?.birthday" />
             </input-container>
 
-            <input-container :full-width="true" v-if="form.music">
+            <input-container :full-width="true" v-if="isform.music">
                 <input-label name="music" label="Musik" />
                 <input-element
                 type="text"
@@ -41,7 +41,7 @@
                 <input-error :message="form?.errors?.music" />
             </input-container>
 
-            <input-container :full-width="true" v-if="form.occupation">
+            <input-container :full-width="true" v-if="isform.occupation">
                 <input-label name="occupation" label="Beschäftigung" />
                 <input-element
                 type="text"
@@ -52,7 +52,7 @@
                 />
                 <input-error :message="form?.errors?.occupation" />
             </input-container>
-            <input-container :full-width="true" v-if="form.headline">
+            <input-container :full-width="true" v-if="isform.headline">
                 <input-label name="headline" label="Beschreibung" />
                 <input-element
                 type="text"
@@ -63,7 +63,7 @@
                 />
                 <input-error :message="form?.errors?.aufgabe" />
             </input-container>
-            <input-container :full-width="true" v-if="form.interests">
+            <input-container :full-width="true" v-if="isform.interests">
                 <input-label name="interests" label="Interessen" />
                 <input-element
                 type="text"
@@ -74,7 +74,7 @@
                 />
                 <input-error :message="form?.errors?.interests" />
             </input-container>
-            <input-container :full-width="true" v-if="form.aufgabe">
+            <input-container :full-width="true" v-if="isform.aufgabe">
                 <input-label name="tasks" label="Aufgabe" />
                 <input-element
                 type="text"
@@ -85,7 +85,7 @@
                 />
                 <input-error :message="form?.errors?.aufgabe" />
             </input-container>
-            <input-container :full-width="true" v-if="form.location">
+            <input-container :full-width="true" v-if="isform.location">
                 <input-label name="location" label="Wohnort" />
                 <input-element
                 type="text"
@@ -97,8 +97,19 @@
                 <input-error :message="form?.errors?.location" />
             </input-container>
 
+            <input-container :full-width="true" v-if="isform.website">
+                <input-label name="website" label="Website" />
+                <input-element
+                type="text"
+                name="website"
+                v-model="form.website"
+                placeholder="Website"
+                ref="website"
+                />
+                <input-error :message="form?.errors?.website" />
+            </input-container>
 
-            <input-container :full-width="true">
+            <input-container :full-width="true" v-if="isform.fbd">
                 <input-label name="fbd" label="Facebook ID" />
                 <input-element
                 type="text"
@@ -148,6 +159,7 @@ import SectionForm from "@/Application/Components/Content/SectionForm.vue";
 import InputButton from "@/Application/Components/Form/InputButton.vue";
 import IconCal from "@/Application/Components/Icons/IconCal.vue";
 import { useForm } from '@inertiajs/inertia-vue3';
+import { GetColumns } from "@/helpers";
 import { route } from 'ziggy-js';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
@@ -184,6 +196,7 @@ export default {
   },
   data() {
     return {
+        isform: {},
         inputBirthday: this.initialForm?.birthday
       ? dayjs(this.initialForm.birthday).format('DD.MM.YYYY')
       : '',
@@ -270,7 +283,7 @@ export default {
 //   }
 },
   },
-  mounted() {
+  async mounted() {
     console.log("form object:", this.initialForm);
     console.log("Birthday bei Submit:", this.form.birthday);
   if (this.form.birthday) {
@@ -281,6 +294,7 @@ export default {
     if (this.form.birthday) {
       console.log("Formatted birthday:", this.initialForm.birthday);
     }
+    this.isform = await GetColumns("users");
     },
     watch: {
   initialForm: {
@@ -290,6 +304,7 @@ export default {
         this.form.occupation = newVal.occupation || '';
         this.form.interests = newVal.interests || '';
         this.form.fbd = newVal.fbd || '';
+        this.form.website = newVal.website || '';
         this.form.about = newVal.about || '';
         this.form.birthday = newVal.birthday || '';
         this.inputBirthday = newVal.birthday

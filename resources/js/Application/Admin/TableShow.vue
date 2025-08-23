@@ -44,7 +44,14 @@
           <!-- Datenzeilen -->
           <template v-slot:datarow="data" :items="items" @update-list="removeItem">
             <td class="np-dl-td-normal">{{ getMixId(data.datarow) }}</td>
-            <td class="np-dl-td-normal" v-if="data.datarow.pub !== 'undefined'"><span v-html="onoffbtn(data.datarow.pub)"></span></td>
+            <td class="np-dl-td-normal" v-if="data.datarow.pub !== 'undefined'">
+                <PublishButton
+                :table="CleanTable()"
+                :id="data.datarow.id"
+                :published="data.datarow.pub === 1"
+                />
+                <!-- <span v-html="onoffbtn(data.datarow.pub)"></span> -->
+            </td>
             <!-- Kategorie -->
             <td v-if="data.datarow.image_categories" class="np-dl-td-normal">
               <img :src="'/images/_ab/images_categories/sm/' + data.datarow.image_categories + '.jpg'" />
@@ -122,6 +129,7 @@
   import { GetSettings } from "@/helpers";
   import Breadcrumb from "@/Application/Components/Content/Breadcrumb.vue";
   import ListContainer from "@/Application/Components/Lists/ListContainer.vue";
+  import PublishButton from "@/Application/Components/Form/PublishButton.vue";
   import axios from "axios";
   import { nextTick } from 'vue';
   import Sortable from "sortablejs"; // <-- NEU
@@ -138,6 +146,7 @@
       Breadcrumb,
       CreatedAt,
       ListContainer,
+      PublishButton,
     },
     props: {
       applicationName: {
@@ -285,6 +294,7 @@ methods: {
             }
             return "<img src='/images/icons/offline.png' />"
         },
+        CleanTable,
       onCheckedStatusUpdate(status) {
         this.checkedStatus = status;
       },

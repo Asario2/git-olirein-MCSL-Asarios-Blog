@@ -619,7 +619,7 @@ class TablesController extends Controller
         //     ->paginate($pag)
         //     ->withQueryString();
 
-        $orderColumn = $ord[0];
+        $orderColumn = $table.".".$ord[0];
         $orderDirection = strtoupper($ord[1]) === 'DESC' ? 'DESC' : 'ASC';
 
         $tables = $query
@@ -691,7 +691,7 @@ class TablesController extends Controller
     {
         $crea = [];
 
-        foreach (Settings::$searchable as $tablex) {
+        foreach (Settings::$searchable[SD()] as $tablex) {
             $rows = DB::table($tablex)
                 ->select(
                     'id AS post_id',
@@ -710,7 +710,7 @@ class TablesController extends Controller
 
             $crea[$tablex] = $rows;
         }
-        // \Log::info("rows:".json_encode($rows));
+         \Log::info("rows:".json_encode($crea));
         return response()->json($crea);
     }
     public function save_order(Request $request,$table)
@@ -2172,6 +2172,28 @@ return response()->json($user);
     //         ->first();
 
     // }
+    // ArticleController.php
+    public function togglePub(Request $request)
+    {
+        $request->validate([
+            'table' => 'required|string',
+            'id'    => 'required|integer',
+            'pub'   => 'required|boolean',
+        ]);
+
+        $table = $request->input('table');
+        $id    = $request->input('id');
+        $pub   = $request->boolean('pub');
+
+        \DB::table($table)->where('id', $id)->update(['pub' => $pub]);
+
+        return response()->json(['success' => true, 'pub' => $pub]);
+    }
+
+    public function getTableColumns($tableName)
+    {
+        return response()->json(Schema::getColumnListing($tableName));
+    }
     public function URights(Request $request)
     {
         if(!CheckZRights("UserRights"))

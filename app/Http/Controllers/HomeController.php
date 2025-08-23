@@ -662,6 +662,16 @@ return Inertia::render('Homepage/Pictures', [
         return Inertia::render('Homepage/InvalidSignature');
     }
 
+    public function home_rindex(){
+        if(SD() != "ab"){
+            $str = "home_".SD()."_ri";
+            return $this->$str();
+        }
+        return Inertia::render("Homepage/ab/Home");
+    }
+    public function home_mfx_ri(){
+        return Inertia::render("Homepage/ri");
+    }
     public function home_mfx()
     {
         //

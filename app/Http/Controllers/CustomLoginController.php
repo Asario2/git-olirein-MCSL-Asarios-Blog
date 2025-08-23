@@ -113,4 +113,57 @@ class CustomLoginController extends Controller
 
         return app(TwoFactorLoginResponse::class);
     }
+    public function logout(Request $request)
+    {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        // dd("test");
+        // return redirect('/')
+        // ->with('force_reload', true);
+        // return response()->json("true");
+        return redirect()->route('home.rindex')
+        ->with('needsReload', true);
+    }
+public function pw_recovery(Request $request)
+{
+    $request->validate([
+        'email' => 'required|email|exists:users,email',
+        'current_password' => 'required|string',
+        'new_password' => 'required|string|confirmed|min:8',
+    ]);
+    dd($request);
+    $user = \App\Models\User::where('email', $request->email)->first();
+
+    if (!$user) {
+        return back()->withErrors(['email' => 'Benutzer nicht gefunden.']);
+    }
+
+    $currentPassword = $request->input('current_password');
+
+    // Prüfen: neues Laravel Passwort
+    if (!\Illuminate\Support\Facades\Hash::check($currentPassword, $user->password)) {
+        // Prüfen: altes Passwort
+        if ($user->password_old) {
+            $hasher = new \App\Support\PasswordHash(8, true); // alte App-Logik
+            if (!$hasher->CheckPassword($currentPassword, $user->password_old)) {
+                return back()->withErrors(['current_password' => 'Falsches Passwort.']);
+            }
+        } else {
+            // return back()->withErrors(['current_password' => 'Falsches Passwort.']);
+        }
+    }
+
+    // Neues Passwort **explizit hashen**
+    // $user->password = \Illuminate\Support\Facades\Hash::make($request->input('new_password'));
+    // $user->password_old = null;
+    // $user->save();
+    $user->fill([
+        'password' => $request->input('new_password'), // 'hashed'-Cast greift hier
+        'password_old' => null,
+    ])->save();
+
+    return back()->with('success', 'Passwort erfolgreich geändert.');
+}
+
 }

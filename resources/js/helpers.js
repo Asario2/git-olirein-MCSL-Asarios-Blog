@@ -1,5 +1,21 @@
 import axios from 'axios';
 
+export async function GetColumns(table) {
+    try {
+        const response = await axios.get(`/api/table-columns/${table}`);
+        if (Array.isArray(response.data)) {
+            // Spaltenliste in ein Objekt konvertieren: { col1: true, col2: true }
+            return response.data.reduce((acc, col) => {
+                acc[col] = true;
+                return acc;
+            }, {});
+        }
+        return {};
+    } catch (error) {
+        console.error("Fehler beim Laden der Spalten:", error);
+        return {};
+    }
+}
 export async function loadRightsOnce() {
   if (!cache.tables) {
     try {

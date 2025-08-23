@@ -42,7 +42,7 @@
         <link href="/css/app.css" rel="stylesheet">
         <link href="/css/tailw/extra.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-                    
+
         {{-- <script src="/js/app.js"></script> --}}
         {{-- <script src="/js/users.js"></script> --}}
         <link rel="icon" type="image/png" href="{{ $favicon }}">
@@ -77,6 +77,11 @@
 
         <!-- https://github.com/whitecube/laravel-cookie-consent -->
         @cookieconsentview
+        <script>
+            @if(session('force_reload'))
+                sessionStorage.setItem("force_reload", "true");
+            @endif
+        </script>
     </body>
 
     </html>

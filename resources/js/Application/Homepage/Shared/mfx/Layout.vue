@@ -360,11 +360,6 @@ export default {
   },
 
   mounted() {
-    const shouldReload = localStorage.getItem('reload_dashboard');
-
-    if (shouldReload) {
-      localStorage.removeItem('reload_dashboard');
-    }
 
     // Den 'search' Parameter prüfen
     const urlParams = new URLSearchParams(window.location.search);
@@ -409,6 +404,19 @@ export default {
     if (this.isLoading) {
       localStorage.setItem('loading', 'true');
     }
+
+
+    if (this.$page.props.flash?.needsReload && !sessionStorage.getItem('needsReload')) {
+        sessionStorage.setItem('needsReload', '1');
+        alert("RELAODED");
+        //window.location.reload();
+
+    } else {
+        // Nach einmaligem Reload entfernen, damit es nicht erneut feuert
+        sessionStorage.removeItem('needsReload');
+    }
+
+
   },
 
   methods: {
@@ -475,8 +483,23 @@ export default {
       localStorage.theme = this.mode;
     },
 
-    logoutUser() {
-      this.$inertia.post(this.route("logout"));
+   async logoutUser() {
+
+    try {
+        await this.$inertia.post(this.route('logout'));
+
+        // // Logout erfolgreich → einmaliges Reload
+        // if (!sessionStorage.getItem('needsReload')) {
+        //     sessionStorage.setItem('needsReload', '1');
+        //     window.location.reload();
+        // } else {
+        //     sessionStorage.removeItem('needsReload');
+        // }
+
+        } catch (e) {
+        console.error(e);
+        }
+
     },
 
     // Startet 3-Sekunden-Timeout, wenn der Nutzer mit Tippen aufhört

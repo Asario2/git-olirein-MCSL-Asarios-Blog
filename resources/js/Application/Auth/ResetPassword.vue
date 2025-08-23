@@ -148,6 +148,8 @@ export default defineComponent({
             this.loading = true;
             this.loadingText = "Das neue Kennwort wird gespeichert!";
             //
+            // console.log(this.form);
+            // return;
             this.$inertia.post(this.route(routeResetPassword), this.form, {
                 onFinish: () => {
                     this.loading = false;

@@ -3,7 +3,7 @@
     <a v-if="createdAt" :href="`/${tablePath}?search=${createdAt}`">
       <slot></slot>
     </a>
-    <span v-else>lädt …</span>
+    <span v-else>lädt …{{ data }}</span>
   </template>
 
   <script>
@@ -82,4 +82,4 @@
     }
   }
   </script>
-    
+p

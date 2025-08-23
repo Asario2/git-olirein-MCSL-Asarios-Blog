@@ -39,8 +39,12 @@
                         <b class='text-grey-0'>Alter: </b>{{ get_age(item.birthday) }}<br />
                         <b class='text-grey-0'>Aufgabe: </b>{{ item.aufgabe }}<br />
                         <b class='text-grey-0'>Wohnort: </b>{{ item.location }}<br />
-                        <b class='text-grey-0'>Website: </b><a v-if="item.website" :href="item.website">{{ item.website }}</a><span v-else >Keine</span>
-                    </div>
+                        <b class='text-grey-0'>Website: </b><a v-if="item.website" :href="item.website">{{ item.website }}</a><span v-else >Keine</span><br />
+                        <span  v-if="item.fbd">
+                        <b style="color:#0c69ff;"><i class="fab fa-facebook"></i>&nbsp; </b><a :href="'https://facebook.com/profile.php?id=' + item.fbd">facebook</a>
+                        </span>
+                        </div>
+
                     </div>
                 </div>
                 </div>

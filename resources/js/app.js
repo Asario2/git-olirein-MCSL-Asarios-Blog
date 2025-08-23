@@ -84,6 +84,17 @@ loadAllRights().then(() => {
             // App mounten
             app.mount(el);
 
+            // === EINMALIGER RELOAD NACH LOGOUT ===
+            if (props.flash?.needsReload && !sessionStorage.getItem('needsReload')) {
+                sessionStorage.setItem('needsReload', '1');
+                console.log("Reload nach Logout");
+                window.location.reload();
+            } else if (sessionStorage.getItem('needsReload')) {
+                // Nach einmaligem Reload Flag entfernen
+                sessionStorage.removeItem('needsReload');
+            }
+            // ======================================
+
             // Dark Mode laden
             async function loadDarkMode() {
                 let mode = localStorage.getItem("theme") || "light";

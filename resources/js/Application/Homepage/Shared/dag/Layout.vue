@@ -351,7 +351,7 @@ export default {
   },
 
   mounted() {
-    const shouldReload = localStorage.getItem('reload_dashboard');
+    const  = localStorage.getItem('reload_dashboard');
 
     if (shouldReload) {
       localStorage.removeItem('reload_dashboard');

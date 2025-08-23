@@ -1,7 +1,7 @@
 <template>
 <span v-if="hasRight('edit',table)">
 <a :href="'/admin/tables/edit/'+ id+ '/' + table + ''" @click.stop><IconPencil class="sm-pencil cursor-pointer"></IconPencil></a>
-</span>&nbsp;&nbsp;
+&nbsp;&nbsp;</span>
 <span v-if="hasRight('delete',table)">
 <form @submit.prevent="deletePost" style="display:inline">
     <button @click.stop type="submit" onclick="return confirm('Sind Sie sicher, dass Sie diesen Blogbeitrag löschen möchten?');"><IconTrash class="sm-pencil cursor-pointer"></IconTrash></button>

@@ -66,6 +66,10 @@ if(SD() == "mfx"){
 Route::middleware(\App\Http\Middleware\CheckSubd::class . ':ab,asario')->group(function () {
 
     Route::get("/", [HomeController::class, "home_index"])->name("home.index");
+    Route::get('/ri', [HomeController::class, 'home_rindex'])->name('home.rindex');
+    Route::get('/dashboard', function () {
+        return redirect('/admin/dashboard');
+    })->name('dashboard');
 
 
     // Imprint
@@ -98,9 +102,6 @@ Route::middleware(\App\Http\Middleware\CheckSubd::class . ':ab,asario')->group(f
     })->name("home.start");
 
     // Dashboard redirect
-    Route::get('/dashboard', function () {
-        return redirect('/admin/dashboard');
-    })->name('dashboard');
 
     // Fehlerseiten
 
@@ -134,6 +135,7 @@ Route::get('/home/invalid_signature', [HomeController::class, 'home_invalid_sign
     #
     Route::middleware(\App\Http\Middleware\CheckSubd::class . ':mfx,marblefx')->group(function () {
         Route::get('/', [HomeController::class, 'home_index'])->name('home.index');
+        Route::get('/ri', [HomeController::class, 'home_rindex'])->name('home.rindex');
 
         Route::get('/changelog', [HomeController::class, 'mcsl_changelog'])->name('mfx.changelog');
         Route::get('/changelog_old', [HomeController::class, 'changelog_old'])->name('mfx.changelog.old');
@@ -156,10 +158,14 @@ Route::get('/home/invalid_signature', [HomeController::class, 'home_invalid_sign
             return redirect('/admin/dashboard');
         })->name('dashboard');
     });
+    Route::get('/api/table-columns/{table}', [TablesController::class, 'getTableColumns'])
+    ->name('api.table-columns');
     Route::get('/login', [CustomLoginController::class, 'showLoginForm'])->name('login');
 
     // Login absenden
     Route::post('/login', [CustomLoginController::class, 'login']);
+    Route::post('/logout', [CustomLoginController::class, 'logout'])
+    ->name('logout');
 
     // 2FA-Challenge
     Route::get('/two-factor-challenge', [CustomLoginController::class, 'showTwoFactorForm'])
@@ -368,6 +374,7 @@ Route::get('/devmod', function () {
             ->first(); // nur ein Eintrag
     })->name('getnickfromcomments');
     // Route::post('/toggle-darkmode', [App\Http\Controllers\DarkModeController::class, 'toggle'])->name('toggle.darkmode');
+    Route::post('/toggle-pub', [TablesController::class, 'togglePub'])->name('toggle.pub');
     Route::get('tables/{table}/create', [TablesController::class, 'createEntryForm'])->name('tables.create-table');
     Route::post('/comments/store/{table}/{postId}', [CommentController::class, 'store_alt'])->name('comments.store_alt');
     Route::post('/comments/{table}/{id}', [CommentController::class, 'store'])->name('comments.store');
@@ -508,7 +515,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         });
 
 
-        Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
+        // Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
         //Route::get('logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout_sfa');
     // ====================
     // APPLICATION EMPLOYEE
@@ -563,7 +570,8 @@ Route::get("/api/images/{table}/{id}",[TablesController::class,"GetImageUrl"])
         //     //
 
 
-           // elseif($subdomain == "mfx")
+        Route::post('confirm-password', [CustomLoginController::class, 'pw_recovery']);
+        // elseif($subdomain == "mfx")
         // {
         //     // dd($subdomain."asd");
 
@@ -582,6 +590,7 @@ Route::get("/api/images/{table}/{id}",[TablesController::class,"GetImageUrl"])
         // include __DIR__."/auth.php";
         // Auth::routes();
         Route::get("/",[HomeController::class,"home_index"])->name("home.index");
+        Route::get('/ri', [HomeController::class, 'home_rindex'])->name('home.rindex');
         Route::fallback(function () {
             return Inertia::render('Homepage/NoPageFound');
         });

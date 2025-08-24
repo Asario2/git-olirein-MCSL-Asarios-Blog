@@ -1029,4 +1029,8 @@ a,.ckoo{
 .dark\:bg-layout-night-2050:is(.dark *){
     background-color:#000 !important;
 }
-
+.pad SPAN{
+    padding:10px !important;
+    margin:0px !important;
+    border-radius:0px !important;
+}

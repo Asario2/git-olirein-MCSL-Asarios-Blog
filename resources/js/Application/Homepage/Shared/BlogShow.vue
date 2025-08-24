@@ -9,7 +9,7 @@
     <!-- Blog-Bild -->
     <div class="relative bg-layout-sun-100 dark:bg-layout-night-100" style="z-index:0;">
         <img
-            :src="`/images/blogs/${blog.url}`"
+            :src="`/images/_ab/blogs/image_path/${blog.url}`"
             :alt="blog.name"
 
             style='min-width:480px;min-height:360px;width:100%'

@@ -148,13 +148,13 @@ export default defineComponent({
         const pathParts = window.location.pathname.split('/');
         // Beispiel: ["", "reset-password", "d9f8ff59544973ec48f6beed15a672d851540ebca17aca8bd039fb3e99adc6c9"]
         const token = pathParts[2];
-        alert(token);
+
     },
     methods: {
         resetPasswordUser() {
             let routeResetPassword = "password.store"
             //
-            console.log(this.form);
+
             this.loading = true;
             this.loadingText = "Das neue Kennwort wird gespeichert!";
             //

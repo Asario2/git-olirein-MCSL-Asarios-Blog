@@ -21,6 +21,9 @@ class CommentController extends Controller
     function __construct()
     {
         $this->processedIds = session()->get('processedIds', []);
+        if(!session_id()){
+            session_start();
+        }
     }
 
 
@@ -141,10 +144,23 @@ class CommentController extends Controller
         'email' => 'required|email',
         'subject' => 'required',
         'message' => 'required',
-        'captcha' => 'required|in:7',
+        'captcha' => 'required|string',
         'accepted' => 'accepted',
     ]);
-    Mail::to('parie@gmx.de')->send(new ContactMail($_SERVER['HTTP_HOST'],$request->name,$request->email,$request->subject,$request->message));
+    \Log::info([$_SESSION['captcha_text'], $request->captcha]);
+
+    if($_SESSION['captcha_text'] !== $request->captcha  || empty($request->captcha) || empty($_SESSION['captcha_text']))
+    {
+
+        return false;
+    }
+    else{
+        unset($_SESSION['captcha_text']);
+        Mail::to('parie@gmx.de')->send(new ContactMail($_SERVER['HTTP_HOST'],$request->name,$request->email,$request->subject,$request->message));
+        return "1";
+    }
+    return false;
+
     // try {
     //     Mail::to('admin@marblefx.de')->send(new ContentMail(
     //         $request->nick,

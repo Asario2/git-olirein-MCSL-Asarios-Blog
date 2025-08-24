@@ -32,10 +32,12 @@ class="max-w-xl mx-auto space-y-6 p-6
 
 <div>
     <label class="block font-semibold mb-1 text-layout-sun-1000 dark:text-layout-night-1000">
-        Sicherheitsfrage: Was ist 3 + 4?
+        Sicherheitsfrage
     </label>
-    <input v-model="form.captcha" type="text"
-        class="input border border-layout-sun-1050 dark:border-layout-night-1050" required />
+    <captcha
+        @update="updateCaptcha"
+        ref="captcha"
+        ></captcha>
 </div>
 
 <div class="flex items-center">
@@ -60,13 +62,13 @@ class="max-w-xl mx-auto space-y-6 p-6
 <script>
 import { defineComponent } from "vue";
 import { selectionHelper, GetSettings,rumLaut } from "@/helpers";
-
+import  captcha  from "@/Application/Components/captcha.vue";
 
 export default defineComponent({
     name: "emailview",
 
     components: {
-
+        captcha,
     },
     props:{
         news:[Array,Object],
@@ -87,6 +89,9 @@ export default defineComponent({
   },
 
     methods: {
+        updateCaptcha(value) {
+      this.form.captcha = value
+    },
         cleanHtml(html) {
       const result = rumLaut(html);
      // console.log("rumLaut output:", result);
@@ -95,11 +100,21 @@ export default defineComponent({
     },
     async submitForm() {
       try {
+        console.log(this.form);
         const response = await axios.post('/contact/send', this.form)
-        alert('Nachricht erfolgreich gesendet!')
+        if(response.data == "1"){
+            alert('Nachricht erfolgreich gesendet!');
+        }
+        else{
+            alert("Bitte Captcha Überprüfen");
+        }
+
+
+        this.$refs.captcha.resetCaptcha();
         this.resetForm()
       } catch (error) {
-        alert('Fehler beim Senden der Nachricht.')
+        this.$refs.captcha.resetCaptcha();
+        alert("Fehler beim Senden der Nachricht.\nBitte überpfüfen Sie das Captcha")
       }
     },
     resetForm() {

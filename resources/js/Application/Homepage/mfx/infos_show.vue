@@ -157,7 +157,7 @@ export default defineComponent({
         },
 
         linkit(str) {
-            return str.replace(/#(\d+)/g, "<a href='https://github.com/Asario2/MCSL-based-on-Starter-Eleven/issues/$1'>#$1</a>");
+            return str.replace(/(?<!&)#(\d+)/g, "<a href='https://github.com/Asario2/MCSL-based-on-Starter-Eleven/issues/$1'>#$1</a>");
         },
 
         async loadVotez() {

@@ -1,4 +1,4 @@
-import MetaHeader from "@/Application/Homepage/Shared/MetaHeader.vue";
+
 <template>
     <div class="prose max-w-none p-4">
       <div v-if="loading">Lade Changelog...</div>
@@ -8,8 +8,9 @@ import MetaHeader from "@/Application/Homepage/Shared/MetaHeader.vue";
 
   <script>
   import { marked } from 'marked';
-
+  import MetaHeader from "@/Application/Homepage/Shared/MetaHeader.vue";
   export default {
+
   components: { MetaHeader },
     data() {
       return {
@@ -41,7 +42,7 @@ import MetaHeader from "@/Application/Homepage/Shared/MetaHeader.vue";
     methods:{
         linkit(str)
         {
-            return str.replace(/#(\d+)/g, "<a href='https://github.com/Asario2/MCSL-based-on-Starter-Eleven/issues/$1'>#$1</a>");
+            return str.replace(/(?<!&)#(\d+)/g, "<a href='https://github.com/Asario2/MCSL-based-on-Starter-Eleven/issues/$1'>#$1</a>");
         }
     }
   };

@@ -7,6 +7,7 @@
     if (!session_id()) {
         session_start();
     }
+    
     $_SESSION['comment_ids'] = [];
 @endphp
 <!doctype html>

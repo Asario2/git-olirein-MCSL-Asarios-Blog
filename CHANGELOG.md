@@ -65,4 +65,13 @@
 ![Version](https://img.shields.io/badge/version-2.73.4-orange) PublicRadio default selection (#61)   
 ![Version](https://img.shields.io/badge/version-2.74.1-orange) Fallback of localhost (#62)   
 ![Version](https://img.shields.io/badge/version-2.75.0-orange) Created Marblefx.de Page (#47)  
+![Version](https://img.shields.io/badge/version-2.76.2-orange) feature - Meta Title adding for most pages (#63)  
+![Version](https://img.shields.io/badge/version-2.77.2-orange) bug - had to fix socialmedia links esp. Twitter (#65)  
+![Version](https://img.shields.io/badge/version-2.78.1-orange) Bug - Layout error CSS file not loaded correctly (#66)  
+![Version](https://img.shields.io/badge/version-2.79.4-orange) bug - Password reset doesn't works (#67)  
+![Version](https://img.shields.io/badge/version-2.80.7-orange) bug in tables/show Deleting (#69)  
+![Version](https://img.shields.io/badge/version-2.81.4-orange) smaller Hot Fixes    
+
+
+  
 

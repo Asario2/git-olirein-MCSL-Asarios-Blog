@@ -73,7 +73,7 @@ Route::middleware(\App\Http\Middleware\CheckSubd::class . ':ab,asario')->group(f
         return redirect('/admin/dashboard');
     })->name('dashboard');
 
-
+    Route::get('/home/aboutme', [HomeController::class, 'home_about'])->name('home.about');
     // Imprint
     Route::get('/home/imprint', [HomeController::class, 'home_imprint'])->name('home.imprint');
     // Privacy
@@ -427,14 +427,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::get('/api/created-at', [TablesController::class, 'getCreatedAt'])->name("created.at");
         Route::post("/api/save-order/{table}", [TablesController::class, 'save_order'])->name("save-order");
         // Route::get("/api/created-at", [TablesController::class],'GetCreatedAt')->name("created.at");
-
-
-
-
-
-
-
-
+        Route::get('api/headlines/{table}', [TablesController::class, 'getHeadlines']);
+        Route::post('/api/entries/update-position/{table}', [TablesController::class, 'updatePosition']);
 
         // =================
         // Laravel-Log-Datei

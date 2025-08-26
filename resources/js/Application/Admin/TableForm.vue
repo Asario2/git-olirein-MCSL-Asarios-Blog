@@ -55,6 +55,25 @@
 
                     </InputFormText>
                 </input-container>
+                <input-container v-else-if="field.class === 'position'">
+                    <InputPosition
+                        :id="field.name"
+                        :name="field.name"
+                        :entries="entries"
+                        :currentPosition="entry.position"
+                        @position-changed="newPosition = $event"
+                        :placeholder="field.placeholder || ''"
+
+
+
+                        :required="isRequired(field.required)"
+
+
+                        >
+                        <template #label>{{ field.label }}</template>
+
+                    </InputPosition>
+                </input-container>
                 <input-container v-if="field.type === 'autoSlug'">
                     <InputFormText
                         :id="field.name"
@@ -629,6 +648,7 @@ import { ref, watch } from "vue";
 // const page2 = usePage();
 import { CleanTable, CleanId } from '@/helpers';
 import ImageUploadModal from '@/Application/Components/ImageUploadModal.vue';
+import InputPosition from '@/Application/Components/InputPosition.vue';
 // import { Ziggy } from 'ziggy-js';
 // import route from 'ziggy';
 
@@ -723,6 +743,7 @@ export default defineComponent({
          Alert,
          ArtSelect,
          ImageUploadModal,
+         InputPosition,
     },
 
     props: {
@@ -820,6 +841,7 @@ export default defineComponent({
         aslug: '',
         nf2:'',
         previewImages: {},
+        newPosition: null,
         subdomain: window.subdomain || '',
 
         fieldtype: "", // Oder ein sinnvoller Standardwert
@@ -844,6 +866,7 @@ export default defineComponent({
             options_sel: {},
             sdata: {},
             loading: false,
+            entries: [], // deine geladenen Daten
             loadingText: null,
             //
             confirmingTableDeletion: false,
@@ -1204,6 +1227,27 @@ export default defineComponent({
                 // };
             },
             methods: {
+                async updatePosition(newPosition) {
+                    console.log("Neue Position:", newPosition);
+
+                    await axios.post("/api/entries/update-position" + CleanTable(), {
+                        id: this.entry.id,
+                        position: newPosition
+                    });
+
+                    // optional: lokal gleich updaten
+                    this.entry.position = newPosition;
+
+                    // oder komplett reloaden:
+                    // this.fetchEntries();
+                    },
+                    async fetchEntries() {
+                        const { data } = await axios.get("/api/headlines/" + CleanTable());
+                    this.entries = data;
+                    },
+
+
+
                 getPreviewSrc(field,num='') {
                     const blobPrefix = "blob:"+window.ahost;
                     const blobUrl = this.previewImages[field.name];
@@ -1843,12 +1887,24 @@ isValid(editor) {
 },
 
 async submitForm() {
+// Positions
 
+try{
+    await axios.post("/api/entries/update-position/" + CleanTable(), {
+        id: this.entry.id,
+        position: this.newPosition
+      });
+
+      this.entry.position = this.newPosition; // lokal anpassen
+      alert("Position gespeichert!");
+}
+catch (error) {
+            console.error("Fehler beim Positionieren:", error);
+        }
 
     console.log('submitForm wurde aufgerufen');
 
-
-        try {
+    try {
 
             const editors = this.$refs.editor;
             if(editors){
@@ -2067,7 +2123,7 @@ async submitForm() {
     return false;
   }
 },
-    },
+            },
     beforeUnmount() {
     // Listener aufräumen
     emitter.off('refresh-preview', this.getPreviewImagez);
@@ -2078,7 +2134,7 @@ async submitForm() {
         this.ulpath = "/images/_"+ this.subdomain + "/"+this.CleanTable_alt()+ "/";
         emitter.on('refresh-preview', this.getPreviewImagez);
         this.getPreviewImagez();
-
+        this.fetchEntries();
 
 
         for (const [key, value] of Object.entries(this.ffo)) {
@@ -2117,7 +2173,7 @@ async submitForm() {
         }
         this.table_image = "images";
         // this.fetchImage(this.ref3,this.table_image);
-        console.log("ffo" + JSON.stringify(this.localFfo,null,2));
+        //      console.log("ffo" + JSON.stringify(this.localFfo,null,2));
     //    this.localFfo = this.fetchFormData();
 
     this.nf2 = this.localFfo.original[this.column]?.value;

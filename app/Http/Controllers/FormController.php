@@ -452,6 +452,9 @@ class FormController extends Controller
                 }
                 return "password";
             break;
+            case "position":
+                return "position";
+            break;
             case "preis":
                 return "price";
             break;

@@ -772,6 +772,10 @@ return Inertia::render('Homepage/Pictures', [
             'users' => $users, // statt 'data'
         ]);
     }
+    public function home_about()
+    {
+        return home_usershow("1");  
+    }
     //
     public function AddUserAI($val = 0)
     {

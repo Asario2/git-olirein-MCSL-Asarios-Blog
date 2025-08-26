@@ -687,6 +687,72 @@ class TablesController extends Controller
 
         ]);
     }
+    public function getHeadlines($table){
+        if(!Schema::hasColumn($table,"position"))
+        {
+            return [];
+        }
+        if(Schema::hasColumn($table,"name")){
+            $hd = "name";
+        }
+        if(Schema::hasColumn($table,"title")){
+            $hd = "title";
+        }
+        if(Schema::hasColumn($table,"headline")){
+            $hd = "headline";
+        }
+        return DB::table($table)->select('id', $hd,"position")->orderBy('position')->get();
+    }
+    public function updatePosition(Request $request, $table)
+{
+    $request->validate([
+        'id' => 'required|integer',
+        'position' => 'required|integer|min:1',
+    ]);
+
+    $entry = DB::table($table)->where('id', $request->id)->first();
+    if (!$entry) {
+        return response()->json(['error' => 'Entry not found'], 404);
+    }
+
+    $newPosition = $request->position;
+    $allEntries = DB::table($table)->orderBy('position')->get();
+
+    if ($newPosition > $allEntries->count()) {
+        $newPosition = $allEntries->count();
+    }
+
+    // Eintrag rausnehmen
+    $sorted = $allEntries->reject(fn($e) => $e->id === $entry->id);
+
+    // Neue Reihenfolge bauen
+    $result = collect();
+    foreach ($sorted as $index => $item) {
+        if (($index + 1) === $newPosition) {
+            $result->push($entry->id); // hier an exakter Stelle einfügen
+        }
+        $result->push($item->id);
+    }
+
+    // Falls letzter Platz → anhängen
+    if (!$result->contains($entry->id)) {
+        $result->push($entry->id);
+    }
+
+    // Positionen speichern
+    foreach ($result as $index => $id) {
+        DB::table($table)->where('id', $id)->update(['position' => $index + 1]);
+    }
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Position aktualisiert',
+        'new_position' => $newPosition,
+        'order' => $result->values(), // zum Debuggen
+    ]);
+}
+
+
     public function getCreatedAt()
     {
         $crea = [];

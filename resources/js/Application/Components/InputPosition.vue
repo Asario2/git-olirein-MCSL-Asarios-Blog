@@ -5,11 +5,11 @@
                 focus:border-primary-sun-500 dark:border-layout-night-300
                 dark:text-layout-night-900 dark:bg-layout-night-50 dark:placeholder-layout-night-400 dark:focus:ring-primary-night-500 dark:focus:border-primary-night-500"
                 id="positionSelect"
-                v-model="selectedPosition"
-                @change="emitPosition" >
+                v-model.number="selectedPosition"
+      @change="emitPosition" >
         <option value="1">Ganz Oben</option>
         <option
-          v-for="(item, index) in entries"
+          v-for="(item, index) in filteredEntries"
           :key="item.id"
           :value="index + 2"
         >
@@ -25,13 +25,18 @@
     name: "InputPosition",
     props: {
       entries: { type: Array, required: true }, // [{id: 1, title: 'foo', position: 1}, ...]
-      currentPosition: { type: Number, default: 1 } // Position des Eintrags aus DB
-
+      currentPosition: { type: Number, default: 1 }, // Position des Eintrags aus DB
+      currentId: { type: Number, required: true },
     },
     data() {
     return {
       selectedPosition: this.currentPosition
     };
+  },
+  computed: {
+    filteredEntries() {
+      return this.entries.filter(e => e.id !== this.currentId);
+    }
   },
   watch: {
     currentPosition(newVal) {

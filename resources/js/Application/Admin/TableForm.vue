@@ -60,7 +60,8 @@
                         :id="field.name"
                         :name="field.name"
                         :entries="entries"
-                        :currentPosition="entry.position"
+                        :currentId="field.id"
+                        :currentPosition="field.value"
                         @position-changed="newPosition = $event"
                         :placeholder="field.placeholder || ''"
 
@@ -1896,7 +1897,7 @@ try{
       });
 
       this.entry.position = this.newPosition; // lokal anpassen
-      alert("Position gespeichert!");
+
 }
 catch (error) {
             console.error("Fehler beim Positionieren:", error);

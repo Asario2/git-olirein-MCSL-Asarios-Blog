@@ -176,6 +176,9 @@ class CommentController extends Controller
     }
      public function store(Request $request,$table='')
     {
+        if (!auth()->check()) {
+            return response()->json(['redirect' => route('login')]);
+        }
         // Validierung des Eingabewerts
         $request->validate([
             'comment' => 'required|string|max:1000', // Maximale Länge kann angepasst werden
@@ -331,7 +334,7 @@ class CommentController extends Controller
                 ->where('ischecked', '0')
                 ->update([
                     'ischecked' =>"1",
-                    'updated_at' => now(),
+                    'checked_at' => now(),
                 ]);
 
         }

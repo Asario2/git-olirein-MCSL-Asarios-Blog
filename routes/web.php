@@ -107,7 +107,7 @@ Route::middleware(\App\Http\Middleware\CheckSubd::class . ':ab,asario')->group(f
 
     // Fehlerseiten
 
-    Route::get("/api/GetCat/{table}/{id}", [TablesController::class, 'GetCats'])->name("GetCats");
+
     Route::get('/home/no_application_found', [HomeController::class, 'home_no_application_found'])->name('home.no_application_found');
     Route::get('/home/user_is_no_admin', [HomeController::class, 'home_user_is_no_admin'])->name('home.user_is_no_admin');
     Route::get('/home/user_is_no_employee', [HomeController::class, 'home_user_is_no_employee'])->name('home.user_is_no_employee');
@@ -241,10 +241,8 @@ Route::post("/cookie_config",[ConfigureController::class,'__invoke'])->name("coo
 
 
 
-            Route::post('/api/AddUserAI/{val}', [HomeController::class, 'AddUserAI'])->name("AddUserAI");
-            Route::post('/api/save-json', [ImageUploadController::class, 'store_json'])->name("save-json-gallery");
-            Route::post('api/saveFolder',  [ImageUploadController::class, 'store_dir'])->name("save-dirsave");
-            Route::post("/api/del_image/{column}/{folder}/{posi}", [ImageUploadController::class, 'Del_Image'])->name("remove.img");
+
+
             // Route::post('/api/save-json', function (Request $request) {
             //     $path = public_path($request->input('path'));
             //     $data = $request->input('data');
@@ -259,10 +257,9 @@ Route::post("/cookie_config",[ConfigureController::class,'__invoke'])->name("coo
 
 
 
-Route::get('/api/tailwind-colors/{subdomain}', [HomeController::class,"getStyles"])->name("mfx.getstyles");
+
 Route::get('/api/getVotez', [HomeController::class,"getVotez"])->name("mfx.getvotez");
 // MAILFORM SUBMIT
-Route::post('/contact/send',[CommentController::class,"sendmc"]);
 
 // Route::post('/mail-test',[CommentController::class,"sendm"]);
 
@@ -293,9 +290,9 @@ Route::get('/mail-test', function () {
 // });
 
 Route::get("/api/user/rights/des/{table}/{right}",[RightsController::class,"GetRights"])->name("GetRights");
-Route::get('/api/chkcom/{id?}', [CommentController::class, 'checkComment'])->name("comments.check");
 
-Route::post('/api/getCheckedBatch', [CommentController::class, 'CheckCommentsDone'])->name("comments.check.done");
+
+
 
 Route::get("/api/user/rights",[RightsController::class,"GetRights_all"])->name("GetRights_all");
 Route::get('/no-rights', [HomeController::class, 'no_rights'])->name('tables.noview');
@@ -320,8 +317,6 @@ Route::get("/GETUserID", function (){
 });
 Route::get('/get-total-rating/{table}', [RatingController::class, 'getTotalRating']);
 
-Route::get('api/admin_table_positions', [RightsController::class,"GetTables_posi"])->name("GetTablesPosi");
-Route::get('/api/roles/{urid}', [TablesController::class, 'getRoles']);
 Route::get("/admin/user-rights/get",[TablesController::class,'GetURights'])->name("admin.users_rights.get");
 Route::middleware(['auth'])->group(function () {
     Route::post('/two-factor/setup', [TwoFactorController::class, 'setup'])->name('two-factor.setup');
@@ -395,6 +390,19 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     // =================
     Route::get('/applicationswitch', [ApplicationController::class, 'index'])->name('applicationswitch');
 
+
+### ============ Authed API qa ============== ###
+
+    //Adde 1/0 bei profil für AI Made ProfilImage
+    Route::post('/api/AddUserAI/{val}', [HomeController::class, 'AddUserAI'])->name("AddUserAI");
+    // Add comment entry to DB (only logged in users)
+    Route::post('/contact/send',[CommentController::class,"sendmc"]);
+
+
+
+
+
+
     // =================
     // CENTRAL DASHBOARD
     // =================
@@ -423,12 +431,30 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
             '/admin/dashboard',
             [DashboardAdminController::class, 'admin_index']
         )->name('admin.dashboard');
+
+### ============== API ISADMIN QI ================ ###
+
+        Route::get('/api/chkcom/{id?}', [CommentController::class, 'checkComment'])->name("comments.check");
         Route::post("/personal_update", [PersonalController::class, 'update'])->name("personal.update");
         Route::get('/api/created-at', [TablesController::class, 'getCreatedAt'])->name("created.at");
+        Route::get("/api/GetCat/{table}/{id}", [TablesController::class, 'GetCats'])->name("GetCats");
         Route::post("/api/save-order/{table}", [TablesController::class, 'save_order'])->name("save-order");
         // Route::get("/api/created-at", [TablesController::class],'GetCreatedAt')->name("created.at");
-        Route::get('api/headlines/{table}', [TablesController::class, 'getHeadlines']);
+        // Route::get("api/get-image-id/{table}/{id}",[TablesController::class,"GetImageId"])
+        //     ->name("api-get-image-id");
+        Route::get('/api/admin_table_positions', [RightsController::class,"GetTables_posi"])->name("GetTablesPosi");
+        Route::get('/api/roles/{urid}', [TablesController::class, 'getRoles']);
+        Route::get("/api/images/{table}/{id}",[TablesController::class,"GetImageUrl"])
+            ->name("/api-get-image-url");
+        Route::get('/api/headlines/{table}', [TablesController::class, 'getHeadlines']);
         Route::post('/api/entries/update-position/{table}', [TablesController::class, 'updatePosition']);
+        Route::delete('/comments/delete/{comment_id}', [CommentController::class,'destroy_comments'])->name("destroy.comments");
+        Route::post('/api/save-json', [ImageUploadController::class, 'store_json'])->name("save-json-gallery");
+        Route::post('api/saveFolder',  [ImageUploadController::class, 'store_dir'])->name("save-dirsave");
+        Route::delete("/api/del_image/{column}/{folder}/{posi}", [ImageUploadController::class, 'Del_Image'])->name("remove.img");
+        Route::get('/api/tailwind-colors/{subdomain}', [HomeController::class,"getStyles"])->name("mfx.getstyles");
+        Route::post('/api/getCheckedBatch', [CommentController::class, 'CheckCommentsDone'])->name("comments.check.done");
+
 
         // =================
         // Laravel-Log-Datei
@@ -492,8 +518,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::delete('/admin/blogs/{blog}', [BlogController::class, 'admin_blog_delete'])
             ->name('admin.blog.delete');
 
-        Route::get("api/get-image-id/{table}/{id}",[TablesController::class,"GetImageId"])
-            ->name("api-get-image-id");
+
         Route::get('/admin', function () {
             return Redirect::route('admin.dashboard');
         })->name('admin.redirect.route');
@@ -538,15 +563,12 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
 });
 // Comments
-Route::delete('/comments/delete/{comment_id}', [CommentController::class,'destroy_comments'])->name("destroy.comments");
+
 
 
 // Darkmode Route
 
-// Route::post('/get-dark-mode', [ApplicationController::class, 'session_dm'])->name('get-dark-mode');
-// Route::get('/api/dark-mode-status', function (Request $request) {
-//     return response()->json(['dark_mode' => Session::get('dark_mode', false)]);
-// });
+;
 Route::get('/api/dark-mode', function () {
 
     return response()->json(['darkMode' => session('dark_mode', 'dark')]);
@@ -564,8 +586,7 @@ Route::get('/act-category/{table}/{id?}', [CategoryController::class, 'index'])
 Route::get('/tables/sort-enumis/{table}/{name}', [TablesController::class, 'getOptionz_itemscope'])
         ->name("GetTableItemScope");
 
-Route::get("/api/images/{table}/{id}",[TablesController::class,"GetImageUrl"])
-            ->name("api-get-image-url");
+
              $sub = SD();
         //     //
 
